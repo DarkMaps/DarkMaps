@@ -7,15 +7,135 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EC12FBB32572ADC700F7230F /* DataStoreInMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9A2572ADC700F7230F /* DataStoreInMemory.swift */; };
+		EC12FBB42572ADC700F7230F /* DataStoreInMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9A2572ADC700F7230F /* DataStoreInMemory.swift */; };
+		EC12FBB52572ADC700F7230F /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9B2572ADC700F7230F /* Protocol.swift */; };
+		EC12FBB62572ADC700F7230F /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9B2572ADC700F7230F /* Protocol.swift */; };
+		EC12FBB72572ADC700F7230F /* PreKeySignalMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9D2572ADC700F7230F /* PreKeySignalMessage.swift */; };
+		EC12FBB82572ADC700F7230F /* PreKeySignalMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9D2572ADC700F7230F /* PreKeySignalMessage.swift */; };
+		EC12FBB92572ADC700F7230F /* SenderKeyMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9E2572ADC700F7230F /* SenderKeyMessage.swift */; };
+		EC12FBBA2572ADC700F7230F /* SenderKeyMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9E2572ADC700F7230F /* SenderKeyMessage.swift */; };
+		EC12FBBB2572ADC700F7230F /* SenderKeyDistributionMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9F2572ADC700F7230F /* SenderKeyDistributionMessage.swift */; };
+		EC12FBBC2572ADC700F7230F /* SenderKeyDistributionMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9F2572ADC700F7230F /* SenderKeyDistributionMessage.swift */; };
+		EC12FBBD2572ADC700F7230F /* CiphertextMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBA02572ADC700F7230F /* CiphertextMessage.swift */; };
+		EC12FBBE2572ADC700F7230F /* CiphertextMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBA02572ADC700F7230F /* CiphertextMessage.swift */; };
+		EC12FBBF2572ADC700F7230F /* SignalMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBA12572ADC700F7230F /* SignalMessage.swift */; };
+		EC12FBC02572ADC700F7230F /* SignalMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBA12572ADC700F7230F /* SignalMessage.swift */; };
+		EC12FBC12572ADC700F7230F /* PublicKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBA22572ADC700F7230F /* PublicKey.swift */; };
+		EC12FBC22572ADC700F7230F /* PublicKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBA22572ADC700F7230F /* PublicKey.swift */; };
+		EC12FBC32572ADC700F7230F /* Address.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBA32572ADC700F7230F /* Address.swift */; };
+		EC12FBC42572ADC700F7230F /* Address.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBA32572ADC700F7230F /* Address.swift */; };
+		EC12FBC52572ADC700F7230F /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBA42572ADC700F7230F /* Error.swift */; };
+		EC12FBC62572ADC700F7230F /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBA42572ADC700F7230F /* Error.swift */; };
+		EC12FBC72572ADC700F7230F /* Kdf.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBA52572ADC700F7230F /* Kdf.swift */; };
+		EC12FBC82572ADC700F7230F /* Kdf.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBA52572ADC700F7230F /* Kdf.swift */; };
+		EC12FBC92572ADC700F7230F /* SessionRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBA72572ADC700F7230F /* SessionRecord.swift */; };
+		EC12FBCA2572ADC700F7230F /* SessionRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBA72572ADC700F7230F /* SessionRecord.swift */; };
+		EC12FBCB2572ADC700F7230F /* SignedPreKeyRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBA82572ADC700F7230F /* SignedPreKeyRecord.swift */; };
+		EC12FBCC2572ADC700F7230F /* SignedPreKeyRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBA82572ADC700F7230F /* SignedPreKeyRecord.swift */; };
+		EC12FBCD2572ADC700F7230F /* SenderKeyRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBA92572ADC700F7230F /* SenderKeyRecord.swift */; };
+		EC12FBCE2572ADC700F7230F /* SenderKeyRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBA92572ADC700F7230F /* SenderKeyRecord.swift */; };
+		EC12FBCF2572ADC700F7230F /* PreKeyRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBAA2572ADC700F7230F /* PreKeyRecord.swift */; };
+		EC12FBD02572ADC700F7230F /* PreKeyRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBAA2572ADC700F7230F /* PreKeyRecord.swift */; };
+		EC12FBD12572ADC700F7230F /* PreKeyBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBAB2572ADC700F7230F /* PreKeyBundle.swift */; };
+		EC12FBD22572ADC700F7230F /* PreKeyBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBAB2572ADC700F7230F /* PreKeyBundle.swift */; };
+		EC12FBD32572ADC700F7230F /* PrivateKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBAC2572ADC700F7230F /* PrivateKey.swift */; };
+		EC12FBD42572ADC700F7230F /* PrivateKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBAC2572ADC700F7230F /* PrivateKey.swift */; };
+		EC12FBD52572ADC700F7230F /* DataStoreProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBAD2572ADC700F7230F /* DataStoreProtocols.swift */; };
+		EC12FBD62572ADC700F7230F /* DataStoreProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBAD2572ADC700F7230F /* DataStoreProtocols.swift */; };
+		EC12FBD72572ADC700F7230F /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBAE2572ADC700F7230F /* Utils.swift */; };
+		EC12FBD82572ADC700F7230F /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBAE2572ADC700F7230F /* Utils.swift */; };
+		EC12FBD92572ADC700F7230F /* Fingerprint.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBAF2572ADC700F7230F /* Fingerprint.swift */; };
+		EC12FBDA2572ADC700F7230F /* Fingerprint.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBAF2572ADC700F7230F /* Fingerprint.swift */; };
+		EC12FBDB2572ADC700F7230F /* SenderKeyName.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBB02572ADC700F7230F /* SenderKeyName.swift */; };
+		EC12FBDC2572ADC700F7230F /* SenderKeyName.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBB02572ADC700F7230F /* SenderKeyName.swift */; };
+		EC12FBDD2572ADC700F7230F /* ClonableHandleOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBB12572ADC700F7230F /* ClonableHandleOwner.swift */; };
+		EC12FBDE2572ADC700F7230F /* ClonableHandleOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBB12572ADC700F7230F /* ClonableHandleOwner.swift */; };
+		EC12FBDF2572ADC700F7230F /* IdentityKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBB22572ADC700F7230F /* IdentityKey.swift */; };
+		EC12FBE02572ADC700F7230F /* IdentityKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBB22572ADC700F7230F /* IdentityKey.swift */; };
+		ECDE0E3D2572B5EC009D3561 /* SignalMapsiOSFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = ECDE0E3B2572B5EC009D3561 /* SignalMapsiOSFramework.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		ECDE0E432572B615009D3561 /* DataStoreInMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9A2572ADC700F7230F /* DataStoreInMemory.swift */; };
+		ECDE0E442572B615009D3561 /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9B2572ADC700F7230F /* Protocol.swift */; };
+		ECDE0E452572B615009D3561 /* PreKeySignalMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9D2572ADC700F7230F /* PreKeySignalMessage.swift */; };
+		ECDE0E462572B615009D3561 /* SenderKeyMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9E2572ADC700F7230F /* SenderKeyMessage.swift */; };
+		ECDE0E472572B615009D3561 /* SenderKeyDistributionMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9F2572ADC700F7230F /* SenderKeyDistributionMessage.swift */; };
+		ECDE0E482572B615009D3561 /* CiphertextMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBA02572ADC700F7230F /* CiphertextMessage.swift */; };
+		ECDE0E492572B615009D3561 /* SignalMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBA12572ADC700F7230F /* SignalMessage.swift */; };
+		ECDE0E4A2572B615009D3561 /* PublicKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBA22572ADC700F7230F /* PublicKey.swift */; };
+		ECDE0E4B2572B615009D3561 /* Address.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBA32572ADC700F7230F /* Address.swift */; };
+		ECDE0E4C2572B615009D3561 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBA42572ADC700F7230F /* Error.swift */; };
+		ECDE0E4D2572B615009D3561 /* Kdf.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBA52572ADC700F7230F /* Kdf.swift */; };
+		ECDE0E4E2572B615009D3561 /* SessionRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBA72572ADC700F7230F /* SessionRecord.swift */; };
+		ECDE0E4F2572B615009D3561 /* SignedPreKeyRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBA82572ADC700F7230F /* SignedPreKeyRecord.swift */; };
+		ECDE0E502572B615009D3561 /* SenderKeyRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBA92572ADC700F7230F /* SenderKeyRecord.swift */; };
+		ECDE0E512572B615009D3561 /* PreKeyRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBAA2572ADC700F7230F /* PreKeyRecord.swift */; };
+		ECDE0E522572B615009D3561 /* PreKeyBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBAB2572ADC700F7230F /* PreKeyBundle.swift */; };
+		ECDE0E532572B615009D3561 /* PrivateKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBAC2572ADC700F7230F /* PrivateKey.swift */; };
+		ECDE0E542572B615009D3561 /* DataStoreProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBAD2572ADC700F7230F /* DataStoreProtocols.swift */; };
+		ECDE0E552572B615009D3561 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBAE2572ADC700F7230F /* Utils.swift */; };
+		ECDE0E562572B615009D3561 /* Fingerprint.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBAF2572ADC700F7230F /* Fingerprint.swift */; };
+		ECDE0E572572B615009D3561 /* SenderKeyName.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBB02572ADC700F7230F /* SenderKeyName.swift */; };
+		ECDE0E582572B615009D3561 /* ClonableHandleOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBB12572ADC700F7230F /* ClonableHandleOwner.swift */; };
+		ECDE0E592572B615009D3561 /* IdentityKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBB22572ADC700F7230F /* IdentityKey.swift */; };
+		ECDE0E5A2572B615009D3561 /* SignalMapsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFFD50F257261FB00458BC8 /* SignalMapsApp.swift */; };
+		ECDE0E5B2572B615009D3561 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFFD510257261FB00458BC8 /* ContentView.swift */; };
+		ECDE0E5C2572B615009D3561 /* KeychainSignalProtocolStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFFD64D2572A9C900458BC8 /* KeychainSignalProtocolStore.swift */; };
+		ECDE0E5D2572B615009D3561 /* KeychainSwiftDistrib.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFFD64E2572A9C900458BC8 /* KeychainSwiftDistrib.swift */; };
+		ECDE0E602572B674009D3561 /* libsignal_ffi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ECFFD6442572A82500458BC8 /* libsignal_ffi.a */; };
 		ECFFD5222572620300458BC8 /* SignalMapsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFFD50F257261FB00458BC8 /* SignalMapsApp.swift */; };
 		ECFFD5232572620300458BC8 /* SignalMapsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFFD50F257261FB00458BC8 /* SignalMapsApp.swift */; };
 		ECFFD5242572620300458BC8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFFD510257261FB00458BC8 /* ContentView.swift */; };
 		ECFFD5252572620300458BC8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFFD510257261FB00458BC8 /* ContentView.swift */; };
 		ECFFD5262572620300458BC8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ECFFD5112572620300458BC8 /* Assets.xcassets */; };
 		ECFFD5272572620300458BC8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ECFFD5112572620300458BC8 /* Assets.xcassets */; };
+		ECFFD6452572A82500458BC8 /* libsignal_ffi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ECFFD6442572A82500458BC8 /* libsignal_ffi.a */; };
+		ECFFD64F2572A9C900458BC8 /* KeychainSignalProtocolStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFFD64D2572A9C900458BC8 /* KeychainSignalProtocolStore.swift */; };
+		ECFFD6502572A9C900458BC8 /* KeychainSignalProtocolStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFFD64D2572A9C900458BC8 /* KeychainSignalProtocolStore.swift */; };
+		ECFFD6512572A9C900458BC8 /* KeychainSwiftDistrib.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFFD64E2572A9C900458BC8 /* KeychainSwiftDistrib.swift */; };
+		ECFFD6522572A9C900458BC8 /* KeychainSwiftDistrib.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFFD64E2572A9C900458BC8 /* KeychainSwiftDistrib.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		ECDE0E082572B0A2009D3561 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		EC12FB8F2572AB9B00F7230F /* SignalClient Build Details.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "SignalClient Build Details.md"; sourceTree = "<group>"; };
+		EC12FB9A2572ADC700F7230F /* DataStoreInMemory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStoreInMemory.swift; sourceTree = "<group>"; };
+		EC12FB9B2572ADC700F7230F /* Protocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocol.swift; sourceTree = "<group>"; };
+		EC12FB9D2572ADC700F7230F /* PreKeySignalMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreKeySignalMessage.swift; sourceTree = "<group>"; };
+		EC12FB9E2572ADC700F7230F /* SenderKeyMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SenderKeyMessage.swift; sourceTree = "<group>"; };
+		EC12FB9F2572ADC700F7230F /* SenderKeyDistributionMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SenderKeyDistributionMessage.swift; sourceTree = "<group>"; };
+		EC12FBA02572ADC700F7230F /* CiphertextMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CiphertextMessage.swift; sourceTree = "<group>"; };
+		EC12FBA12572ADC700F7230F /* SignalMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignalMessage.swift; sourceTree = "<group>"; };
+		EC12FBA22572ADC700F7230F /* PublicKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublicKey.swift; sourceTree = "<group>"; };
+		EC12FBA32572ADC700F7230F /* Address.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Address.swift; sourceTree = "<group>"; };
+		EC12FBA42572ADC700F7230F /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
+		EC12FBA52572ADC700F7230F /* Kdf.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Kdf.swift; sourceTree = "<group>"; };
+		EC12FBA72572ADC700F7230F /* SessionRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionRecord.swift; sourceTree = "<group>"; };
+		EC12FBA82572ADC700F7230F /* SignedPreKeyRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignedPreKeyRecord.swift; sourceTree = "<group>"; };
+		EC12FBA92572ADC700F7230F /* SenderKeyRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SenderKeyRecord.swift; sourceTree = "<group>"; };
+		EC12FBAA2572ADC700F7230F /* PreKeyRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreKeyRecord.swift; sourceTree = "<group>"; };
+		EC12FBAB2572ADC700F7230F /* PreKeyBundle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreKeyBundle.swift; sourceTree = "<group>"; };
+		EC12FBAC2572ADC700F7230F /* PrivateKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivateKey.swift; sourceTree = "<group>"; };
+		EC12FBAD2572ADC700F7230F /* DataStoreProtocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStoreProtocols.swift; sourceTree = "<group>"; };
+		EC12FBAE2572ADC700F7230F /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		EC12FBAF2572ADC700F7230F /* Fingerprint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fingerprint.swift; sourceTree = "<group>"; };
+		EC12FBB02572ADC700F7230F /* SenderKeyName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SenderKeyName.swift; sourceTree = "<group>"; };
+		EC12FBB12572ADC700F7230F /* ClonableHandleOwner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClonableHandleOwner.swift; sourceTree = "<group>"; };
+		EC12FBB22572ADC700F7230F /* IdentityKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityKey.swift; sourceTree = "<group>"; };
+		ECDE0E392572B5EC009D3561 /* SignalMapsiOSFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SignalMapsiOSFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		ECDE0E3B2572B5EC009D3561 /* SignalMapsiOSFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SignalMapsiOSFramework.h; sourceTree = "<group>"; };
+		ECDE0E3C2572B5EC009D3561 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ECFFD50F257261FB00458BC8 /* SignalMapsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalMapsApp.swift; sourceTree = "<group>"; };
 		ECFFD510257261FB00458BC8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		ECFFD5112572620300458BC8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -24,13 +144,25 @@
 		ECFFD51E2572620300458BC8 /* SignalMaps.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SignalMaps.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECFFD5202572620300458BC8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ECFFD5212572620300458BC8 /* macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macOS.entitlements; sourceTree = "<group>"; };
+		ECFFD6442572A82500458BC8 /* libsignal_ffi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsignal_ffi.a; path = "libsignal-client/target/universal/release/libsignal_ffi.a"; sourceTree = "<group>"; };
+		ECFFD64D2572A9C900458BC8 /* KeychainSignalProtocolStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainSignalProtocolStore.swift; sourceTree = "<group>"; };
+		ECFFD64E2572A9C900458BC8 /* KeychainSwiftDistrib.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainSwiftDistrib.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		ECDE0E362572B5EC009D3561 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ECDE0E602572B674009D3561 /* libsignal_ffi.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		ECFFD5132572620300458BC8 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ECFFD6452572A82500458BC8 /* libsignal_ffi.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -44,13 +176,72 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		EC12FB992572ADC700F7230F /* SignalClient */ = {
+			isa = PBXGroup;
+			children = (
+				EC12FB9A2572ADC700F7230F /* DataStoreInMemory.swift */,
+				EC12FB9B2572ADC700F7230F /* Protocol.swift */,
+				EC12FB9C2572ADC700F7230F /* messages */,
+				EC12FBA22572ADC700F7230F /* PublicKey.swift */,
+				EC12FBA32572ADC700F7230F /* Address.swift */,
+				EC12FBA42572ADC700F7230F /* Error.swift */,
+				EC12FBA52572ADC700F7230F /* Kdf.swift */,
+				EC12FBA62572ADC700F7230F /* state */,
+				EC12FBAC2572ADC700F7230F /* PrivateKey.swift */,
+				EC12FBAD2572ADC700F7230F /* DataStoreProtocols.swift */,
+				EC12FBAE2572ADC700F7230F /* Utils.swift */,
+				EC12FBAF2572ADC700F7230F /* Fingerprint.swift */,
+				EC12FBB02572ADC700F7230F /* SenderKeyName.swift */,
+				EC12FBB12572ADC700F7230F /* ClonableHandleOwner.swift */,
+				EC12FBB22572ADC700F7230F /* IdentityKey.swift */,
+			);
+			path = SignalClient;
+			sourceTree = "<group>";
+		};
+		EC12FB9C2572ADC700F7230F /* messages */ = {
+			isa = PBXGroup;
+			children = (
+				EC12FB9D2572ADC700F7230F /* PreKeySignalMessage.swift */,
+				EC12FB9E2572ADC700F7230F /* SenderKeyMessage.swift */,
+				EC12FB9F2572ADC700F7230F /* SenderKeyDistributionMessage.swift */,
+				EC12FBA02572ADC700F7230F /* CiphertextMessage.swift */,
+				EC12FBA12572ADC700F7230F /* SignalMessage.swift */,
+			);
+			path = messages;
+			sourceTree = "<group>";
+		};
+		EC12FBA62572ADC700F7230F /* state */ = {
+			isa = PBXGroup;
+			children = (
+				EC12FBA72572ADC700F7230F /* SessionRecord.swift */,
+				EC12FBA82572ADC700F7230F /* SignedPreKeyRecord.swift */,
+				EC12FBA92572ADC700F7230F /* SenderKeyRecord.swift */,
+				EC12FBAA2572ADC700F7230F /* PreKeyRecord.swift */,
+				EC12FBAB2572ADC700F7230F /* PreKeyBundle.swift */,
+			);
+			path = state;
+			sourceTree = "<group>";
+		};
+		ECDE0E3A2572B5EC009D3561 /* SignalMapsiOSFramework */ = {
+			isa = PBXGroup;
+			children = (
+				ECDE0E3B2572B5EC009D3561 /* SignalMapsiOSFramework.h */,
+				ECDE0E3C2572B5EC009D3561 /* Info.plist */,
+			);
+			path = SignalMapsiOSFramework;
+			sourceTree = "<group>";
+		};
 		ECFFD509257261FB00458BC8 = {
 			isa = PBXGroup;
 			children = (
+				EC12FB992572ADC700F7230F /* SignalClient */,
+				EC12FB8F2572AB9B00F7230F /* SignalClient Build Details.md */,
 				ECFFD50E257261FB00458BC8 /* Shared */,
 				ECFFD5182572620300458BC8 /* iOS */,
 				ECFFD51F2572620300458BC8 /* macOS */,
+				ECDE0E3A2572B5EC009D3561 /* SignalMapsiOSFramework */,
 				ECFFD5172572620300458BC8 /* Products */,
+				ECFFD6432572A82400458BC8 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -59,6 +250,8 @@
 			children = (
 				ECFFD50F257261FB00458BC8 /* SignalMapsApp.swift */,
 				ECFFD510257261FB00458BC8 /* ContentView.swift */,
+				ECFFD64D2572A9C900458BC8 /* KeychainSignalProtocolStore.swift */,
+				ECFFD64E2572A9C900458BC8 /* KeychainSwiftDistrib.swift */,
 				ECFFD5112572620300458BC8 /* Assets.xcassets */,
 			);
 			path = Shared;
@@ -69,6 +262,7 @@
 			children = (
 				ECFFD5162572620300458BC8 /* SignalMaps.app */,
 				ECFFD51E2572620300458BC8 /* SignalMaps.app */,
+				ECDE0E392572B5EC009D3561 /* SignalMapsiOSFramework.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -90,9 +284,46 @@
 			path = macOS;
 			sourceTree = "<group>";
 		};
+		ECFFD6432572A82400458BC8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				ECFFD6442572A82500458BC8 /* libsignal_ffi.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		ECDE0E342572B5EC009D3561 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ECDE0E3D2572B5EC009D3561 /* SignalMapsiOSFramework.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
+		ECDE0E382572B5EC009D3561 /* SignalMapsiOSFramework */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = ECDE0E3E2572B5EC009D3561 /* Build configuration list for PBXNativeTarget "SignalMapsiOSFramework" */;
+			buildPhases = (
+				ECDE0E342572B5EC009D3561 /* Headers */,
+				ECDE0E352572B5EC009D3561 /* Sources */,
+				ECDE0E362572B5EC009D3561 /* Frameworks */,
+				ECDE0E372572B5EC009D3561 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SignalMapsiOSFramework;
+			productName = SignalMapsiOSFramework;
+			productReference = ECDE0E392572B5EC009D3561 /* SignalMapsiOSFramework.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		ECFFD5152572620300458BC8 /* SignalMaps (iOS) */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = ECFFD52A2572620300458BC8 /* Build configuration list for PBXNativeTarget "SignalMaps (iOS)" */;
@@ -100,6 +331,7 @@
 				ECFFD5122572620300458BC8 /* Sources */,
 				ECFFD5132572620300458BC8 /* Frameworks */,
 				ECFFD5142572620300458BC8 /* Resources */,
+				ECDE0E082572B0A2009D3561 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -136,6 +368,9 @@
 				LastSwiftUpdateCheck = 1220;
 				LastUpgradeCheck = 1220;
 				TargetAttributes = {
+					ECDE0E382572B5EC009D3561 = {
+						CreatedOnToolsVersion = 12.2;
+					};
 					ECFFD5152572620300458BC8 = {
 						CreatedOnToolsVersion = 12.2;
 					};
@@ -159,11 +394,19 @@
 			targets = (
 				ECFFD5152572620300458BC8 /* SignalMaps (iOS) */,
 				ECFFD51D2572620300458BC8 /* SignalMaps (macOS) */,
+				ECDE0E382572B5EC009D3561 /* SignalMapsiOSFramework */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		ECDE0E372572B5EC009D3561 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		ECFFD5142572620300458BC8 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -183,12 +426,71 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		ECDE0E352572B5EC009D3561 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ECDE0E432572B615009D3561 /* DataStoreInMemory.swift in Sources */,
+				ECDE0E442572B615009D3561 /* Protocol.swift in Sources */,
+				ECDE0E452572B615009D3561 /* PreKeySignalMessage.swift in Sources */,
+				ECDE0E462572B615009D3561 /* SenderKeyMessage.swift in Sources */,
+				ECDE0E472572B615009D3561 /* SenderKeyDistributionMessage.swift in Sources */,
+				ECDE0E482572B615009D3561 /* CiphertextMessage.swift in Sources */,
+				ECDE0E492572B615009D3561 /* SignalMessage.swift in Sources */,
+				ECDE0E4A2572B615009D3561 /* PublicKey.swift in Sources */,
+				ECDE0E4B2572B615009D3561 /* Address.swift in Sources */,
+				ECDE0E4C2572B615009D3561 /* Error.swift in Sources */,
+				ECDE0E4D2572B615009D3561 /* Kdf.swift in Sources */,
+				ECDE0E4E2572B615009D3561 /* SessionRecord.swift in Sources */,
+				ECDE0E4F2572B615009D3561 /* SignedPreKeyRecord.swift in Sources */,
+				ECDE0E502572B615009D3561 /* SenderKeyRecord.swift in Sources */,
+				ECDE0E512572B615009D3561 /* PreKeyRecord.swift in Sources */,
+				ECDE0E522572B615009D3561 /* PreKeyBundle.swift in Sources */,
+				ECDE0E532572B615009D3561 /* PrivateKey.swift in Sources */,
+				ECDE0E542572B615009D3561 /* DataStoreProtocols.swift in Sources */,
+				ECDE0E552572B615009D3561 /* Utils.swift in Sources */,
+				ECDE0E562572B615009D3561 /* Fingerprint.swift in Sources */,
+				ECDE0E572572B615009D3561 /* SenderKeyName.swift in Sources */,
+				ECDE0E582572B615009D3561 /* ClonableHandleOwner.swift in Sources */,
+				ECDE0E592572B615009D3561 /* IdentityKey.swift in Sources */,
+				ECDE0E5A2572B615009D3561 /* SignalMapsApp.swift in Sources */,
+				ECDE0E5B2572B615009D3561 /* ContentView.swift in Sources */,
+				ECDE0E5C2572B615009D3561 /* KeychainSignalProtocolStore.swift in Sources */,
+				ECDE0E5D2572B615009D3561 /* KeychainSwiftDistrib.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		ECFFD5122572620300458BC8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EC12FBB92572ADC700F7230F /* SenderKeyMessage.swift in Sources */,
+				EC12FBC92572ADC700F7230F /* SessionRecord.swift in Sources */,
+				EC12FBBD2572ADC700F7230F /* CiphertextMessage.swift in Sources */,
+				EC12FBCB2572ADC700F7230F /* SignedPreKeyRecord.swift in Sources */,
+				EC12FBC32572ADC700F7230F /* Address.swift in Sources */,
+				EC12FBB32572ADC700F7230F /* DataStoreInMemory.swift in Sources */,
 				ECFFD5242572620300458BC8 /* ContentView.swift in Sources */,
+				ECFFD64F2572A9C900458BC8 /* KeychainSignalProtocolStore.swift in Sources */,
 				ECFFD5222572620300458BC8 /* SignalMapsApp.swift in Sources */,
+				EC12FBB72572ADC700F7230F /* PreKeySignalMessage.swift in Sources */,
+				EC12FBBB2572ADC700F7230F /* SenderKeyDistributionMessage.swift in Sources */,
+				EC12FBCF2572ADC700F7230F /* PreKeyRecord.swift in Sources */,
+				EC12FBDB2572ADC700F7230F /* SenderKeyName.swift in Sources */,
+				EC12FBDD2572ADC700F7230F /* ClonableHandleOwner.swift in Sources */,
+				EC12FBD92572ADC700F7230F /* Fingerprint.swift in Sources */,
+				EC12FBBF2572ADC700F7230F /* SignalMessage.swift in Sources */,
+				EC12FBD52572ADC700F7230F /* DataStoreProtocols.swift in Sources */,
+				ECFFD6512572A9C900458BC8 /* KeychainSwiftDistrib.swift in Sources */,
+				EC12FBD72572ADC700F7230F /* Utils.swift in Sources */,
+				EC12FBCD2572ADC700F7230F /* SenderKeyRecord.swift in Sources */,
+				EC12FBD12572ADC700F7230F /* PreKeyBundle.swift in Sources */,
+				EC12FBC72572ADC700F7230F /* Kdf.swift in Sources */,
+				EC12FBC12572ADC700F7230F /* PublicKey.swift in Sources */,
+				EC12FBDF2572ADC700F7230F /* IdentityKey.swift in Sources */,
+				EC12FBC52572ADC700F7230F /* Error.swift in Sources */,
+				EC12FBB52572ADC700F7230F /* Protocol.swift in Sources */,
+				EC12FBD32572ADC700F7230F /* PrivateKey.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -196,14 +498,106 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EC12FBBA2572ADC700F7230F /* SenderKeyMessage.swift in Sources */,
+				EC12FBCA2572ADC700F7230F /* SessionRecord.swift in Sources */,
+				EC12FBBE2572ADC700F7230F /* CiphertextMessage.swift in Sources */,
+				EC12FBCC2572ADC700F7230F /* SignedPreKeyRecord.swift in Sources */,
+				EC12FBC42572ADC700F7230F /* Address.swift in Sources */,
+				EC12FBB42572ADC700F7230F /* DataStoreInMemory.swift in Sources */,
 				ECFFD5252572620300458BC8 /* ContentView.swift in Sources */,
+				ECFFD6502572A9C900458BC8 /* KeychainSignalProtocolStore.swift in Sources */,
 				ECFFD5232572620300458BC8 /* SignalMapsApp.swift in Sources */,
+				EC12FBB82572ADC700F7230F /* PreKeySignalMessage.swift in Sources */,
+				EC12FBBC2572ADC700F7230F /* SenderKeyDistributionMessage.swift in Sources */,
+				EC12FBD02572ADC700F7230F /* PreKeyRecord.swift in Sources */,
+				EC12FBDC2572ADC700F7230F /* SenderKeyName.swift in Sources */,
+				EC12FBDE2572ADC700F7230F /* ClonableHandleOwner.swift in Sources */,
+				EC12FBDA2572ADC700F7230F /* Fingerprint.swift in Sources */,
+				EC12FBC02572ADC700F7230F /* SignalMessage.swift in Sources */,
+				EC12FBD62572ADC700F7230F /* DataStoreProtocols.swift in Sources */,
+				ECFFD6522572A9C900458BC8 /* KeychainSwiftDistrib.swift in Sources */,
+				EC12FBD82572ADC700F7230F /* Utils.swift in Sources */,
+				EC12FBCE2572ADC700F7230F /* SenderKeyRecord.swift in Sources */,
+				EC12FBD22572ADC700F7230F /* PreKeyBundle.swift in Sources */,
+				EC12FBC82572ADC700F7230F /* Kdf.swift in Sources */,
+				EC12FBC22572ADC700F7230F /* PublicKey.swift in Sources */,
+				EC12FBE02572ADC700F7230F /* IdentityKey.swift in Sources */,
+				EC12FBC62572ADC700F7230F /* Error.swift in Sources */,
+				EC12FBB62572ADC700F7230F /* Protocol.swift in Sources */,
+				EC12FBD42572ADC700F7230F /* PrivateKey.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		ECDE0E3F2572B5EC009D3561 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = A4G3Y5XC83;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = SignalMapsiOSFramework/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/libsignal-client/target/universal/release",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = mtr.SignalMapsiOSFramework;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		ECDE0E402572B5EC009D3561 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = A4G3Y5XC83;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = SignalMapsiOSFramework/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/libsignal-client/target/universal/release",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = mtr.SignalMapsiOSFramework;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 		ECFFD5282572620300458BC8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -259,6 +653,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_INCLUDE_PATHS = "${SRCROOT}/**";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -311,6 +706,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_INCLUDE_PATHS = "${SRCROOT}/**";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 			};
 			name = Release;
@@ -318,16 +714,22 @@
 		ECFFD52B2572620300458BC8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A4G3Y5XC83;
+				ENABLE_BITCODE = NO;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/libsignal-client/target/universal/release",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = mtr.SignalMaps;
 				PRODUCT_NAME = SignalMaps;
@@ -340,16 +742,22 @@
 		ECFFD52C2572620300458BC8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A4G3Y5XC83;
+				ENABLE_BITCODE = NO;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/libsignal-client/target/universal/release",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = mtr.SignalMaps;
 				PRODUCT_NAME = SignalMaps;
@@ -411,6 +819,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		ECDE0E3E2572B5EC009D3561 /* Build configuration list for PBXNativeTarget "SignalMapsiOSFramework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ECDE0E3F2572B5EC009D3561 /* Debug */,
+				ECDE0E402572B5EC009D3561 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		ECFFD50D257261FB00458BC8 /* Build configuration list for PBXProject "SignalMaps" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
