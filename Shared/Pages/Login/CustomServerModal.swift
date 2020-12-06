@@ -35,7 +35,7 @@ struct CustomServerModal: View {
             .padding(.bottom)
             Button("Set", action: dismissModal)
                 .disabled(showInvalidServerText)
-                .buttonStyle(RoundedButtonStyle(backgroundColor: Color("Primary")))
+                .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
             Spacer()
         }
         .padding()

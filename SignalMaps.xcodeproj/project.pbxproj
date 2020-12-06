@@ -67,6 +67,10 @@
 		EC9129BD257CC72500E12BF6 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129BC257CC72500E12BF6 /* ActivityIndicator.swift */; };
 		EC9129C1257CF7DB00E12BF6 /* LoggedInUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129C0257CF7DB00E12BF6 /* LoggedInUser.swift */; };
 		EC9129C5257CF8BF00E12BF6 /* LoggedInUserError.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129C4257CF8BF00E12BF6 /* LoggedInUserError.swift */; };
+		EC9129C9257D59C800E12BF6 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129C8257D59C800E12BF6 /* HomeController.swift */; };
+		EC9129CD257D59DF00E12BF6 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129CC257D59DF00E12BF6 /* HomeView.swift */; };
+		EC9129D1257D5EC100E12BF6 /* TwoFactorModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129D0257D5EC100E12BF6 /* TwoFactorModal.swift */; };
+		EC9129D9257D6C6400E12BF6 /* AuthorisationEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129D8257D6C6400E12BF6 /* AuthorisationEnum.swift */; };
 		ECDE0E3D2572B5EC009D3561 /* SignalMapsiOSFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = ECDE0E3B2572B5EC009D3561 /* SignalMapsiOSFramework.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		ECDE0E432572B615009D3561 /* DataStoreInMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9A2572ADC700F7230F /* DataStoreInMemory.swift */; };
 		ECDE0E442572B615009D3561 /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9B2572ADC700F7230F /* Protocol.swift */; };
@@ -159,6 +163,10 @@
 		EC9129BC257CC72500E12BF6 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		EC9129C0257CF7DB00E12BF6 /* LoggedInUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggedInUser.swift; sourceTree = "<group>"; };
 		EC9129C4257CF8BF00E12BF6 /* LoggedInUserError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggedInUserError.swift; sourceTree = "<group>"; };
+		EC9129C8257D59C800E12BF6 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
+		EC9129CC257D59DF00E12BF6 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		EC9129D0257D5EC100E12BF6 /* TwoFactorModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoFactorModal.swift; sourceTree = "<group>"; };
+		EC9129D8257D6C6400E12BF6 /* AuthorisationEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorisationEnum.swift; sourceTree = "<group>"; };
 		ECDE0E392572B5EC009D3561 /* SignalMapsiOSFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SignalMapsiOSFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECDE0E3B2572B5EC009D3561 /* SignalMapsiOSFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SignalMapsiOSFramework.h; sourceTree = "<group>"; };
 		ECDE0E3C2572B5EC009D3561 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -281,6 +289,7 @@
 				EC9129A5257CC33800E12BF6 /* LoginController.swift */,
 				EC9129A9257CC34900E12BF6 /* LoginView.swift */,
 				EC9129AD257CC51E00E12BF6 /* CustomServerModal.swift */,
+				EC9129D0257D5EC100E12BF6 /* TwoFactorModal.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -288,6 +297,8 @@
 		EC912982257BB61700E12BF6 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				EC9129C8257D59C800E12BF6 /* HomeController.swift */,
+				EC9129CC257D59DF00E12BF6 /* HomeView.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -322,6 +333,7 @@
 			children = (
 				EC912999257CC13800E12BF6 /* AuthorisationController.swift */,
 				EC91299F257CC17D00E12BF6 /* AuthorisationError.swift */,
+				EC9129D8257D6C6400E12BF6 /* AuthorisationEnum.swift */,
 			);
 			path = Authorisation;
 			sourceTree = "<group>";
@@ -586,16 +598,20 @@
 				EC12FBB92572ADC700F7230F /* SenderKeyMessage.swift in Sources */,
 				EC12FBC92572ADC700F7230F /* SessionRecord.swift in Sources */,
 				EC91299A257CC13900E12BF6 /* AuthorisationController.swift in Sources */,
+				EC9129C9257D59C800E12BF6 /* HomeController.swift in Sources */,
 				EC12FBBD2572ADC700F7230F /* CiphertextMessage.swift in Sources */,
 				EC12FBCB2572ADC700F7230F /* SignedPreKeyRecord.swift in Sources */,
 				EC912986257BB67500E12BF6 /* AppState.swift in Sources */,
 				EC12FBC32572ADC700F7230F /* Address.swift in Sources */,
+				EC9129D1257D5EC100E12BF6 /* TwoFactorModal.swift in Sources */,
 				EC91298C257BB69100E12BF6 /* RootView.swift in Sources */,
 				EC12FBB32572ADC700F7230F /* DataStoreInMemory.swift in Sources */,
 				ECFFD5242572620300458BC8 /* ContentView.swift in Sources */,
+				EC9129CD257D59DF00E12BF6 /* HomeView.swift in Sources */,
 				ECFFD64F2572A9C900458BC8 /* KeychainSignalProtocolStore.swift in Sources */,
 				ECFFD5222572620300458BC8 /* SignalMapsApp.swift in Sources */,
 				EC12FBB72572ADC700F7230F /* PreKeySignalMessage.swift in Sources */,
+				EC9129D9257D6C6400E12BF6 /* AuthorisationEnum.swift in Sources */,
 				EC9129A6257CC33800E12BF6 /* LoginController.swift in Sources */,
 				EC12FBBB2572ADC700F7230F /* SenderKeyDistributionMessage.swift in Sources */,
 				EC12FBCF2572ADC700F7230F /* PreKeyRecord.swift in Sources */,

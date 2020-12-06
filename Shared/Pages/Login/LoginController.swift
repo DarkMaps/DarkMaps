@@ -16,14 +16,37 @@ struct LoginController: View {
     @State private var password = ""
     @State private var username = ""
     @State private var serverAddress = "https://www.simplesignal.co.uk"
+    @State private var ephemeralCode: String? = nil
+    @State private var twoFactorCode = ""
+    @State private var twoFactorModalVisible = false
     
     var authorisationController = AuthorisationController()
     
     func handleLogin() -> Void {
         loginInProgress = true
-        authorisationController.login(
+        let loginOutcome = authorisationController.login(
             username: username,
             password: password,
+            serverAddress: serverAddress,
+            appState: appState
+        )
+        switch loginOutcome {
+        case .twoFactorRequired(let ephemeralCodeReceived):
+            
+            ephemeralCode = ephemeralCodeReceived
+            twoFactorModalVisible = true
+        default:
+            return
+        }
+        loginInProgress = false
+    }
+    
+    func submitTwoFactor(_ twoFactorCode: String) {
+        loginInProgress = true
+        authorisationController.submitTwoFactor(
+            ephemeralCode: "a",
+            twoFactorCode: twoFactorCode,
+            username: username,
             serverAddress: serverAddress,
             appState: appState
         )
@@ -35,9 +58,12 @@ struct LoginController: View {
             username: $username,
             password: $password,
             customServerModalVisible: $customServerModalVisible,
+            twoFactorModalVisible: $twoFactorModalVisible,
             loginInProgress: $loginInProgress,
             serverAddress: $serverAddress,
-            performLogin: handleLogin
+            twoFactorCode: $twoFactorCode,
+            performLogin: handleLogin,
+            submitTwoFactor: submitTwoFactor
         )
     }
 }

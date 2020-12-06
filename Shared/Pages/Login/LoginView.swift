@@ -16,17 +16,16 @@ struct LoginView: View {
     @Binding var username: String
     @Binding var password: String
     @Binding var customServerModalVisible: Bool
+    @Binding var twoFactorModalVisible: Bool
     @Binding var loginInProgress: Bool
     @Binding var serverAddress: String
+    @Binding var twoFactorCode: String
     
     @State private var invalidUsername: Bool = false
     @State private var invalidPassword: Bool = false
     
     var performLogin: () -> Void
-    
-    var loginParsedServerAddress: String {
-        return serverAddress.components(separatedBy: "://").last ?? "** Unknown Address **"
-    }
+    var submitTwoFactor: (_ twoFactorCode: String) -> Void
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -46,14 +45,6 @@ struct LoginView: View {
                 onCommit: self.performLogin
             )
             Spacer()
-            if self.username.count > 0 {
-                Group {
-                    Text("Logging in as:").foregroundColor(Color(.gray))
-                    Text("@\(self.username):\(self.loginParsedServerAddress)").foregroundColor(Color(.gray))
-                }
-                .transition(.move(edge: .leading))
-                .animation(.easeInOut(duration: 0.2))
-            }
             Button(action: self.performLogin) {
                 HStack {
                     if (self.loginInProgress) {
@@ -63,7 +54,15 @@ struct LoginView: View {
                 }
             }
             .disabled(invalidUsername || invalidPassword || loginInProgress)
-            .buttonStyle(RoundedButtonStyle(backgroundColor: Color("Primary")))
+            .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
+            Text("").hidden().sheet(
+            isPresented: $twoFactorModalVisible) {
+                TwoFactorModal(
+                    twoFactorCode: $twoFactorCode,
+                    loginInProgress: $loginInProgress,
+                    submitTwoFactor: submitTwoFactor
+                )
+            }
             Text("").hidden().sheet(
             isPresented: $customServerModalVisible) {
                 CustomServerModal(serverAddress: $serverAddress)
@@ -75,7 +74,7 @@ struct LoginView: View {
         .navigationBarItems(
             leading: Text(""),
             trailing: Button(action: {self.customServerModalVisible.toggle()}) {
-                Image(systemName: "gear").imageScale(.large).foregroundColor(Color("Primary"))
+                Image(systemName: "gear").imageScale(.large).foregroundColor(Color("AccentColor"))
         })
     }
 }
@@ -95,8 +94,14 @@ struct LoginView_Previews: PreviewProvider {
         @State(initialValue: false) var customServerModalVisible: Bool
         @State(initialValue: false) var loginInProgress: Bool
         @State(initialValue: "https://www.reallyreallyreallylongserveraddress.com") var serverAddress: String
+        @State(initialValue: false) var twoFactorModalVisible: Bool
+        @State(initialValue: "") var twoFactorCode: String
         
         func login () -> Void {
+            return
+        }
+        
+        func submitTwoFactor(_ twoFactorCode: String) -> Void {
             return
         }
 
@@ -105,9 +110,12 @@ struct LoginView_Previews: PreviewProvider {
                 username: $username,
                 password: $password,
                 customServerModalVisible: $customServerModalVisible,
+                twoFactorModalVisible: $twoFactorModalVisible,
                 loginInProgress: $loginInProgress,
                 serverAddress: $serverAddress,
-                performLogin: login
+                twoFactorCode: $twoFactorCode,
+                performLogin: login,
+                submitTwoFactor: submitTwoFactor
             )
           }
     }
