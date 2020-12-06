@@ -71,6 +71,8 @@
 		EC9129CD257D59DF00E12BF6 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129CC257D59DF00E12BF6 /* HomeView.swift */; };
 		EC9129D1257D5EC100E12BF6 /* TwoFactorModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129D0257D5EC100E12BF6 /* TwoFactorModal.swift */; };
 		EC9129D9257D6C6400E12BF6 /* AuthorisationEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129D8257D6C6400E12BF6 /* AuthorisationEnum.swift */; };
+		EC9129DD257D828200E12BF6 /* ErrorAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129DC257D828200E12BF6 /* ErrorAlert.swift */; };
+		EC9129E1257D82D000E12BF6 /* IdentifiableError.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129E0257D82D000E12BF6 /* IdentifiableError.swift */; };
 		ECDE0E3D2572B5EC009D3561 /* SignalMapsiOSFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = ECDE0E3B2572B5EC009D3561 /* SignalMapsiOSFramework.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		ECDE0E432572B615009D3561 /* DataStoreInMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9A2572ADC700F7230F /* DataStoreInMemory.swift */; };
 		ECDE0E442572B615009D3561 /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9B2572ADC700F7230F /* Protocol.swift */; };
@@ -167,6 +169,8 @@
 		EC9129CC257D59DF00E12BF6 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		EC9129D0257D5EC100E12BF6 /* TwoFactorModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoFactorModal.swift; sourceTree = "<group>"; };
 		EC9129D8257D6C6400E12BF6 /* AuthorisationEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorisationEnum.swift; sourceTree = "<group>"; };
+		EC9129DC257D828200E12BF6 /* ErrorAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorAlert.swift; sourceTree = "<group>"; };
+		EC9129E0257D82D000E12BF6 /* IdentifiableError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifiableError.swift; sourceTree = "<group>"; };
 		ECDE0E392572B5EC009D3561 /* SignalMapsiOSFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SignalMapsiOSFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECDE0E3B2572B5EC009D3561 /* SignalMapsiOSFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SignalMapsiOSFramework.h; sourceTree = "<group>"; };
 		ECDE0E3C2572B5EC009D3561 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -324,6 +328,7 @@
 				EC912985257BB67500E12BF6 /* AppState.swift */,
 				EC9129C0257CF7DB00E12BF6 /* LoggedInUser.swift */,
 				EC9129C4257CF8BF00E12BF6 /* LoggedInUserError.swift */,
+				EC9129E0257D82D000E12BF6 /* IdentifiableError.swift */,
 			);
 			path = Structs;
 			sourceTree = "<group>";
@@ -344,6 +349,7 @@
 				EC9129B2257CC60A00E12BF6 /* TextFieldWithTitleAndValidation.swift */,
 				EC9129B8257CC61B00E12BF6 /* RoundedButton.swift */,
 				EC9129BC257CC72500E12BF6 /* ActivityIndicator.swift */,
+				EC9129DC257D828200E12BF6 /* ErrorAlert.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -614,6 +620,7 @@
 				EC9129D9257D6C6400E12BF6 /* AuthorisationEnum.swift in Sources */,
 				EC9129A6257CC33800E12BF6 /* LoginController.swift in Sources */,
 				EC12FBBB2572ADC700F7230F /* SenderKeyDistributionMessage.swift in Sources */,
+				EC9129E1257D82D000E12BF6 /* IdentifiableError.swift in Sources */,
 				EC12FBCF2572ADC700F7230F /* PreKeyRecord.swift in Sources */,
 				EC12FBDB2572ADC700F7230F /* SenderKeyName.swift in Sources */,
 				EC12FBDD2572ADC700F7230F /* ClonableHandleOwner.swift in Sources */,
@@ -631,6 +638,7 @@
 				EC12FBC12572ADC700F7230F /* PublicKey.swift in Sources */,
 				EC12FBDF2572ADC700F7230F /* IdentityKey.swift in Sources */,
 				EC9129A0257CC17D00E12BF6 /* AuthorisationError.swift in Sources */,
+				EC9129DD257D828200E12BF6 /* ErrorAlert.swift in Sources */,
 				EC12FBC52572ADC700F7230F /* Error.swift in Sources */,
 				EC9129B9257CC61B00E12BF6 /* RoundedButton.swift in Sources */,
 				EC9129AA257CC34900E12BF6 /* LoginView.swift in Sources */,

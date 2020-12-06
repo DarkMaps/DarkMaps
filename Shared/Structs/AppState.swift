@@ -9,5 +9,5 @@ import Foundation
 
 class AppState: ObservableObject {
     @Published var loggedInUser: LoggedInUser? = nil
-    @Published var displayedError: Error? = nil
+    @Published var displayedError: IdentifiableError? = nil
 }

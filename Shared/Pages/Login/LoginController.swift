@@ -32,7 +32,6 @@ struct LoginController: View {
         )
         switch loginOutcome {
         case .twoFactorRequired(let ephemeralCodeReceived):
-            
             ephemeralCode = ephemeralCodeReceived
             twoFactorModalVisible = true
         default:

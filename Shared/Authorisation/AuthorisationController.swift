@@ -25,7 +25,7 @@ public class AuthorisationController {
             return .twoFactorRequired("fakeEphemeralCode")
         } else {
             appState.loggedInUser = nil
-            appState.displayedError = AuthorisationError.invalidPassword
+            appState.displayedError = IdentifiableError(AuthorisationError.invalidPassword)
             print("Login Unsuccessful")
             return .failure
         }

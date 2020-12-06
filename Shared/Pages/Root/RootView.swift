@@ -17,6 +17,9 @@ struct RootView: View {
             return NavigationView{AnyView(
                 ZStack {
                     LoginController()
+                    Text("").hidden().alert(item: $appState.displayedError) { viewError -> Alert in
+                        return ErrorAlert(viewError: viewError)
+                    }
                 }
             )}
         } else {
