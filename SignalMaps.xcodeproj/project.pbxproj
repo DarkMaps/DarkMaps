@@ -53,6 +53,20 @@
 		EC12FBDE2572ADC700F7230F /* ClonableHandleOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBB12572ADC700F7230F /* ClonableHandleOwner.swift */; };
 		EC12FBDF2572ADC700F7230F /* IdentityKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBB22572ADC700F7230F /* IdentityKey.swift */; };
 		EC12FBE02572ADC700F7230F /* IdentityKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBB22572ADC700F7230F /* IdentityKey.swift */; };
+		EC912986257BB67500E12BF6 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC912985257BB67500E12BF6 /* AppState.swift */; };
+		EC91298C257BB69100E12BF6 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC91298B257BB69100E12BF6 /* RootView.swift */; };
+		EC91298F257BB84B00E12BF6 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC91298B257BB69100E12BF6 /* RootView.swift */; };
+		EC912992257BB85400E12BF6 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC912985257BB67500E12BF6 /* AppState.swift */; };
+		EC91299A257CC13900E12BF6 /* AuthorisationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC912999257CC13800E12BF6 /* AuthorisationController.swift */; };
+		EC9129A0257CC17D00E12BF6 /* AuthorisationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC91299F257CC17D00E12BF6 /* AuthorisationError.swift */; };
+		EC9129A6257CC33800E12BF6 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129A5257CC33800E12BF6 /* LoginController.swift */; };
+		EC9129AA257CC34900E12BF6 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129A9257CC34900E12BF6 /* LoginView.swift */; };
+		EC9129AE257CC51E00E12BF6 /* CustomServerModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129AD257CC51E00E12BF6 /* CustomServerModal.swift */; };
+		EC9129B3257CC60A00E12BF6 /* TextFieldWithTitleAndValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129B2257CC60A00E12BF6 /* TextFieldWithTitleAndValidation.swift */; };
+		EC9129B9257CC61B00E12BF6 /* RoundedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129B8257CC61B00E12BF6 /* RoundedButton.swift */; };
+		EC9129BD257CC72500E12BF6 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129BC257CC72500E12BF6 /* ActivityIndicator.swift */; };
+		EC9129C1257CF7DB00E12BF6 /* LoggedInUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129C0257CF7DB00E12BF6 /* LoggedInUser.swift */; };
+		EC9129C5257CF8BF00E12BF6 /* LoggedInUserError.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129C4257CF8BF00E12BF6 /* LoggedInUserError.swift */; };
 		ECDE0E3D2572B5EC009D3561 /* SignalMapsiOSFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = ECDE0E3B2572B5EC009D3561 /* SignalMapsiOSFramework.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		ECDE0E432572B615009D3561 /* DataStoreInMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9A2572ADC700F7230F /* DataStoreInMemory.swift */; };
 		ECDE0E442572B615009D3561 /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9B2572ADC700F7230F /* Protocol.swift */; };
@@ -133,6 +147,18 @@
 		EC12FBB02572ADC700F7230F /* SenderKeyName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SenderKeyName.swift; sourceTree = "<group>"; };
 		EC12FBB12572ADC700F7230F /* ClonableHandleOwner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClonableHandleOwner.swift; sourceTree = "<group>"; };
 		EC12FBB22572ADC700F7230F /* IdentityKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityKey.swift; sourceTree = "<group>"; };
+		EC912985257BB67500E12BF6 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		EC91298B257BB69100E12BF6 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		EC912999257CC13800E12BF6 /* AuthorisationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorisationController.swift; sourceTree = "<group>"; };
+		EC91299F257CC17D00E12BF6 /* AuthorisationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorisationError.swift; sourceTree = "<group>"; };
+		EC9129A5257CC33800E12BF6 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
+		EC9129A9257CC34900E12BF6 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		EC9129AD257CC51E00E12BF6 /* CustomServerModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomServerModal.swift; sourceTree = "<group>"; };
+		EC9129B2257CC60A00E12BF6 /* TextFieldWithTitleAndValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldWithTitleAndValidation.swift; sourceTree = "<group>"; };
+		EC9129B8257CC61B00E12BF6 /* RoundedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedButton.swift; sourceTree = "<group>"; };
+		EC9129BC257CC72500E12BF6 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
+		EC9129C0257CF7DB00E12BF6 /* LoggedInUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggedInUser.swift; sourceTree = "<group>"; };
+		EC9129C4257CF8BF00E12BF6 /* LoggedInUserError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggedInUserError.swift; sourceTree = "<group>"; };
 		ECDE0E392572B5EC009D3561 /* SignalMapsiOSFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SignalMapsiOSFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECDE0E3B2572B5EC009D3561 /* SignalMapsiOSFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SignalMapsiOSFramework.h; sourceTree = "<group>"; };
 		ECDE0E3C2572B5EC009D3561 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -222,6 +248,94 @@
 			path = state;
 			sourceTree = "<group>";
 		};
+		EC91297E257BB50C00E12BF6 /* Keychain */ = {
+			isa = PBXGroup;
+			children = (
+				ECFFD64E2572A9C900458BC8 /* KeychainSwiftDistrib.swift */,
+			);
+			path = Keychain;
+			sourceTree = "<group>";
+		};
+		EC91297F257BB51F00E12BF6 /* SignalProtocol */ = {
+			isa = PBXGroup;
+			children = (
+				ECFFD64D2572A9C900458BC8 /* KeychainSignalProtocolStore.swift */,
+			);
+			path = SignalProtocol;
+			sourceTree = "<group>";
+		};
+		EC912980257BB5CE00E12BF6 /* Pages */ = {
+			isa = PBXGroup;
+			children = (
+				EC912984257BB63F00E12BF6 /* Root */,
+				EC912983257BB61F00E12BF6 /* Detail */,
+				EC912982257BB61700E12BF6 /* Home */,
+				EC912981257BB60C00E12BF6 /* Login */,
+			);
+			path = Pages;
+			sourceTree = "<group>";
+		};
+		EC912981257BB60C00E12BF6 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				EC9129A5257CC33800E12BF6 /* LoginController.swift */,
+				EC9129A9257CC34900E12BF6 /* LoginView.swift */,
+				EC9129AD257CC51E00E12BF6 /* CustomServerModal.swift */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		EC912982257BB61700E12BF6 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		EC912983257BB61F00E12BF6 /* Detail */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Detail;
+			sourceTree = "<group>";
+		};
+		EC912984257BB63F00E12BF6 /* Root */ = {
+			isa = PBXGroup;
+			children = (
+				EC91298B257BB69100E12BF6 /* RootView.swift */,
+			);
+			path = Root;
+			sourceTree = "<group>";
+		};
+		EC912995257BBAA800E12BF6 /* Structs */ = {
+			isa = PBXGroup;
+			children = (
+				EC912985257BB67500E12BF6 /* AppState.swift */,
+				EC9129C0257CF7DB00E12BF6 /* LoggedInUser.swift */,
+				EC9129C4257CF8BF00E12BF6 /* LoggedInUserError.swift */,
+			);
+			path = Structs;
+			sourceTree = "<group>";
+		};
+		EC912998257CC11F00E12BF6 /* Authorisation */ = {
+			isa = PBXGroup;
+			children = (
+				EC912999257CC13800E12BF6 /* AuthorisationController.swift */,
+				EC91299F257CC17D00E12BF6 /* AuthorisationError.swift */,
+			);
+			path = Authorisation;
+			sourceTree = "<group>";
+		};
+		EC9129B1257CC5F600E12BF6 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				EC9129B2257CC60A00E12BF6 /* TextFieldWithTitleAndValidation.swift */,
+				EC9129B8257CC61B00E12BF6 /* RoundedButton.swift */,
+				EC9129BC257CC72500E12BF6 /* ActivityIndicator.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		ECDE0E3A2572B5EC009D3561 /* SignalMapsiOSFramework */ = {
 			isa = PBXGroup;
 			children = (
@@ -248,10 +362,14 @@
 		ECFFD50E257261FB00458BC8 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				EC9129B1257CC5F600E12BF6 /* Components */,
+				EC912998257CC11F00E12BF6 /* Authorisation */,
+				EC912995257BBAA800E12BF6 /* Structs */,
+				EC912980257BB5CE00E12BF6 /* Pages */,
+				EC91297F257BB51F00E12BF6 /* SignalProtocol */,
+				EC91297E257BB50C00E12BF6 /* Keychain */,
 				ECFFD50F257261FB00458BC8 /* SignalMapsApp.swift */,
 				ECFFD510257261FB00458BC8 /* ContentView.swift */,
-				ECFFD64D2572A9C900458BC8 /* KeychainSignalProtocolStore.swift */,
-				ECFFD64E2572A9C900458BC8 /* KeychainSwiftDistrib.swift */,
 				ECFFD5112572620300458BC8 /* Assets.xcassets */,
 			);
 			path = Shared;
@@ -464,32 +582,44 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EC9129BD257CC72500E12BF6 /* ActivityIndicator.swift in Sources */,
 				EC12FBB92572ADC700F7230F /* SenderKeyMessage.swift in Sources */,
 				EC12FBC92572ADC700F7230F /* SessionRecord.swift in Sources */,
+				EC91299A257CC13900E12BF6 /* AuthorisationController.swift in Sources */,
 				EC12FBBD2572ADC700F7230F /* CiphertextMessage.swift in Sources */,
 				EC12FBCB2572ADC700F7230F /* SignedPreKeyRecord.swift in Sources */,
+				EC912986257BB67500E12BF6 /* AppState.swift in Sources */,
 				EC12FBC32572ADC700F7230F /* Address.swift in Sources */,
+				EC91298C257BB69100E12BF6 /* RootView.swift in Sources */,
 				EC12FBB32572ADC700F7230F /* DataStoreInMemory.swift in Sources */,
 				ECFFD5242572620300458BC8 /* ContentView.swift in Sources */,
 				ECFFD64F2572A9C900458BC8 /* KeychainSignalProtocolStore.swift in Sources */,
 				ECFFD5222572620300458BC8 /* SignalMapsApp.swift in Sources */,
 				EC12FBB72572ADC700F7230F /* PreKeySignalMessage.swift in Sources */,
+				EC9129A6257CC33800E12BF6 /* LoginController.swift in Sources */,
 				EC12FBBB2572ADC700F7230F /* SenderKeyDistributionMessage.swift in Sources */,
 				EC12FBCF2572ADC700F7230F /* PreKeyRecord.swift in Sources */,
 				EC12FBDB2572ADC700F7230F /* SenderKeyName.swift in Sources */,
 				EC12FBDD2572ADC700F7230F /* ClonableHandleOwner.swift in Sources */,
 				EC12FBD92572ADC700F7230F /* Fingerprint.swift in Sources */,
+				EC9129AE257CC51E00E12BF6 /* CustomServerModal.swift in Sources */,
 				EC12FBBF2572ADC700F7230F /* SignalMessage.swift in Sources */,
 				EC12FBD52572ADC700F7230F /* DataStoreProtocols.swift in Sources */,
 				ECFFD6512572A9C900458BC8 /* KeychainSwiftDistrib.swift in Sources */,
 				EC12FBD72572ADC700F7230F /* Utils.swift in Sources */,
 				EC12FBCD2572ADC700F7230F /* SenderKeyRecord.swift in Sources */,
 				EC12FBD12572ADC700F7230F /* PreKeyBundle.swift in Sources */,
+				EC9129C1257CF7DB00E12BF6 /* LoggedInUser.swift in Sources */,
 				EC12FBC72572ADC700F7230F /* Kdf.swift in Sources */,
+				EC9129C5257CF8BF00E12BF6 /* LoggedInUserError.swift in Sources */,
 				EC12FBC12572ADC700F7230F /* PublicKey.swift in Sources */,
 				EC12FBDF2572ADC700F7230F /* IdentityKey.swift in Sources */,
+				EC9129A0257CC17D00E12BF6 /* AuthorisationError.swift in Sources */,
 				EC12FBC52572ADC700F7230F /* Error.swift in Sources */,
+				EC9129B9257CC61B00E12BF6 /* RoundedButton.swift in Sources */,
+				EC9129AA257CC34900E12BF6 /* LoginView.swift in Sources */,
 				EC12FBB52572ADC700F7230F /* Protocol.swift in Sources */,
+				EC9129B3257CC60A00E12BF6 /* TextFieldWithTitleAndValidation.swift in Sources */,
 				EC12FBD32572ADC700F7230F /* PrivateKey.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -502,6 +632,7 @@
 				EC12FBCA2572ADC700F7230F /* SessionRecord.swift in Sources */,
 				EC12FBBE2572ADC700F7230F /* CiphertextMessage.swift in Sources */,
 				EC12FBCC2572ADC700F7230F /* SignedPreKeyRecord.swift in Sources */,
+				EC91298F257BB84B00E12BF6 /* RootView.swift in Sources */,
 				EC12FBC42572ADC700F7230F /* Address.swift in Sources */,
 				EC12FBB42572ADC700F7230F /* DataStoreInMemory.swift in Sources */,
 				ECFFD5252572620300458BC8 /* ContentView.swift in Sources */,
@@ -513,6 +644,7 @@
 				EC12FBDC2572ADC700F7230F /* SenderKeyName.swift in Sources */,
 				EC12FBDE2572ADC700F7230F /* ClonableHandleOwner.swift in Sources */,
 				EC12FBDA2572ADC700F7230F /* Fingerprint.swift in Sources */,
+				EC912992257BB85400E12BF6 /* AppState.swift in Sources */,
 				EC12FBC02572ADC700F7230F /* SignalMessage.swift in Sources */,
 				EC12FBD62572ADC700F7230F /* DataStoreProtocols.swift in Sources */,
 				ECFFD6522572A9C900458BC8 /* KeychainSwiftDistrib.swift in Sources */,

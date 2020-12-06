@@ -10,12 +10,8 @@ import SignalFfi
 
 struct ContentView: View {
     
-    func testFunc() {
-    }
-    
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        RootView()
     }
 }
 
