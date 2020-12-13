@@ -14,6 +14,7 @@ public class LoggedInUser: Equatable, Hashable {
     public let deviceName: String
     public let serverAddress: String
     public let authCode: String
+    public let is2FAUser: Bool
     
     var combinedName: String {
         return "\(self.userName):\(self.deviceName):\(String(describing: self.serverAddress.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed))):\(self.authCode)"
@@ -24,11 +25,12 @@ public class LoggedInUser: Equatable, Hashable {
     /// - Parameters:
     ///   - userName: The username fo the recipient
     ///   - deviceName: The deviceName of the recipient
-    public init(userName: String, deviceName: String, serverAddress: String, authCode: String) {
+    public init(userName: String, deviceName: String, serverAddress: String, authCode: String, is2FAUser: Bool) {
         self.userName = userName
         self.deviceName = deviceName
         self.serverAddress = serverAddress
         self.authCode = authCode
+        self.is2FAUser = is2FAUser
     }
     
     
@@ -37,11 +39,12 @@ public class LoggedInUser: Equatable, Hashable {
     /// - Parameter combinedName: The combined name to initialise from
     public init(combinedName: String) throws {
         let components = combinedName.components(separatedBy: ":")
-        guard components.count == 4 else {throw LoggedInUserError.invalidCombinedName}
+        guard components.count == 5 else {throw LoggedInUserError.invalidCombinedName}
         self.userName = components[0]
         self.deviceName = components[1]
         self.serverAddress = components[2]
         self.authCode = String(components[3]).removingPercentEncoding!
+        self.is2FAUser = components[4]
     }
     
     // Conforming to Equatable
@@ -55,5 +58,20 @@ public class LoggedInUser: Equatable, Hashable {
         hasher.combine(deviceName)
         hasher.combine(serverAddress)
         hasher.combine(authCode)
+        hasher.combine(is2FAUser)
+    }
+}
+
+
+enum LoggedInUserError: LocalizedError {
+    case invalidCombinedName
+}
+
+extension LoggedInUserError {
+    public var errorDescription: String? {
+        switch self {
+            case .invalidCombinedName:
+                return NSLocalizedString("Error loading user", comment: "")
+        }
     }
 }

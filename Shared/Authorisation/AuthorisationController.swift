@@ -40,4 +40,9 @@ public class AuthorisationController {
         )
     }
     
+    func logUserOut(appState: AppState) {
+        print("Log Out")
+        appState.loggedInUser = nil
+    }
+    
 }

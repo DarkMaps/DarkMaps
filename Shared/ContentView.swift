@@ -10,15 +10,15 @@ import SignalFfi
 
 struct ContentView: View {
     
-    var appState = AppState()
+    @EnvironmentObject var appState: AppState
     
     var body: some View {
-        RootView().environmentObject(appState)
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
+        
+        if $appState.loggedInUser.wrappedValue != nil {
+            HomeView()
+        } else {
+            LoginController()
+        }
+        
     }
 }

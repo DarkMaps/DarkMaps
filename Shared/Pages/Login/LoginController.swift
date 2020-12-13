@@ -34,10 +34,11 @@ struct LoginController: View {
         case .twoFactorRequired(let ephemeralCodeReceived):
             ephemeralCode = ephemeralCodeReceived
             twoFactorModalVisible = true
+        case .failure:
+            loginInProgress = false
         default:
             return
         }
-        loginInProgress = false
     }
     
     func submitTwoFactor(_ twoFactorCode: String) {
