@@ -44,7 +44,7 @@ public class LoggedInUser: Equatable, Hashable {
         self.deviceName = components[1]
         self.serverAddress = components[2]
         self.authCode = String(components[3]).removingPercentEncoding!
-        self.is2FAUser = components[4]
+        self.is2FAUser = (components[4] == "true") ? true : false
     }
     
     // Conforming to Equatable
@@ -58,7 +58,7 @@ public class LoggedInUser: Equatable, Hashable {
         hasher.combine(deviceName)
         hasher.combine(serverAddress)
         hasher.combine(authCode)
-        hasher.combine(is2FAUser)
+        hasher.combine(is2FAUser ? "true" : "false")
     }
 }
 
