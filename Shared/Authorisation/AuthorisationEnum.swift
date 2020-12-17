@@ -7,8 +7,8 @@
 
 import Foundation
 
-public enum loginOutcome {
-    case success
+public enum LoginOutcome {
+    case success(LoggedInUser)
     case twoFactorRequired(String)
-    case failure
+    case failure(AuthorisationError)
 }

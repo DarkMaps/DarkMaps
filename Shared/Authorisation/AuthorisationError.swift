@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum AuthorisationError: LocalizedError {
+public enum AuthorisationError: LocalizedError {
     case invalidUsername
     case invalidPassword
 }

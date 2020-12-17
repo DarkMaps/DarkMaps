@@ -24,20 +24,20 @@ struct LoginController: View {
     
     func handleLogin() -> Void {
         loginInProgress = true
-        let loginOutcome = authorisationController.login(
+        authorisationController.login(
             username: username,
             password: password,
-            serverAddress: serverAddress,
-            appState: appState
-        )
-        switch loginOutcome {
-        case .twoFactorRequired(let ephemeralCodeReceived):
-            ephemeralCode = ephemeralCodeReceived
-            twoFactorModalVisible = true
-        case .failure:
-            loginInProgress = false
-        default:
-            return
+            serverAddress: serverAddress
+        ) { loginOutcome in
+            switch loginOutcome {
+            case .twoFactorRequired(let ephemeralCodeReceived):
+                ephemeralCode = ephemeralCodeReceived
+                twoFactorModalVisible = true
+            case .failure:
+                loginInProgress = false
+            default:
+                return
+            }
         }
     }
     

@@ -9,27 +9,50 @@ import Foundation
 
 public class AuthorisationController {
     
-    func login(username: String, password: String, serverAddress: String, appState: AppState) -> loginOutcome{
+    var simpleSignalSwiftAPI = SimpleSignalSwiftAPI()
+    
+    func login(username: String, password: String, serverAddress: String, completionHandler: @escaping (_: LoginOutcome) -> ()) {
         print("Attempting Login")
-        if username == "testUser" && password == "password" {
-            appState.loggedInUser = LoggedInUser(
-                userName: username,
-                deviceName: "fakeDeviceName",
-                serverAddress: serverAddress,
-                authCode: "testAuthString",
-                is2FAUser: false
-            )
-            print("Login Successful")
-            return .success
-        } else if username == "testUser2FA" && password == "password" {
-            print("2FA Required")
-            return .twoFactorRequired("fakeEphemeralCode")
-        } else {
-            appState.loggedInUser = nil
-            appState.displayedError = IdentifiableError(AuthorisationError.invalidPassword)
-            print("Login Unsuccessful")
-            return .failure
+        DispatchQueue.global(qos: .utility).async {
+            let response = self.simpleSignalSwiftAPI.login(username: username, password: password, serverAddress: serverAddress)
+            DispatchQueue.main.async {
+                switch response {
+                    case let .success(data):
+                        let newUser =  LoggedInUser(
+                            userName: username,
+                            deviceName: "fakeDeviceName",
+                            serverAddress: serverAddress,
+                            authCode: data.authToken,
+                            is2FAUser: false
+                        )
+                        print("Login Successful")
+                        completionHandler(.success(newUser))
+                    case let .failure(error):
+                        print(error)
+                        print("Login Unsuccessful")
+                        completionHandler(.failure(AuthorisationError.invalidPassword))
+                    }
+            }
         }
+//        if username == "testUser" && password == "password" {
+//            appState.loggedInUser = LoggedInUser(
+//                userName: username,
+//                deviceName: "fakeDeviceName",
+//                serverAddress: serverAddress,
+//                authCode: "testAuthString",
+//                is2FAUser: false
+//            )
+//            print("Login Successful")
+//            return .success
+//        } else if username == "testUser2FA" && password == "password" {
+//            print("2FA Required")
+//            return .twoFactorRequired("fakeEphemeralCode")
+//        } else {
+//            appState.loggedInUser = nil
+//            appState.displayedError = IdentifiableError(AuthorisationError.invalidPassword)
+//            print("Login Unsuccessful")
+//            return .failure
+//        }
     }
     
     func submitTwoFactor(ephemeralCode: String, twoFactorCode: String, username: String, serverAddress: String, appState: AppState) {
