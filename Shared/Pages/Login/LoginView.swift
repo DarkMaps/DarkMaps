@@ -9,10 +9,6 @@ import SwiftUI
 
 struct LoginView: View {
     
-//    // This is required to allow modal to be displayed multiple times
-//    // See: https://stackoverflow.com/questions/58512344/swiftui-navigation-bar-button-not-clickable-after-sheet-has-been-presented
-//    @Environment(\.presentationMode) var presentation
-    
     @Binding var username: String
     @Binding var password: String
     @Binding var customServerModalVisible: Bool

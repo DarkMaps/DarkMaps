@@ -16,7 +16,8 @@ public class AuthorisationController {
                 userName: username,
                 deviceName: "fakeDeviceName",
                 serverAddress: serverAddress,
-                authCode: "testAuthString"
+                authCode: "testAuthString",
+                is2FAUser: false
             )
             print("Login Successful")
             return .success
@@ -36,12 +37,45 @@ public class AuthorisationController {
             userName: username,
             deviceName: "fakeDeviceName",
             serverAddress: serverAddress,
-            authCode: "testAuthString"
+            authCode: "testAuthString",
+            is2FAUser: true
         )
     }
     
     func logUserOut(appState: AppState) {
         print("Log Out")
+        appState.loggedInUser = nil
+    }
+    
+    func request2FAQRCode() -> String {
+        print("Request 2FA QR Code")
+        return "jkhsdgjhsjdghjsghsk"
+    }
+    
+    func activate2FA(code: String, appState: AppState) {
+        print("Activate 2FA")
+        appState.loggedInUser = LoggedInUser(
+            userName: appState.loggedInUser!.userName,
+            deviceName: appState.loggedInUser!.deviceName,
+            serverAddress: appState.loggedInUser!.serverAddress,
+            authCode: appState.loggedInUser!.authCode,
+            is2FAUser: true
+        )
+    }
+    
+    func deactivate2FA(code: String, appState: AppState) {
+        print("Deactivate 2FA")
+        appState.loggedInUser = LoggedInUser(
+            userName: appState.loggedInUser!.userName,
+            deviceName: appState.loggedInUser!.deviceName,
+            serverAddress: appState.loggedInUser!.serverAddress,
+            authCode: appState.loggedInUser!.authCode,
+            is2FAUser: false
+        )
+    }
+    
+    func deleteUserAccount(appState: AppState) {
+        print("Delete User Account")
         appState.loggedInUser = nil
     }
     

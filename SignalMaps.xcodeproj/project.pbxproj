@@ -53,6 +53,8 @@
 		EC12FBDE2572ADC700F7230F /* ClonableHandleOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBB12572ADC700F7230F /* ClonableHandleOwner.swift */; };
 		EC12FBDF2572ADC700F7230F /* IdentityKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBB22572ADC700F7230F /* IdentityKey.swift */; };
 		EC12FBE02572ADC700F7230F /* IdentityKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBB22572ADC700F7230F /* IdentityKey.swift */; };
+		EC4520D525896275002768C8 /* Activate2FAModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4520D425896275002768C8 /* Activate2FAModal.swift */; };
+		EC4520D925896287002768C8 /* Deactivate2FAModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4520D825896287002768C8 /* Deactivate2FAModal.swift */; };
 		EC912986257BB67500E12BF6 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC912985257BB67500E12BF6 /* AppState.swift */; };
 		EC912992257BB85400E12BF6 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC912985257BB67500E12BF6 /* AppState.swift */; };
 		EC91299A257CC13900E12BF6 /* AuthorisationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC912999257CC13800E12BF6 /* AuthorisationController.swift */; };
@@ -158,6 +160,8 @@
 		EC12FBB02572ADC700F7230F /* SenderKeyName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SenderKeyName.swift; sourceTree = "<group>"; };
 		EC12FBB12572ADC700F7230F /* ClonableHandleOwner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClonableHandleOwner.swift; sourceTree = "<group>"; };
 		EC12FBB22572ADC700F7230F /* IdentityKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityKey.swift; sourceTree = "<group>"; };
+		EC4520D425896275002768C8 /* Activate2FAModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activate2FAModal.swift; sourceTree = "<group>"; };
+		EC4520D825896287002768C8 /* Deactivate2FAModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deactivate2FAModal.swift; sourceTree = "<group>"; };
 		EC912985257BB67500E12BF6 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		EC912999257CC13800E12BF6 /* AuthorisationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorisationController.swift; sourceTree = "<group>"; };
 		EC91299F257CC17D00E12BF6 /* AuthorisationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorisationError.swift; sourceTree = "<group>"; };
@@ -383,6 +387,8 @@
 			children = (
 				ECC0A5D8257FE8F5001D5E60 /* SettingsController.swift */,
 				ECC0A5DC257FE8FF001D5E60 /* SettingsView.swift */,
+				EC4520D425896275002768C8 /* Activate2FAModal.swift */,
+				EC4520D825896287002768C8 /* Deactivate2FAModal.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -643,6 +649,7 @@
 				EC12FBC32572ADC700F7230F /* Address.swift in Sources */,
 				EC9129D1257D5EC100E12BF6 /* TwoFactorModal.swift in Sources */,
 				ECC0A5C5257FE8B8001D5E60 /* ListView.swift in Sources */,
+				EC4520D925896287002768C8 /* Deactivate2FAModal.swift in Sources */,
 				EC12FBB32572ADC700F7230F /* DataStoreInMemory.swift in Sources */,
 				ECFFD5242572620300458BC8 /* ContentView.swift in Sources */,
 				EC9129CD257D59DF00E12BF6 /* HomeView.swift in Sources */,
@@ -661,6 +668,7 @@
 				EC12FBBF2572ADC700F7230F /* SignalMessage.swift in Sources */,
 				EC12FBD52572ADC700F7230F /* DataStoreProtocols.swift in Sources */,
 				ECFFD6512572A9C900458BC8 /* KeychainSwiftDistrib.swift in Sources */,
+				EC4520D525896275002768C8 /* Activate2FAModal.swift in Sources */,
 				ECC0A5D1257FE8DF001D5E60 /* NewChatController.swift in Sources */,
 				EC12FBD72572ADC700F7230F /* Utils.swift in Sources */,
 				EC12FBCD2572ADC700F7230F /* SenderKeyRecord.swift in Sources */,
