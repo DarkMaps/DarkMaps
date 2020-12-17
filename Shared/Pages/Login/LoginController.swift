@@ -38,6 +38,8 @@ struct LoginController: View {
                     ephemeralCode = ephemeralCodeReceived
                     twoFactorModalVisible = true
                 case .failure(let error):
+                    print(error)
+                    print(error.localizedDescription)
                     appState.displayedError = IdentifiableError(error)
                 }
             }

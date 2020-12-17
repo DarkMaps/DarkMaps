@@ -58,8 +58,6 @@ struct HomeView: View {
                     .foregroundColor(Color.gray),
                 alignment: .top
             )
-        }.alert(item: $appState.displayedError) { viewError -> Alert in
-            return ErrorAlert(viewError: viewError)
         }
     }
 }

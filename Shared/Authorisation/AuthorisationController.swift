@@ -31,20 +31,8 @@ public class AuthorisationController {
                         switch error {
                         case let .needsTwoFactorAuthentication(ephemeralToken):
                             completionHandler(.twoFactorRequired(ephemeralToken))
-                        case .url:
-                            completionHandler(.failure(.invalidUrl))
-                        case .clientJson:
-                            completionHandler(.failure(.badFormat))
-                        case .serverError, .serverJson:
-                            completionHandler(.failure(.serverError))
-                        case let .server(errorString):
-                            if (errorString == "Unable to login with provided credentials.") {
-                                completionHandler(.failure(.invalidCredentials))
-                            } else {
-                                completionHandler(.failure(.serverError))
-                            }
-                        case .requestThrottled:
-                            completionHandler(.failure(.requestThrottled))
+                        default:
+                            completionHandler(.failure(error))
                         }
                     }
             }
@@ -71,7 +59,7 @@ public class AuthorisationController {
         return "jkhsdgjhsjdghjsghsk"
     }
     
-    func BUILDINGFORAPIrequest2DAQRCode(authToken: String, serverAddress: String, completionHandler: @escaping (_: Result<String, TwoFactorError>) -> ()) {
+    func BUILDINGFORAPIrequest2DAQRCode(authToken: String, serverAddress: String, completionHandler: @escaping (_: Result<String, SSAPIActivate2FAError>) -> ()) {
         print("Request 2FA QR Code")
         DispatchQueue.global(qos: .utility).async {
             let response = self.simpleSignalSwiftAPI.activateTwoFactorAuthentication(authToken: authToken, mfaMethodName: "app", serverAddress: serverAddress)
@@ -85,19 +73,8 @@ public class AuthorisationController {
                         completionHandler(.success(data.qrLink!))
                     case let .failure(error):
                         print("Request Unsuccessful")
-                        switch error {
-                        case .possibleIncorrectMFAMethodName:
-                            completionHandler(.failure(.invalidMFAName))
-                        case .url:
-                            completionHandler(.failure(.invalidUrl))
-                        case .clientJson:
-                            completionHandler(.failure(.badFormat))
-                        case .serverError, .serverJson:
-                            completionHandler(.failure(.serverError))
-                        case .requestThrottled:
-                            completionHandler(.failure(.requestThrottled))
-                        }
-                    }
+                        completionHandler(.failure(error))
+                }
             }
         }
     }

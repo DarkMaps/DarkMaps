@@ -8,6 +8,7 @@
 import SwiftUI
 
 public func ErrorAlert(viewError: IdentifiableError) -> Alert {
+    print(viewError.error.localizedDescription)
     return Alert(
         title: Text("Error"),
         message: Text(viewError.error.localizedDescription),

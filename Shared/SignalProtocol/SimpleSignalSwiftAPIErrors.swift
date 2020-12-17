@@ -1,23 +1,18 @@
 //
-//  AuthorisationError.swift
+//  SimpleSignalSwiftAPIErrors.swift
 //  SignalMaps (iOS)
 //
-//  Created by Matthew Roche on 06/12/2020.
+//  Created by Matthew Roche on 17/12/2020.
 //
 
 import Foundation
 
-public enum AuthorisationError: LocalizedError {
-    case invalidCredentials
-    case invalidUrl
-    case badFormat
-    case badResponseFromServer
-    case serverError
-    case requestThrottled
+public enum SSAPILoginError: Error {
+    case invalidCredentials, invalidUrl, badFormat, badResponseFromServer, serverError, needsTwoFactorAuthentication(String), requestThrottled
 }
 
-extension AuthorisationError {
-    public var errorDescription: String? {
+extension SSAPILoginError {
+    public var localizedDescription: String {
         switch self {
         case .invalidCredentials:
             return NSLocalizedString("The credentials provided are invalid", comment: "")
@@ -31,24 +26,21 @@ extension AuthorisationError {
             return NSLocalizedString("The server returned an error", comment: "")
         case .requestThrottled:
             return NSLocalizedString("The request was throttled", comment: "")
+        case .needsTwoFactorAuthentication:
+            return NSLocalizedString("This user has two factor authentication enabled", comment: "")
         }
     }
 }
 
-public enum TwoFactorError: LocalizedError {
-    case invalidMFAName
-    case invalidUrl
-    case badFormat
-    case badResponseFromServer
-    case serverError
-    case requestThrottled
+
+
+public enum SSAPIActivate2FAError: Error {
+    case invalidUrl, badFormat, badResponseFromServer, serverError, possibleIncorrectMFAMethodName, requestThrottled
 }
 
-extension TwoFactorError {
-    public var errorDescription: String? {
+extension SSAPIActivate2FAError {
+    public var localizedDescription: String {
         switch self {
-        case .invalidMFAName:
-            return NSLocalizedString("This type of two factor authentication does not exist on the server", comment: "")
         case .invalidUrl:
             return NSLocalizedString("The server address provided is invalid", comment: "")
         case .badFormat:
@@ -59,6 +51,9 @@ extension TwoFactorError {
             return NSLocalizedString("The server returned an error", comment: "")
         case .requestThrottled:
             return NSLocalizedString("The request was throttled", comment: "")
+        case .possibleIncorrectMFAMethodName:
+            return NSLocalizedString("This type of two factor authentication does not exist on the server", comment: "")
         }
     }
 }
+

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -57,6 +57,8 @@
 		EC12FBDE2572ADC700F7230F /* ClonableHandleOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBB12572ADC700F7230F /* ClonableHandleOwner.swift */; };
 		EC12FBDF2572ADC700F7230F /* IdentityKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBB22572ADC700F7230F /* IdentityKey.swift */; };
 		EC12FBE02572ADC700F7230F /* IdentityKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBB22572ADC700F7230F /* IdentityKey.swift */; };
+		EC23C0EC258BEE2D00ABDE84 /* SimpleSignalSwiftAPIErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC23C0EB258BEE2D00ABDE84 /* SimpleSignalSwiftAPIErrors.swift */; };
+		EC23C0F5258BEE4600ABDE84 /* SimpleSignalSwiftAPIStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC23C0F4258BEE4600ABDE84 /* SimpleSignalSwiftAPIStructs.swift */; };
 		EC4520D525896275002768C8 /* Activate2FAModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4520D425896275002768C8 /* Activate2FAModal.swift */; };
 		EC4520D925896287002768C8 /* Deactivate2FAModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4520D825896287002768C8 /* Deactivate2FAModal.swift */; };
 		EC4520DD258B66F8002768C8 /* SimpleSignalSwiftAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4520DC258B66F8002768C8 /* SimpleSignalSwiftAPI.swift */; };
@@ -64,7 +66,6 @@
 		EC912986257BB67500E12BF6 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC912985257BB67500E12BF6 /* AppState.swift */; };
 		EC912992257BB85400E12BF6 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC912985257BB67500E12BF6 /* AppState.swift */; };
 		EC91299A257CC13900E12BF6 /* AuthorisationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC912999257CC13800E12BF6 /* AuthorisationController.swift */; };
-		EC9129A0257CC17D00E12BF6 /* AuthorisationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC91299F257CC17D00E12BF6 /* AuthorisationError.swift */; };
 		EC9129A6257CC33800E12BF6 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129A5257CC33800E12BF6 /* LoginController.swift */; };
 		EC9129AA257CC34900E12BF6 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129A9257CC34900E12BF6 /* LoginView.swift */; };
 		EC9129AE257CC51E00E12BF6 /* CustomServerModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129AD257CC51E00E12BF6 /* CustomServerModal.swift */; };
@@ -187,6 +188,8 @@
 		EC12FBB02572ADC700F7230F /* SenderKeyName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SenderKeyName.swift; sourceTree = "<group>"; };
 		EC12FBB12572ADC700F7230F /* ClonableHandleOwner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClonableHandleOwner.swift; sourceTree = "<group>"; };
 		EC12FBB22572ADC700F7230F /* IdentityKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityKey.swift; sourceTree = "<group>"; };
+		EC23C0EB258BEE2D00ABDE84 /* SimpleSignalSwiftAPIErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleSignalSwiftAPIErrors.swift; sourceTree = "<group>"; };
+		EC23C0F4258BEE4600ABDE84 /* SimpleSignalSwiftAPIStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleSignalSwiftAPIStructs.swift; sourceTree = "<group>"; };
 		EC4520D425896275002768C8 /* Activate2FAModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activate2FAModal.swift; sourceTree = "<group>"; };
 		EC4520D825896287002768C8 /* Deactivate2FAModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deactivate2FAModal.swift; sourceTree = "<group>"; };
 		EC4520DC258B66F8002768C8 /* SimpleSignalSwiftAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleSignalSwiftAPI.swift; sourceTree = "<group>"; };
@@ -195,7 +198,6 @@
 		EC67E4C7258BC39100CACBE7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EC912985257BB67500E12BF6 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		EC912999257CC13800E12BF6 /* AuthorisationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorisationController.swift; sourceTree = "<group>"; };
-		EC91299F257CC17D00E12BF6 /* AuthorisationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorisationError.swift; sourceTree = "<group>"; };
 		EC9129A5257CC33800E12BF6 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		EC9129A9257CC34900E12BF6 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		EC9129AD257CC51E00E12BF6 /* CustomServerModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomServerModal.swift; sourceTree = "<group>"; };
@@ -284,7 +286,6 @@
 				90C1554DF51364B9D04C5877 /* Pods-SignalMapsiOSFramework.debug.xcconfig */,
 				6B46959A2EE072ECE69BA27E /* Pods-SignalMapsiOSFramework.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -356,6 +357,8 @@
 			children = (
 				ECFFD64D2572A9C900458BC8 /* KeychainSignalProtocolStore.swift */,
 				EC4520DC258B66F8002768C8 /* SimpleSignalSwiftAPI.swift */,
+				EC23C0EB258BEE2D00ABDE84 /* SimpleSignalSwiftAPIErrors.swift */,
+				EC23C0F4258BEE4600ABDE84 /* SimpleSignalSwiftAPIStructs.swift */,
 			);
 			path = SignalProtocol;
 			sourceTree = "<group>";
@@ -415,7 +418,6 @@
 			isa = PBXGroup;
 			children = (
 				EC912999257CC13800E12BF6 /* AuthorisationController.swift */,
-				EC91299F257CC17D00E12BF6 /* AuthorisationError.swift */,
 				EC9129D8257D6C6400E12BF6 /* AuthorisationEnum.swift */,
 			);
 			path = Authorisation;
@@ -867,6 +869,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EC9129BD257CC72500E12BF6 /* ActivityIndicator.swift in Sources */,
+				EC23C0F5258BEE4600ABDE84 /* SimpleSignalSwiftAPIStructs.swift in Sources */,
 				EC12FBB92572ADC700F7230F /* SenderKeyMessage.swift in Sources */,
 				EC12FBC92572ADC700F7230F /* SessionRecord.swift in Sources */,
 				EC91299A257CC13900E12BF6 /* AuthorisationController.swift in Sources */,
@@ -907,7 +910,6 @@
 				EC12FBDF2572ADC700F7230F /* IdentityKey.swift in Sources */,
 				ECC0A5CD257FE8CE001D5E60 /* DetailView.swift in Sources */,
 				ECC0A5D9257FE8F5001D5E60 /* SettingsController.swift in Sources */,
-				EC9129A0257CC17D00E12BF6 /* AuthorisationError.swift in Sources */,
 				EC9129DD257D828200E12BF6 /* ErrorAlert.swift in Sources */,
 				ECC0A5C9257FE8C4001D5E60 /* DetailController.swift in Sources */,
 				ECC0A5D5257FE8E8001D5E60 /* NewChatView.swift in Sources */,
@@ -917,6 +919,7 @@
 				ECC0A5DD257FE8FF001D5E60 /* SettingsView.swift in Sources */,
 				ECD126C3258679C800C2161D /* HomeViewButton.swift in Sources */,
 				EC9129AA257CC34900E12BF6 /* LoginView.swift in Sources */,
+				EC23C0EC258BEE2D00ABDE84 /* SimpleSignalSwiftAPIErrors.swift in Sources */,
 				EC12FBB52572ADC700F7230F /* Protocol.swift in Sources */,
 				EC9129B3257CC60A00E12BF6 /* TextFieldWithTitleAndValidation.swift in Sources */,
 				EC12FBD32572ADC700F7230F /* PrivateKey.swift in Sources */,
