@@ -29,14 +29,17 @@ struct LoginController: View {
             password: password,
             serverAddress: serverAddress
         ) { loginOutcome in
-            switch loginOutcome {
-            case .twoFactorRequired(let ephemeralCodeReceived):
-                ephemeralCode = ephemeralCodeReceived
-                twoFactorModalVisible = true
-            case .failure:
+            DispatchQueue.main.async {
                 loginInProgress = false
-            default:
-                return
+                switch loginOutcome {
+                case .success(let newUser):
+                    appState.loggedInUser = newUser
+                case .twoFactorRequired(let ephemeralCodeReceived):
+                    ephemeralCode = ephemeralCodeReceived
+                    twoFactorModalVisible = true
+                case .failure(let error):
+                    appState.displayedError = IdentifiableError(error)
+                }
             }
         }
     }

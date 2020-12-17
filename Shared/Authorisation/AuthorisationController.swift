@@ -16,11 +16,11 @@ public class AuthorisationController {
         DispatchQueue.global(qos: .utility).async {
             let response = self.simpleSignalSwiftAPI.login(username: username, password: password, serverAddress: serverAddress)
             DispatchQueue.main.async {
+                print(response)
                 switch response {
                     case let .success(data):
                         let newUser =  LoggedInUser(
                             userName: username,
-                            deviceName: "fakeDeviceName",
                             serverAddress: serverAddress,
                             authCode: data.authToken,
                             is2FAUser: false
@@ -28,31 +28,28 @@ public class AuthorisationController {
                         print("Login Successful")
                         completionHandler(.success(newUser))
                     case let .failure(error):
-                        print(error)
                         print("Login Unsuccessful")
-                        completionHandler(.failure(AuthorisationError.invalidPassword))
+                        switch error {
+                        case let .needsTwoFactorAuthentication(ephemeralToken):
+                            completionHandler(.twoFactorRequired(ephemeralToken))
+                        case .url:
+                            completionHandler(.failure(AuthorisationError.invalidUrl))
+                        case .clientJson:
+                            completionHandler(.failure(AuthorisationError.badFormat))
+                        case .serverError, .serverJson:
+                            completionHandler(.failure(AuthorisationError.serverError))
+                        case let .server(errorString):
+                            if (errorString == "Unable to login with provided credentials.") {
+                                completionHandler(.failure(AuthorisationError.invalidCredentials))
+                            } else {
+                                completionHandler(.failure(AuthorisationError.serverError))
+                            }
+                        case .requestThrottled:
+                            completionHandler(.failure(AuthorisationError.requestThrottled))
+                        }
                     }
             }
         }
-//        if username == "testUser" && password == "password" {
-//            appState.loggedInUser = LoggedInUser(
-//                userName: username,
-//                deviceName: "fakeDeviceName",
-//                serverAddress: serverAddress,
-//                authCode: "testAuthString",
-//                is2FAUser: false
-//            )
-//            print("Login Successful")
-//            return .success
-//        } else if username == "testUser2FA" && password == "password" {
-//            print("2FA Required")
-//            return .twoFactorRequired("fakeEphemeralCode")
-//        } else {
-//            appState.loggedInUser = nil
-//            appState.displayedError = IdentifiableError(AuthorisationError.invalidPassword)
-//            print("Login Unsuccessful")
-//            return .failure
-//        }
     }
     
     func submitTwoFactor(ephemeralCode: String, twoFactorCode: String, username: String, serverAddress: String, appState: AppState) {

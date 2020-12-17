@@ -28,7 +28,7 @@ struct LoginView: View {
             TextFieldWithTitleAndValidation(
                 title: "Username",
                 invalidText: "Invalid username",
-                validRegex: "[a-zA-Z0-9]*",
+                validRegex: "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$",
                 text: $username,
                 showInvalidText: $invalidUsername
             )

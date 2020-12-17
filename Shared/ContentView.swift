@@ -13,12 +13,15 @@ struct ContentView: View {
     @EnvironmentObject var appState: AppState
     
     var body: some View {
-        
-        if $appState.loggedInUser.wrappedValue != nil {
-            HomeView()
-        } else {
-            LoginController()
+        ZStack {
+            if $appState.loggedInUser.wrappedValue != nil {
+                HomeView()
+            } else {
+                LoginController()
+            }
+            Text("").hidden().alert(item: $appState.displayedError) { viewError -> Alert in
+                ErrorAlert(viewError: viewError)
+            }
         }
-        
     }
 }
