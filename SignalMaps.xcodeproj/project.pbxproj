@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		31DEBF49F23794BFFECA51D9 /* Pods_SignalMapsTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D17B5F89E164C587A5B39F2B /* Pods_SignalMapsTests.framework */; };
+		33EDA2C414F1EE5FF7790D4B /* Pods_SignalMaps__iOS_.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58D82B0371C685B5A728E6FC /* Pods_SignalMaps__iOS_.framework */; };
+		C0AE23C842E51208AAFF733A /* Pods_SignalMaps__macOS_.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5928D1A9EC10070475DFB08 /* Pods_SignalMaps__macOS_.framework */; };
+		E01DB77B6862818867731679 /* Pods_SignalMapsiOSFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63F2EA1EB688402BE4E39A90 /* Pods_SignalMapsiOSFramework.framework */; };
 		EC12FBB32572ADC700F7230F /* DataStoreInMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9A2572ADC700F7230F /* DataStoreInMemory.swift */; };
 		EC12FBB42572ADC700F7230F /* DataStoreInMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9A2572ADC700F7230F /* DataStoreInMemory.swift */; };
 		EC12FBB52572ADC700F7230F /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9B2572ADC700F7230F /* Protocol.swift */; };
@@ -56,6 +60,7 @@
 		EC4520D525896275002768C8 /* Activate2FAModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4520D425896275002768C8 /* Activate2FAModal.swift */; };
 		EC4520D925896287002768C8 /* Deactivate2FAModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4520D825896287002768C8 /* Deactivate2FAModal.swift */; };
 		EC4520DD258B66F8002768C8 /* SimpleSignalSwiftAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4520DC258B66F8002768C8 /* SimpleSignalSwiftAPI.swift */; };
+		EC67E4C6258BC39100CACBE7 /* SignalMapsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC67E4C5258BC39100CACBE7 /* SignalMapsTests.swift */; };
 		EC912986257BB67500E12BF6 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC912985257BB67500E12BF6 /* AppState.swift */; };
 		EC912992257BB85400E12BF6 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC912985257BB67500E12BF6 /* AppState.swift */; };
 		EC91299A257CC13900E12BF6 /* AuthorisationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC912999257CC13800E12BF6 /* AuthorisationController.swift */; };
@@ -123,6 +128,16 @@
 		ECFFD6522572A9C900458BC8 /* KeychainSwiftDistrib.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFFD64E2572A9C900458BC8 /* KeychainSwiftDistrib.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		EC67E4C8258BC39100CACBE7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = ECFFD50A257261FB00458BC8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = ECFFD5152572620300458BC8;
+			remoteInfo = "SignalMaps (iOS)";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		ECDE0E082572B0A2009D3561 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -137,6 +152,17 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4C0B6A86103A7428799B48EE /* Pods-SignalMapsTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SignalMapsTests.debug.xcconfig"; path = "Target Support Files/Pods-SignalMapsTests/Pods-SignalMapsTests.debug.xcconfig"; sourceTree = "<group>"; };
+		501FFDFC2B9CE5CAF6CA2D2C /* Pods-SignalMaps (iOS).debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SignalMaps (iOS).debug.xcconfig"; path = "Target Support Files/Pods-SignalMaps (iOS)/Pods-SignalMaps (iOS).debug.xcconfig"; sourceTree = "<group>"; };
+		58D82B0371C685B5A728E6FC /* Pods_SignalMaps__iOS_.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SignalMaps__iOS_.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		63F2EA1EB688402BE4E39A90 /* Pods_SignalMapsiOSFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SignalMapsiOSFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6B46959A2EE072ECE69BA27E /* Pods-SignalMapsiOSFramework.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SignalMapsiOSFramework.release.xcconfig"; path = "Target Support Files/Pods-SignalMapsiOSFramework/Pods-SignalMapsiOSFramework.release.xcconfig"; sourceTree = "<group>"; };
+		90C1554DF51364B9D04C5877 /* Pods-SignalMapsiOSFramework.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SignalMapsiOSFramework.debug.xcconfig"; path = "Target Support Files/Pods-SignalMapsiOSFramework/Pods-SignalMapsiOSFramework.debug.xcconfig"; sourceTree = "<group>"; };
+		B142397D1F8BCB75AA138E5E /* Pods-SignalMaps (macOS).release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SignalMaps (macOS).release.xcconfig"; path = "Target Support Files/Pods-SignalMaps (macOS)/Pods-SignalMaps (macOS).release.xcconfig"; sourceTree = "<group>"; };
+		B328EA1D3F68205B0B8D8BC2 /* Pods-SignalMapsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SignalMapsTests.release.xcconfig"; path = "Target Support Files/Pods-SignalMapsTests/Pods-SignalMapsTests.release.xcconfig"; sourceTree = "<group>"; };
+		D17B5F89E164C587A5B39F2B /* Pods_SignalMapsTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SignalMapsTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E98AC0C8FE9533339F9D78FB /* Pods-SignalMaps (iOS).release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SignalMaps (iOS).release.xcconfig"; path = "Target Support Files/Pods-SignalMaps (iOS)/Pods-SignalMaps (iOS).release.xcconfig"; sourceTree = "<group>"; };
+		EC084BC2A0B331CF4F0AF335 /* Pods-SignalMaps (macOS).debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SignalMaps (macOS).debug.xcconfig"; path = "Target Support Files/Pods-SignalMaps (macOS)/Pods-SignalMaps (macOS).debug.xcconfig"; sourceTree = "<group>"; };
 		EC12FB8F2572AB9B00F7230F /* SignalClient Build Details.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "SignalClient Build Details.md"; sourceTree = "<group>"; };
 		EC12FB9A2572ADC700F7230F /* DataStoreInMemory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStoreInMemory.swift; sourceTree = "<group>"; };
 		EC12FB9B2572ADC700F7230F /* Protocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocol.swift; sourceTree = "<group>"; };
@@ -164,6 +190,9 @@
 		EC4520D425896275002768C8 /* Activate2FAModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activate2FAModal.swift; sourceTree = "<group>"; };
 		EC4520D825896287002768C8 /* Deactivate2FAModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deactivate2FAModal.swift; sourceTree = "<group>"; };
 		EC4520DC258B66F8002768C8 /* SimpleSignalSwiftAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleSignalSwiftAPI.swift; sourceTree = "<group>"; };
+		EC67E4C3258BC39100CACBE7 /* SignalMapsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SignalMapsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		EC67E4C5258BC39100CACBE7 /* SignalMapsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalMapsTests.swift; sourceTree = "<group>"; };
+		EC67E4C7258BC39100CACBE7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EC912985257BB67500E12BF6 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		EC912999257CC13800E12BF6 /* AuthorisationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorisationController.swift; sourceTree = "<group>"; };
 		EC91299F257CC17D00E12BF6 /* AuthorisationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorisationError.swift; sourceTree = "<group>"; };
@@ -202,14 +231,24 @@
 		ECFFD6442572A82500458BC8 /* libsignal_ffi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsignal_ffi.a; path = "libsignal-client/target/universal/release/libsignal_ffi.a"; sourceTree = "<group>"; };
 		ECFFD64D2572A9C900458BC8 /* KeychainSignalProtocolStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainSignalProtocolStore.swift; sourceTree = "<group>"; };
 		ECFFD64E2572A9C900458BC8 /* KeychainSwiftDistrib.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainSwiftDistrib.swift; sourceTree = "<group>"; };
+		F5928D1A9EC10070475DFB08 /* Pods_SignalMaps__macOS_.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SignalMaps__macOS_.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		EC67E4C0258BC39100CACBE7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				31DEBF49F23794BFFECA51D9 /* Pods_SignalMapsTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		ECDE0E362572B5EC009D3561 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				ECDE0E602572B674009D3561 /* libsignal_ffi.a in Frameworks */,
+				E01DB77B6862818867731679 /* Pods_SignalMapsiOSFramework.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -218,6 +257,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ECFFD6452572A82500458BC8 /* libsignal_ffi.a in Frameworks */,
+				33EDA2C414F1EE5FF7790D4B /* Pods_SignalMaps__iOS_.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -225,12 +265,29 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C0AE23C842E51208AAFF733A /* Pods_SignalMaps__macOS_.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		542B6CB7100481FC88A71579 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				501FFDFC2B9CE5CAF6CA2D2C /* Pods-SignalMaps (iOS).debug.xcconfig */,
+				E98AC0C8FE9533339F9D78FB /* Pods-SignalMaps (iOS).release.xcconfig */,
+				EC084BC2A0B331CF4F0AF335 /* Pods-SignalMaps (macOS).debug.xcconfig */,
+				B142397D1F8BCB75AA138E5E /* Pods-SignalMaps (macOS).release.xcconfig */,
+				4C0B6A86103A7428799B48EE /* Pods-SignalMapsTests.debug.xcconfig */,
+				B328EA1D3F68205B0B8D8BC2 /* Pods-SignalMapsTests.release.xcconfig */,
+				90C1554DF51364B9D04C5877 /* Pods-SignalMapsiOSFramework.debug.xcconfig */,
+				6B46959A2EE072ECE69BA27E /* Pods-SignalMapsiOSFramework.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		EC12FB992572ADC700F7230F /* SignalClient */ = {
 			isa = PBXGroup;
 			children = (
@@ -275,6 +332,15 @@
 				EC12FBAB2572ADC700F7230F /* PreKeyBundle.swift */,
 			);
 			path = state;
+			sourceTree = "<group>";
+		};
+		EC67E4C4258BC39100CACBE7 /* SignalMapsTests */ = {
+			isa = PBXGroup;
+			children = (
+				EC67E4C5258BC39100CACBE7 /* SignalMapsTests.swift */,
+				EC67E4C7258BC39100CACBE7 /* Info.plist */,
+			);
+			path = SignalMapsTests;
 			sourceTree = "<group>";
 		};
 		EC91297E257BB50C00E12BF6 /* Keychain */ = {
@@ -414,8 +480,10 @@
 				ECFFD5182572620300458BC8 /* iOS */,
 				ECFFD51F2572620300458BC8 /* macOS */,
 				ECDE0E3A2572B5EC009D3561 /* SignalMapsiOSFramework */,
+				EC67E4C4258BC39100CACBE7 /* SignalMapsTests */,
 				ECFFD5172572620300458BC8 /* Products */,
 				ECFFD6432572A82400458BC8 /* Frameworks */,
+				542B6CB7100481FC88A71579 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -441,6 +509,7 @@
 				ECFFD5162572620300458BC8 /* SignalMaps.app */,
 				ECFFD51E2572620300458BC8 /* SignalMaps.app */,
 				ECDE0E392572B5EC009D3561 /* SignalMapsiOSFramework.framework */,
+				EC67E4C3258BC39100CACBE7 /* SignalMapsTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -466,6 +535,10 @@
 			isa = PBXGroup;
 			children = (
 				ECFFD6442572A82500458BC8 /* libsignal_ffi.a */,
+				58D82B0371C685B5A728E6FC /* Pods_SignalMaps__iOS_.framework */,
+				F5928D1A9EC10070475DFB08 /* Pods_SignalMaps__macOS_.framework */,
+				63F2EA1EB688402BE4E39A90 /* Pods_SignalMapsiOSFramework.framework */,
+				D17B5F89E164C587A5B39F2B /* Pods_SignalMapsTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -484,10 +557,31 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		EC67E4C2258BC39100CACBE7 /* SignalMapsTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EC67E4CC258BC39100CACBE7 /* Build configuration list for PBXNativeTarget "SignalMapsTests" */;
+			buildPhases = (
+				E6384B99A639383009277A80 /* [CP] Check Pods Manifest.lock */,
+				EC67E4BF258BC39100CACBE7 /* Sources */,
+				EC67E4C0258BC39100CACBE7 /* Frameworks */,
+				EC67E4C1258BC39100CACBE7 /* Resources */,
+				DD08A35597EB33B9BB6902DF /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				EC67E4C9258BC39100CACBE7 /* PBXTargetDependency */,
+			);
+			name = SignalMapsTests;
+			productName = SignalMapsTests;
+			productReference = EC67E4C3258BC39100CACBE7 /* SignalMapsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		ECDE0E382572B5EC009D3561 /* SignalMapsiOSFramework */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = ECDE0E3E2572B5EC009D3561 /* Build configuration list for PBXNativeTarget "SignalMapsiOSFramework" */;
 			buildPhases = (
+				441C723E1064FD0D4E50A31C /* [CP] Check Pods Manifest.lock */,
 				ECDE0E342572B5EC009D3561 /* Headers */,
 				ECDE0E352572B5EC009D3561 /* Sources */,
 				ECDE0E362572B5EC009D3561 /* Frameworks */,
@@ -506,6 +600,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = ECFFD52A2572620300458BC8 /* Build configuration list for PBXNativeTarget "SignalMaps (iOS)" */;
 			buildPhases = (
+				AB1182B292520CE8EACD7A72 /* [CP] Check Pods Manifest.lock */,
 				ECFFD5122572620300458BC8 /* Sources */,
 				ECFFD5132572620300458BC8 /* Frameworks */,
 				ECFFD5142572620300458BC8 /* Resources */,
@@ -524,6 +619,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = ECFFD52D2572620300458BC8 /* Build configuration list for PBXNativeTarget "SignalMaps (macOS)" */;
 			buildPhases = (
+				37049E14A733E9B3E0C454F0 /* [CP] Check Pods Manifest.lock */,
 				ECFFD51A2572620300458BC8 /* Sources */,
 				ECFFD51B2572620300458BC8 /* Frameworks */,
 				ECFFD51C2572620300458BC8 /* Resources */,
@@ -546,6 +642,10 @@
 				LastSwiftUpdateCheck = 1220;
 				LastUpgradeCheck = 1220;
 				TargetAttributes = {
+					EC67E4C2258BC39100CACBE7 = {
+						CreatedOnToolsVersion = 12.2;
+						TestTargetID = ECFFD5152572620300458BC8;
+					};
 					ECDE0E382572B5EC009D3561 = {
 						CreatedOnToolsVersion = 12.2;
 					};
@@ -573,11 +673,19 @@
 				ECFFD5152572620300458BC8 /* SignalMaps (iOS) */,
 				ECFFD51D2572620300458BC8 /* SignalMaps (macOS) */,
 				ECDE0E382572B5EC009D3561 /* SignalMapsiOSFramework */,
+				EC67E4C2258BC39100CACBE7 /* SignalMapsTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		EC67E4C1258BC39100CACBE7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		ECDE0E372572B5EC009D3561 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -603,7 +711,123 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		37049E14A733E9B3E0C454F0 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SignalMaps (macOS)-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		441C723E1064FD0D4E50A31C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SignalMapsiOSFramework-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AB1182B292520CE8EACD7A72 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SignalMaps (iOS)-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DD08A35597EB33B9BB6902DF /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SignalMapsTests/Pods-SignalMapsTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SignalMapsTests/Pods-SignalMapsTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SignalMapsTests/Pods-SignalMapsTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E6384B99A639383009277A80 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SignalMapsTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
+		EC67E4BF258BC39100CACBE7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EC67E4C6258BC39100CACBE7 /* SignalMapsTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		ECDE0E352572B5EC009D3561 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -736,9 +960,65 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		EC67E4C9258BC39100CACBE7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = ECFFD5152572620300458BC8 /* SignalMaps (iOS) */;
+			targetProxy = EC67E4C8258BC39100CACBE7 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		EC67E4CA258BC39100CACBE7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4C0B6A86103A7428799B48EE /* Pods-SignalMapsTests.debug.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = A4G3Y5XC83;
+				INFOPLIST_FILE = SignalMapsTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = mtr.SignalMapsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SignalMaps.app/SignalMaps";
+			};
+			name = Debug;
+		};
+		EC67E4CB258BC39100CACBE7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B328EA1D3F68205B0B8D8BC2 /* Pods-SignalMapsTests.release.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = A4G3Y5XC83;
+				INFOPLIST_FILE = SignalMapsTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = mtr.SignalMapsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SignalMaps.app/SignalMaps";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		ECDE0E3F2572B5EC009D3561 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 90C1554DF51364B9D04C5877 /* Pods-SignalMapsiOSFramework.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -772,6 +1052,7 @@
 		};
 		ECDE0E402572B5EC009D3561 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6B46959A2EE072ECE69BA27E /* Pods-SignalMapsiOSFramework.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -919,6 +1200,7 @@
 		};
 		ECFFD52B2572620300458BC8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 501FFDFC2B9CE5CAF6CA2D2C /* Pods-SignalMaps (iOS).debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -947,6 +1229,7 @@
 		};
 		ECFFD52C2572620300458BC8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E98AC0C8FE9533339F9D78FB /* Pods-SignalMaps (iOS).release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -976,6 +1259,7 @@
 		};
 		ECFFD52E2572620300458BC8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EC084BC2A0B331CF4F0AF335 /* Pods-SignalMaps (macOS).debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1000,6 +1284,7 @@
 		};
 		ECFFD52F2572620300458BC8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B142397D1F8BCB75AA138E5E /* Pods-SignalMaps (macOS).release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1025,6 +1310,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		EC67E4CC258BC39100CACBE7 /* Build configuration list for PBXNativeTarget "SignalMapsTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EC67E4CA258BC39100CACBE7 /* Debug */,
+				EC67E4CB258BC39100CACBE7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		ECDE0E3E2572B5EC009D3561 /* Build configuration list for PBXNativeTarget "SignalMapsiOSFramework" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

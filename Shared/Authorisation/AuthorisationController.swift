@@ -16,7 +16,6 @@ public class AuthorisationController {
         DispatchQueue.global(qos: .utility).async {
             let response = self.simpleSignalSwiftAPI.login(username: username, password: password, serverAddress: serverAddress)
             DispatchQueue.main.async {
-                print(response)
                 switch response {
                     case let .success(data):
                         let newUser =  LoggedInUser(
@@ -33,19 +32,19 @@ public class AuthorisationController {
                         case let .needsTwoFactorAuthentication(ephemeralToken):
                             completionHandler(.twoFactorRequired(ephemeralToken))
                         case .url:
-                            completionHandler(.failure(AuthorisationError.invalidUrl))
+                            completionHandler(.failure(.invalidUrl))
                         case .clientJson:
-                            completionHandler(.failure(AuthorisationError.badFormat))
+                            completionHandler(.failure(.badFormat))
                         case .serverError, .serverJson:
-                            completionHandler(.failure(AuthorisationError.serverError))
+                            completionHandler(.failure(.serverError))
                         case let .server(errorString):
                             if (errorString == "Unable to login with provided credentials.") {
-                                completionHandler(.failure(AuthorisationError.invalidCredentials))
+                                completionHandler(.failure(.invalidCredentials))
                             } else {
-                                completionHandler(.failure(AuthorisationError.serverError))
+                                completionHandler(.failure(.serverError))
                             }
                         case .requestThrottled:
-                            completionHandler(.failure(AuthorisationError.requestThrottled))
+                            completionHandler(.failure(.requestThrottled))
                         }
                     }
             }
@@ -70,6 +69,37 @@ public class AuthorisationController {
     func request2FAQRCode() -> String {
         print("Request 2FA QR Code")
         return "jkhsdgjhsjdghjsghsk"
+    }
+    
+    func BUILDINGFORAPIrequest2DAQRCode(authToken: String, serverAddress: String, completionHandler: @escaping (_: Result<String, TwoFactorError>) -> ()) {
+        print("Request 2FA QR Code")
+        DispatchQueue.global(qos: .utility).async {
+            let response = self.simpleSignalSwiftAPI.activateTwoFactorAuthentication(authToken: authToken, mfaMethodName: "app", serverAddress: serverAddress)
+            DispatchQueue.main.async {
+                switch response {
+                    case let .success(data):
+                        guard data.qrLink != nil else {
+                            completionHandler(.failure(.badResponseFromServer))
+                            return
+                        }
+                        completionHandler(.success(data.qrLink!))
+                    case let .failure(error):
+                        print("Request Unsuccessful")
+                        switch error {
+                        case .possibleIncorrectMFAMethodName:
+                            completionHandler(.failure(.invalidMFAName))
+                        case .url:
+                            completionHandler(.failure(.invalidUrl))
+                        case .clientJson:
+                            completionHandler(.failure(.badFormat))
+                        case .serverError, .serverJson:
+                            completionHandler(.failure(.serverError))
+                        case .requestThrottled:
+                            completionHandler(.failure(.requestThrottled))
+                        }
+                    }
+            }
+        }
     }
     
     func activate2FA(code: String, appState: AppState) {
