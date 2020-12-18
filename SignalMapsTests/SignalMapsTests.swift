@@ -47,7 +47,29 @@ class SignalMapsTests: XCTestCase {
             }
             
         }
-        
+        wait(for: [expectation], timeout: 2.0)
+    }
+    
+    func testActivate2FA() throws {
+        let expectation = XCTestExpectation(description: "Successfully activates 2FA")
+        let uriValue = "https://www.simplesignal.co.uk/v1/auth/app/activate/"
+        let data: NSDictionary = [
+            "qr_link": "otpauth://totp/myApplication:test%40test.co.uk?secret=AVYSQYWDUNGQBTP2&issuer=test"
+        ]
+        self.stub(uri(uriValue), json(data, status: 200))
+        let authController = AuthorisationController()
+        authController.request2FAQRCode(
+            authToken: "testAuthToken",
+            serverAddress: "https://www.simplesignal.co.uk") {result in
+            switch result {
+            case .success(let qrcode):
+                XCTAssertNotEqual(qrcode, nil)
+                expectation.fulfill()
+            default:
+                print(result)
+                return
+            }
+        }
         wait(for: [expectation], timeout: 2.0)
     }
 

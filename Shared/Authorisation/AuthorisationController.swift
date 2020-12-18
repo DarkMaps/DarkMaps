@@ -54,12 +54,7 @@ public class AuthorisationController {
         appState.loggedInUser = nil
     }
     
-    func request2FAQRCode() -> String {
-        print("Request 2FA QR Code")
-        return "jkhsdgjhsjdghjsghsk"
-    }
-    
-    func BUILDINGFORAPIrequest2DAQRCode(authToken: String, serverAddress: String, completionHandler: @escaping (_: Result<String, SSAPIActivate2FAError>) -> ()) {
+    func request2FAQRCode(authToken: String, serverAddress: String, completionHandler: @escaping (_: Result<String, SSAPIActivate2FAError>) -> ()) {
         print("Request 2FA QR Code")
         DispatchQueue.global(qos: .utility).async {
             let response = self.simpleSignalSwiftAPI.activateTwoFactorAuthentication(authToken: authToken, mfaMethodName: "app", serverAddress: serverAddress)

@@ -7,12 +7,12 @@
 
 import Foundation
 
-public enum SSAPILoginError: Error {
+public enum SSAPILoginError: LocalizedError {
     case invalidCredentials, invalidUrl, badFormat, badResponseFromServer, serverError, needsTwoFactorAuthentication(String), requestThrottled
 }
 
 extension SSAPILoginError {
-    public var localizedDescription: String {
+    public var errorDescription: String? {
         switch self {
         case .invalidCredentials:
             return NSLocalizedString("The credentials provided are invalid", comment: "")
@@ -34,12 +34,12 @@ extension SSAPILoginError {
 
 
 
-public enum SSAPIActivate2FAError: Error {
+public enum SSAPIActivate2FAError: LocalizedError {
     case invalidUrl, badFormat, badResponseFromServer, serverError, possibleIncorrectMFAMethodName, requestThrottled
 }
 
 extension SSAPIActivate2FAError {
-    public var localizedDescription: String {
+    public var errorDescription: String? {
         switch self {
         case .invalidUrl:
             return NSLocalizedString("The server address provided is invalid", comment: "")

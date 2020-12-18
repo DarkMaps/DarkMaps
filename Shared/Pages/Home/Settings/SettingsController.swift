@@ -23,7 +23,14 @@ struct SettingsController: View {
     }
     
     func obtain2FAQRCode() {
-        QRCodeFor2FA = authorisationController.request2FAQRCode()
+        authorisationController.request2FAQRCode(authToken: appState.loggedInUser?.authCode ?? "unknown", serverAddress: appState.loggedInUser?.serverAddress ?? "unknown") { result in
+            switch result {
+            case .success(let QRCode):
+                self.QRCodeFor2FA = QRCode
+            case .failure(let error):
+                appState.displayedError = IdentifiableError(error)
+            }
+        }
     }
     
     func activate2FA() {
