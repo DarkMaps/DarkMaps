@@ -50,6 +50,36 @@ class SignalMapsTests: XCTestCase {
         wait(for: [expectation], timeout: 2.0)
     }
     
+    func testSubmit2FA() throws {
+        let expectation = XCTestExpectation(description: "Successfully logs in")
+        let uriValue = "https://www.simplesignal.co.uk/v1/auth/login/code/"
+        let data: NSDictionary = [
+            "auth_token": "testToken"
+        ]
+        self.stub(uri(uriValue), json(data, status: 200))
+        let authController = AuthorisationController()
+        authController.submitTwoFactor(
+            username: "testUser",
+            code: "1234",
+            ephemeralToken: "testEphemeralToken",
+            serverAddress: "https://www.simplesignal.co.uk") { result in
+            switch result {
+            case .success(let newUser):
+                XCTAssertEqual(newUser.authCode, "testToken")
+                XCTAssertEqual(newUser.is2FAUser, true)
+                XCTAssertEqual(newUser.serverAddress, "https://www.simplesignal.co.uk")
+                XCTAssertEqual(newUser.userName, "testUser")
+                XCTAssertEqual(newUser.deviceName, nil)
+                expectation.fulfill()
+            default:
+                print(result)
+                return
+            }
+            
+        }
+        wait(for: [expectation], timeout: 2.0)
+    }
+    
     func testActivate2FA() throws {
         let expectation = XCTestExpectation(description: "Successfully activates 2FA")
         let uriValue = "https://www.simplesignal.co.uk/v1/auth/app/activate/"
@@ -63,7 +93,90 @@ class SignalMapsTests: XCTestCase {
             serverAddress: "https://www.simplesignal.co.uk") {result in
             switch result {
             case .success(let qrcode):
-                XCTAssertNotEqual(qrcode, nil)
+                XCTAssertEqual(qrcode, "otpauth://totp/myApplication:test%40test.co.uk?secret=AVYSQYWDUNGQBTP2&issuer=test")
+                expectation.fulfill()
+            default:
+                print(result)
+                return
+            }
+        }
+        wait(for: [expectation], timeout: 2.0)
+    }
+    
+    func testConfirm2FA() throws {
+        let expectation = XCTestExpectation(description: "Successfully confirms 2FA")
+        let uriValue = "https://www.simplesignal.co.uk/v1/auth/app/confirm/"
+        let data: NSDictionary = [
+            "backup_codes": [
+                "test_backup_code"
+            ]
+        ]
+        self.stub(uri(uriValue), json(data, status: 200))
+        let authController = AuthorisationController()
+        authController.confirm2FA(
+            code: "1234",
+            authToken: "testAuthToken",
+            serverAddress: "https://www.simplesignal.co.uk") {result in
+            switch result {
+            case .success(let backupCodes):
+                XCTAssertEqual(backupCodes.first, "test_backup_code")
+                expectation.fulfill()
+            default:
+                print(result)
+                return
+            }
+        }
+        wait(for: [expectation], timeout: 2.0)
+    }
+    
+    func testDeactivate2FA() throws {
+        let expectation = XCTestExpectation(description: "Successfully deactivates 2FA")
+        let uriValue = "https://www.simplesignal.co.uk/v1/auth/app/deactivate/"
+        self.stub(uri(uriValue), http(204))
+        let authController = AuthorisationController()
+        authController.deactivate2FA(
+            code: "1234",
+            authToken: "testAuthToken",
+            serverAddress: "https://www.simplesignal.co.uk") {result in
+            switch result {
+            case .success():
+                expectation.fulfill()
+            default:
+                print(result)
+                return
+            }
+        }
+        wait(for: [expectation], timeout: 2.0)
+    }
+    
+    func testLogOut() throws {
+        let expectation = XCTestExpectation(description: "Successfully logs user out")
+        let uriValue = "https://www.simplesignal.co.uk/v1/auth/logout/"
+        self.stub(uri(uriValue), http(204))
+        let authController = AuthorisationController()
+        authController.logUserOut(authToken: "testAuthToken", serverAddress: "https://www.simplesignal.co.uk") {result in
+            switch result {
+            case .success():
+                expectation.fulfill()
+            default:
+                print(result)
+                return
+            }
+        }
+        wait(for: [expectation], timeout: 2.0)
+    }
+    
+    func testDeleteUserAccount() throws {
+        let expectation = XCTestExpectation(description: "Successfully deletes account")
+        let uriValue = "https://www.simplesignal.co.uk/v1/auth/users/me/"
+        self.stub(uri(uriValue), http(204))
+        let authController = AuthorisationController()
+        authController.deleteUserAccount(
+            currentPassword: "testPassword",
+            authToken: "testAuthToken",
+            serverAddress: "https://www.simplesignal.co.uk") {result in
+            switch result {
+            case .success():
                 expectation.fulfill()
             default:
                 print(result)

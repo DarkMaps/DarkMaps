@@ -12,14 +12,22 @@ struct SettingsController: View {
     
     @State var activate2FAModalIsShowing = false
     @State var QRCodeFor2FA = ""
-    @State var activate2FACode = ""
+    @State var confirm2FACode = ""
     @State var deactivate2FAModalIsShowing = false
     @State var deactivate2FACode = ""
     
     var authorisationController = AuthorisationController()
     
     func logUserOut() {
-        authorisationController.logUserOut(appState: appState)
+        authorisationController.logUserOut(authToken: appState.loggedInUser?.authCode ?? "unknown", serverAddress: appState.loggedInUser?.serverAddress ?? "unknown") { result in
+            switch result {
+            case .success():
+                appState.loggedInUser = nil
+            case .failure(let error):
+                appState.displayedError = IdentifiableError(error)
+                appState.loggedInUser = nil
+            }
+        }
     }
     
     func obtain2FAQRCode() {
@@ -33,17 +41,41 @@ struct SettingsController: View {
         }
     }
     
-    func activate2FA() {
-        authorisationController.activate2FA(code: activate2FACode, appState: appState)
-        activate2FAModalIsShowing = false
+    func confirm2FA() {
+        authorisationController.confirm2FA(code: confirm2FACode, authToken: appState.loggedInUser?.authCode ?? "unknown", serverAddress: appState.loggedInUser?.serverAddress ?? "unknown") { result in
+            switch result {
+            case .success(let TODO_NEEDS_IMPLEMENTING_backupCodes):
+                //Handle backupcodes
+                activate2FAModalIsShowing = false
+            case .failure(let error):
+                appState.displayedError = IdentifiableError(error)
+                activate2FAModalIsShowing = false
+            }
+        }
     }
     
     func deactivate2FA() {
-        authorisationController.deactivate2FA(code: deactivate2FACode, appState: appState)
-        deactivate2FAModalIsShowing = false
+        authorisationController.deactivate2FA(code: deactivate2FACode, authToken: appState.loggedInUser?.authCode ?? "unknown", serverAddress: appState.loggedInUser?.serverAddress ?? "unknown") { result in
+            switch result {
+            case .success():
+                deactivate2FAModalIsShowing = false
+            case .failure(let error):
+                appState.displayedError = IdentifiableError(error)
+                deactivate2FAModalIsShowing = false
+            }
+        }
     }
+    
     func deleteUserAccount() {
-        authorisationController.deleteUserAccount(appState: appState)
+        authorisationController.deleteUserAccount(currentPassword: "TODO_NEEDS_IMPLEMENTING", authToken: appState.loggedInUser?.authCode ?? "unknown", serverAddress: appState.loggedInUser?.serverAddress ?? "unknown") { result in
+            switch result {
+            case .success():
+                appState.loggedInUser = nil
+            case .failure(let error):
+                appState.displayedError = IdentifiableError(error)
+                appState.loggedInUser = nil
+            }
+        }
     }
     
     var body: some View {
@@ -57,10 +89,10 @@ struct SettingsController: View {
             )
             Text("").hidden().sheet(isPresented: $activate2FAModalIsShowing, content: {
                 Activate2FAModal(
-                    activate2FACode: $activate2FACode,
+                    confirm2FACode: $confirm2FACode,
                     QRCodeFor2FA: $QRCodeFor2FA,
                     obtain2FAQRCode: obtain2FAQRCode,
-                    activate2FA: activate2FA)
+                    confirm2FA: confirm2FA)
             })
             Text("").hidden().sheet(isPresented: $deactivate2FAModalIsShowing, content: {
                 Deactivate2FAModal(

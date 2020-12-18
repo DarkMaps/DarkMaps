@@ -39,19 +39,43 @@ public class AuthorisationController {
         }
     }
     
-    func submitTwoFactor(ephemeralCode: String, twoFactorCode: String, username: String, serverAddress: String, appState: AppState) {
-        appState.loggedInUser = LoggedInUser(
-            userName: username,
-            deviceName: "fakeDeviceName",
-            serverAddress: serverAddress,
-            authCode: "testAuthString",
-            is2FAUser: true
-        )
+    func submitTwoFactor(username: String, code: String, ephemeralToken: String, serverAddress: String, completionHandler: @escaping (_: Result<LoggedInUser, SSAPISubmit2FAError>) -> ()) {
+        print("Submit 2FA")
+        DispatchQueue.global(qos: .utility).async {
+            let response = self.simpleSignalSwiftAPI.submitTwoFactorAuthentication(ephemeralToken: ephemeralToken, submit2FACode: code, serverAddress: serverAddress)
+            DispatchQueue.main.async {
+                switch response {
+                    case let .success(data):
+                        let newUser =  LoggedInUser(
+                            userName: username,
+                            serverAddress: serverAddress,
+                            authCode: data.authToken,
+                            is2FAUser: true
+                        )
+                        print("2FA Login Successful")
+                        completionHandler(.success(newUser))
+                    case let .failure(error):
+                        print("Request Unsuccessful")
+                        completionHandler(.failure(error))
+                }
+            }
+        }
     }
     
-    func logUserOut(appState: AppState) {
+    func logUserOut(authToken: String, serverAddress: String, completionHandler: @escaping (_: Result<Void, SSAPILogOutError>) -> ()) {
         print("Log Out")
-        appState.loggedInUser = nil
+        DispatchQueue.global(qos: .utility).async {
+            let response = self.simpleSignalSwiftAPI.logOut(authToken: authToken, serverAddress: serverAddress)
+            DispatchQueue.main.async {
+                switch response {
+                    case .success:
+                        completionHandler(.success(()))
+                    case let .failure(error):
+                        print("Request Unsuccessful")
+                        completionHandler(.failure(error))
+                }
+            }
+        }
     }
     
     func request2FAQRCode(authToken: String, serverAddress: String, completionHandler: @escaping (_: Result<String, SSAPIActivate2FAError>) -> ()) {
@@ -74,31 +98,63 @@ public class AuthorisationController {
         }
     }
     
-    func activate2FA(code: String, appState: AppState) {
-        print("Activate 2FA")
-        appState.loggedInUser = LoggedInUser(
-            userName: appState.loggedInUser!.userName,
-            deviceName: appState.loggedInUser!.deviceName,
-            serverAddress: appState.loggedInUser!.serverAddress,
-            authCode: appState.loggedInUser!.authCode,
-            is2FAUser: true
-        )
+    func confirm2FA(code: String, authToken: String, serverAddress: String, completionHandler: @escaping (_: Result<[String], SSAPIConfirm2FAError>) -> ()) {
+        print("Confirm 2FA")
+        DispatchQueue.global(qos: .utility).async {
+            let response = self.simpleSignalSwiftAPI.confirmTwoFactorAuthentication(
+                authToken: authToken,
+                mfaMethodName: "app",
+                confirm2FACode: code,
+                serverAddress: serverAddress)
+            DispatchQueue.main.async {
+                switch response {
+                    case let .success(data):
+                        completionHandler(.success(data.backupCodes))
+                    case let .failure(error):
+                        print("Request Unsuccessful")
+                        completionHandler(.failure(error))
+                }
+            }
+        }
     }
     
-    func deactivate2FA(code: String, appState: AppState) {
-        print("Deactivate 2FA")
-        appState.loggedInUser = LoggedInUser(
-            userName: appState.loggedInUser!.userName,
-            deviceName: appState.loggedInUser!.deviceName,
-            serverAddress: appState.loggedInUser!.serverAddress,
-            authCode: appState.loggedInUser!.authCode,
-            is2FAUser: false
-        )
+    func deactivate2FA(code: String, authToken: String, serverAddress: String, completionHandler: @escaping (_: Result<Void, SSAPIDeactivate2FAError>) -> ()) {
+        print("Deativate 2FA")
+        DispatchQueue.global(qos: .utility).async {
+            let response = self.simpleSignalSwiftAPI.deactivateTwoFactorAuthentication(
+                authToken: authToken,
+                mfaMethodName: "app",
+                confirm2FACode: code,
+                serverAddress: serverAddress)
+            DispatchQueue.main.async {
+                switch response {
+                    case .success():
+                        completionHandler(.success(()))
+                    case let .failure(error):
+                        print("Request Unsuccessful")
+                        completionHandler(.failure(error))
+                }
+            }
+        }
     }
     
-    func deleteUserAccount(appState: AppState) {
+    func deleteUserAccount(currentPassword: String, authToken: String, serverAddress: String, completionHandler: @escaping (_: Result<Void, SSAPIDeleteUserAccountError>) -> ()) {
         print("Delete User Account")
-        appState.loggedInUser = nil
+        DispatchQueue.global(qos: .utility).async {
+            let response = self.simpleSignalSwiftAPI.deleteUserAccount(
+                currentPassword: currentPassword,
+                authToken: authToken,
+                serverAddress: serverAddress)
+            DispatchQueue.main.async {
+                switch response {
+                    case .success():
+                        completionHandler(.success(()))
+                    case let .failure(error):
+                        print("Request Unsuccessful")
+                        completionHandler(.failure(error))
+                }
+            }
+        }
     }
     
 }

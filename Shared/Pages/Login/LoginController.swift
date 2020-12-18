@@ -38,8 +38,6 @@ struct LoginController: View {
                     ephemeralCode = ephemeralCodeReceived
                     twoFactorModalVisible = true
                 case .failure(let error):
-                    print(error)
-                    print(error.localizedDescription)
                     appState.displayedError = IdentifiableError(error)
                 }
             }
@@ -49,13 +47,20 @@ struct LoginController: View {
     func submitTwoFactor(_ twoFactorCode: String) {
         loginInProgress = true
         authorisationController.submitTwoFactor(
-            ephemeralCode: "a",
-            twoFactorCode: twoFactorCode,
             username: username,
-            serverAddress: serverAddress,
-            appState: appState
-        )
-        loginInProgress = false
+            code: twoFactorCode,
+            ephemeralToken: ephemeralCode ?? "unknown",
+            serverAddress: serverAddress) { outcome in
+            DispatchQueue.main.async {
+                loginInProgress = false
+                switch outcome {
+                case .success(let newUser):
+                    appState.loggedInUser = newUser
+                case .failure(let error):
+                    appState.displayedError = IdentifiableError(error)
+                }
+            }
+        }
     }
     
     var body: some View {

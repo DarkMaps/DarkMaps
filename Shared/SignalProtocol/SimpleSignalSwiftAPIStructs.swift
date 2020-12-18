@@ -11,7 +11,15 @@ public struct SSAPILoginResponse: Codable {
     var authToken: String
 }
 
+public struct SSAPISubmit2FAResponse: Codable {
+    var authToken: String
+}
+
 public struct SSAPIActivate2FAResponse: Codable {
     var message: String?
     var qrLink: String?
+}
+
+public struct SSAPIConfirm2FAResponse: Codable {
+    var backupCodes: [String]
 }

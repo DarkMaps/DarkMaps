@@ -10,13 +10,13 @@ import CoreImage.CIFilterBuiltins
 
 struct Activate2FAModal: View {
     
-    @Binding var activate2FACode: String
+    @Binding var confirm2FACode: String
     @Binding var QRCodeFor2FA: String
     
     @State private var invalidCode: Bool = false
     
     let obtain2FAQRCode: () -> Void
-    let activate2FA: () -> Void
+    let confirm2FA: () -> Void
     
     let context = CIContext()
     let filter = CIFilter.qrCodeGenerator()
@@ -53,10 +53,10 @@ struct Activate2FAModal: View {
                 title: "Enter the code from your programme",
                 invalidText: "Invalid code",
                 validRegex: ".{4,}",
-                text: $activate2FACode,
+                text: $confirm2FACode,
                 showInvalidText: $invalidCode
             )
-            Button(action: self.activate2FA) {
+            Button(action: self.confirm2FA) {
                 HStack {
 //                    if (self.loginInProgress) {
 //                        ActivityIndicator(isAnimating: true)
@@ -80,22 +80,22 @@ struct Activate2FAModal_Previews: PreviewProvider {
     
     struct PreviewWrapper: View {
         
-        @State var activate2FACode = ""
+        @State var confirm2FACode = ""
         @State var QRCodeFor2FA = ""
         func obtain2FAQRCode() {
             return
         }
-        func activate2FA() {
+        func confirm2FA() {
             return
         }
 
         var body: some View {
             
             return Activate2FAModal(
-                activate2FACode: $activate2FACode,
+                confirm2FACode: $confirm2FACode,
                 QRCodeFor2FA: $QRCodeFor2FA,
                 obtain2FAQRCode: obtain2FAQRCode,
-                activate2FA: activate2FA
+                confirm2FA: confirm2FA
             )
         }
     }
