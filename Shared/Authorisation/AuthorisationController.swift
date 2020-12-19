@@ -92,6 +92,7 @@ public class AuthorisationController {
                         completionHandler(.success(data.qrLink!))
                     case let .failure(error):
                         print("Request Unsuccessful")
+                        print(error)
                         completionHandler(.failure(error))
                 }
             }
@@ -112,6 +113,7 @@ public class AuthorisationController {
                         completionHandler(.success(data.backupCodes))
                     case let .failure(error):
                         print("Request Unsuccessful")
+                        print(error)
                         completionHandler(.failure(error))
                 }
             }

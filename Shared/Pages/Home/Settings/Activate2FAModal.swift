@@ -11,9 +11,12 @@ import CoreImage.CIFilterBuiltins
 struct Activate2FAModal: View {
     
     @Binding var confirm2FACode: String
-    @Binding var QRCodeFor2FA: String
+    @Binding var QRCodeFor2FA: String?
+    @Binding var actionInProgress: ActionInProgress?
     
     @State private var invalidCode: Bool = false
+    
+    @Environment(\.presentationMode) var presentation
     
     let obtain2FAQRCode: () -> Void
     let confirm2FA: () -> Void
@@ -41,11 +44,15 @@ struct Activate2FAModal: View {
             Spacer()
             HStack {
                 Spacer()
-                Image(uiImage: generateQRCode(from: QRCodeFor2FA))
-                    .interpolation(.none)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 200, height: 200)
+                if QRCodeFor2FA != nil {
+                    Image(uiImage: generateQRCode(from: QRCodeFor2FA!))
+                        .interpolation(.none)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 200, height: 200)
+                } else {
+                    ActivityIndicator(isAnimating: true)
+                }
                 Spacer()
             }
             Spacer()
@@ -58,15 +65,19 @@ struct Activate2FAModal: View {
             )
             Button(action: self.confirm2FA) {
                 HStack {
-//                    if (self.loginInProgress) {
-//                        ActivityIndicator(isAnimating: true)
-//                    }
+                    if (actionInProgress == .confirm2FA) {
+                        ActivityIndicator(isAnimating: true)
+                    }
                     Text("Activate")
                 }
             }
             .disabled(invalidCode)
             .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
-        }.padding()
+        }
+        .padding()
+        .onAppear() {
+            obtain2FAQRCode()
+        }
     }
 }
 
@@ -81,7 +92,8 @@ struct Activate2FAModal_Previews: PreviewProvider {
     struct PreviewWrapper: View {
         
         @State var confirm2FACode = ""
-        @State var QRCodeFor2FA = ""
+        @State var QRCodeFor2FA: String? = nil
+        @State var actionInProgress: ActionInProgress? = nil
         func obtain2FAQRCode() {
             return
         }
@@ -94,6 +106,7 @@ struct Activate2FAModal_Previews: PreviewProvider {
             return Activate2FAModal(
                 confirm2FACode: $confirm2FACode,
                 QRCodeFor2FA: $QRCodeFor2FA,
+                actionInProgress: $actionInProgress,
                 obtain2FAQRCode: obtain2FAQRCode,
                 confirm2FA: confirm2FA
             )

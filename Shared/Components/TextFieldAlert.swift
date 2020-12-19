@@ -13,7 +13,9 @@ struct TextFieldAlert<Presenting>: View where Presenting: View {
     @Binding var text: String
     let presenting: Presenting
     let title: String
+    let secureField: Bool
     let onDismiss: () -> Void
+    
 
     var body: some View {
         GeometryReader { (deviceSize: GeometryProxy) in
@@ -22,8 +24,13 @@ struct TextFieldAlert<Presenting>: View where Presenting: View {
                     .disabled(isShowing)
                 VStack {
                     Text(self.title)
-                    TextField(self.title, text: self.$text)
-                        .id(self.isShowing)
+                    if (secureField) {
+                        SecureField(self.title, text: self.$text)
+                            .id(self.isShowing)
+                    } else {
+                        TextField(self.title, text: self.$text)
+                            .id(self.isShowing)
+                    }
                     Divider()
                     HStack {
                         Button(action: {
@@ -61,11 +68,13 @@ extension View {
     func textFieldAlert(isShowing: Binding<Bool>,
                         text: Binding<String>,
                         title: String,
+                        secureField: Bool = false,
                         onDismiss: @escaping () -> Void) -> some View {
         TextFieldAlert(isShowing: isShowing,
                        text: text,
                        presenting: self,
                        title: title,
+                       secureField: secureField,
                        onDismiss: onDismiss)
     }
 

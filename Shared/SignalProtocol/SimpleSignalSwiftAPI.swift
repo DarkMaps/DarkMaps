@@ -200,7 +200,7 @@ public class SimpleSignalSwiftAPI {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue(authToken, forHTTPHeaderField: "Authorization")
+        request.setValue("Token \(authToken)", forHTTPHeaderField: "Authorization")
         let json: [String: Any] = [:]
         guard let jsonData = try? JSONSerialization.data(withJSONObject: json, options: []) else {
             return .failure(.badFormat)
@@ -225,7 +225,23 @@ public class SimpleSignalSwiftAPI {
             }
             
             guard response.statusCode == 200 else {
-                if response.statusCode == 403 {
+                if response.statusCode == 400 {
+                    // For 400 errors we need to parse the returned JSON and determine the type of error
+                    do {
+                        let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
+                        if let errorsObject = (json?["error"] as? [String]) {
+                            if errorsObject.contains("MFA method already active.") {
+                                result = .failure(.twoFactorAlreadyExists)
+                            } else {
+                                result = .failure(.serverError)
+                            }
+                        } else {
+                            result = .failure(.serverError)
+                        }
+                    } catch {
+                        result = .failure(.badResponseFromServer)
+                    }
+                } else if response.statusCode == 403 {
                     // A 403 response probably means the mfaMethodName was unrecognised
                     result = .failure(.possibleIncorrectMFAMethodName)
                 } else if response.statusCode == 429 {
@@ -258,7 +274,7 @@ public class SimpleSignalSwiftAPI {
     
     public func confirmTwoFactorAuthentication(authToken: String, mfaMethodName: String, confirm2FACode: String, serverAddress: String) -> Result<SSAPIConfirm2FAResponse, SSAPIConfirm2FAError> {
         
-        let path = "\(serverAddress)/v1/auth/\(mfaMethodName)/confirm/"
+        let path = "\(serverAddress)/v1/auth/\(mfaMethodName)/activate/confirm/"
         guard let url = URL(string: path) else {
             return .failure(.invalidUrl)
         }
@@ -270,7 +286,7 @@ public class SimpleSignalSwiftAPI {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue(authToken, forHTTPHeaderField: "Authorization")
+        request.setValue("Token \(authToken)", forHTTPHeaderField: "Authorization")
         let json = [
             "code": confirm2FACodeInt
         ]
@@ -346,7 +362,7 @@ public class SimpleSignalSwiftAPI {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue(authToken, forHTTPHeaderField: "Authorization")
+        request.setValue("Token \(authToken)", forHTTPHeaderField: "Authorization")
         let json = [
             "code": confirm2FACodeInt
         ]
@@ -412,7 +428,7 @@ public class SimpleSignalSwiftAPI {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue(authToken, forHTTPHeaderField: "Authorization")
+        request.setValue("Token \(authToken)", forHTTPHeaderField: "Authorization")
         let json: [String: Any] = [:]
         guard let jsonData = try? JSONSerialization.data(withJSONObject: json, options: []) else {
             return .failure(.badFormat)
@@ -471,7 +487,7 @@ public class SimpleSignalSwiftAPI {
         var request = URLRequest(url: url)
         request.httpMethod = "DELETE"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue(authToken, forHTTPHeaderField: "Authorization")
+        request.setValue("Token \(authToken)", forHTTPHeaderField: "Authorization")
         let json = [
             "currentPassword": currentPassword
         ]

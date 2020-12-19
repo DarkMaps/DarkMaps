@@ -14,6 +14,7 @@ struct TextFieldWithTitleAndValidation: View {
     var invalidText: String
     var validRegex: String = ".*"
     var secureField: Bool = false
+    var disableAutocorrection: Bool = false
     
     @Binding var text: String
     @Binding var showInvalidText: Bool
@@ -46,6 +47,7 @@ struct TextFieldWithTitleAndValidation: View {
                         onCommit: onCommit)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .autocapitalization(.none)
+                        .disableAutocorrection(disableAutocorrection)
                 } else {
                     SecureField(
                         title,

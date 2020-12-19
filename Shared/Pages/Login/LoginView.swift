@@ -29,6 +29,7 @@ struct LoginView: View {
                 title: "Username",
                 invalidText: "Invalid username",
                 validRegex: "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$",
+                disableAutocorrection: true,
                 text: $username,
                 showInvalidText: $invalidUsername
             )

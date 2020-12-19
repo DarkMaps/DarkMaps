@@ -60,12 +60,14 @@ extension SSAPISubmit2FAError {
 
 
 public enum SSAPIActivate2FAError: LocalizedError {
-    case invalidUrl, badFormat, badResponseFromServer, serverError, possibleIncorrectMFAMethodName, requestThrottled
+    case twoFactorAlreadyExists, invalidUrl, badFormat, badResponseFromServer, serverError, possibleIncorrectMFAMethodName, requestThrottled
 }
 
 extension SSAPIActivate2FAError {
     public var errorDescription: String? {
         switch self {
+        case .twoFactorAlreadyExists:
+            return NSLocalizedString("Two factor authentication already exists", comment: "")
         case .invalidUrl:
             return NSLocalizedString("The server address provided is invalid", comment: "")
         case .badFormat:

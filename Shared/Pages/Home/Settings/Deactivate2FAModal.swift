@@ -10,6 +10,7 @@ import SwiftUI
 struct Deactivate2FAModal: View {
     
     @Binding var deactivate2FACode: String
+    @Binding var actionInProgress: ActionInProgress?
     @State var invalidCode: Bool = false
     let deactivate2FA: () -> Void
     
@@ -26,9 +27,9 @@ struct Deactivate2FAModal: View {
             )
             Button(action: self.deactivate2FA) {
                 HStack {
-//                    if (self.loginInProgress) {
-//                        ActivityIndicator(isAnimating: true)
-//                    }
+                    if (actionInProgress == .deactivate2FA) {
+                        ActivityIndicator(isAnimating: true)
+                    }
                     Text("Deactivate")
                 }
             }
@@ -50,6 +51,7 @@ struct Deactivate2FAModal_Previews: PreviewProvider {
     struct PreviewWrapper: View {
         
         @State var deactivate2FACode = ""
+        @State var actionInProgress: ActionInProgress? = nil
         func deactivate2FA() {
             return
         }
@@ -58,6 +60,7 @@ struct Deactivate2FAModal_Previews: PreviewProvider {
             
             return Deactivate2FAModal(
                 deactivate2FACode: $deactivate2FACode,
+                actionInProgress: $actionInProgress,
                 deactivate2FA: deactivate2FA
             )
         }

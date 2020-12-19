@@ -7,13 +7,21 @@
 
 import Foundation
 
-public class LoggedInUser: Equatable, Hashable {
+public class LoggedInUser: Equatable, Hashable, Codable {
     
     public let userName: String
-    public let deviceName: String?
+    public var deviceName: String? {
+        didSet {
+            handleStoreObject()
+        }
+    }
     public let serverAddress: String
     public let authCode: String
-    public let is2FAUser: Bool
+    public var is2FAUser: Bool {
+        didSet {
+            handleStoreObject()
+        }
+    }
     
     var combinedName: String {
         return "\(self.userName):\(self.deviceName ?? "Unknown"):\(String(describing: self.serverAddress.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed))):\(self.authCode)"
@@ -50,6 +58,15 @@ public class LoggedInUser: Equatable, Hashable {
         hasher.combine(serverAddress)
         hasher.combine(authCode)
         hasher.combine(is2FAUser ? "true" : "false")
+    }
+    
+    func handleStoreObject() {
+        let encoder = JSONEncoder()
+        guard let data = try? encoder.encode(self) else {
+            print("Error encoding object, unable to save user")
+            return
+        }
+        KeychainSwift().set(data, forKey: "loggedInUser")
     }
 }
 

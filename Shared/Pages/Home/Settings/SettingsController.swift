@@ -10,13 +10,16 @@ struct SettingsController: View {
     
     @EnvironmentObject var appState: AppState
     
+    @Environment(\.presentationMode) var presentation
+    
     @State var activate2FAModalIsShowing = false
-    @State var QRCodeFor2FA = ""
+    @State var QRCodeFor2FA: String? = nil
     @State var confirm2FACode = ""
     @State var deactivate2FAModalIsShowing = false
     @State var deactivate2FACode = ""
     @State var passwordAlertShowing = false
     @State var currentPassword = ""
+    @State var backupCodesAlertShowing = false
     @State var backupCodes: IdentifiableBackupCodes?
     @State var actionInProgress: ActionInProgress? = nil
     
@@ -44,7 +47,10 @@ struct SettingsController: View {
             case .success(let QRCode):
                 self.QRCodeFor2FA = QRCode
             case .failure(let error):
-                appState.displayedError = IdentifiableError(error)
+                activate2FAModalIsShowing = false
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+                    appState.displayedError = IdentifiableError(error)
+                })
             }
         }
     }
@@ -53,13 +59,15 @@ struct SettingsController: View {
         actionInProgress = .confirm2FA
         authorisationController.confirm2FA(code: confirm2FACode, authToken: appState.loggedInUser?.authCode ?? "unknown", serverAddress: appState.loggedInUser?.serverAddress ?? "unknown") { result in
             actionInProgress = nil
+            activate2FAModalIsShowing = false
             switch result {
             case .success(let backupCodes):
                 self.backupCodes = IdentifiableBackupCodes(codes: backupCodes)
-                activate2FAModalIsShowing = false
+                appState.loggedInUser?.is2FAUser = true
             case .failure(let error):
-                appState.displayedError = IdentifiableError(error)
-                activate2FAModalIsShowing = false
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+                    appState.displayedError = IdentifiableError(error)
+                })
             }
         }
     }
@@ -68,12 +76,14 @@ struct SettingsController: View {
         actionInProgress = .deactivate2FA
         authorisationController.deactivate2FA(code: deactivate2FACode, authToken: appState.loggedInUser?.authCode ?? "unknown", serverAddress: appState.loggedInUser?.serverAddress ?? "unknown") { result in
             actionInProgress = nil
+            deactivate2FAModalIsShowing = false
             switch result {
             case .success():
-                deactivate2FAModalIsShowing = false
+                appState.loggedInUser?.is2FAUser = false
             case .failure(let error):
-                appState.displayedError = IdentifiableError(error)
-                deactivate2FAModalIsShowing = false
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+                    appState.displayedError = IdentifiableError(error)
+                })
             }
         }
     }
@@ -102,28 +112,35 @@ struct SettingsController: View {
                 actionInProgress: $actionInProgress,
                 logUserOut: logUserOut
             )
-            Text("").hidden().sheet(isPresented: $activate2FAModalIsShowing, content: {
+            Text("").hidden().sheet(isPresented: $activate2FAModalIsShowing, onDismiss: {
+                if backupCodes != nil {
+                    self.backupCodesAlertShowing = true
+                }
+            }, content: {
                 Activate2FAModal(
                     confirm2FACode: $confirm2FACode,
                     QRCodeFor2FA: $QRCodeFor2FA,
+                    actionInProgress: $actionInProgress,
                     obtain2FAQRCode: obtain2FAQRCode,
                     confirm2FA: confirm2FA)
             })
             Text("").hidden().sheet(isPresented: $deactivate2FAModalIsShowing, content: {
                 Deactivate2FAModal(
                     deactivate2FACode: $deactivate2FACode,
+                    actionInProgress: $actionInProgress,
                     deactivate2FA: deactivate2FA)
             })
             Text("").hidden().textFieldAlert(
                 isShowing: $passwordAlertShowing,
                 text: $currentPassword,
                 title: "Password Required",
+                secureField: true,
                 onDismiss: deleteUserAccount
             )
-            Text("").hidden().alert(item: $backupCodes) { backupCodes -> Alert in
+            Text("").hidden().alert(isPresented: $backupCodesAlertShowing) { () -> Alert in
                 Alert(
                     title: Text("Backup Codes"),
-                    message: Text("Store these backup codes in a safe place:\n\n\(backupCodes.codes.joined(separator: "\n"))"),
+                    message: Text("Store these backup codes in a safe place:\n\n\((backupCodes?.codes ?? []).joined(separator: "\n"))"),
                     dismissButton: .cancel()
                 )
             }
