@@ -11,10 +11,11 @@ struct SettingsView: View {
     
     @Binding var activate2FAModalIsShowing: Bool
     @Binding var deactivate2FAModalIsShowing: Bool
+    @Binding var passwordAlertShowing: Bool
     @Binding var loggedInUser: LoggedInUser?
+    @Binding var actionInProgress: ActionInProgress?
     
     var logUserOut: () -> Void
-    var deleteUserAccount: () -> Void
     
     var body: some View {
         List {
@@ -25,20 +26,32 @@ struct SettingsView: View {
             }
             Section(header: Text("Account")) {
                 if (loggedInUser?.is2FAUser ?? false) {
-                    Text("Deactivate 2FA").onTapGesture(perform: {
-                        print("Click")
-                        deactivate2FAModalIsShowing = true
-                    })
+                    SettingsRow(
+                        actionInProgress: $actionInProgress,
+                        title: "Deactivate 2FA",
+                        actionDefiningActivityMarker: .deactivate2FA,
+                        onTap: {deactivate2FAModalIsShowing = true}
+                    )
                 } else {
-                    Text("Activate 2FA").onTapGesture(perform: {
-                        print("Click")
-                        activate2FAModalIsShowing = true
-                    })
+                    SettingsRow(
+                        actionInProgress: $actionInProgress,
+                        title: "Activate 2FA",
+                        actionDefiningActivityMarker: .confirm2FA,
+                        onTap: {activate2FAModalIsShowing = true}
+                    )
                 }
-                Text("Log Out")
-                    .onTapGesture(perform: logUserOut)
-                Text("Delete Account")
-                    .onTapGesture(perform: deleteUserAccount)
+                SettingsRow(
+                    actionInProgress: $actionInProgress,
+                    title: "Log Out",
+                    actionDefiningActivityMarker: .logUserOut,
+                    onTap: logUserOut
+                )
+                SettingsRow(
+                    actionInProgress: $actionInProgress,
+                    title: "Delete Account",
+                    actionDefiningActivityMarker: .deleteUserAccount,
+                    onTap: {passwordAlertShowing = true}
+                )
             }
         }.listStyle(GroupedListStyle())
     }
@@ -48,31 +61,29 @@ struct SettingsView_Previews: PreviewProvider {
     
     static var previews: some View {
         return Group {
-            PreviewWrapper(is2FAUser: true)
-                .previewDisplayName("2FA")
-            PreviewWrapper(is2FAUser: false)
-                .previewDisplayName("No 2FA")
+            PreviewWrapper()
         }
     }
     
     struct PreviewWrapper: View {
         
         func logUserOut() {}
-        func deleteUserAccount() {}
         
         @State var loggedInUser: LoggedInUser? = nil
-        @State var is2FAUser: Bool
         @State var activate2FAModalIsShowing = false
         @State var deactivate2FAModalIsShowing = false
+        @State var passwordAlertShowing = false
+        @State var actionInProgress: ActionInProgress? = nil
 
         var body: some View {
             
             return SettingsView(
                 activate2FAModalIsShowing: $activate2FAModalIsShowing,
                 deactivate2FAModalIsShowing: $deactivate2FAModalIsShowing,
+                passwordAlertShowing: $passwordAlertShowing,
                 loggedInUser: $loggedInUser,
-                logUserOut: logUserOut,
-                deleteUserAccount: deleteUserAccount
+                actionInProgress: $actionInProgress,
+                logUserOut: logUserOut
             )
         }
     }

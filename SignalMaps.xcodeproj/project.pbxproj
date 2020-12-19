@@ -116,6 +116,8 @@
 		ECDE0E5C2572B615009D3561 /* KeychainSignalProtocolStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFFD64D2572A9C900458BC8 /* KeychainSignalProtocolStore.swift */; };
 		ECDE0E5D2572B615009D3561 /* KeychainSwiftDistrib.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFFD64E2572A9C900458BC8 /* KeychainSwiftDistrib.swift */; };
 		ECDE0E602572B674009D3561 /* libsignal_ffi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ECFFD6442572A82500458BC8 /* libsignal_ffi.a */; };
+		ECFC5940258DF804005CCDA2 /* TextFieldAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFC593F258DF803005CCDA2 /* TextFieldAlert.swift */; };
+		ECFC5945258E0AAC005CCDA2 /* SettingsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFC5944258E0AAB005CCDA2 /* SettingsRow.swift */; };
 		ECFFD5222572620300458BC8 /* SignalMapsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFFD50F257261FB00458BC8 /* SignalMapsApp.swift */; };
 		ECFFD5232572620300458BC8 /* SignalMapsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFFD50F257261FB00458BC8 /* SignalMapsApp.swift */; };
 		ECFFD5242572620300458BC8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFFD510257261FB00458BC8 /* ContentView.swift */; };
@@ -222,6 +224,8 @@
 		ECDE0E392572B5EC009D3561 /* SignalMapsiOSFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SignalMapsiOSFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECDE0E3B2572B5EC009D3561 /* SignalMapsiOSFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SignalMapsiOSFramework.h; sourceTree = "<group>"; };
 		ECDE0E3C2572B5EC009D3561 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		ECFC593F258DF803005CCDA2 /* TextFieldAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldAlert.swift; sourceTree = "<group>"; };
+		ECFC5944258E0AAB005CCDA2 /* SettingsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRow.swift; sourceTree = "<group>"; };
 		ECFFD50F257261FB00458BC8 /* SignalMapsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalMapsApp.swift; sourceTree = "<group>"; };
 		ECFFD510257261FB00458BC8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		ECFFD5112572620300458BC8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -430,6 +434,7 @@
 				EC9129B8257CC61B00E12BF6 /* RoundedButton.swift */,
 				EC9129BC257CC72500E12BF6 /* ActivityIndicator.swift */,
 				EC9129DC257D828200E12BF6 /* ErrorAlert.swift */,
+				ECFC593F258DF803005CCDA2 /* TextFieldAlert.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -460,6 +465,7 @@
 				ECC0A5DC257FE8FF001D5E60 /* SettingsView.swift */,
 				EC4520D425896275002768C8 /* Activate2FAModal.swift */,
 				EC4520D825896287002768C8 /* Deactivate2FAModal.swift */,
+				ECFC5944258E0AAB005CCDA2 /* SettingsRow.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -870,12 +876,14 @@
 			files = (
 				EC9129BD257CC72500E12BF6 /* ActivityIndicator.swift in Sources */,
 				EC23C0F5258BEE4600ABDE84 /* SimpleSignalSwiftAPIStructs.swift in Sources */,
+				ECFC5945258E0AAC005CCDA2 /* SettingsRow.swift in Sources */,
 				EC12FBB92572ADC700F7230F /* SenderKeyMessage.swift in Sources */,
 				EC12FBC92572ADC700F7230F /* SessionRecord.swift in Sources */,
 				EC91299A257CC13900E12BF6 /* AuthorisationController.swift in Sources */,
 				EC12FBBD2572ADC700F7230F /* CiphertextMessage.swift in Sources */,
 				EC12FBCB2572ADC700F7230F /* SignedPreKeyRecord.swift in Sources */,
 				EC912986257BB67500E12BF6 /* AppState.swift in Sources */,
+				ECFC5940258DF804005CCDA2 /* TextFieldAlert.swift in Sources */,
 				EC12FBC32572ADC700F7230F /* Address.swift in Sources */,
 				EC9129D1257D5EC100E12BF6 /* TwoFactorModal.swift in Sources */,
 				ECC0A5C5257FE8B8001D5E60 /* ListView.swift in Sources */,
