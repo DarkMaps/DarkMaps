@@ -18,13 +18,6 @@ struct TwoFactorModal: View {
     
     var submitTwoFactor: (String) -> Void
     
-    func handleSubmit() {
-        loginInProgress = true
-        submitTwoFactor(twoFactorCode)
-        presentationMode.wrappedValue.dismiss()
-        loginInProgress = false
-    }
-    
     var body: some View {
         VStack(alignment: .leading) {
             Text("Two Factor Authentication")
@@ -36,10 +29,10 @@ struct TwoFactorModal: View {
                 validRegex: "0-9",
                 text: $twoFactorCode,
                 showInvalidText: $showInvalidTwoFactorCodeText,
-                onCommit: handleSubmit
+                onCommit: {submitTwoFactor(twoFactorCode)}
             )
             .padding(.bottom)
-            Button(action: self.handleSubmit) {
+            Button(action: {submitTwoFactor(twoFactorCode)}) {
                 HStack {
                     if (self.loginInProgress) {
                         ActivityIndicator(isAnimating: true)

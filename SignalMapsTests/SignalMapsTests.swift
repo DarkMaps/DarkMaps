@@ -105,7 +105,7 @@ class SignalMapsTests: XCTestCase {
     
     func testConfirm2FA() throws {
         let expectation = XCTestExpectation(description: "Successfully confirms 2FA")
-        let uriValue = "https://www.simplesignal.co.uk/v1/auth/app/confirm/"
+        let uriValue = "https://www.simplesignal.co.uk/v1/auth/app/activate/confirm/"
         let data: NSDictionary = [
             "backup_codes": [
                 "test_backup_code"

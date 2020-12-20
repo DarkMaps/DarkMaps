@@ -9,7 +9,7 @@ import Foundation
 
 //https://michaellong.medium.com/how-to-chain-api-calls-using-swift-5s-new-result-type-and-gcd-56025b51033c
 
-public class SimpleSignalSwiftAPI {
+public class SimpleSignalSwiftAuthAPI{
     
     public func login(username: String, password: String, serverAddress: String) -> Result<SSAPILoginResponse, SSAPILoginError> {
         

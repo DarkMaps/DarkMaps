@@ -13,16 +13,33 @@ public class KeychainSignalProtocolStore: IdentityKeyStore, PreKeyStore, SignedP
 
     public init(keychainSwift: KeychainSwift) throws {
         self.keychainSwift = keychainSwift
-        let privateKey = try IdentityKeyPair.generate()
-        let deviceId = UInt32.random(in: 0...65535)
-        keychainSwift.set(Data(try privateKey.serialize()), forKey: "privateKey")
-        keychainSwift.set(String(deviceId), forKey: "deviceId")
+        guard let _ = keychainSwift.getData("privateKey") else {
+            throw KeychainSignalProtocolStoreError.noStoredIdentityKey
+        }
+        guard let _ = keychainSwift.getData("deviceId") else {
+            throw KeychainSignalProtocolStoreError.noStoredDeviceId
+        }
     }
 
     public init(keychainSwift: KeychainSwift, identity: IdentityKeyPair, deviceId: UInt32) throws {
         self.keychainSwift = keychainSwift
+        guard keychainSwift.getData("privateKey") == nil else {
+            throw KeychainSignalProtocolStoreError.identityKeyAlreadyExists
+        }
+        guard keychainSwift.getData("deviceId") == nil else {
+            throw KeychainSignalProtocolStoreError.deviceIdAlreadyExists
+        }
         keychainSwift.set(Data(try identity.serialize()), forKey: "privateKey")
         keychainSwift.set(String(deviceId), forKey: "deviceId")
+    }
+    
+    public func clearAllData() {
+        let keys = keychainSwift.allKeys
+        for key in keys {
+            if key.starts(with: keychainSwift.keyPrefix) {
+                keychainSwift.delete(key)
+            }
+        }
     }
 
     public func identityKeyPair(context: UnsafeMutableRawPointer?) throws -> IdentityKeyPair {
@@ -131,4 +148,6 @@ public class KeychainSignalProtocolStore: IdentityKeyStore, PreKeyStore, SignedP
 public enum KeychainSignalProtocolStoreError: Error {
     case noStoredIdentityKey
     case noStoredDeviceId
+    case identityKeyAlreadyExists
+    case deviceIdAlreadyExists
 }

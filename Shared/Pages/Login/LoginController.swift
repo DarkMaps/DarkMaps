@@ -53,11 +53,14 @@ struct LoginController: View {
             serverAddress: serverAddress) { outcome in
             DispatchQueue.main.async {
                 loginInProgress = false
+                twoFactorModalVisible = false
                 switch outcome {
                 case .success(let newUser):
                     appState.loggedInUser = newUser
                 case .failure(let error):
-                    appState.displayedError = IdentifiableError(error)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+                        appState.displayedError = IdentifiableError(error)
+                    })
                 }
             }
         }

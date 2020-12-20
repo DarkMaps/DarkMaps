@@ -97,7 +97,6 @@ struct SettingsController: View {
                 appState.loggedInUser = nil
             case .failure(let error):
                 appState.displayedError = IdentifiableError(error)
-                appState.loggedInUser = nil
             }
         }
     }
