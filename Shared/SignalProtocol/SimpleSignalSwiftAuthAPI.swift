@@ -11,7 +11,7 @@ import Foundation
 
 public class SimpleSignalSwiftAuthAPI{
     
-    public func login(username: String, password: String, serverAddress: String) -> Result<SSAPILoginResponse, SSAPILoginError> {
+    public func login(username: String, password: String, serverAddress: String) -> Result<SSAPILoginResponse, SSAPIAuthLoginError> {
         
         let path = "\(serverAddress)/v1/auth/login/"
         guard let url = URL(string: path) else {
@@ -29,7 +29,7 @@ public class SimpleSignalSwiftAuthAPI{
             return .failure(.badFormat)
         }
         
-        var result: Result<SSAPILoginResponse, SSAPILoginError>!
+        var result: Result<SSAPILoginResponse, SSAPIAuthLoginError>!
         
         let semaphore = DispatchSemaphore(value: 0)
         
@@ -103,7 +103,7 @@ public class SimpleSignalSwiftAuthAPI{
         
     }
     
-    public func submitTwoFactorAuthentication(ephemeralToken: String, submit2FACode: String, serverAddress: String) -> Result<SSAPISubmit2FAResponse, SSAPISubmit2FAError> {
+    public func submitTwoFactorAuthentication(ephemeralToken: String, submit2FACode: String, serverAddress: String) -> Result<SSAPISubmit2FAResponse, SSAPIAuthSubmit2FAError> {
         
         let path = "\(serverAddress)/v1/auth/login/code/"
         guard let url = URL(string: path) else {
@@ -125,7 +125,7 @@ public class SimpleSignalSwiftAuthAPI{
             return .failure(.badFormat)
         }
         
-        var result: Result<SSAPISubmit2FAResponse, SSAPISubmit2FAError>!
+        var result: Result<SSAPISubmit2FAResponse, SSAPIAuthSubmit2FAError>!
         
         let semaphore = DispatchSemaphore(value: 0)
         
@@ -190,7 +190,7 @@ public class SimpleSignalSwiftAuthAPI{
         
     }
     
-    public func activateTwoFactorAuthentication(authToken: String, mfaMethodName: String, serverAddress: String) -> Result<SSAPIActivate2FAResponse, SSAPIActivate2FAError> {
+    public func activateTwoFactorAuthentication(authToken: String, mfaMethodName: String, serverAddress: String) -> Result<SSAPIActivate2FAResponse, SSAPIAuthActivate2FAError> {
         
         let path = "\(serverAddress)/v1/auth/\(mfaMethodName)/activate/"
         guard let url = URL(string: path) else {
@@ -206,7 +206,7 @@ public class SimpleSignalSwiftAuthAPI{
             return .failure(.badFormat)
         }
         
-        var result: Result<SSAPIActivate2FAResponse, SSAPIActivate2FAError>!
+        var result: Result<SSAPIActivate2FAResponse, SSAPIAuthActivate2FAError>!
         
         let semaphore = DispatchSemaphore(value: 0)
         
@@ -272,7 +272,7 @@ public class SimpleSignalSwiftAuthAPI{
         
     }
     
-    public func confirmTwoFactorAuthentication(authToken: String, mfaMethodName: String, confirm2FACode: String, serverAddress: String) -> Result<SSAPIConfirm2FAResponse, SSAPIConfirm2FAError> {
+    public func confirmTwoFactorAuthentication(authToken: String, mfaMethodName: String, confirm2FACode: String, serverAddress: String) -> Result<SSAPIConfirm2FAResponse, SSAPIAuthConfirm2FAError> {
         
         let path = "\(serverAddress)/v1/auth/\(mfaMethodName)/activate/confirm/"
         guard let url = URL(string: path) else {
@@ -294,7 +294,7 @@ public class SimpleSignalSwiftAuthAPI{
             return .failure(.badFormat)
         }
         
-        var result: Result<SSAPIConfirm2FAResponse, SSAPIConfirm2FAError>!
+        var result: Result<SSAPIConfirm2FAResponse, SSAPIAuthConfirm2FAError>!
         
         let semaphore = DispatchSemaphore(value: 0)
         
@@ -348,7 +348,7 @@ public class SimpleSignalSwiftAuthAPI{
         
     }
     
-    public func deactivateTwoFactorAuthentication(authToken: String, mfaMethodName: String, confirm2FACode: String, serverAddress: String) -> Result<Void, SSAPIDeactivate2FAError> {
+    public func deactivateTwoFactorAuthentication(authToken: String, mfaMethodName: String, confirm2FACode: String, serverAddress: String) -> Result<Void, SSAPIAuthDeactivate2FAError> {
         
         let path = "\(serverAddress)/v1/auth/\(mfaMethodName)/deactivate/"
         guard let url = URL(string: path) else {
@@ -370,7 +370,7 @@ public class SimpleSignalSwiftAuthAPI{
             return .failure(.badFormat)
         }
         
-        var result: Result<Void, SSAPIDeactivate2FAError>!
+        var result: Result<Void, SSAPIAuthDeactivate2FAError>!
         
         let semaphore = DispatchSemaphore(value: 0)
         
@@ -418,7 +418,7 @@ public class SimpleSignalSwiftAuthAPI{
         
     }
     
-    public func logOut(authToken: String, serverAddress: String) -> Result<Void, SSAPILogOutError> {
+    public func logOut(authToken: String, serverAddress: String) -> Result<Void, SSAPIAuthLogOutError> {
         
         let path = "\(serverAddress)/v1/auth/logout/"
         guard let url = URL(string: path) else {
@@ -434,7 +434,7 @@ public class SimpleSignalSwiftAuthAPI{
             return .failure(.badFormat)
         }
         
-        var result: Result<Void, SSAPILogOutError>!
+        var result: Result<Void, SSAPIAuthLogOutError>!
         
         let semaphore = DispatchSemaphore(value: 0)
         
@@ -477,7 +477,7 @@ public class SimpleSignalSwiftAuthAPI{
         
     }
     
-    public func deleteUserAccount(currentPassword: String, authToken: String, serverAddress: String) -> Result<Void, SSAPIDeleteUserAccountError> {
+    public func deleteUserAccount(currentPassword: String, authToken: String, serverAddress: String) -> Result<Void, SSAPIAuthDeleteUserAccountError> {
         
         let path = "\(serverAddress)/v1/auth/users/me/"
         guard let url = URL(string: path) else {
@@ -495,7 +495,7 @@ public class SimpleSignalSwiftAuthAPI{
             return .failure(.badFormat)
         }
         
-        var result: Result<Void, SSAPIDeleteUserAccountError>!
+        var result: Result<Void, SSAPIAuthDeleteUserAccountError>!
         
         let semaphore = DispatchSemaphore(value: 0)
         

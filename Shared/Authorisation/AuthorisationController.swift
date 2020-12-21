@@ -39,7 +39,7 @@ public class AuthorisationController {
         }
     }
     
-    func submitTwoFactor(username: String, code: String, ephemeralToken: String, serverAddress: String, completionHandler: @escaping (_: Result<LoggedInUser, SSAPISubmit2FAError>) -> ()) {
+    func submitTwoFactor(username: String, code: String, ephemeralToken: String, serverAddress: String, completionHandler: @escaping (_: Result<LoggedInUser, SSAPIAuthSubmit2FAError>) -> ()) {
         print("Submit 2FA")
         DispatchQueue.global(qos: .utility).async {
             let response = self.simpleSignalSwiftAuthAPI.submitTwoFactorAuthentication(ephemeralToken: ephemeralToken, submit2FACode: code, serverAddress: serverAddress)
@@ -62,7 +62,7 @@ public class AuthorisationController {
         }
     }
     
-    func logUserOut(authToken: String, serverAddress: String, completionHandler: @escaping (_: Result<Void, SSAPILogOutError>) -> ()) {
+    func logUserOut(authToken: String, serverAddress: String, completionHandler: @escaping (_: Result<Void, SSAPIAuthLogOutError>) -> ()) {
         print("Log Out")
         DispatchQueue.global(qos: .utility).async {
             let response = self.simpleSignalSwiftAuthAPI.logOut(authToken: authToken, serverAddress: serverAddress)
@@ -78,7 +78,7 @@ public class AuthorisationController {
         }
     }
     
-    func request2FAQRCode(authToken: String, serverAddress: String, completionHandler: @escaping (_: Result<String, SSAPIActivate2FAError>) -> ()) {
+    func request2FAQRCode(authToken: String, serverAddress: String, completionHandler: @escaping (_: Result<String, SSAPIAuthActivate2FAError>) -> ()) {
         print("Request 2FA QR Code")
         DispatchQueue.global(qos: .utility).async {
             let response = self.simpleSignalSwiftAuthAPI.activateTwoFactorAuthentication(authToken: authToken, mfaMethodName: "app", serverAddress: serverAddress)
@@ -99,7 +99,7 @@ public class AuthorisationController {
         }
     }
     
-    func confirm2FA(code: String, authToken: String, serverAddress: String, completionHandler: @escaping (_: Result<[String], SSAPIConfirm2FAError>) -> ()) {
+    func confirm2FA(code: String, authToken: String, serverAddress: String, completionHandler: @escaping (_: Result<[String], SSAPIAuthConfirm2FAError>) -> ()) {
         print("Confirm 2FA")
         DispatchQueue.global(qos: .utility).async {
             let response = self.simpleSignalSwiftAuthAPI.confirmTwoFactorAuthentication(
@@ -120,7 +120,7 @@ public class AuthorisationController {
         }
     }
     
-    func deactivate2FA(code: String, authToken: String, serverAddress: String, completionHandler: @escaping (_: Result<Void, SSAPIDeactivate2FAError>) -> ()) {
+    func deactivate2FA(code: String, authToken: String, serverAddress: String, completionHandler: @escaping (_: Result<Void, SSAPIAuthDeactivate2FAError>) -> ()) {
         print("Deativate 2FA")
         DispatchQueue.global(qos: .utility).async {
             let response = self.simpleSignalSwiftAuthAPI.deactivateTwoFactorAuthentication(
@@ -140,7 +140,7 @@ public class AuthorisationController {
         }
     }
     
-    func deleteUserAccount(currentPassword: String, authToken: String, serverAddress: String, completionHandler: @escaping (_: Result<Void, SSAPIDeleteUserAccountError>) -> ()) {
+    func deleteUserAccount(currentPassword: String, authToken: String, serverAddress: String, completionHandler: @escaping (_: Result<Void, SSAPIAuthDeleteUserAccountError>) -> ()) {
         print("Delete User Account")
         DispatchQueue.global(qos: .utility).async {
             let response = self.simpleSignalSwiftAuthAPI.deleteUserAccount(

@@ -7,11 +7,11 @@
 
 import Foundation
 
-public enum SSAPILoginError: LocalizedError {
+public enum SSAPIAuthLoginError: LocalizedError {
     case invalidCredentials, invalidUrl, badFormat, badResponseFromServer, serverError, needsTwoFactorAuthentication(String), requestThrottled
 }
 
-extension SSAPILoginError {
+extension SSAPIAuthLoginError {
     public var errorDescription: String? {
         switch self {
         case .invalidCredentials:
@@ -32,11 +32,11 @@ extension SSAPILoginError {
     }
 }
 
-public enum SSAPISubmit2FAError: LocalizedError {
+public enum SSAPIAuthSubmit2FAError: LocalizedError {
     case invalidToken, invalidCode, invalidUrl, badFormat, badResponseFromServer, serverError, requestThrottled
 }
 
-extension SSAPISubmit2FAError {
+extension SSAPIAuthSubmit2FAError {
     public var errorDescription: String? {
         switch self {
         case .invalidToken:
@@ -59,11 +59,11 @@ extension SSAPISubmit2FAError {
 
 
 
-public enum SSAPIActivate2FAError: LocalizedError {
+public enum SSAPIAuthActivate2FAError: LocalizedError {
     case twoFactorAlreadyExists, invalidUrl, badFormat, badResponseFromServer, serverError, possibleIncorrectMFAMethodName, requestThrottled
 }
 
-extension SSAPIActivate2FAError {
+extension SSAPIAuthActivate2FAError {
     public var errorDescription: String? {
         switch self {
         case .twoFactorAlreadyExists:
@@ -84,11 +84,11 @@ extension SSAPIActivate2FAError {
     }
 }
 
-public enum SSAPIConfirm2FAError: LocalizedError {
+public enum SSAPIAuthConfirm2FAError: LocalizedError {
     case invalidUrl, badFormat, badResponseFromServer, serverError, possibleIncorrectMFAMethodName, requestThrottled, invalidAuthorisation, invalidCode
 }
 
-extension SSAPIConfirm2FAError {
+extension SSAPIAuthConfirm2FAError {
     public var errorDescription: String? {
         switch self {
         case .invalidUrl:
@@ -112,11 +112,11 @@ extension SSAPIConfirm2FAError {
     }
 }
 
-public enum SSAPIDeactivate2FAError: LocalizedError {
+public enum SSAPIAuthDeactivate2FAError: LocalizedError {
     case invalidUrl, badFormat, badResponseFromServer, serverError, possibleIncorrectMFAMethodName, requestThrottled, invalidAuthorisation, invalidCode
 }
 
-extension SSAPIDeactivate2FAError {
+extension SSAPIAuthDeactivate2FAError {
     public var errorDescription: String? {
         switch self {
         case .invalidUrl:
@@ -140,11 +140,11 @@ extension SSAPIDeactivate2FAError {
     }
 }
 
-public enum SSAPILogOutError: LocalizedError {
+public enum SSAPIAuthLogOutError: LocalizedError {
     case invalidUrl, badFormat, badResponseFromServer, serverError, requestThrottled, invalidAuthorisation
 }
 
-extension SSAPILogOutError {
+extension SSAPIAuthLogOutError {
     public var errorDescription: String? {
         switch self {
         case .invalidUrl:
@@ -164,11 +164,11 @@ extension SSAPILogOutError {
     }
 }
 
-public enum SSAPIDeleteUserAccountError: LocalizedError {
+public enum SSAPIAuthDeleteUserAccountError: LocalizedError {
     case invalidPassword, invalidUrl, badFormat, badResponseFromServer, serverError, requestThrottled, invalidAuthorisation
 }
 
-extension SSAPIDeleteUserAccountError {
+extension SSAPIAuthDeleteUserAccountError {
     public var errorDescription: String? {
         switch self {
         case .invalidPassword:

@@ -10,5 +10,5 @@ import Foundation
 public enum LoginOutcome {
     case success(LoggedInUser)
     case twoFactorRequired(String)
-    case failure(SSAPILoginError)
+    case failure(SSAPIAuthLoginError)
 }
