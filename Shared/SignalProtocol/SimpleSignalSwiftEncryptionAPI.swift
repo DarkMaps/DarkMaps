@@ -30,7 +30,7 @@ public class SimpleSignalSwiftEncryptionAPI {
             let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, address: address, identity: identityKey, registrationId: registrationId)
             
             var allPreKeys: [PreKeyRecord] = []
-            for i in 1...100 {
+            for i in 1...50 {
                 let preKey = try PreKeyRecord.init(id: UInt32(i), privateKey: try PrivateKey.generate())
                 allPreKeys.append(preKey)
                 try store.storePreKey(
@@ -583,6 +583,337 @@ public class SimpleSignalSwiftEncryptionAPI {
         let output = SSAPIGetMessagesOutput(message: decryptedMessageString, senderAddress: address)
         return(.success(output))
         
+    }
+    
+    public func deleteDevice(serverAddress: String) -> Result<Void, SSAPIEncryptionDeleteDeviceError> {
+        
+        let path = "\(serverAddress)/v1/devices/"
+        guard let url = URL(string: path) else {
+            return .failure(.invalidUrl)
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        
+        var result: Result<Void, SSAPIEncryptionDeleteDeviceError>!
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            
+            if error != nil || data == nil {
+                result = .failure(.badResponseFromServer)
+                semaphore.signal()
+                return
+            }
+
+            guard let response = response as? HTTPURLResponse else {
+                result = .failure(.badResponseFromServer)
+                semaphore.signal()
+                return
+            }
+            
+            guard response.statusCode == 200 else {
+                if response.statusCode == 404 {
+                    do {
+                        let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
+                        if let code = (json?["code"] as? String) {
+                            if code == "no_device" {
+                                result = .failure(.userHasNoRegisteredDevice)
+                            } else {
+                                result = .failure(.serverError)
+                            }
+                        } else {
+                            result = .failure(.serverError)
+                        }
+                    } catch {
+                        result = .failure(.badResponseFromServer)
+                    }
+                } else if response.statusCode == 429 {
+                    result = .failure(.requestThrottled)
+                } else {
+                    result = .failure(.serverError)
+                }
+                semaphore.signal()
+                return
+            }
+            
+            result = .success(())
+            
+            semaphore.signal()
+            
+        }.resume()
+        
+        _ = semaphore.wait(wallTimeout: .distantFuture)
+        
+        return result
+    }
+    
+    public func deleteMessage(serverAddress: String, messageIds: [Int]) -> Result<[Int: SSAPIDeleteMessageOutcome], SSAPIEncryptionDeleteMessagesError> {
+        
+        guard let store = self.store else {
+            return(.failure(.noStore))
+        }
+        
+        guard let localRegistrationId = try? store.localRegistrationId(context: nil) else {
+            return(.failure(.userHasNoRegisteredDevice))
+        }
+        
+        let path = "\(serverAddress)/\(localRegistrationId)/messages/"
+        guard let url = URL(string: path) else {
+            return .failure(.invalidUrl)
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        
+        var result: Result<[Int: SSAPIDeleteMessageOutcome], SSAPIEncryptionDeleteMessagesError>!
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            
+            if error != nil || data == nil {
+                result = .failure(.badResponseFromServer)
+                semaphore.signal()
+                return
+            }
+
+            guard let response = response as? HTTPURLResponse else {
+                result = .failure(.badResponseFromServer)
+                semaphore.signal()
+                return
+            }
+            
+            guard response.statusCode == 200 else {
+                if response.statusCode == 403 {
+                    do {
+                        let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
+                        if let code = (json?["code"] as? String) {
+                            if code == "incorrect_arguments" {
+                                result = .failure(.badFormat)
+                            } else if code == "device_changed" {
+                                result = .failure(.userDeviceChanged)
+                            } else {
+                                result = .failure(.serverError)
+                            }
+                        } else {
+                            result = .failure(.serverError)
+                        }
+                    } catch {
+                        result = .failure(.badResponseFromServer)
+                    }
+                } else if response.statusCode == 404 {
+                    do {
+                        let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
+                        if let code = (json?["code"] as? String) {
+                            if code == "no_device" {
+                                result = .failure(.userHasNoRegisteredDevice)
+                            } else {
+                                result = .failure(.serverError)
+                            }
+                        } else {
+                            result = .failure(.serverError)
+                        }
+                    } catch {
+                        result = .failure(.badResponseFromServer)
+                    }
+                } else if response.statusCode == 429 {
+                    result = .failure(.requestThrottled)
+                } else {
+                    result = .failure(.serverError)
+                }
+                semaphore.signal()
+                return
+            }
+            
+            do {
+                var output: [Int: SSAPIDeleteMessageOutcome] = [:]
+                let decoder = JSONDecoder()
+                decoder.keyDecodingStrategy = .convertFromSnakeCase
+                let decodedResponse = try decoder.decode([String].self, from: data!)
+                for (index, outcomeCode) in decodedResponse.enumerated() {
+                    guard let messageId = messageIds[safe: index] else {
+                        throw SSAPIEncryptionDeleteMessagesError.badResponseFromServer
+                    }
+                    if outcomeCode == "message_deleted" {
+                        output[messageId] = .messageDeleted
+                    } else if outcomeCode == "not_message_owner" {
+                        output[messageId] = .notMessageOwner
+                    } else if outcomeCode == "non-existant_message" {
+                        output[messageId] = .nonExistantMessage
+                    } else {
+                        output[messageId] = .serverError
+                    }
+                }
+                result = .success(output)
+            } catch {
+                result = .failure(.badResponseFromServer)
+            }
+            
+            semaphore.signal()
+            
+        }.resume()
+        
+        _ = semaphore.wait(wallTimeout: .distantFuture)
+        
+        return result
+    }
+    
+    private func updatePreKeys(serverAddress: String) -> Result<Void, SSAPIEncryptionUpdatePrekeyError> {
+        
+        guard let store = self.store else {
+            return(.failure(.noStore))
+        }
+        
+        guard let userRegistrationId = try? store.localRegistrationId(context: nil) else {
+            return(.failure(.userHasNoRegisteredDevice))
+        }
+        
+        guard let (preKeyCount, maxKeyId) = try? store.countPreKeys() else {
+            return(.failure(.unableToGetPreKeyStatus))
+        }
+        
+        let numberOfPreKeysRequired = 50 - preKeyCount
+        
+        if numberOfPreKeysRequired < 1 {
+            return(.success(()))
+        }
+        
+        var allPreKeys: [PreKeyRecord] = []
+        do {
+            for i in (maxKeyId + 1)...(maxKeyId + 1 + numberOfPreKeysRequired) {
+                let preKey = try PreKeyRecord.init(id: UInt32(i), privateKey: try PrivateKey.generate())
+                allPreKeys.append(preKey)
+                try store.storePreKey(
+                    preKey,
+                    id: UInt32(i),
+                    context: nil)
+            }
+        } catch {
+            return(.failure(.unableToCreateKeys))
+        }
+        
+        
+        let path = "\(serverAddress)/v1/\(userRegistrationId)/prekeys/"
+        guard let url = URL(string: path) else {
+            return .failure(.invalidUrl)
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        var json: [[String: Any]] = []
+        do {
+            for preKey in allPreKeys {
+                json.append([
+                    "key_id": preKey.id,
+                    "public_key": try preKey.publicKey().serialize()
+                ])
+            }
+        } catch {
+            return .failure(.badFormat)
+        }
+        
+        print(json)
+        
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: json, options: []) else {
+            return .failure(.badFormat)
+        }
+        
+        var result: Result<Void, SSAPIEncryptionUpdatePrekeyError>!
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        URLSession.shared.uploadTask(with: request, from: jsonData) { (data, response, error) in
+            
+            if error != nil || data == nil {
+                result = .failure(.badResponseFromServer)
+                semaphore.signal()
+                return
+            }
+
+            guard let response = response as? HTTPURLResponse else {
+                result = .failure(.badResponseFromServer)
+                semaphore.signal()
+                return
+            }
+            
+            guard response.statusCode == 200 else {
+                if response.statusCode == 400 {
+                    do {
+                        let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
+                        if let code = (json?["code"] as? String) {
+                            if code == "reached_max_prekeys" {
+                                result = .failure(.reachedMaxPreKeys)
+                            } else if code == "prekey_id_exists" {
+                                result = .failure(.prekeyIdExists)
+                            } else {
+                                result = .failure(.serverError)
+                            }
+                        } else {
+                            result = .failure(.serverError)
+                        }
+                    } catch {
+                        result = .failure(.badResponseFromServer)
+                    }
+                } else if response.statusCode == 403 {
+                    do {
+                        let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
+                        if let code = (json?["code"] as? String) {
+                            if code == "incorrect_arguments" {
+                                result = .failure(.badFormat)
+                            } else if code == "device_changed" {
+                                result = .failure(.deviceChanged)
+                            } else {
+                                result = .failure(.serverError)
+                            }
+                        } else {
+                            result = .failure(.serverError)
+                        }
+                    } catch {
+                        result = .failure(.badResponseFromServer)
+                    }
+                } else if response.statusCode == 404 {
+                    do {
+                        let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
+                        if let code = (json?["code"] as? String) {
+                            if code == "no_device" {
+                                result = .failure(.userHasNoDevice)
+                            } else {
+                                result = .failure(.serverError)
+                            }
+                        } else {
+                            result = .failure(.serverError)
+                        }
+                    } catch {
+                        result = .failure(.badResponseFromServer)
+                    }
+                } else if response.statusCode == 429 {
+                    result = .failure(.requestThrottled)
+                } else {
+                    result = .failure(.serverError)
+                }
+                semaphore.signal()
+                return
+            }
+            
+            result = .success(())
+            
+            semaphore.signal()
+            
+        }.resume()
+        
+        _ = semaphore.wait(wallTimeout: .distantFuture)
+        
+        return result
+        
+    }
+}
+
+extension Collection {
+    subscript (safe index: Index) -> Element? {
+        return indices.contains(index) ? self[index] : nil
     }
 }
 

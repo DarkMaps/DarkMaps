@@ -110,6 +110,25 @@ public class KeychainSignalProtocolStore: IdentityKeyStore, PreKeyStore, SignedP
         let keyName = "preKey:\(id)"
         keychainSwift.delete(keyName)
     }
+    
+    public func countPreKeys() throws -> (Int, Int) {
+        var count = 0
+        var maxKeyId = 0
+        let keys = keychainSwift.allKeys
+        for key in keys {
+            if key.starts(with: "\(keychainSwift.keyPrefix)preKey") {
+                count += 1
+                guard let keyId = Int(key.split(separator: ":")[safe: 1] ?? "") else {
+                    keychainSwift.delete(key)
+                    break
+                }
+                if keyId > maxKeyId {
+                    maxKeyId = keyId
+                }
+            }
+        }
+        return (count, maxKeyId)
+    }
 
     public func loadSignedPreKey(id: UInt32, context: UnsafeMutableRawPointer?) throws -> SignedPreKeyRecord {
         let keyName = "signedPreKey:\(id)"
@@ -122,6 +141,15 @@ public class KeychainSignalProtocolStore: IdentityKeyStore, PreKeyStore, SignedP
     public func storeSignedPreKey(_ record: SignedPreKeyRecord, id: UInt32, context: UnsafeMutableRawPointer?) throws {
         let keyName = "signedPreKey:\(id)"
         keychainSwift.set(Data(try record.serialize()), forKey: keyName)
+    }
+    
+    public func signedPreKeyAge(id: UInt32) throws -> UInt64 {
+        let keyName = "signedPreKey:\(id)"
+        guard let spkData = keychainSwift.getData(keyName) else {
+            throw SignalError.invalidKeyIdentifier("no signed prekey with this identifier")
+        }
+        let spk = try SignedPreKeyRecord(bytes: spkData)
+        return Date().ticks - (try spk.timestamp())
     }
 
     public func loadSession(for address: ProtocolAddress, context: UnsafeMutableRawPointer?) throws -> SessionRecord? {

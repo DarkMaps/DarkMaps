@@ -38,3 +38,7 @@ public struct SSAPIGetMessagesOutput {
     var message: String
     var senderAddress: ProtocolAddress
 }
+
+public enum SSAPIDeleteMessageOutcome {
+    case messageDeleted, notMessageOwner, nonExistantMessage, serverError
+}
