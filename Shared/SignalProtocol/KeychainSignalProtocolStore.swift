@@ -13,24 +13,31 @@ public class KeychainSignalProtocolStore: IdentityKeyStore, PreKeyStore, SignedP
 
     public init(keychainSwift: KeychainSwift) throws {
         self.keychainSwift = keychainSwift
+        guard let _ = keychainSwift.getData("address") else {
+            throw KeychainSignalProtocolStoreError.noStoredAddress
+        }
         guard let _ = keychainSwift.getData("privateKey") else {
             throw KeychainSignalProtocolStoreError.noStoredIdentityKey
         }
-        guard let _ = keychainSwift.getData("deviceId") else {
-            throw KeychainSignalProtocolStoreError.noStoredDeviceId
+        guard let _ = keychainSwift.getData("registrationId") else {
+            throw KeychainSignalProtocolStoreError.noStoredRegistrationId
         }
     }
 
-    public init(keychainSwift: KeychainSwift, identity: IdentityKeyPair, deviceId: UInt32) throws {
+    public init(keychainSwift: KeychainSwift, address: ProtocolAddress, identity: IdentityKeyPair, registrationId: UInt32) throws {
         self.keychainSwift = keychainSwift
+        guard keychainSwift.getData("address") == nil else {
+            throw KeychainSignalProtocolStoreError.addressAlreadyExists
+        }
         guard keychainSwift.getData("privateKey") == nil else {
             throw KeychainSignalProtocolStoreError.identityKeyAlreadyExists
         }
-        guard keychainSwift.getData("deviceId") == nil else {
+        guard keychainSwift.getData("registrationId") == nil else {
             throw KeychainSignalProtocolStoreError.deviceIdAlreadyExists
         }
+        keychainSwift.set(address.combinedValue, forKey: "privateKey")
         keychainSwift.set(Data(try identity.serialize()), forKey: "privateKey")
-        keychainSwift.set(String(deviceId), forKey: "deviceId")
+        keychainSwift.set(String(registrationId), forKey: "registrationId")
     }
     
     public func clearAllData() {
@@ -50,11 +57,11 @@ public class KeychainSignalProtocolStore: IdentityKeyStore, PreKeyStore, SignedP
     }
 
     public func localRegistrationId(context: UnsafeMutableRawPointer?) throws -> UInt32 {
-        guard let deviceIdString = keychainSwift.get("deviceId") else {
-            throw KeychainSignalProtocolStoreError.noStoredDeviceId
+        guard let deviceIdString = keychainSwift.get("registrationId") else {
+            throw KeychainSignalProtocolStoreError.noStoredRegistrationId
         }
         guard let deviceId = UInt32(deviceIdString) else {
-            throw KeychainSignalProtocolStoreError.noStoredDeviceId
+            throw KeychainSignalProtocolStoreError.noStoredRegistrationId
         }
         return deviceId
     }
@@ -146,8 +153,10 @@ public class KeychainSignalProtocolStore: IdentityKeyStore, PreKeyStore, SignedP
 
 
 public enum KeychainSignalProtocolStoreError: Error {
+    case noStoredAddress
     case noStoredIdentityKey
-    case noStoredDeviceId
+    case noStoredRegistrationId
+    case addressAlreadyExists
     case identityKeyAlreadyExists
     case deviceIdAlreadyExists
 }

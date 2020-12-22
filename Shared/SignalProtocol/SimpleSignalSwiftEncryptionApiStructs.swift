@@ -25,3 +25,16 @@ public struct SSAPIReceivedSignedPreKey: Codable {
     var publicKey: [UInt8]
     var signature: [UInt8]
 }
+
+public struct SSAPIGetMessagesResponse: Codable {
+    var id: Int
+    var created: Date
+    var content: [UInt8]
+    var senderRegistrationId: Int
+    var senderAddress: String
+}
+
+public struct SSAPIGetMessagesOutput {
+    var message: String
+    var senderAddress: ProtocolAddress
+}

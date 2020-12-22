@@ -7,7 +7,10 @@
 
 import Foundation
 
-    
+public enum SSAPIProtocolAddressError: LocalizedError {
+    case incorrectNumberOfComponents, deviceIdIsNotInt
+}
+
 public enum SSAPIEncryptionUploadDeviceError: LocalizedError {
     case invalidUrl, badFormat, badResponseFromServer, serverError, requestThrottled, deviceExists
 }
@@ -62,5 +65,38 @@ extension SSAPIEncryptionSendMessageError {
         case .senderHasNoRegisteredDevice:
             return NSLocalizedString("The sending user has no registered device", comment: "")
         }
+    }
+}
+
+public enum SSAPIEncryptionGetMessagesError: LocalizedError {
+    case noStore, invalidUrl, badFormat, badResponseFromServer, serverError, requestThrottled, userHasNoRegisteredDevice, userDeviceChanged, unableToDecrypt, invalidSenderAddress
+}
+
+extension SSAPIEncryptionGetMessagesError {
+    public var errorDescription: String? {
+        switch self {
+        case .noStore:
+            return NSLocalizedString("There was an error loading your encryption data", comment: "")
+        case .invalidUrl:
+            return NSLocalizedString("The server address provided is invalid", comment: "")
+        case .badFormat:
+            return NSLocalizedString("The values you provided were in the wrong format", comment: "")
+        case .badResponseFromServer:
+            return NSLocalizedString("The response from the server was invalid", comment: "")
+        case .serverError:
+            return NSLocalizedString("The server returned an error", comment: "")
+        case .requestThrottled:
+            return NSLocalizedString("The request was throttled", comment: "")
+        case .userHasNoRegisteredDevice:
+            return NSLocalizedString("You have not registered a device", comment: "")
+        case .userDeviceChanged:
+            return NSLocalizedString("Your device has changed", comment: "")
+        case .unableToDecrypt:
+            return NSLocalizedString("Unable to decrypt message", comment: "")
+        case .invalidSenderAddress:
+            return NSLocalizedString("The senders address was in an incorrect format", comment: "")
+        }
+        
+            
     }
 }

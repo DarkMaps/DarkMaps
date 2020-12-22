@@ -19,13 +19,15 @@ public class SimpleSignalSwiftEncryptionAPI {
         self.store = try? KeychainSignalProtocolStore(keychainSwift: keychainSwift)
     }
     
-    public func createDevice(keychainSwift: KeychainSwift, serverAddress: String) -> Result <Void, SSAPIEncryptionUploadDeviceError> {
+    public func createDevice(keychainSwift: KeychainSwift, username: String, serverAddress: String) -> Result <Void, SSAPIEncryptionUploadDeviceError> {
             
         do {
             let identityKey = try IdentityKeyPair.generate()
-            let deviceId = UInt32(1111)
+            let deviceId = UInt32(1)
+            let address = try ProtocolAddress(name: username, deviceId: deviceId)
+            let registrationId = UInt32(Int.random(in: 1..<10000))
             
-            let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, identity: identityKey, deviceId: deviceId)
+            let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, address: address, identity: identityKey, registrationId: registrationId)
             
             var allPreKeys: [PreKeyRecord] = []
             for i in 1...100 {
@@ -53,7 +55,7 @@ public class SimpleSignalSwiftEncryptionAPI {
                 serverAddress: serverAddress,
                 deviceAddress: try ProtocolAddress(name: keychainSwift.keyPrefix, deviceId: deviceId).combinedValue,
                 identityKey: identityKey.identityKey,
-                registrationId: deviceId,
+                registrationId: registrationId,
                 preKeys: allPreKeys,
                 signedPreKey: signedPreKeyRecord)
             
@@ -443,9 +445,161 @@ public class SimpleSignalSwiftEncryptionAPI {
         
         return result
     }
+    
+    public func getMessages(serverAddress: String) -> Result<[Result<SSAPIGetMessagesOutput, SSAPIEncryptionGetMessagesError>], SSAPIEncryptionGetMessagesError> {
+        
+        guard let store = self.store else {
+            return(.failure(.noStore))
+        }
+        
+        guard let recipientRegistrationId = try? store.localRegistrationId(context: nil) else {
+            return(.failure(.userHasNoRegisteredDevice))
+        }
+        
+        let path = "\(serverAddress)/v1/prekeybundle/\(recipientRegistrationId)/messages/"
+        guard let url = URL(string: path) else {
+            return .failure(.invalidUrl)
+        }
+        
+        var result: Result<[Result<SSAPIGetMessagesOutput, SSAPIEncryptionGetMessagesError>], SSAPIEncryptionGetMessagesError>!
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            
+            if error != nil || data == nil {
+                result = .failure(.badResponseFromServer)
+                semaphore.signal()
+                return
+            }
+
+            guard let response = response as? HTTPURLResponse else {
+                result = .failure(.badResponseFromServer)
+                semaphore.signal()
+                return
+            }
+            
+            guard response.statusCode == 200 else {
+                if response.statusCode == 403 {
+                    do {
+                        let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
+                        if let code = (json?["code"] as? String) {
+                            if code == "incorrect_arguments" {
+                                result = .failure(.badFormat)
+                            } else if code == "device_changed" {
+                                result = .failure(.userDeviceChanged)
+                            } else {
+                                result = .failure(.serverError)
+                            }
+                        } else {
+                            result = .failure(.serverError)
+                        }
+                    } catch {
+                        result = .failure(.badResponseFromServer)
+                    }
+                } else if response.statusCode == 404 {
+                    do {
+                        let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
+                        if let code = (json?["code"] as? String) {
+                            if code == "no_device" {
+                                result = .failure(.userHasNoRegisteredDevice)
+                            } else {
+                                result = .failure(.serverError)
+                            }
+                        } else {
+                            result = .failure(.serverError)
+                        }
+                    } catch {
+                        result = .failure(.badResponseFromServer)
+                    }
+                } else if response.statusCode == 429 {
+                    result = .failure(.requestThrottled)
+                } else {
+                    result = .failure(.serverError)
+                }
+                semaphore.signal()
+                return
+            }
+            
+            do {
+                var output: [Result<SSAPIGetMessagesOutput, SSAPIEncryptionGetMessagesError>] = []
+                let decoder = JSONDecoder()
+                decoder.keyDecodingStrategy = .convertFromSnakeCase
+                let decodedResponse = try decoder.decode([SSAPIGetMessagesResponse].self, from: data!)
+                for input in decodedResponse {
+                    output.append(self.decryptMessage(input: input))
+                }
+                result = .success(output)
+            } catch {
+                result = .failure(.badResponseFromServer)
+            }
+            
+            semaphore.signal()
+            
+        }.resume()
+        
+        _ = semaphore.wait(wallTimeout: .distantFuture)
+        
+        return result
+    }
+    
+    private func decryptMessage(input: SSAPIGetMessagesResponse) -> Result<SSAPIGetMessagesOutput, SSAPIEncryptionGetMessagesError> {
+        
+        guard let store = self.store else {
+            return(.failure(.noStore))
+        }
+        
+        let address: ProtocolAddress
+        do {
+            address = try ProtocolAddress(input.senderAddress)
+        } catch {
+            return(.failure(.invalidSenderAddress))
+        }
+        let decryptedMessageString: String
+        do {
+            let decryptedMessageData = try signalDecrypt(
+                message: SignalMessage(bytes: input.content),
+                from: address,
+                sessionStore: store,
+                identityStore: store,
+                context: nil)
+
+            decryptedMessageString = String(decoding: decryptedMessageData, as: UTF8.self)
+        } catch {
+            do {
+                let decryptedMessageData = try signalDecryptPreKey(
+                    message: PreKeySignalMessage(bytes: input.content),
+                    from: address,
+                    sessionStore: store,
+                    identityStore: store,
+                    preKeyStore: store,
+                    signedPreKeyStore: store,
+                    context: nil)
+                decryptedMessageString = String(decoding: decryptedMessageData, as: UTF8.self)
+            } catch {
+                return(.failure(.unableToDecrypt))
+            }
+        }
+        let output = SSAPIGetMessagesOutput(message: decryptedMessageString, senderAddress: address)
+        return(.success(output))
+        
+    }
 }
 
 extension ProtocolAddress {
+    
+    convenience init(_ combinedValue: String) throws {
+        let splitValues = combinedValue.split(separator: ".")
+        guard splitValues.count == 2 else {
+            throw SSAPIProtocolAddressError.incorrectNumberOfComponents
+        }
+        let name = String(splitValues[0])
+        guard let deviceId = UInt32(splitValues[1]) else {
+            throw SSAPIProtocolAddressError.deviceIdIsNotInt
+        }
+        try self.init(name: name, deviceId: deviceId)
+    }
+    
     var combinedValue: String {
         return "\(self.name).\(self.deviceId)"
     }
