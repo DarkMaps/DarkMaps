@@ -909,6 +909,145 @@ public class SimpleSignalSwiftEncryptionAPI {
         return result
         
     }
+    
+    private func updateSignedPreKey(serverAddress: String) -> Result<Void, SSAPIEncryptionUpdateSignedPrekeyError> {
+        
+        guard let store = self.store else {
+            return(.failure(.noStore))
+        }
+        
+        guard let userRegistrationId = try? store.localRegistrationId(context: nil) else {
+            return(.failure(.userHasNoRegisteredDevice))
+        }
+        
+        guard let (spkAge, maxKeyId) = try? store.signedPreKeyAge() else {
+            return(.failure(.unableToGetPreKeyStatus))
+        }
+        
+        //60,000,000 = 1min, 432000000000 = 5days
+        let spkHasExpired = spkAge > 432000000000
+        
+        if !spkHasExpired {
+            return(.success(()))
+        }
+        
+        guard let identityKey = try? store.identityKeyPair(context: nil) else {
+            return(.failure(.userHasNoRegisteredDevice))
+        }
+        
+        let signedPreKeyRecord: SignedPreKeyRecord
+        do {
+            let signedPreKey = try PrivateKey.generate()
+            let signedPrekeySignature = try identityKey.privateKey.generateSignature(
+                message: signedPreKey.publicKey().serialize()
+            )
+            signedPreKeyRecord = try SignedPreKeyRecord.init(
+                id: UInt32(maxKeyId + 1),
+                timestamp: Date().ticks,
+                privateKey: signedPreKey,
+                signature: signedPrekeySignature)
+            try store.storeSignedPreKey(signedPreKeyRecord, id: 1, context: nil)
+        } catch {
+            return(.failure(.unableToCreateKeys))
+        }
+        
+        
+        let path = "\(serverAddress)/v1/\(userRegistrationId)/signedprekeys/"
+        guard let url = URL(string: path) else {
+            return .failure(.invalidUrl)
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let json: [String: Any]
+        do {
+            json = [
+                "key_id": signedPreKeyRecord.id,
+                "public_key": try signedPreKeyRecord.publicKey().serialize(),
+                "signature": try signedPreKeyRecord.signature()
+            ]
+        } catch {
+            return(.failure(.badFormat))
+        }
+        
+        print(json)
+        
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: json, options: []) else {
+            return .failure(.badFormat)
+        }
+        
+        var result: Result<Void, SSAPIEncryptionUpdateSignedPrekeyError>!
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        URLSession.shared.uploadTask(with: request, from: jsonData) { (data, response, error) in
+            
+            if error != nil || data == nil {
+                result = .failure(.badResponseFromServer)
+                semaphore.signal()
+                return
+            }
+
+            guard let response = response as? HTTPURLResponse else {
+                result = .failure(.badResponseFromServer)
+                semaphore.signal()
+                return
+            }
+            
+            guard response.statusCode == 200 else {
+                if response.statusCode == 403 {
+                    do {
+                        let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
+                        if let code = (json?["code"] as? String) {
+                            if code == "incorrect_arguments" {
+                                result = .failure(.badFormat)
+                            } else if code == "device_changed" {
+                                result = .failure(.deviceChanged)
+                            } else {
+                                result = .failure(.serverError)
+                            }
+                        } else {
+                            result = .failure(.serverError)
+                        }
+                    } catch {
+                        result = .failure(.badResponseFromServer)
+                    }
+                } else if response.statusCode == 404 {
+                    do {
+                        let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
+                        if let code = (json?["code"] as? String) {
+                            if code == "no_device" {
+                                result = .failure(.userHasNoDevice)
+                            } else {
+                                result = .failure(.serverError)
+                            }
+                        } else {
+                            result = .failure(.serverError)
+                        }
+                    } catch {
+                        result = .failure(.badResponseFromServer)
+                    }
+                } else if response.statusCode == 429 {
+                    result = .failure(.requestThrottled)
+                } else {
+                    result = .failure(.serverError)
+                }
+                semaphore.signal()
+                return
+            }
+            
+            result = .success(())
+            
+            semaphore.signal()
+            
+        }.resume()
+        
+        _ = semaphore.wait(wallTimeout: .distantFuture)
+        
+        return result
+        
+    }
 }
 
 extension Collection {

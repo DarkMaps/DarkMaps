@@ -189,3 +189,40 @@ extension SSAPIEncryptionUpdatePrekeyError {
         }
     }
 }
+
+public enum SSAPIEncryptionUpdateSignedPrekeyError: LocalizedError {
+    case noStore, invalidUrl, badFormat, badResponseFromServer, serverError, requestThrottled, userHasNoRegisteredDevice, unableToCreateKeys, reachedMaxPreKeys, prekeyIdExists, deviceChanged, userHasNoDevice, unableToGetPreKeyStatus
+}
+
+extension SSAPIEncryptionUpdateSignedPrekeyError {
+    public var errorDescription: String? {
+        switch self {
+        case .noStore:
+            return NSLocalizedString("There was an error loading your encryption data", comment: "")
+        case .invalidUrl:
+            return NSLocalizedString("The server address provided is invalid", comment: "")
+        case .badFormat:
+            return NSLocalizedString("The values you provided were in the wrong format", comment: "")
+        case .badResponseFromServer:
+            return NSLocalizedString("The response from the server was invalid", comment: "")
+        case .serverError:
+            return NSLocalizedString("The server returned an error", comment: "")
+        case .requestThrottled:
+            return NSLocalizedString("The request was throttled", comment: "")
+        case .userHasNoRegisteredDevice:
+            return NSLocalizedString("You have not registered a device", comment: "")
+        case .unableToCreateKeys:
+            return NSLocalizedString("Unable to create new pre keys", comment: "")
+        case .reachedMaxPreKeys:
+            return NSLocalizedString("Tried to create too many prekeys", comment: "")
+        case .prekeyIdExists:
+            return NSLocalizedString("Tried to create an existing prekey", comment: "")
+        case .deviceChanged:
+            return NSLocalizedString("Your device has changed", comment: "")
+        case .userHasNoDevice:
+            return NSLocalizedString("You have not registered a device", comment: "")
+        case .unableToGetPreKeyStatus:
+            return NSLocalizedString("Unable to count the number of prekeys in the store", comment: "")
+        }
+    }
+}
