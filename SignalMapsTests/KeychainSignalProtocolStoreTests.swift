@@ -23,21 +23,24 @@ class KeychainSignalProtocolStoreTests: XCTestCase {
     }
 
     func testInitWithNewDetails() throws {
+        let address = try ProtocolAddress(name: "test", deviceId: 1)
         let identityKey = try IdentityKeyPair.generate()
-        let deviceId = UInt32.random(in: 0...65535)
+        let registrationId = UInt32.random(in: 0...65535)
         
-        let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, identity: identityKey, deviceId: deviceId)
+        let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, address: address, identity: identityKey, registrationId: registrationId)
         
         XCTAssertNotNil(store.identityKeyPair)
         XCTAssertNotNil(store.localRegistrationId)
     }
     
     func testInitWithExistingDetails() throws {
+        let address = try ProtocolAddress(name: "test", deviceId: 1)
         let identityKey = try IdentityKeyPair.generate()
-        let deviceId = UInt32.random(in: 0...65535)
+        let registrationId = UInt32.random(in: 0...65535)
         
+        keychainSwift.set(address.combinedValue, forKey: "address")
         keychainSwift.set(Data(try identityKey.serialize()), forKey: "privateKey")
-        keychainSwift.set(String(deviceId), forKey: "deviceId")
+        keychainSwift.set(String(registrationId), forKey: "registrationId")
         
         let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift)
         
@@ -48,16 +51,18 @@ class KeychainSignalProtocolStoreTests: XCTestCase {
     func testInitFailsIfExisitingDetailsAndNewProvided() throws {
         var thrownError: Error?
         
+        let address = try ProtocolAddress(name: "test", deviceId: 1)
         let identityKey = try IdentityKeyPair.generate()
-        let deviceId = UInt32.random(in: 0...65535)
+        let registrationId = UInt32.random(in: 0...65535)
         
+        keychainSwift.set(address.combinedValue, forKey: "address")
         keychainSwift.set(Data(try identityKey.serialize()), forKey: "privateKey")
-        keychainSwift.set(String(deviceId), forKey: "deviceId")
+        keychainSwift.set(String(registrationId), forKey: "registrationId")
         
-        XCTAssertThrowsError(try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, identity: identityKey, deviceId: deviceId)) {
+        XCTAssertThrowsError(try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, address: address, identity: identityKey, registrationId: registrationId)) {
             thrownError = $0
         }
-        XCTAssertEqual(thrownError as? KeychainSignalProtocolStoreError, KeychainSignalProtocolStoreError.identityKeyAlreadyExists)
+        XCTAssertEqual(thrownError as? KeychainSignalProtocolStoreError, KeychainSignalProtocolStoreError.addressAlreadyExists)
     }
     
     func testInitFailsIfNoStoresDetailsAndNoneProvided() throws {
@@ -66,22 +71,24 @@ class KeychainSignalProtocolStoreTests: XCTestCase {
         XCTAssertThrowsError(try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift)) {
             thrownError = $0
         }
-        XCTAssertEqual(thrownError as? KeychainSignalProtocolStoreError, KeychainSignalProtocolStoreError.noStoredIdentityKey)
+        XCTAssertEqual(thrownError as? KeychainSignalProtocolStoreError, KeychainSignalProtocolStoreError.noStoredAddress)
     }
     
     func testLoadIdentityKey() throws {
+        let address = try ProtocolAddress(name: "test", deviceId: 1)
         let identityKey = try IdentityKeyPair.generate()
-        let deviceId = UInt32.random(in: 0...65535)
-        let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, identity: identityKey, deviceId: deviceId)
+        let registrationId = UInt32.random(in: 0...65535)
+        let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, address: address, identity: identityKey, registrationId: registrationId)
         let loadedKey = try store.identityKeyPair(context: nil)
         XCTAssertEqual(loadedKey.publicKey, identityKey.publicKey)
     }
     
     func testLoadIdentityKeyFailsIfNotPresent() throws {
         var thrownError: Error?
+        let address = try ProtocolAddress(name: "test", deviceId: 1)
         let identityKey = try IdentityKeyPair.generate()
-        let deviceId = UInt32.random(in: 0...65535)
-        let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, identity: identityKey, deviceId: deviceId)
+        let registrationId = UInt32.random(in: 0...65535)
+        let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, address: address, identity: identityKey, registrationId: registrationId)
         keychainSwift.delete("privateKey")
         XCTAssertThrowsError(try store.identityKeyPair(context: nil)) {
             thrownError = $0
@@ -90,43 +97,46 @@ class KeychainSignalProtocolStoreTests: XCTestCase {
     }
     
     func testLoadRegistrationID() throws {
+        let address = try ProtocolAddress(name: "test", deviceId: 1)
         let identityKey = try IdentityKeyPair.generate()
-        let deviceId = UInt32.random(in: 0...65535)
-        let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, identity: identityKey, deviceId: deviceId)
+        let registrationId = UInt32.random(in: 0...65535)
+        let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, address: address, identity: identityKey, registrationId: registrationId)
         let loadedId = try store.localRegistrationId(context: nil)
-        XCTAssertEqual(deviceId, loadedId)
+        XCTAssertEqual(registrationId, loadedId)
     }
     
     func testLoadRegistrationIDFailsIfNotPresent() throws {
         var thrownError: Error?
+        let address = try ProtocolAddress(name: "test", deviceId: 1)
         let identityKey = try IdentityKeyPair.generate()
-        let deviceId = UInt32.random(in: 0...65535)
-        let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, identity: identityKey, deviceId: deviceId)
-        keychainSwift.delete("deviceId")
+        let registrationId = UInt32.random(in: 0...65535)
+        let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, address: address, identity: identityKey, registrationId: registrationId)
+        keychainSwift.delete("registrationId")
         XCTAssertThrowsError(try store.localRegistrationId(context: nil)) {
             thrownError = $0
         }
-        XCTAssertEqual(thrownError as? KeychainSignalProtocolStoreError, KeychainSignalProtocolStoreError.noStoredDeviceId)
+        XCTAssertEqual(thrownError as? KeychainSignalProtocolStoreError, KeychainSignalProtocolStoreError.noStoredRegistrationId)
     }
     
     func testLoadRegistrationIDFailsIfNotInteger() throws {
         var thrownError: Error?
+        let address = try ProtocolAddress(name: "test", deviceId: 1)
         let identityKey = try IdentityKeyPair.generate()
-        let deviceId = UInt32.random(in: 0...65535)
-        let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, identity: identityKey, deviceId: deviceId)
-        keychainSwift.set("jhdsgjs", forKey: "deviceId")
+        let registrationId = UInt32.random(in: 0...65535)
+        let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, address: address, identity: identityKey, registrationId: registrationId)
+        keychainSwift.set("jhdsgjs", forKey: "registrationId")
         XCTAssertThrowsError(try store.localRegistrationId(context: nil)) {
             thrownError = $0
         }
-        XCTAssertEqual(thrownError as? KeychainSignalProtocolStoreError, KeychainSignalProtocolStoreError.noStoredDeviceId)
+        XCTAssertEqual(thrownError as? KeychainSignalProtocolStoreError, KeychainSignalProtocolStoreError.noStoredRegistrationId)
     }
     
     func testSaveIdentity() throws {
+        let address = try ProtocolAddress(name: "test", deviceId: 1)
         let identityKey = try IdentityKeyPair.generate()
-        let deviceId = UInt32.random(in: 0...65535)
-        let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, identity: identityKey, deviceId: deviceId)
+        let registrationId = UInt32.random(in: 0...65535)
+        let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, address: address, identity: identityKey, registrationId: registrationId)
         
-        let address = try ProtocolAddress(name: "testName", deviceId: 1234)
         let key = try IdentityKeyPair.generate().identityKey
         let boolOutcome = try store.saveIdentity(key, for: address, context: nil)
         
@@ -134,11 +144,11 @@ class KeychainSignalProtocolStoreTests: XCTestCase {
     }
     
     func testSaveIdentityReturnsTrueIfExisting() throws {
+        let address = try ProtocolAddress(name: "test", deviceId: 1)
         let identityKey = try IdentityKeyPair.generate()
-        let deviceId = UInt32.random(in: 0...65535)
-        let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, identity: identityKey, deviceId: deviceId)
+        let registrationId = UInt32.random(in: 0...65535)
+        let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, address: address, identity: identityKey, registrationId: registrationId)
         
-        let address = try ProtocolAddress(name: "testName", deviceId: 1234)
         var key = try IdentityKeyPair.generate().identityKey
         let _ = try store.saveIdentity(key, for: address, context: nil)
         key = try IdentityKeyPair.generate().identityKey
@@ -148,11 +158,11 @@ class KeychainSignalProtocolStoreTests: XCTestCase {
     }
     
     func testIsTrustedIdentityTrueIfMatchiing() throws {
+        let address = try ProtocolAddress(name: "test", deviceId: 1)
         let identityKey = try IdentityKeyPair.generate()
-        let deviceId = UInt32.random(in: 0...65535)
-        let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, identity: identityKey, deviceId: deviceId)
+        let registrationId = UInt32.random(in: 0...65535)
+        let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, address: address, identity: identityKey, registrationId: registrationId)
         
-        let address = try ProtocolAddress(name: "testName", deviceId: 1234)
         let key = try IdentityKeyPair.generate().identityKey
         let _ = try store.saveIdentity(key, for: address, context: nil)
         
@@ -162,11 +172,11 @@ class KeychainSignalProtocolStoreTests: XCTestCase {
     }
     
     func testIsTrustedIdentityFalseIfNotMatching() throws {
+        let address = try ProtocolAddress(name: "test", deviceId: 1)
         let identityKey = try IdentityKeyPair.generate()
-        let deviceId = UInt32.random(in: 0...65535)
-        let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, identity: identityKey, deviceId: deviceId)
+        let registrationId = UInt32.random(in: 0...65535)
+        let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, address: address, identity: identityKey, registrationId: registrationId)
         
-        let address = try ProtocolAddress(name: "testName", deviceId: 1234)
         var key = try IdentityKeyPair.generate().identityKey
         let _ = try store.saveIdentity(key, for: address, context: nil)
         
@@ -177,11 +187,11 @@ class KeychainSignalProtocolStoreTests: XCTestCase {
     }
     
     func testLoadIdentity() throws {
+        let address = try ProtocolAddress(name: "test", deviceId: 1)
         let identityKey = try IdentityKeyPair.generate()
-        let deviceId = UInt32.random(in: 0...65535)
-        let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, identity: identityKey, deviceId: deviceId)
+        let registrationId = UInt32.random(in: 0...65535)
+        let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, address: address, identity: identityKey, registrationId: registrationId)
         
-        let address = try ProtocolAddress(name: "testName", deviceId: 1234)
         let key = try IdentityKeyPair.generate().identityKey
         let _ = try store.saveIdentity(key, for: address, context: nil)
         
@@ -191,11 +201,10 @@ class KeychainSignalProtocolStoreTests: XCTestCase {
     }
     
     func testLoadIdentityNilIfNonePresent() throws {
+        let address = try ProtocolAddress(name: "test", deviceId: 1)
         let identityKey = try IdentityKeyPair.generate()
-        let deviceId = UInt32.random(in: 0...65535)
-        let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, identity: identityKey, deviceId: deviceId)
-        
-        let address = try ProtocolAddress(name: "testName", deviceId: 1234)
+        let registrationId = UInt32.random(in: 0...65535)
+        let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, address: address, identity: identityKey, registrationId: registrationId)
         
         let loadedKey = try store.identity(for: address, context: nil)
         
@@ -203,9 +212,10 @@ class KeychainSignalProtocolStoreTests: XCTestCase {
     }
     
     func testLoadStoreAndRemovePreKey() throws {
+        let address = try ProtocolAddress(name: "test", deviceId: 1)
         let identityKey = try IdentityKeyPair.generate()
-        let deviceId = UInt32.random(in: 0...65535)
-        let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, identity: identityKey, deviceId: deviceId)
+        let registrationId = UInt32.random(in: 0...65535)
+        let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, address: address, identity: identityKey, registrationId: registrationId)
         
         let preKey = try PreKeyRecord.init(id: 1, privateKey: try PrivateKey.generate())
         try store.storePreKey(preKey, id: 1, context: nil)
@@ -222,10 +232,36 @@ class KeychainSignalProtocolStoreTests: XCTestCase {
         XCTAssertThrowsError(try store.loadPreKey(id: 1, context: nil))
     }
     
-    func testLoadAndStoreSignedPreKey() throws {
+    func testCountPrekeys() throws {
+        let address = try ProtocolAddress(name: "test", deviceId: 1)
         let identityKey = try IdentityKeyPair.generate()
-        let deviceId = UInt32.random(in: 0...65535)
-        let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, identity: identityKey, deviceId: deviceId)
+        let registrationId = UInt32.random(in: 0...65535)
+        let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, address: address, identity: identityKey, registrationId: registrationId)
+        
+        let preKey = try PreKeyRecord.init(id: 1, privateKey: try PrivateKey.generate())
+        keychainSwift.set(Data(try preKey.serialize()), forKey: "preKey:1")
+        
+        let preKey2 = try PreKeyRecord.init(id: 1, privateKey: try PrivateKey.generate())
+        keychainSwift.set(Data(try preKey2.serialize()), forKey: "preKey:2")
+        
+        let (count, maxKeyId) = try store.countPreKeys()
+        
+        XCTAssertEqual(count, 2)
+        XCTAssertEqual(maxKeyId, 2)
+        
+        keychainSwift.delete("preKey:1")
+        
+        let (count2, maxKeyId2) = try store.countPreKeys()
+        
+        XCTAssertEqual(count2, 1)
+        XCTAssertEqual(maxKeyId2, 2)
+    }
+    
+    func testLoadAndStoreSignedPreKey() throws {
+        let address = try ProtocolAddress(name: "test", deviceId: 1)
+        let identityKey = try IdentityKeyPair.generate()
+        let registrationId = UInt32.random(in: 0...65535)
+        let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, address: address, identity: identityKey, registrationId: registrationId)
         
         let signedPreKey = try PrivateKey.generate()
         let signedPrekeySignature = try identityKey.privateKey.generateSignature(message: signedPreKey.publicKey().serialize())
@@ -244,6 +280,40 @@ class KeychainSignalProtocolStoreTests: XCTestCase {
         keychainSwift.delete("signedPreKey:1")
         
         XCTAssertThrowsError(try store.loadSignedPreKey(id: 1, context: nil))
+    }
+    
+    func testSignedPreKeyDate() throws {
+        let address = try ProtocolAddress(name: "test", deviceId: 1)
+        let identityKey = try IdentityKeyPair.generate()
+        let registrationId = UInt32.random(in: 0...65535)
+        let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, address: address, identity: identityKey, registrationId: registrationId)
+        
+        let signedPreKey = try PrivateKey.generate()
+        let signedPrekeySignature = try identityKey.privateKey.generateSignature(message: signedPreKey.publicKey().serialize())
+        let signedPreKeyRecord = try SignedPreKeyRecord.init(
+            id: 1,
+            timestamp: Date().ticks,
+            privateKey: signedPreKey,
+            signature: signedPrekeySignature)
+        keychainSwift.set(Data(try signedPreKeyRecord.serialize()), forKey: "signedPreKey:1")
+        
+        let (firstAge, maxKeyId) = try store.signedPreKeyAge()
+        
+        XCTAssertEqual(maxKeyId, 1)
+        
+        let signedPreKey2 = try PrivateKey.generate()
+        let signedPrekeySignature2 = try identityKey.privateKey.generateSignature(message: signedPreKey.publicKey().serialize())
+        let signedPreKeyRecord2 = try SignedPreKeyRecord.init(
+            id: 2,
+            timestamp: Date().ticks,
+            privateKey: signedPreKey2,
+            signature: signedPrekeySignature2)
+        keychainSwift.set(Data(try signedPreKeyRecord2.serialize()), forKey: "signedPreKey:2")
+        
+        let (secondAge, maxKeyId2) = try store.signedPreKeyAge()
+        
+        XCTAssertEqual(maxKeyId2, 2)
+        XCTAssertGreaterThan(firstAge, secondAge)
     }
 
 }

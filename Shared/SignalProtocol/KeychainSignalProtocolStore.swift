@@ -35,7 +35,7 @@ public class KeychainSignalProtocolStore: IdentityKeyStore, PreKeyStore, SignedP
         guard keychainSwift.getData("registrationId") == nil else {
             throw KeychainSignalProtocolStoreError.deviceIdAlreadyExists
         }
-        keychainSwift.set(address.combinedValue, forKey: "privateKey")
+        keychainSwift.set(address.combinedValue, forKey: "address")
         keychainSwift.set(Data(try identity.serialize()), forKey: "privateKey")
         keychainSwift.set(String(registrationId), forKey: "registrationId")
     }
@@ -44,7 +44,8 @@ public class KeychainSignalProtocolStore: IdentityKeyStore, PreKeyStore, SignedP
         let keys = keychainSwift.allKeys
         for key in keys {
             if key.starts(with: keychainSwift.keyPrefix) {
-                keychainSwift.delete(key)
+                let keyToDelete = key.replacingOccurrences(of: keychainSwift.keyPrefix, with: "")
+                keychainSwift.delete(keyToDelete)
             }
         }
     }

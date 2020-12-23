@@ -9,7 +9,7 @@ import Foundation
 
 public struct SSAPIPreKeyBundleResponse: Codable {
     var address: String
-    var identityKey: [UInt8]
+    var identityKey: String
     var registrationId: UInt32
     var preKey: SSAPIReceivedPreKey
     var signedPreKey: SSAPIReceivedSignedPreKey
@@ -17,19 +17,19 @@ public struct SSAPIPreKeyBundleResponse: Codable {
 
 public struct SSAPIReceivedPreKey: Codable {
     var keyId: UInt32
-    var publicKey: [UInt8]
+    var publicKey: String
 }
 
 public struct SSAPIReceivedSignedPreKey: Codable {
     var keyId: UInt32
-    var publicKey: [UInt8]
-    var signature: [UInt8]
+    var publicKey: String
+    var signature: String
 }
 
 public struct SSAPIGetMessagesResponse: Codable {
     var id: Int
-    var created: Date
-    var content: [UInt8]
+    var created: Int
+    var content: String
     var senderRegistrationId: Int
     var senderAddress: String
 }

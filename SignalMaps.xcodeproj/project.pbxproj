@@ -66,7 +66,8 @@
 		EC4520D525896275002768C8 /* Activate2FAModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4520D425896275002768C8 /* Activate2FAModal.swift */; };
 		EC4520D925896287002768C8 /* Deactivate2FAModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4520D825896287002768C8 /* Deactivate2FAModal.swift */; };
 		EC4520DD258B66F8002768C8 /* SimpleSignalSwiftAuthAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4520DC258B66F8002768C8 /* SimpleSignalSwiftAuthAPI.swift */; };
-		EC67E4C6258BC39100CACBE7 /* SignalMapsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC67E4C5258BC39100CACBE7 /* SignalMapsTests.swift */; };
+		EC5FDA5425933A8E006448AB /* SimpleSignalSwiftEncryptionAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC5FDA5325933A8E006448AB /* SimpleSignalSwiftEncryptionAPITests.swift */; };
+		EC67E4C6258BC39100CACBE7 /* SimpleSignalSwiftAuthAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC67E4C5258BC39100CACBE7 /* SimpleSignalSwiftAuthAPITests.swift */; };
 		EC912986257BB67500E12BF6 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC912985257BB67500E12BF6 /* AppState.swift */; };
 		EC912992257BB85400E12BF6 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC912985257BB67500E12BF6 /* AppState.swift */; };
 		EC91299A257CC13900E12BF6 /* AuthorisationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC912999257CC13800E12BF6 /* AuthorisationController.swift */; };
@@ -203,8 +204,9 @@
 		EC4520D425896275002768C8 /* Activate2FAModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activate2FAModal.swift; sourceTree = "<group>"; };
 		EC4520D825896287002768C8 /* Deactivate2FAModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deactivate2FAModal.swift; sourceTree = "<group>"; };
 		EC4520DC258B66F8002768C8 /* SimpleSignalSwiftAuthAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleSignalSwiftAuthAPI.swift; sourceTree = "<group>"; };
+		EC5FDA5325933A8E006448AB /* SimpleSignalSwiftEncryptionAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleSignalSwiftEncryptionAPITests.swift; sourceTree = "<group>"; };
 		EC67E4C3258BC39100CACBE7 /* SignalMapsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SignalMapsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		EC67E4C5258BC39100CACBE7 /* SignalMapsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalMapsTests.swift; sourceTree = "<group>"; };
+		EC67E4C5258BC39100CACBE7 /* SimpleSignalSwiftAuthAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleSignalSwiftAuthAPITests.swift; sourceTree = "<group>"; };
 		EC67E4C7258BC39100CACBE7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EC912985257BB67500E12BF6 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		EC912999257CC13800E12BF6 /* AuthorisationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorisationController.swift; sourceTree = "<group>"; };
@@ -350,7 +352,8 @@
 		EC67E4C4258BC39100CACBE7 /* SignalMapsTests */ = {
 			isa = PBXGroup;
 			children = (
-				EC67E4C5258BC39100CACBE7 /* SignalMapsTests.swift */,
+				EC67E4C5258BC39100CACBE7 /* SimpleSignalSwiftAuthAPITests.swift */,
+				EC5FDA5325933A8E006448AB /* SimpleSignalSwiftEncryptionAPITests.swift */,
 				EC1EDB36258F417C00B8F4D4 /* KeychainSignalProtocolStoreTests.swift */,
 				EC67E4C7258BC39100CACBE7 /* Info.plist */,
 			);
@@ -844,8 +847,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EC67E4C6258BC39100CACBE7 /* SignalMapsTests.swift in Sources */,
+				EC67E4C6258BC39100CACBE7 /* SimpleSignalSwiftAuthAPITests.swift in Sources */,
 				EC1EDB37258F417D00B8F4D4 /* KeychainSignalProtocolStoreTests.swift in Sources */,
+				EC5FDA5425933A8E006448AB /* SimpleSignalSwiftEncryptionAPITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
