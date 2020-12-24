@@ -533,7 +533,7 @@ public class SimpleSignalSwiftEncryptionAPI {
         return result
     }
     
-    private func updatePreKeys(serverAddress: String) -> Result<Void, SSAPIEncryptionError> {
+    public func updatePreKeys(serverAddress: String) -> Result<Void, SSAPIEncryptionError> {
         
         guard let store = self.store else {
             return(.failure(.noStore))
@@ -580,7 +580,7 @@ public class SimpleSignalSwiftEncryptionAPI {
         do {
             for preKey in allPreKeys {
                 json.append([
-                    "key_id": preKey.id,
+                    "key_id": try preKey.id(),
                     "public_key": (try preKey.publicKey().serialize()).toBase64String()
                 ])
             }
@@ -619,7 +619,7 @@ public class SimpleSignalSwiftEncryptionAPI {
         
     }
     
-    private func updateSignedPreKey(serverAddress: String) -> Result<Void, SSAPIEncryptionError> {
+    public func updateSignedPreKey(serverAddress: String) -> Result<Void, SSAPIEncryptionError> {
         
         guard let store = self.store else {
             return(.failure(.noStore))
@@ -635,6 +635,7 @@ public class SimpleSignalSwiftEncryptionAPI {
         
         //60,000,000 = 1min, 432000000000 = 5days
         let spkHasExpired = spkAge > 432000000000
+        print("Expired: \(spkHasExpired)")
         
         if !spkHasExpired {
             return(.success(()))
@@ -672,7 +673,7 @@ public class SimpleSignalSwiftEncryptionAPI {
         let json: [String: Any]
         do {
             json = [
-                "key_id": signedPreKeyRecord.id,
+                "key_id": try signedPreKeyRecord.id(),
                 "public_key": (try signedPreKeyRecord.publicKey().serialize()).toBase64String(),
                 "signature": (try signedPreKeyRecord.signature()).toBase64String()
             ]

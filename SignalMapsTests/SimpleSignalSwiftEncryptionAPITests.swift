@@ -288,7 +288,6 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
         let registrationId = UInt32(KeychainSwift().get("\(address.combinedValue)registrationId")!)!
         
         let uriValue2 = "https://www.simplesignal.co.uk/v1/\(registrationId)/messages/"
-        print(uriValue2)
         let data2: NSArray = [
             "message_deleted"
         ]
@@ -306,5 +305,99 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
         }
         
         wait(for: [expectation], timeout: 2.0)
+    }
+    
+    func testUpdatePreKeys() throws {
+        
+        let expectation = XCTestExpectation(description: "Successfully updates prekeys")
+        
+        let uriValue = "https://www.simplesignal.co.uk/v1/device/"
+        let data: NSDictionary = [
+            "code": "device_created",
+            "message": "Device successfully created"
+        ]
+        self.stub(uri(uriValue), json(data, status: 201))
+        
+        let name = "testRecipient"
+        let deviceId = UInt32(1)
+        let address = try ProtocolAddress(name: name, deviceId: UInt32(deviceId))
+        let encryptionAPI = try SimpleSignalSwiftEncryptionAPI(address: address)
+        let _ = encryptionAPI.createDevice(address: address, serverAddress: "https://www.simplesignal.co.uk")
+        
+        let registrationId = UInt32(KeychainSwift().get("\(address.combinedValue)registrationId")!)!
+        
+        let allKeys = KeychainSwift().allKeys
+        for key in allKeys {
+            if key.starts(with: "\(address.combinedValue)preKey") {
+                print("Deleting key: \(key)")
+                KeychainSwift().delete(key)
+            }
+        }
+        
+        let uriValue2 = "https://www.simplesignal.co.uk/v1/\(registrationId)/prekeys/"
+        let data2: NSDictionary = [
+            "code": "prekeys_stored",
+            "message": "Prekeys successfully stored"
+        ]
+        self.stub(uri(uriValue2), json(data2, status: 200))
+        
+        let result = encryptionAPI.updatePreKeys(serverAddress: "https://www.simplesignal.co.uk")
+        
+        switch result {
+        case .success():
+            expectation.fulfill()
+        case .failure(let error):
+            print(error)
+        }
+        
+        wait(for: [expectation], timeout: 2.0)
+        
+    }
+    
+    func testUpdateSignedPreKey() throws {
+        
+        let expectation = XCTestExpectation(description: "Successfully updates signed prekeys")
+        
+        let uriValue = "https://www.simplesignal.co.uk/v1/device/"
+        let data: NSDictionary = [
+            "code": "device_created",
+            "message": "Device successfully created"
+        ]
+        self.stub(uri(uriValue), json(data, status: 201))
+        
+        let name = "testRecipient"
+        let deviceId = UInt32(1)
+        let address = try ProtocolAddress(name: name, deviceId: UInt32(deviceId))
+        let encryptionAPI = try SimpleSignalSwiftEncryptionAPI(address: address)
+        let _ = encryptionAPI.createDevice(address: address, serverAddress: "https://www.simplesignal.co.uk")
+        
+        let registrationId = UInt32(KeychainSwift().get("\(address.combinedValue)registrationId")!)!
+        
+        let currentSignedPreKey = try SignedPreKeyRecord(bytes: KeychainSwift().getData("\(address.combinedValue)signedPreKey:1")!)
+        let newSignedPreKey = try SignedPreKeyRecord(
+            id: try currentSignedPreKey.id(),
+            timestamp: try currentSignedPreKey.timestamp() - 532000000000,
+            privateKey: try currentSignedPreKey.privateKey(),
+            signature: try currentSignedPreKey.signature())
+        KeychainSwift().set(Data(try newSignedPreKey.serialize()), forKey: "\(address.combinedValue)signedPreKey:1")
+        
+        let uriValue2 = "https://www.simplesignal.co.uk/v1/\(registrationId)/signedprekeys/"
+        let data2: NSDictionary = [
+            "code": "signed_prekey_stored",
+            "message": "Signed prekey successfully stored"
+        ]
+        self.stub(uri(uriValue2), json(data2, status: 200))
+        
+        let result = encryptionAPI.updateSignedPreKey(serverAddress: "https://www.simplesignal.co.uk")
+        
+        switch result {
+        case .success():
+            expectation.fulfill()
+        case .failure(let error):
+            print(error)
+        }
+        
+        wait(for: [expectation], timeout: 2.0)
+        
     }
 }
