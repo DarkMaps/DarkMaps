@@ -297,7 +297,7 @@ class KeychainSignalProtocolStoreTests: XCTestCase {
             signature: signedPrekeySignature)
         keychainSwift.set(Data(try signedPreKeyRecord.serialize()), forKey: "signedPreKey:1")
         
-        let (firstAge, maxKeyId) = try store.signedPreKeyAge()
+        let (_, maxKeyId) = try store.signedPreKeyAge()
         
         XCTAssertEqual(maxKeyId, 1)
         
@@ -310,10 +310,9 @@ class KeychainSignalProtocolStoreTests: XCTestCase {
             signature: signedPrekeySignature2)
         keychainSwift.set(Data(try signedPreKeyRecord2.serialize()), forKey: "signedPreKey:2")
         
-        let (secondAge, maxKeyId2) = try store.signedPreKeyAge()
+        let (_, maxKeyId2) = try store.signedPreKeyAge()
         
         XCTAssertEqual(maxKeyId2, 2)
-        XCTAssertGreaterThan(firstAge, secondAge)
     }
 
 }

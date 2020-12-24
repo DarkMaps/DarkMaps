@@ -19,7 +19,7 @@ public class SimpleSignalSwiftEncryptionAPI {
         self.store = try? KeychainSignalProtocolStore(keychainSwift: keychainSwift)
     }
     
-    public func createDevice(address: ProtocolAddress, serverAddress: String) -> Result <Void, SSAPIEncryptionError> {
+    public func createDevice(address: ProtocolAddress, authToken: String, serverAddress: String) -> Result <Void, SSAPIEncryptionError> {
             
         do {
             let identityKey = try IdentityKeyPair.generate()
@@ -52,6 +52,7 @@ public class SimpleSignalSwiftEncryptionAPI {
             
             let result = uploadDevice(
                 serverAddress: serverAddress,
+                authToken: authToken,
                 deviceAddress: try ProtocolAddress(name: keychainSwift.keyPrefix, deviceId: deviceId).combinedValue,
                 identityKey: identityKey.identityKey,
                 registrationId: registrationId,
@@ -73,7 +74,7 @@ public class SimpleSignalSwiftEncryptionAPI {
         }
     }
     
-    private func uploadDevice(serverAddress: String, deviceAddress: String, identityKey: IdentityKey, registrationId: UInt32, preKeys: [PreKeyRecord], signedPreKey: SignedPreKeyRecord) -> Result<Void, SSAPIEncryptionError> {
+    private func uploadDevice(serverAddress: String, authToken: String, deviceAddress: String, identityKey: IdentityKey, registrationId: UInt32, preKeys: [PreKeyRecord], signedPreKey: SignedPreKeyRecord) -> Result<Void, SSAPIEncryptionError> {
         
         let path = "\(serverAddress)/v1/device/"
         guard let url = URL(string: path) else {
@@ -83,6 +84,7 @@ public class SimpleSignalSwiftEncryptionAPI {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Token \(authToken)", forHTTPHeaderField: "Authorization")
         let json: [String: Any]
         do {
             json = [
@@ -136,7 +138,7 @@ public class SimpleSignalSwiftEncryptionAPI {
         
     }
     
-    public func sendMessage(message: String, recipient: String, serverAddress: String) -> Result<Void, SSAPIEncryptionError> {
+    public func sendMessage(message: String, recipient: String, authToken: String, serverAddress: String) -> Result<Void, SSAPIEncryptionError> {
         
         guard let store = self.store else {
             return(.failure(.noStore))
@@ -148,11 +150,11 @@ public class SimpleSignalSwiftEncryptionAPI {
             
             if (try? store.loadSession(for: address, context: nil)) != nil {
                 print("Session exists: Sending message")
-                return (sendMessageUsingStore(message: message, isPreKeyMessage: false, recipientAddress: address, serverAddress: serverAddress))
+                return (sendMessageUsingStore(message: message, isPreKeyMessage: false, recipientAddress: address, authToken: authToken, serverAddress: serverAddress))
             } else {
                 print("No session: Obtaining preKeyBundle")
                 let deviceId = try store.localRegistrationId(context: nil)
-                let preKeyBundleResult = obtainPreKeyBundle(recipient: recipient, sendersDeviceId: Int(deviceId), serverAddress: serverAddress)
+                let preKeyBundleResult = obtainPreKeyBundle(recipient: recipient, sendersDeviceId: Int(deviceId), authToken: authToken, serverAddress: serverAddress)
                 switch preKeyBundleResult {
                 case .success(let preKeyBundle):
                     print(preKeyBundle)
@@ -162,7 +164,7 @@ public class SimpleSignalSwiftEncryptionAPI {
                         sessionStore: store,
                         identityStore: store,
                         context: nil)
-                    return (sendMessageUsingStore(message: message, isPreKeyMessage: true, recipientAddress: address, serverAddress: serverAddress))
+                    return (sendMessageUsingStore(message: message, isPreKeyMessage: true, recipientAddress: address, authToken: authToken, serverAddress: serverAddress))
                 case .failure(let error):
                     return(.failure(error))
                 }
@@ -174,7 +176,7 @@ public class SimpleSignalSwiftEncryptionAPI {
         
     }
     
-    private func sendMessageUsingStore(message: String, isPreKeyMessage: Bool, recipientAddress: ProtocolAddress, serverAddress: String) -> Result<Void, SSAPIEncryptionError> {
+    private func sendMessageUsingStore(message: String, isPreKeyMessage: Bool, recipientAddress: ProtocolAddress, authToken: String, serverAddress: String) -> Result<Void, SSAPIEncryptionError> {
         
         guard let store = self.store else {
             return(.failure(.noStore))
@@ -206,6 +208,7 @@ public class SimpleSignalSwiftEncryptionAPI {
             var request = URLRequest(url: url)
             request.httpMethod = "POST"
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.setValue("Token \(authToken)", forHTTPHeaderField: "Authorization")
             let messageJsonObject = [
                 "registration_id": recipientAddress.deviceId,
                 "content": messageData
@@ -250,19 +253,23 @@ public class SimpleSignalSwiftEncryptionAPI {
         }
     }
     
-    private func obtainPreKeyBundle(recipient: String, sendersDeviceId: Int, serverAddress: String) -> Result<PreKeyBundle, SSAPIEncryptionError> {
+    private func obtainPreKeyBundle(recipient: String, sendersDeviceId: Int, authToken: String, serverAddress: String) -> Result<PreKeyBundle, SSAPIEncryptionError> {
         let recipientData = Data(recipient.utf8)
         let recipientHex = recipientData.map{ String(format:"%02x", $0) }.joined()
         let path = "\(serverAddress)/v1/prekeybundle/\(recipientHex)/\(sendersDeviceId)/"
         guard let url = URL(string: path) else {
             return .failure(.invalidUrl)
         }
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Token \(authToken)", forHTTPHeaderField: "Authorization")
         
         var result: Result<PreKeyBundle, SSAPIEncryptionError>!
         
         let semaphore = DispatchSemaphore(value: 0)
         
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
             
             let processedResponse = self.handleURLErrors(successCode: 200, data: data, response: response, error: error)
             
@@ -326,7 +333,7 @@ public class SimpleSignalSwiftEncryptionAPI {
         return result
     }
     
-    public func getMessages(serverAddress: String) -> Result<[Result<SSAPIGetMessagesOutput, SSAPIEncryptionError>], SSAPIEncryptionError> {
+    public func getMessages(authToken: String, serverAddress: String) -> Result<[Result<SSAPIGetMessagesOutput, SSAPIEncryptionError>], SSAPIEncryptionError> {
         
         guard let store = self.store else {
             return(.failure(.noStore))
@@ -340,12 +347,16 @@ public class SimpleSignalSwiftEncryptionAPI {
         guard let url = URL(string: path) else {
             return .failure(.invalidUrl)
         }
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Token \(authToken)", forHTTPHeaderField: "Authorization")
         
         var result: Result<[Result<SSAPIGetMessagesOutput, SSAPIEncryptionError>], SSAPIEncryptionError>!
         
         let semaphore = DispatchSemaphore(value: 0)
         
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
             
             let processedResponse = self.handleURLErrors(successCode: 200, data: data, response: response, error: error)
             
@@ -425,7 +436,7 @@ public class SimpleSignalSwiftEncryptionAPI {
         
     }
     
-    public func deleteDevice(serverAddress: String) -> Result<Void, SSAPIEncryptionError> {
+    public func deleteDevice(authToken: String, serverAddress: String) -> Result<Void, SSAPIEncryptionError> {
         
         let path = "\(serverAddress)/v1/devices/"
         guard let url = URL(string: path) else {
@@ -434,6 +445,7 @@ public class SimpleSignalSwiftEncryptionAPI {
         
         var request = URLRequest(url: url)
         request.httpMethod = "DELETE"
+        request.setValue("Token \(authToken)", forHTTPHeaderField: "Authorization")
         
         var result: Result<Void, SSAPIEncryptionError>!
         
@@ -464,7 +476,7 @@ public class SimpleSignalSwiftEncryptionAPI {
         return result
     }
     
-    public func deleteMessage(serverAddress: String, messageIds: [Int]) -> Result<[Int: SSAPIDeleteMessageOutcome], SSAPIEncryptionError> {
+    public func deleteMessage(authToken: String, serverAddress: String, messageIds: [Int]) -> Result<[Int: SSAPIDeleteMessageOutcome], SSAPIEncryptionError> {
         
         guard let store = self.store else {
             return(.failure(.noStore))
@@ -482,6 +494,7 @@ public class SimpleSignalSwiftEncryptionAPI {
         
         var request = URLRequest(url: url)
         request.httpMethod = "DELETE"
+        request.setValue("Token \(authToken)", forHTTPHeaderField: "Authorization")
         
         var result: Result<[Int: SSAPIDeleteMessageOutcome], SSAPIEncryptionError>!
         
@@ -533,7 +546,7 @@ public class SimpleSignalSwiftEncryptionAPI {
         return result
     }
     
-    public func updatePreKeys(serverAddress: String) -> Result<Void, SSAPIEncryptionError> {
+    public func updatePreKeys(authToken: String, serverAddress: String) -> Result<Void, SSAPIEncryptionError> {
         
         guard let store = self.store else {
             return(.failure(.noStore))
@@ -576,6 +589,7 @@ public class SimpleSignalSwiftEncryptionAPI {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Token \(authToken)", forHTTPHeaderField: "Authorization")
         var json: [[String: Any]] = []
         do {
             for preKey in allPreKeys {
@@ -619,7 +633,7 @@ public class SimpleSignalSwiftEncryptionAPI {
         
     }
     
-    public func updateSignedPreKey(serverAddress: String) -> Result<Void, SSAPIEncryptionError> {
+    public func updateSignedPreKey(authToken: String, serverAddress: String) -> Result<Void, SSAPIEncryptionError> {
         
         guard let store = self.store else {
             return(.failure(.noStore))
@@ -670,6 +684,7 @@ public class SimpleSignalSwiftEncryptionAPI {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Token \(authToken)", forHTTPHeaderField: "Authorization")
         let json: [String: Any]
         do {
             json = [

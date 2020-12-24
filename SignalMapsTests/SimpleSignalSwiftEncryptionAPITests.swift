@@ -35,7 +35,7 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
         let address = try ProtocolAddress(name: "testName", deviceId: 1)
         let encryptionAPI = try SimpleSignalSwiftEncryptionAPI(address: address)
         
-        let result = encryptionAPI.createDevice(address: address, serverAddress: "https://www.simplesignal.co.uk")
+        let result = encryptionAPI.createDevice(address: address, authToken: "testAuthToken", serverAddress: "https://www.simplesignal.co.uk")
         
         print(result)
         
@@ -60,7 +60,7 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
         
         let address = try ProtocolAddress(name: "testName", deviceId: 1)
         let encryptionAPI = try SimpleSignalSwiftEncryptionAPI(address: address)
-        let _ = encryptionAPI.createDevice(address: address, serverAddress: "https://www.simplesignal.co.uk")
+        let _ = encryptionAPI.createDevice(address: address, authToken: "testAuthToken", serverAddress: "https://www.simplesignal.co.uk")
         
         let registrationId = KeychainSwift().get("testName.1registrationId")!
         
@@ -111,7 +111,7 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
         ]
         self.stub(uri(uriValue3), json(data3, status: 201))
         
-        let result = encryptionAPI.sendMessage(message: "testMessage", recipient: recipient, serverAddress: "https://www.simplesignal.co.uk")
+        let result = encryptionAPI.sendMessage(message: "testMessage", recipient: recipient, authToken: "testAuthToken", serverAddress: "https://www.simplesignal.co.uk")
         
         print(result)
         
@@ -169,7 +169,7 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
         let recipientDeviceId = UInt32(1)
         let recipientAddress = try ProtocolAddress(name: recipient, deviceId: UInt32(recipientDeviceId))
         let encryptionAPI = try SimpleSignalSwiftEncryptionAPI(address: recipientAddress)
-        let _ = encryptionAPI.createDevice(address: recipientAddress, serverAddress: "https://www.simplesignal.co.uk")
+        let _ = encryptionAPI.createDevice(address: recipientAddress, authToken: "testAuthToken", serverAddress: "https://www.simplesignal.co.uk")
         
         let recipientRegistrationId = UInt32(KeychainSwift().get("\(recipientAddress.combinedValue)registrationId")!)!
         let recipientIdentity = try IdentityKeyPair(bytes: KeychainSwift().getData("\(recipientAddress.combinedValue)privateKey")!)
@@ -216,7 +216,7 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
         
         self.stub(uri(uriValue2), json(data2, status: 200))
         
-        let result = encryptionAPI.getMessages(serverAddress: "https://www.simplesignal.co.uk")
+        let result = encryptionAPI.getMessages(authToken: "testAuthToken", serverAddress: "https://www.simplesignal.co.uk")
         
         switch result {
         case .success(let decryptedMessages):
@@ -251,12 +251,12 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
         let deviceId = UInt32(1)
         let address = try ProtocolAddress(name: name, deviceId: UInt32(deviceId))
         let encryptionAPI = try SimpleSignalSwiftEncryptionAPI(address: address)
-        let _ = encryptionAPI.createDevice(address: address, serverAddress: "https://www.simplesignal.co.uk")
+        let _ = encryptionAPI.createDevice(address: address, authToken: "testAuthToken", serverAddress: "https://www.simplesignal.co.uk")
         
         let uriValue2 = "https://www.simplesignal.co.uk/v1/devices/"
         self.stub(uri(uriValue2), http(204))
         
-        let result = encryptionAPI.deleteDevice(serverAddress: "https://www.simplesignal.co.uk")
+        let result = encryptionAPI.deleteDevice(authToken: "testAuthToken", serverAddress: "https://www.simplesignal.co.uk")
         
         switch result {
         case .success():
@@ -283,7 +283,7 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
         let deviceId = UInt32(1)
         let address = try ProtocolAddress(name: name, deviceId: UInt32(deviceId))
         let encryptionAPI = try SimpleSignalSwiftEncryptionAPI(address: address)
-        let _ = encryptionAPI.createDevice(address: address, serverAddress: "https://www.simplesignal.co.uk")
+        let _ = encryptionAPI.createDevice(address: address, authToken: "testAuthToken", serverAddress: "https://www.simplesignal.co.uk")
         
         let registrationId = UInt32(KeychainSwift().get("\(address.combinedValue)registrationId")!)!
         
@@ -293,7 +293,7 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
         ]
         self.stub(uri(uriValue2), json(data2, status: 200))
         
-        let result = encryptionAPI.deleteMessage(serverAddress: "https://www.simplesignal.co.uk", messageIds: [1])
+        let result = encryptionAPI.deleteMessage(authToken: "testAuthToken", serverAddress: "https://www.simplesignal.co.uk", messageIds: [1])
         
         switch result {
         case .success(let outcomeArray):
@@ -322,7 +322,7 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
         let deviceId = UInt32(1)
         let address = try ProtocolAddress(name: name, deviceId: UInt32(deviceId))
         let encryptionAPI = try SimpleSignalSwiftEncryptionAPI(address: address)
-        let _ = encryptionAPI.createDevice(address: address, serverAddress: "https://www.simplesignal.co.uk")
+        let _ = encryptionAPI.createDevice(address: address, authToken: "testAuthToken", serverAddress: "https://www.simplesignal.co.uk")
         
         let registrationId = UInt32(KeychainSwift().get("\(address.combinedValue)registrationId")!)!
         
@@ -341,7 +341,7 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
         ]
         self.stub(uri(uriValue2), json(data2, status: 200))
         
-        let result = encryptionAPI.updatePreKeys(serverAddress: "https://www.simplesignal.co.uk")
+        let result = encryptionAPI.updatePreKeys(authToken: "testAuthToken", serverAddress: "https://www.simplesignal.co.uk")
         
         switch result {
         case .success():
@@ -369,7 +369,7 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
         let deviceId = UInt32(1)
         let address = try ProtocolAddress(name: name, deviceId: UInt32(deviceId))
         let encryptionAPI = try SimpleSignalSwiftEncryptionAPI(address: address)
-        let _ = encryptionAPI.createDevice(address: address, serverAddress: "https://www.simplesignal.co.uk")
+        let _ = encryptionAPI.createDevice(address: address, authToken: "testAuthToken", serverAddress: "https://www.simplesignal.co.uk")
         
         let registrationId = UInt32(KeychainSwift().get("\(address.combinedValue)registrationId")!)!
         
@@ -388,7 +388,7 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
         ]
         self.stub(uri(uriValue2), json(data2, status: 200))
         
-        let result = encryptionAPI.updateSignedPreKey(serverAddress: "https://www.simplesignal.co.uk")
+        let result = encryptionAPI.updateSignedPreKey(authToken: "testAuthToken", serverAddress: "https://www.simplesignal.co.uk")
         
         switch result {
         case .success():
