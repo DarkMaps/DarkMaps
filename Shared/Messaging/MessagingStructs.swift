@@ -53,12 +53,14 @@ public class LocationMessage: Codable {
     }
 }
 
-public class ShortLocationMessage {
+public class ShortLocationMessage: Identifiable {
     
+    public var id: Int
     var sender: ProtocolAddress
     var lastReceived: Int
     
     init(_ locationMessage: LocationMessage) {
+        self.id = locationMessage.id
         self.sender = locationMessage.sender
         self.lastReceived = locationMessage.lastReceived
     }

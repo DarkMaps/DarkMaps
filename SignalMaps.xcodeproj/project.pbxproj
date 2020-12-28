@@ -100,6 +100,7 @@
 		ECC0A5DD257FE8FF001D5E60 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECC0A5DC257FE8FF001D5E60 /* SettingsView.swift */; };
 		ECD126C3258679C800C2161D /* HomeViewButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD126C2258679C800C2161D /* HomeViewButton.swift */; };
 		ECD599D42599D590003AD3D0 /* NewChatErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD599D32599D590003AD3D0 /* NewChatErrors.swift */; };
+		ECD599D92599F63A003AD3D0 /* ListViewErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD599D82599F63A003AD3D0 /* ListViewErrors.swift */; };
 		ECDE0E3D2572B5EC009D3561 /* SignalMapsiOSFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = ECDE0E3B2572B5EC009D3561 /* SignalMapsiOSFramework.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		ECDE0E432572B615009D3561 /* DataStoreInMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9A2572ADC700F7230F /* DataStoreInMemory.swift */; };
 		ECDE0E442572B615009D3561 /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9B2572ADC700F7230F /* Protocol.swift */; };
@@ -247,6 +248,7 @@
 		ECC0A5DC257FE8FF001D5E60 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		ECD126C2258679C800C2161D /* HomeViewButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewButton.swift; sourceTree = "<group>"; };
 		ECD599D32599D590003AD3D0 /* NewChatErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChatErrors.swift; sourceTree = "<group>"; };
+		ECD599D82599F63A003AD3D0 /* ListViewErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewErrors.swift; sourceTree = "<group>"; };
 		ECDE0E392572B5EC009D3561 /* SignalMapsiOSFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SignalMapsiOSFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECDE0E3B2572B5EC009D3561 /* SignalMapsiOSFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SignalMapsiOSFramework.h; sourceTree = "<group>"; };
 		ECDE0E3C2572B5EC009D3561 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -497,6 +499,7 @@
 				EC912983257BB61F00E12BF6 /* Detail */,
 				ECC0A5BE257FE8A6001D5E60 /* ListController.swift */,
 				ECC0A5C4257FE8B8001D5E60 /* ListView.swift */,
+				ECD599D82599F63A003AD3D0 /* ListViewErrors.swift */,
 			);
 			path = List;
 			sourceTree = "<group>";
@@ -972,6 +975,7 @@
 				EC12FBB32572ADC700F7230F /* DataStoreInMemory.swift in Sources */,
 				ECFFD5242572620300458BC8 /* ContentView.swift in Sources */,
 				EC9129CD257D59DF00E12BF6 /* HomeView.swift in Sources */,
+				ECD599D92599F63A003AD3D0 /* ListViewErrors.swift in Sources */,
 				ECFFD64F2572A9C900458BC8 /* KeychainSignalProtocolStore.swift in Sources */,
 				EC4A05CF2595F99F00DE81A8 /* MessagingStore.swift in Sources */,
 				ECFFD5222572620300458BC8 /* SignalMapsApp.swift in Sources */,

@@ -9,10 +9,30 @@ import SwiftUI
 
 struct ListView: View {
     
+    @Binding var messageArray: [ShortLocationMessage]
+    @Binding var getMessagesInProgress: Bool
+               
+    var performSync: () -> Void
+    
     var body: some View {
-        List {
-            Text("List")
+        Text("List")
+        List(messageArray) { message in
+            HStack {
+                Text(message.sender.combinedValue)
+                Spacer()
+                Text(String(message.lastReceived))
+            }
         }
+        Button(action: self.performSync) {
+            HStack {
+                if (self.getMessagesInProgress) {
+                    ActivityIndicator(isAnimating: true)
+                }
+                Text("Sync")
+            }
+        }
+        .disabled(getMessagesInProgress)
+        .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
     }
 }
 
@@ -23,9 +43,18 @@ struct ListView_Previews: PreviewProvider {
     }
     
     struct PreviewWrapper: View {
+        
+        @State var messageArray: [ShortLocationMessage] = []
+        @State var getMessagesInProgress: Bool = false
+                   
+        func performSync() {}
 
         var body: some View {
-            return ListView()
+            return ListView(
+                messageArray: $messageArray,
+                getMessagesInProgress: $getMessagesInProgress,
+                performSync: performSync
+            )
         }
     }
     
