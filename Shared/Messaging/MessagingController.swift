@@ -13,6 +13,7 @@ public class MessagingController {
     var simpleSignalSwiftEncryptionAPI: SimpleSignalSwiftEncryptionAPI? = nil
     
     func createDevice(userName: String, serverAddress: String, authToken: String, completionHandler: @escaping (_: Result<Int, MessagingControllerError>) -> ()) {
+        
         guard let address = try? ProtocolAddress(name: userName, deviceId: UInt32(1)) else {
             completionHandler(.failure(.unableToCreateAddress))
             return
@@ -30,6 +31,16 @@ public class MessagingController {
             return
         }
         self.messagingStore = messagingStore
+        
+        if simpleSignalSwiftEncryptionAPI.deviceExists {
+            print("Device already exists")
+            if let registrationId = simpleSignalSwiftEncryptionAPI.registrationId {
+                completionHandler(.success(registrationId))
+                return
+            } else {
+                simpleSignalSwiftEncryptionAPI.deleteLocalDeviceDetails()
+            }
+        }
         
         let createDeviceResult = simpleSignalSwiftEncryptionAPI.createDevice(authToken: authToken, serverAddress: serverAddress)
         switch createDeviceResult {

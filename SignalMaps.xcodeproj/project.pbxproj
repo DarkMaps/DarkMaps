@@ -61,6 +61,7 @@
 		EC12FBDF2572ADC700F7230F /* IdentityKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBB22572ADC700F7230F /* IdentityKey.swift */; };
 		EC12FBE02572ADC700F7230F /* IdentityKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FBB22572ADC700F7230F /* IdentityKey.swift */; };
 		EC1CC2DB2597D5410047E9AF /* EndToEndTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1CC2DA2597D5410047E9AF /* EndToEndTests.swift */; };
+		EC1CC2E12599CAC30047E9AF /* LocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1CC2E02599CAC30047E9AF /* LocationController.swift */; };
 		EC1EDB1A258EB1A000B8F4D4 /* SimpleSignalSwiftEncryptionAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1EDB19258EB1A000B8F4D4 /* SimpleSignalSwiftEncryptionAPI.swift */; };
 		EC1EDB1F258EB1C000B8F4D4 /* SimpleSignalSwiftEncryptionAPIErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1EDB1E258EB1C000B8F4D4 /* SimpleSignalSwiftEncryptionAPIErrors.swift */; };
 		EC1EDB24258EB1ED00B8F4D4 /* SimpleSignalSwiftEncryptionApiStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1EDB23258EB1ED00B8F4D4 /* SimpleSignalSwiftEncryptionApiStructs.swift */; };
@@ -98,6 +99,7 @@
 		ECC0A5D9257FE8F5001D5E60 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECC0A5D8257FE8F5001D5E60 /* SettingsController.swift */; };
 		ECC0A5DD257FE8FF001D5E60 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECC0A5DC257FE8FF001D5E60 /* SettingsView.swift */; };
 		ECD126C3258679C800C2161D /* HomeViewButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD126C2258679C800C2161D /* HomeViewButton.swift */; };
+		ECD599D42599D590003AD3D0 /* NewChatErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD599D32599D590003AD3D0 /* NewChatErrors.swift */; };
 		ECDE0E3D2572B5EC009D3561 /* SignalMapsiOSFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = ECDE0E3B2572B5EC009D3561 /* SignalMapsiOSFramework.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		ECDE0E432572B615009D3561 /* DataStoreInMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9A2572ADC700F7230F /* DataStoreInMemory.swift */; };
 		ECDE0E442572B615009D3561 /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9B2572ADC700F7230F /* Protocol.swift */; };
@@ -205,6 +207,7 @@
 		EC12FBB12572ADC700F7230F /* ClonableHandleOwner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClonableHandleOwner.swift; sourceTree = "<group>"; };
 		EC12FBB22572ADC700F7230F /* IdentityKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityKey.swift; sourceTree = "<group>"; };
 		EC1CC2DA2597D5410047E9AF /* EndToEndTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndToEndTests.swift; sourceTree = "<group>"; };
+		EC1CC2E02599CAC30047E9AF /* LocationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationController.swift; sourceTree = "<group>"; };
 		EC1EDB19258EB1A000B8F4D4 /* SimpleSignalSwiftEncryptionAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleSignalSwiftEncryptionAPI.swift; sourceTree = "<group>"; };
 		EC1EDB1E258EB1C000B8F4D4 /* SimpleSignalSwiftEncryptionAPIErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleSignalSwiftEncryptionAPIErrors.swift; sourceTree = "<group>"; };
 		EC1EDB23258EB1ED00B8F4D4 /* SimpleSignalSwiftEncryptionApiStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleSignalSwiftEncryptionApiStructs.swift; sourceTree = "<group>"; };
@@ -243,6 +246,7 @@
 		ECC0A5D8257FE8F5001D5E60 /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
 		ECC0A5DC257FE8FF001D5E60 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		ECD126C2258679C800C2161D /* HomeViewButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewButton.swift; sourceTree = "<group>"; };
+		ECD599D32599D590003AD3D0 /* NewChatErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChatErrors.swift; sourceTree = "<group>"; };
 		ECDE0E392572B5EC009D3561 /* SignalMapsiOSFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SignalMapsiOSFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECDE0E3B2572B5EC009D3561 /* SignalMapsiOSFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SignalMapsiOSFramework.h; sourceTree = "<group>"; };
 		ECDE0E3C2572B5EC009D3561 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -359,6 +363,14 @@
 				EC12FBAB2572ADC700F7230F /* PreKeyBundle.swift */,
 			);
 			path = state;
+			sourceTree = "<group>";
+		};
+		EC1CC2DF2599CA6B0047E9AF /* Location */ = {
+			isa = PBXGroup;
+			children = (
+				EC1CC2E02599CAC30047E9AF /* LocationController.swift */,
+			);
+			path = Location;
 			sourceTree = "<group>";
 		};
 		EC4A05CA2595F97400DE81A8 /* Messaging */ = {
@@ -494,6 +506,7 @@
 			children = (
 				ECC0A5D0257FE8DF001D5E60 /* NewChatController.swift */,
 				ECC0A5D4257FE8E8001D5E60 /* NewChatView.swift */,
+				ECD599D32599D590003AD3D0 /* NewChatErrors.swift */,
 			);
 			path = "New Chat";
 			sourceTree = "<group>";
@@ -538,6 +551,7 @@
 		ECFFD50E257261FB00458BC8 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				EC1CC2DF2599CA6B0047E9AF /* Location */,
 				EC4A05CA2595F97400DE81A8 /* Messaging */,
 				EC9129B1257CC5F600E12BF6 /* Components */,
 				EC912998257CC11F00E12BF6 /* Authorisation */,
@@ -654,6 +668,7 @@
 				ECFFD5132572620300458BC8 /* Frameworks */,
 				ECFFD5142572620300458BC8 /* Resources */,
 				ECDE0E082572B0A2009D3561 /* Embed Frameworks */,
+				AB8EC9123B78B78AE52AC95C /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -827,6 +842,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		AB8EC9123B78B78AE52AC95C /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SignalMaps (iOS)/Pods-SignalMaps (iOS)-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SignalMaps (iOS)/Pods-SignalMaps (iOS)-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SignalMaps (iOS)/Pods-SignalMaps (iOS)-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		DD08A35597EB33B9BB6902DF /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -932,6 +964,7 @@
 				EC912986257BB67500E12BF6 /* AppState.swift in Sources */,
 				ECFC5940258DF804005CCDA2 /* TextFieldAlert.swift in Sources */,
 				EC12FBC32572ADC700F7230F /* Address.swift in Sources */,
+				ECD599D42599D590003AD3D0 /* NewChatErrors.swift in Sources */,
 				EC9129D1257D5EC100E12BF6 /* TwoFactorModal.swift in Sources */,
 				ECC0A5C5257FE8B8001D5E60 /* ListView.swift in Sources */,
 				EC4520DD258B66F8002768C8 /* SimpleSignalSwiftAuthAPI.swift in Sources */,
@@ -967,6 +1000,7 @@
 				EC12FBDF2572ADC700F7230F /* IdentityKey.swift in Sources */,
 				ECC0A5CD257FE8CE001D5E60 /* DetailView.swift in Sources */,
 				ECC0A5D9257FE8F5001D5E60 /* SettingsController.swift in Sources */,
+				EC1CC2E12599CAC30047E9AF /* LocationController.swift in Sources */,
 				EC9129DD257D828200E12BF6 /* ErrorAlert.swift in Sources */,
 				ECC0A5C9257FE8C4001D5E60 /* DetailController.swift in Sources */,
 				ECC0A5D5257FE8E8001D5E60 /* NewChatView.swift in Sources */,

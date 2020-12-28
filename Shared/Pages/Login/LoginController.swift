@@ -21,6 +21,7 @@ struct LoginController: View {
     @State private var twoFactorModalVisible = false
     
     var authorisationController = AuthorisationController()
+    var messagingController = MessagingController()
     
     func handleLogin() -> Void {
         loginInProgress = true
@@ -29,16 +30,30 @@ struct LoginController: View {
             password: password,
             serverAddress: serverAddress
         ) { loginOutcome in
-            DispatchQueue.main.async {
-                loginInProgress = false
-                switch loginOutcome {
-                case .success(let newUser):
-                    appState.loggedInUser = newUser
-                case .twoFactorRequired(let ephemeralCodeReceived):
-                    ephemeralCode = ephemeralCodeReceived
-                    twoFactorModalVisible = true
-                case .failure(let error):
-                    appState.displayedError = IdentifiableError(error)
+            
+            switch loginOutcome {
+            case .twoFactorRequired(let ephemeralCodeReceived):
+                ephemeralCode = ephemeralCodeReceived
+                twoFactorModalVisible = true
+            case .failure(let error):
+                appState.displayedError = IdentifiableError(error)
+            case .success(let newUser):
+                    
+                messagingController.createDevice(
+                    userName: newUser.userName,
+                    serverAddress: newUser.serverAddress,
+                    authToken: newUser.authCode) {
+                    createDeviceOutcome in
+                    
+                    loginInProgress = false
+                    
+                    switch createDeviceOutcome {
+                    case .failure(let error):
+                        appState.displayedError = IdentifiableError(error)
+                    case .success(let registrationId):
+                        print("Registration Id: \(registrationId)")
+                        appState.loggedInUser = newUser
+                    }
                 }
             }
         }

@@ -12,13 +12,27 @@ import Foundation
 public class SimpleSignalSwiftEncryptionAPI {
     
     let address: ProtocolAddress
-    let keychainSwift: KeychainSwift
-    var store: KeychainSignalProtocolStore? = nil
+    private let keychainSwift: KeychainSwift
+    private var store: KeychainSignalProtocolStore? = nil
     
     init(address: ProtocolAddress) throws {
         self.address = address
         self.keychainSwift = KeychainSwift(keyPrefix: address.combinedValue)
         self.store = try? KeychainSignalProtocolStore(keychainSwift: keychainSwift)
+    }
+    
+    public var deviceExists: Bool {
+        return store != nil
+    }
+    
+    public var registrationId: Int? {
+        guard let store = self.store else {
+            return nil
+        }
+        guard let uInt32RegistrationId = try? store.localRegistrationId(context: nil) else {
+            return nil
+        }
+        return Int(uInt32RegistrationId)
     }
     
     public func createDevice(authToken: String, serverAddress: String) -> Result <Int, SSAPIEncryptionError> {
@@ -474,14 +488,12 @@ public class SimpleSignalSwiftEncryptionAPI {
             switch processedResponse {
             case .failure(let error):
                 result = .failure(error)
+                // Clear data anyway
+                self.deleteLocalDeviceDetails()
             case .success:
                 result = .success(())
                 // Store may be empty as we are a new user deleting an old device
-                if let store = self.store {
-                    print("Clearing data")
-                    store.clearAllData()
-                    self.store = nil
-                }
+                self.deleteLocalDeviceDetails()
             }
             
             semaphore.signal()
@@ -491,6 +503,14 @@ public class SimpleSignalSwiftEncryptionAPI {
         _ = semaphore.wait(wallTimeout: .distantFuture)
         
         return result
+    }
+    
+    public func deleteLocalDeviceDetails() {
+        print("Clearing data")
+        if let store = self.store {
+            store.clearAllData()
+            self.store = nil
+        }
     }
     
     public func deleteMessage(authToken: String, serverAddress: String, messageIds: [Int]) -> Result<[Int: SSAPIDeleteMessageOutcome], SSAPIEncryptionError> {
