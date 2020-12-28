@@ -18,42 +18,46 @@ struct SettingsView: View {
     var logUserOut: () -> Void
     
     var body: some View {
-        List {
-            Section(header: Text("User")) {
-                Text("Username: \(loggedInUser?.userName ?? "Unknown")")
-                Text("Device ID: \(String(loggedInUser?.deviceId ?? -1))")
-                Text("Server Address: \(loggedInUser?.serverAddress ?? "Unknown")")
-            }
-            Section(header: Text("Account")) {
-                if (loggedInUser?.is2FAUser ?? false) {
+        NavigationView {
+            List {
+                Section(header: Text("User")) {
+                    Text("Username: \(loggedInUser?.userName ?? "Unknown")")
+                    Text("Device ID: \(String(loggedInUser?.deviceId ?? -1))")
+                    Text("Server Address: \(loggedInUser?.serverAddress ?? "Unknown")")
+                }
+                Section(header: Text("Account")) {
+                    if (loggedInUser?.is2FAUser ?? false) {
+                        SettingsRow(
+                            actionInProgress: $actionInProgress,
+                            title: "Deactivate 2FA",
+                            actionDefiningActivityMarker: .deactivate2FA,
+                            onTap: {deactivate2FAModalIsShowing = true}
+                        )
+                    } else {
+                        SettingsRow(
+                            actionInProgress: $actionInProgress,
+                            title: "Activate 2FA",
+                            actionDefiningActivityMarker: .confirm2FA,
+                            onTap: {activate2FAModalIsShowing = true}
+                        )
+                    }
                     SettingsRow(
                         actionInProgress: $actionInProgress,
-                        title: "Deactivate 2FA",
-                        actionDefiningActivityMarker: .deactivate2FA,
-                        onTap: {deactivate2FAModalIsShowing = true}
+                        title: "Log Out",
+                        actionDefiningActivityMarker: .logUserOut,
+                        onTap: logUserOut
                     )
-                } else {
                     SettingsRow(
                         actionInProgress: $actionInProgress,
-                        title: "Activate 2FA",
-                        actionDefiningActivityMarker: .confirm2FA,
-                        onTap: {activate2FAModalIsShowing = true}
+                        title: "Delete Account",
+                        actionDefiningActivityMarker: .deleteUserAccount,
+                        onTap: {passwordAlertShowing = true}
                     )
                 }
-                SettingsRow(
-                    actionInProgress: $actionInProgress,
-                    title: "Log Out",
-                    actionDefiningActivityMarker: .logUserOut,
-                    onTap: logUserOut
-                )
-                SettingsRow(
-                    actionInProgress: $actionInProgress,
-                    title: "Delete Account",
-                    actionDefiningActivityMarker: .deleteUserAccount,
-                    onTap: {passwordAlertShowing = true}
-                )
             }
-        }.listStyle(GroupedListStyle())
+            .listStyle(GroupedListStyle())
+            .navigationTitle("Settings")
+        }
     }
 }
 

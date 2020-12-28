@@ -32,7 +32,11 @@ struct ListController: View {
             case .success():
                 
                 do {
-                    let messageStore = try MessagingStore(keychainSwift: KeychainSwift(keyPrefix: loggedInUser.combinedName))
+                    let messageStore = MessagingStore(
+                        localAddress: try ProtocolAddress(
+                            name: loggedInUser.userName,
+                            deviceId: UInt32(loggedInUser.deviceId ?? 1))
+                    )
                     let messages = try messageStore.getMessageSummary()
                     print(messages)
                     self.messageArray.append(contentsOf: messages)

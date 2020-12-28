@@ -25,8 +25,9 @@ public class MessagingController {
         }
         self.simpleSignalSwiftEncryptionAPI = simpleSignalSwiftEncryptionAPI
         
-        let keychainSwift = KeychainSwift(keyPrefix: address.combinedValue)
-        guard let messagingStore = try? MessagingStore(keychainSwift: keychainSwift) else {
+        guard let messagingStore = try? MessagingStore(
+                localAddress: address
+        ) else {
             completionHandler(.failure(.unableToCreateMessagingStore))
             return
         }

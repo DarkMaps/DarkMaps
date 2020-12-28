@@ -11,8 +11,8 @@ public class MessagingStore {
     
     private var keychainSwift: KeychainSwift
 
-    public init(keychainSwift: KeychainSwift) throws {
-        self.keychainSwift = keychainSwift
+    public init(localAddress: ProtocolAddress) {
+        self.keychainSwift = KeychainSwift(keyPrefix: localAddress.combinedValue)
     }
     
     public func clearAllData() {

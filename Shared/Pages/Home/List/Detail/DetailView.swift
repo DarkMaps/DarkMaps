@@ -9,16 +9,28 @@ import SwiftUI
 
 struct DetailView: View {
     
+    @Binding var messageDetails: LocationMessage?
+    @Binding var fetchingMessageDetails: Bool
+    
     var body: some View {
-        VStack {
-//            if (chatArray.count > 0) {
-//                List(chatArray, id: \.self) { chat in
-//                    ChatRow(chatItem: chat, refreshing: self.$refreshing)
-//                }
-//            } else {
-//                NoSharedLocationsView(newChatModalVisible: $newChatModalVisible)
-//            }
+        ZStack {
+            if fetchingMessageDetails {
+                Text("Loading data")
+            } else if messageDetails == nil {
+                Text("Error loading data")
+            } else if (messageDetails!.location == nil) {
+                Text("No location data in message")
+            } else {
+                VStack {
+                    Text("Location:")
+                    Text("Latitude: \(messageDetails!.location!.latitude)")
+                    Text("Longitude: \(messageDetails!.location!.longitude)")
+                }
+                
+            }
+            Text("").hidden().navigationTitle("Detail")
         }
+        
     }
 }
 
@@ -32,11 +44,21 @@ struct DetailView_Previews: PreviewProvider {
     
     struct PreviewWrapper: View {
         
-        func sync () {return}
+        @State var messageDetails: LocationMessage? = LocationMessage(
+            id: 3,
+            sender: try! ProtocolAddress(
+                name: "test@test.com",
+                deviceId: UInt32(324)
+            ),
+            location: Location(latitude: 2.345346, longitude: 5.2323535),
+            lastReceived: Int(Date().ticks)
+        )
+        @State var fetchingMessageDetails = false
 
         var body: some View {
-            
             return DetailView(
+                messageDetails: $messageDetails,
+                fetchingMessageDetails: $fetchingMessageDetails
             )
         }
     }

@@ -123,7 +123,8 @@ class EndToEndTests: XCTestCase {
                         
                         
                         do {
-                            let messageStore = try MessagingStore(keychainSwift: self.keychainSwift)
+                            let user2Address = try ProtocolAddress(name: userDetails2.userName, deviceId: UInt32(userDetails2.deviceId ?? 1))
+                            let messageStore = MessagingStore(localAddress: user2Address)
                             let messageSummary = try messageStore.getMessageSummary()
                             print(messageSummary)
                             self.startDeleteDevices(userDetails1: userDetails1, userDetails2: userDetails2, user1MessagingController: user1MessagingController, user2MessagingController: user2MessagingController, expectation: expectation)

@@ -11,7 +11,8 @@ import XCTest
 
 class MessagingStoreTests: XCTestCase {
     
-    let keychainSwift = KeychainSwift(keyPrefix: "testPrefix")
+    let address = try! ProtocolAddress(name: "testUser@test.com", deviceId: UInt32(1))
+    let keychainSwift = KeychainSwift(keyPrefix: "testUser@test.com.1")
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -23,11 +24,11 @@ class MessagingStoreTests: XCTestCase {
     }
     
     func testInitWithNewDetails() throws {
-        XCTAssertNoThrow(try MessagingStore(keychainSwift: keychainSwift))
+        XCTAssertNoThrow(MessagingStore(localAddress: address))
     }
 
     func testLoadMessage() throws {
-        let messagingStore = try MessagingStore(keychainSwift: keychainSwift)
+        let messagingStore = MessagingStore(localAddress: address)
         
         let location = Location(latitude: 1.1, longitude: 1.1)
         let message = LocationMessage(
@@ -49,7 +50,7 @@ class MessagingStoreTests: XCTestCase {
     }
     
     func testStoreMessage() throws {
-        let messagingStore = try MessagingStore(keychainSwift: keychainSwift)
+        let messagingStore = MessagingStore(localAddress: address)
         
         let location = Location(latitude: 1.1, longitude: 1.1)
         let message = LocationMessage(id: 1, 
@@ -72,7 +73,7 @@ class MessagingStoreTests: XCTestCase {
     }
     
     func testRemoveMessage() throws {
-        let messagingStore = try MessagingStore(keychainSwift: keychainSwift)
+        let messagingStore = MessagingStore(localAddress: address)
         
         let location = Location(latitude: 1.1, longitude: 1.1)
         let message = LocationMessage(
@@ -93,7 +94,7 @@ class MessagingStoreTests: XCTestCase {
     
     func testClearAllMessages() throws {
         
-        let messagingStore = try MessagingStore(keychainSwift: keychainSwift)
+        let messagingStore = MessagingStore(localAddress: address)
         
         let location = Location(latitude: 1.1, longitude: 1.1)
         let message = LocationMessage(
@@ -127,7 +128,7 @@ class MessagingStoreTests: XCTestCase {
     
     func testGetMessageSummary() throws {
         
-        let messagingStore = try MessagingStore(keychainSwift: keychainSwift)
+        let messagingStore = MessagingStore(localAddress: address)
         
         let location = Location(latitude: 1.1, longitude: 1.1)
         let message = LocationMessage(

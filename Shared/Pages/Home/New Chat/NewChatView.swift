@@ -16,25 +16,29 @@ struct NewChatView: View {
     var performMessageSend: () -> Void
     
     var body: some View {
-        Text("NewChat")
-        TextFieldWithTitleAndValidation(
-            title: "Recipient's Email",
-            invalidText: "Invalid email",
-            validRegex: "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$",
-            disableAutocorrection: true,
-            text: $recipientEmail,
-            showInvalidText: $recipientEmailInvalid
-        )
-        Button(action: self.performMessageSend) {
-            HStack {
-                if (self.sendLocationInProgress) {
-                    ActivityIndicator(isAnimating: true)
+        NavigationView {
+            VStack {
+                TextFieldWithTitleAndValidation(
+                    title: "Recipient's Email",
+                    invalidText: "Invalid email",
+                    validRegex: "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$",
+                    disableAutocorrection: true,
+                    text: $recipientEmail,
+                    showInvalidText: $recipientEmailInvalid
+                )
+                Button(action: self.performMessageSend) {
+                    HStack {
+                        if (self.sendLocationInProgress) {
+                            ActivityIndicator(isAnimating: true)
+                        }
+                        Text("Send")
+                    }
                 }
-                Text("Send")
+                .disabled(recipientEmailInvalid || sendLocationInProgress)
+                .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
+                .navigationTitle("Send Location")
             }
         }
-        .disabled(recipientEmailInvalid || sendLocationInProgress)
-        .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
     }
 }
 

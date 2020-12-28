@@ -15,24 +15,37 @@ struct ListView: View {
     var performSync: () -> Void
     
     var body: some View {
-        Text("List")
-        List(messageArray) { message in
-            HStack {
-                Text(message.sender.combinedValue)
-                Spacer()
-                Text(String(message.lastReceived))
-            }
-        }
-        Button(action: self.performSync) {
-            HStack {
-                if (self.getMessagesInProgress) {
-                    ActivityIndicator(isAnimating: true)
+        NavigationView {
+            VStack {
+                if messageArray.count == 0 {
+                    HStack {
+                        Spacer()
+                        Text("No locations received yet").padding()
+                        Spacer()
+                    }
                 }
-                Text("Sync")
+                List(messageArray) { message in
+                    NavigationLink(destination: DetailController(sender: message.sender)) {
+                        HStack {
+                            Text(message.sender.combinedValue)
+                            Spacer()
+                            Text(String(message.lastReceived))
+                        }
+                    }
+                }
+                Button(action: self.performSync) {
+                    HStack {
+                        if (self.getMessagesInProgress) {
+                            ActivityIndicator(isAnimating: true)
+                        }
+                        Text("Sync")
+                    }
+                }
+                .disabled(getMessagesInProgress)
+                .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
+                .navigationTitle("Received")
             }
         }
-        .disabled(getMessagesInProgress)
-        .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
     }
 }
 
