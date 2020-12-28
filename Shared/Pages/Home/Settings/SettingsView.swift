@@ -21,7 +21,7 @@ struct SettingsView: View {
         List {
             Section(header: Text("User")) {
                 Text("Username: \(loggedInUser?.userName ?? "Unknown")")
-                Text("Device ID: \(loggedInUser?.deviceName ?? "Unknown")")
+                Text("Device ID: \(String(loggedInUser?.deviceId ?? -1))")
                 Text("Server Address: \(loggedInUser?.serverAddress ?? "Unknown")")
             }
             Section(header: Text("Account")) {

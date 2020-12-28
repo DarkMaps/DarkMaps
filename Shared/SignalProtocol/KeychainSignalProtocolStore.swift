@@ -13,37 +13,37 @@ public class KeychainSignalProtocolStore: IdentityKeyStore, PreKeyStore, SignedP
 
     public init(keychainSwift: KeychainSwift) throws {
         self.keychainSwift = keychainSwift
-        guard let _ = keychainSwift.getData("address") else {
+        guard let _ = keychainSwift.getData("-enc-address") else {
             throw KeychainSignalProtocolStoreError.noStoredAddress
         }
-        guard let _ = keychainSwift.getData("privateKey") else {
+        guard let _ = keychainSwift.getData("-enc-privateKey") else {
             throw KeychainSignalProtocolStoreError.noStoredIdentityKey
         }
-        guard let _ = keychainSwift.getData("registrationId") else {
+        guard let _ = keychainSwift.getData("-enc-registrationId") else {
             throw KeychainSignalProtocolStoreError.noStoredRegistrationId
         }
     }
 
     public init(keychainSwift: KeychainSwift, address: ProtocolAddress, identity: IdentityKeyPair, registrationId: UInt32) throws {
         self.keychainSwift = keychainSwift
-        guard keychainSwift.getData("address") == nil else {
+        guard keychainSwift.getData("-enc-address") == nil else {
             throw KeychainSignalProtocolStoreError.addressAlreadyExists
         }
-        guard keychainSwift.getData("privateKey") == nil else {
+        guard keychainSwift.getData("-enc-privateKey") == nil else {
             throw KeychainSignalProtocolStoreError.identityKeyAlreadyExists
         }
-        guard keychainSwift.getData("registrationId") == nil else {
+        guard keychainSwift.getData("-enc-registrationId") == nil else {
             throw KeychainSignalProtocolStoreError.deviceIdAlreadyExists
         }
-        keychainSwift.set(address.combinedValue, forKey: "address")
-        keychainSwift.set(Data(try identity.serialize()), forKey: "privateKey")
-        keychainSwift.set(String(registrationId), forKey: "registrationId")
+        keychainSwift.set(address.combinedValue, forKey: "-enc-address")
+        keychainSwift.set(Data(try identity.serialize()), forKey: "-enc-privateKey")
+        keychainSwift.set(String(registrationId), forKey: "-enc-registrationId")
     }
     
     public func clearAllData() {
         let keys = keychainSwift.allKeys
         for key in keys {
-            if key.starts(with: keychainSwift.keyPrefix) {
+            if key.starts(with: "\(keychainSwift.keyPrefix)-enc-") {
                 let keyToDelete = key.replacingOccurrences(of: keychainSwift.keyPrefix, with: "")
                 keychainSwift.delete(keyToDelete)
             }
@@ -51,14 +51,14 @@ public class KeychainSignalProtocolStore: IdentityKeyStore, PreKeyStore, SignedP
     }
 
     public func identityKeyPair(context: UnsafeMutableRawPointer?) throws -> IdentityKeyPair {
-        guard let identityKeyPairData = keychainSwift.getData("privateKey") else {
+        guard let identityKeyPairData = keychainSwift.getData("-enc-privateKey") else {
             throw KeychainSignalProtocolStoreError.noStoredIdentityKey
         }
         return try IdentityKeyPair.init(bytes: identityKeyPairData)
     }
 
     public func localRegistrationId(context: UnsafeMutableRawPointer?) throws -> UInt32 {
-        guard let deviceIdString = keychainSwift.get("registrationId") else {
+        guard let deviceIdString = keychainSwift.get("-enc-registrationId") else {
             throw KeychainSignalProtocolStoreError.noStoredRegistrationId
         }
         guard let deviceId = UInt32(deviceIdString) else {
@@ -68,7 +68,7 @@ public class KeychainSignalProtocolStore: IdentityKeyStore, PreKeyStore, SignedP
     }
 
     public func saveIdentity(_ identity: IdentityKey, for address: ProtocolAddress, context: UnsafeMutableRawPointer?) throws -> Bool {
-        let keyName = "publicKey:\(address)"
+        let keyName = "-enc-publicKey:\(address)"
         let existingIdentity = keychainSwift.getData(keyName)
         keychainSwift.set(Data(try identity.serialize()), forKey: keyName)
         if existingIdentity == nil {
@@ -79,7 +79,7 @@ public class KeychainSignalProtocolStore: IdentityKeyStore, PreKeyStore, SignedP
     }
 
     public func isTrustedIdentity(_ identity: IdentityKey, for address: ProtocolAddress, direction: Direction, context: UnsafeMutableRawPointer?) throws -> Bool {
-        let keyName = "publicKey:\(address)"
+        let keyName = "-enc-publicKey:\(address)"
         guard let pkData = keychainSwift.getData(keyName) else {
             return true
         }
@@ -87,7 +87,7 @@ public class KeychainSignalProtocolStore: IdentityKeyStore, PreKeyStore, SignedP
     }
 
     public func identity(for address: ProtocolAddress, context: UnsafeMutableRawPointer?) throws -> IdentityKey? {
-        let keyName = "publicKey:\(address)"
+        let keyName = "-enc-publicKey:\(address)"
         guard let pkData = keychainSwift.getData(keyName) else {
             return nil
         }
@@ -95,7 +95,7 @@ public class KeychainSignalProtocolStore: IdentityKeyStore, PreKeyStore, SignedP
     }
 
     public func loadPreKey(id: UInt32, context: UnsafeMutableRawPointer?) throws -> PreKeyRecord {
-        let keyName = "preKey:\(id)"
+        let keyName = "-enc-preKey:\(id)"
         guard let pkData = keychainSwift.getData(keyName) else {
             throw SignalError.invalidKeyIdentifier("no prekey with this identifier")
         }
@@ -103,12 +103,12 @@ public class KeychainSignalProtocolStore: IdentityKeyStore, PreKeyStore, SignedP
     }
 
     public func storePreKey(_ record: PreKeyRecord, id: UInt32, context: UnsafeMutableRawPointer?) throws {
-        let keyName = "preKey:\(id)"
+        let keyName = "-enc-preKey:\(id)"
         keychainSwift.set(Data(try record.serialize()), forKey: keyName)
     }
 
     public func removePreKey(id: UInt32, context: UnsafeMutableRawPointer?) throws {
-        let keyName = "preKey:\(id)"
+        let keyName = "-enc-preKey:\(id)"
         keychainSwift.delete(keyName)
     }
     
@@ -117,7 +117,7 @@ public class KeychainSignalProtocolStore: IdentityKeyStore, PreKeyStore, SignedP
         var maxKeyId = 0
         let keys = keychainSwift.allKeys
         for key in keys {
-            if key.starts(with: "\(keychainSwift.keyPrefix)preKey") {
+            if key.starts(with: "\(keychainSwift.keyPrefix)-enc-preKey") {
                 count += 1
                 guard let keyId = Int(key.split(separator: ":")[safe: 1] ?? "") else {
                     keychainSwift.delete(key)
@@ -132,7 +132,7 @@ public class KeychainSignalProtocolStore: IdentityKeyStore, PreKeyStore, SignedP
     }
 
     public func loadSignedPreKey(id: UInt32, context: UnsafeMutableRawPointer?) throws -> SignedPreKeyRecord {
-        let keyName = "signedPreKey:\(id)"
+        let keyName = "-enc-signedPreKey:\(id)"
         guard let spkData = keychainSwift.getData(keyName) else {
             throw SignalError.invalidKeyIdentifier("no signed prekey with this identifier")
         }
@@ -140,7 +140,7 @@ public class KeychainSignalProtocolStore: IdentityKeyStore, PreKeyStore, SignedP
     }
 
     public func storeSignedPreKey(_ record: SignedPreKeyRecord, id: UInt32, context: UnsafeMutableRawPointer?) throws {
-        let keyName = "signedPreKey:\(id)"
+        let keyName = "-enc-signedPreKey:\(id)"
         keychainSwift.set(Data(try record.serialize()), forKey: keyName)
     }
     
@@ -148,7 +148,7 @@ public class KeychainSignalProtocolStore: IdentityKeyStore, PreKeyStore, SignedP
         let keys = keychainSwift.allKeys
         var maxKeyId = 0
         for key in keys {
-            if key.starts(with: "\(keychainSwift.keyPrefix)signedPreKey:") {
+            if key.starts(with: "\(keychainSwift.keyPrefix)-enc-signedPreKey:") {
                 guard let keyId = Int(key.split(separator: ":")[safe: 1] ?? "") else {
                     keychainSwift.delete(key)
                     break
@@ -158,7 +158,7 @@ public class KeychainSignalProtocolStore: IdentityKeyStore, PreKeyStore, SignedP
                 }
             }
         }
-        let keyName = "signedPreKey:\(maxKeyId)"
+        let keyName = "-enc-signedPreKey:\(maxKeyId)"
         guard let spkData = keychainSwift.getData(keyName) else {
             throw SignalError.invalidKeyIdentifier("no signed prekey with this identifier")
         }
@@ -168,7 +168,7 @@ public class KeychainSignalProtocolStore: IdentityKeyStore, PreKeyStore, SignedP
     }
 
     public func loadSession(for address: ProtocolAddress, context: UnsafeMutableRawPointer?) throws -> SessionRecord? {
-        let keyName = "session:\(address.hashValue)"
+        let keyName = "-enc-session:\(address.hashValue)"
         guard let sessionData = keychainSwift.getData(keyName) else {
             return nil
         }
@@ -176,17 +176,17 @@ public class KeychainSignalProtocolStore: IdentityKeyStore, PreKeyStore, SignedP
     }
 
     public func storeSession(_ record: SessionRecord, for address: ProtocolAddress, context: UnsafeMutableRawPointer?) throws {
-        let keyName = "session:\(address.hashValue)"
+        let keyName = "-enc-session:\(address.hashValue)"
         keychainSwift.set(Data(try record.serialize()), forKey: keyName)
     }
 
     public func storeSenderKey(name: SenderKeyName, record: SenderKeyRecord, context: UnsafeMutableRawPointer?) throws {
-        let keyName = "senderKey:\(name.hashValue)"
+        let keyName = "-enc-senderKey:\(name.hashValue)"
         keychainSwift.set(Data(try record.serialize()), forKey: keyName)
     }
 
     public func loadSenderKey(name: SenderKeyName, context: UnsafeMutableRawPointer?) throws -> SenderKeyRecord? {
-        let keyName = "senderKey:\(name.hashValue)"
+        let keyName = "-enc-senderKey:\(name.hashValue)"
         guard let senderKeyData = keychainSwift.getData(keyName) else {
             return nil
         }

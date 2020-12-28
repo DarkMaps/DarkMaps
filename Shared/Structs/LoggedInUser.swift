@@ -10,7 +10,7 @@ import Foundation
 public class LoggedInUser: Equatable, Hashable, Codable {
     
     public let userName: String
-    public var deviceName: String? {
+    public var deviceId: Int? {
         didSet {
             handleStoreObject()
         }
@@ -24,12 +24,12 @@ public class LoggedInUser: Equatable, Hashable, Codable {
     }
     
     var combinedName: String {
-        return "\(self.userName):\(self.deviceName ?? "Unknown"):\(String(describing: self.serverAddress.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed))):\(self.authCode)"
+        return "\(self.userName):\(self.deviceId ?? -1):\(String(describing: self.serverAddress.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed))):\(self.authCode)"
     }
     
-    public init(userName: String, deviceName: String? = nil, serverAddress: String, authCode: String, is2FAUser: Bool) {
+    public init(userName: String, deviceId: Int? = nil, serverAddress: String, authCode: String, is2FAUser: Bool) {
         self.userName = userName
-        self.deviceName = deviceName
+        self.deviceId = deviceId
         self.serverAddress = serverAddress
         self.authCode = authCode
         self.is2FAUser = is2FAUser
@@ -40,7 +40,8 @@ public class LoggedInUser: Equatable, Hashable, Codable {
         let components = combinedName.components(separatedBy: ":")
         guard components.count == 5 else {throw LoggedInUserError.invalidCombinedName}
         self.userName = components[0]
-        self.deviceName = components[1] == "Unknown" ? nil : components[1]
+        // Note -1 codes deviceId = nil
+        self.deviceId = Int(components[1]) == -1 ? nil : Int(components[1])
         self.serverAddress = components[2]
         self.authCode = String(components[3]).removingPercentEncoding!
         self.is2FAUser = (components[4] == "true") ? true : false
@@ -54,7 +55,7 @@ public class LoggedInUser: Equatable, Hashable, Codable {
     
     public func hash(into hasher: inout Hasher) {
         hasher.combine(userName)
-        hasher.combine(deviceName)
+        hasher.combine(deviceId)
         hasher.combine(serverAddress)
         hasher.combine(authCode)
         hasher.combine(is2FAUser ? "true" : "false")

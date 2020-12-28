@@ -11,19 +11,20 @@ import Foundation
 
 public class SimpleSignalSwiftEncryptionAPI {
     
+    let address: ProtocolAddress
     let keychainSwift: KeychainSwift
     var store: KeychainSignalProtocolStore? = nil
     
     init(address: ProtocolAddress) throws {
+        self.address = address
         self.keychainSwift = KeychainSwift(keyPrefix: address.combinedValue)
         self.store = try? KeychainSignalProtocolStore(keychainSwift: keychainSwift)
     }
     
-    public func createDevice(address: ProtocolAddress, authToken: String, serverAddress: String) -> Result <Void, SSAPIEncryptionError> {
+    public func createDevice(authToken: String, serverAddress: String) -> Result <Int, SSAPIEncryptionError> {
             
         do {
             let identityKey = try IdentityKeyPair.generate()
-            let deviceId = address.deviceId
             let registrationId = UInt32(Int.random(in: 1..<10000))
             
             let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, address: address, identity: identityKey, registrationId: registrationId)
@@ -53,7 +54,7 @@ public class SimpleSignalSwiftEncryptionAPI {
             let result = uploadDevice(
                 serverAddress: serverAddress,
                 authToken: authToken,
-                deviceAddress: try ProtocolAddress(name: keychainSwift.keyPrefix, deviceId: deviceId).combinedValue,
+                deviceAddress: address.combinedValue,
                 identityKey: identityKey.identityKey,
                 registrationId: registrationId,
                 preKeys: allPreKeys,
@@ -62,7 +63,7 @@ public class SimpleSignalSwiftEncryptionAPI {
             switch result {
             case .success:
                 self.store = store
-                return .success(())
+                return .success(Int(registrationId))
             case .failure(let error):
                 return .failure(error)
             }
@@ -76,7 +77,7 @@ public class SimpleSignalSwiftEncryptionAPI {
     
     private func uploadDevice(serverAddress: String, authToken: String, deviceAddress: String, identityKey: IdentityKey, registrationId: UInt32, preKeys: [PreKeyRecord], signedPreKey: SignedPreKeyRecord) -> Result<Void, SSAPIEncryptionError> {
         
-        let path = "\(serverAddress)/v1/device/"
+        let path = "\(serverAddress)/v1/devices/"
         guard let url = URL(string: path) else {
             return .failure(.invalidUrl)
         }
@@ -121,6 +122,8 @@ public class SimpleSignalSwiftEncryptionAPI {
             
             let processedResponse = self.handleURLErrors(successCode: 201, data: data, response: response, error: error)
             
+            print(processedResponse)
+            
             switch processedResponse {
             case .success:
                 result = .success(())
@@ -138,7 +141,7 @@ public class SimpleSignalSwiftEncryptionAPI {
         
     }
     
-    public func sendMessage(message: String, recipient: String, authToken: String, serverAddress: String) -> Result<Void, SSAPIEncryptionError> {
+    public func sendMessage(message: String, recipientName: String, recipientDeviceId: UInt32, authToken: String, serverAddress: String) -> Result<Void, SSAPIEncryptionError> {
         
         guard let store = self.store else {
             return(.failure(.noStore))
@@ -146,25 +149,24 @@ public class SimpleSignalSwiftEncryptionAPI {
         
         do {
             
-            let address = try ProtocolAddress(name: recipient, deviceId: 1111)
+            let recipientAddress = try ProtocolAddress(name: recipientName, deviceId: recipientDeviceId)
             
-            if (try? store.loadSession(for: address, context: nil)) != nil {
+            if let session = try? store.loadSession(for: recipientAddress, context: nil) {
                 print("Session exists: Sending message")
-                return (sendMessageUsingStore(message: message, isPreKeyMessage: false, recipientAddress: address, authToken: authToken, serverAddress: serverAddress))
+                return (sendMessageUsingStore(message: message, isPreKeyMessage: false, recipientAddress: recipientAddress, recipientRegistrationId: Int(try session.remoteRegistrationId()), authToken: authToken, serverAddress: serverAddress))
             } else {
                 print("No session: Obtaining preKeyBundle")
-                let deviceId = try store.localRegistrationId(context: nil)
-                let preKeyBundleResult = obtainPreKeyBundle(recipient: recipient, sendersDeviceId: Int(deviceId), authToken: authToken, serverAddress: serverAddress)
+                let registrationId = try store.localRegistrationId(context: nil)
+                let preKeyBundleResult = obtainPreKeyBundle(recipient: recipientAddress, sendersRegistrationId: Int(registrationId), authToken: authToken, serverAddress: serverAddress)
                 switch preKeyBundleResult {
                 case .success(let preKeyBundle):
-                    print(preKeyBundle)
                     try processPreKeyBundle(
                         preKeyBundle,
-                        for: address,
+                        for: recipientAddress,
                         sessionStore: store,
                         identityStore: store,
                         context: nil)
-                    return (sendMessageUsingStore(message: message, isPreKeyMessage: true, recipientAddress: address, authToken: authToken, serverAddress: serverAddress))
+                    return (sendMessageUsingStore(message: message, isPreKeyMessage: true, recipientAddress: recipientAddress, recipientRegistrationId: Int(try preKeyBundle.registrationId()), authToken: authToken, serverAddress: serverAddress))
                 case .failure(let error):
                     return(.failure(error))
                 }
@@ -176,7 +178,7 @@ public class SimpleSignalSwiftEncryptionAPI {
         
     }
     
-    private func sendMessageUsingStore(message: String, isPreKeyMessage: Bool, recipientAddress: ProtocolAddress, authToken: String, serverAddress: String) -> Result<Void, SSAPIEncryptionError> {
+    private func sendMessageUsingStore(message: String, isPreKeyMessage: Bool, recipientAddress: ProtocolAddress, recipientRegistrationId: Int, authToken: String, serverAddress: String) -> Result<Void, SSAPIEncryptionError> {
         
         guard let store = self.store else {
             return(.failure(.noStore))
@@ -196,11 +198,11 @@ public class SimpleSignalSwiftEncryptionAPI {
                 messageData = (try! SignalMessage(bytes: try! cipherText.serialize()).serialize()).toBase64String()
             }
             
-            guard let deviceId = try? store.localRegistrationId(context: nil) else {
+            guard let registrationId = try? store.localRegistrationId(context: nil) else {
                 return(.failure(.senderHasNoRegisteredDevice))
             }
             
-            let path = "\(serverAddress)/v1/\(deviceId)/messages/"
+            let path = "\(serverAddress)/v1/\(registrationId)/messages/"
             guard let url = URL(string: path) else {
                 return .failure(.invalidUrl)
             }
@@ -210,13 +212,15 @@ public class SimpleSignalSwiftEncryptionAPI {
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.setValue("Token \(authToken)", forHTTPHeaderField: "Authorization")
             let messageJsonObject = [
-                "registration_id": recipientAddress.deviceId,
+                "registration_id": recipientRegistrationId,
                 "content": messageData
             ] as [String : Any]
             guard let messageJsonData = try? JSONSerialization.data(withJSONObject: messageJsonObject, options: []) else {
                 return .failure(.badFormat)
             }
-            let messageJsonString = String(data: messageJsonData, encoding: .utf8)
+            guard let messageJsonString = String(data: messageJsonData, encoding: .utf8) else {
+                return .failure(.badFormat)
+            }
             let bodyJson = [
                 "recipient": recipientAddress.name,
                 "message": messageJsonString
@@ -253,10 +257,10 @@ public class SimpleSignalSwiftEncryptionAPI {
         }
     }
     
-    private func obtainPreKeyBundle(recipient: String, sendersDeviceId: Int, authToken: String, serverAddress: String) -> Result<PreKeyBundle, SSAPIEncryptionError> {
-        let recipientData = Data(recipient.utf8)
+    private func obtainPreKeyBundle(recipient: ProtocolAddress, sendersRegistrationId: Int, authToken: String, serverAddress: String) -> Result<PreKeyBundle, SSAPIEncryptionError> {
+        let recipientData = Data(recipient.combinedValue.utf8)
         let recipientHex = recipientData.map{ String(format:"%02x", $0) }.joined()
-        let path = "\(serverAddress)/v1/prekeybundle/\(recipientHex)/\(sendersDeviceId)/"
+        let path = "\(serverAddress)/v1/prekeybundles/\(recipientHex)/\(sendersRegistrationId)/"
         guard let url = URL(string: path) else {
             return .failure(.invalidUrl)
         }
@@ -282,7 +286,13 @@ public class SimpleSignalSwiftEncryptionAPI {
                     let decoder = JSONDecoder()
                     decoder.keyDecodingStrategy = .convertFromSnakeCase
                     let decodedResponse = try decoder.decode(SSAPIPreKeyBundleResponse.self, from: data!)
-                    guard let deviceId = UInt32(decodedResponse.address.split(separator: ".")[1]) else {
+                    print(decodedResponse)
+                    guard let deviceIdString = decodedResponse.address.split(separator: ".").last else {
+                        print("Error decoding address")
+                        result = .failure(.badFormat)
+                        return
+                    }
+                    guard let deviceId = UInt32(deviceIdString) else {
                         print("Error decoding address")
                         result = .failure(.badFormat)
                         return
@@ -319,6 +329,9 @@ public class SimpleSignalSwiftEncryptionAPI {
                     result = .success(preKeyBundle)
                 } catch {
                     print("Error creating pre key bundle")
+                    print(error)
+                    let responseString = String(data: data!, encoding: .utf8)
+                    print("raw response: \(responseString)")
                     result = .failure(.badResponseFromServer)
                 }
             
@@ -333,7 +346,7 @@ public class SimpleSignalSwiftEncryptionAPI {
         return result
     }
     
-    public func getMessages(authToken: String, serverAddress: String) -> Result<[Result<SSAPIGetMessagesOutput, SSAPIEncryptionError>], SSAPIEncryptionError> {
+    public func getMessages(authToken: String, serverAddress: String) -> Result<[SSAPIGetMessagesOutput], SSAPIEncryptionError> {
         
         guard let store = self.store else {
             return(.failure(.noStore))
@@ -343,7 +356,7 @@ public class SimpleSignalSwiftEncryptionAPI {
             return(.failure(.userHasNoRegisteredDevice))
         }
         
-        let path = "\(serverAddress)/v1/prekeybundle/\(recipientRegistrationId)/messages/"
+        let path = "\(serverAddress)/v1/\(recipientRegistrationId)/messages/"
         guard let url = URL(string: path) else {
             return .failure(.invalidUrl)
         }
@@ -352,7 +365,7 @@ public class SimpleSignalSwiftEncryptionAPI {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Token \(authToken)", forHTTPHeaderField: "Authorization")
         
-        var result: Result<[Result<SSAPIGetMessagesOutput, SSAPIEncryptionError>], SSAPIEncryptionError>!
+        var result: Result<[SSAPIGetMessagesOutput], SSAPIEncryptionError>!
         
         let semaphore = DispatchSemaphore(value: 0)
         
@@ -366,17 +379,19 @@ public class SimpleSignalSwiftEncryptionAPI {
             case .success:
                 
                 do {
-                    var output: [Result<SSAPIGetMessagesOutput, SSAPIEncryptionError>] = []
+                    var output: [SSAPIGetMessagesOutput] = []
                     let decoder = JSONDecoder()
                     decoder.keyDecodingStrategy = .convertFromSnakeCase
                     let decodedResponse = try decoder.decode([SSAPIGetMessagesResponse].self, from: data!)
                     for input in decodedResponse {
-                        output.append(self.decryptMessage(input: input))
+                        output.append(try self.decryptMessage(input: input))
                     }
                     result = .success(output)
                 } catch {
                     print(error)
                     print("error decrypting messages")
+                    let responseString = String(data: data!, encoding: .utf8)
+                    print("raw response: \(responseString)")
                     result = .failure(.badResponseFromServer)
                 }
                 
@@ -391,21 +406,22 @@ public class SimpleSignalSwiftEncryptionAPI {
         return result
     }
     
-    private func decryptMessage(input: SSAPIGetMessagesResponse) -> Result<SSAPIGetMessagesOutput, SSAPIEncryptionError> {
+    private func decryptMessage(input: SSAPIGetMessagesResponse) throws -> SSAPIGetMessagesOutput {
         
         guard let store = self.store else {
-            return(.failure(.noStore))
+            throw SSAPIEncryptionError.noStore
         }
         
         let address: ProtocolAddress
+        print(input.senderAddress)
         do {
             address = try ProtocolAddress(input.senderAddress)
         } catch {
-            return(.failure(.invalidSenderAddress))
+            throw SSAPIEncryptionError.invalidSenderAddress
         }
         let decryptedMessageString: String
         guard let contentArray = input.content.toUint8Array() else {
-            return(.failure(.badResponseFromServer))
+            return(SSAPIGetMessagesOutput(id: input.id, error: .badResponseFromServer, senderAddress: address))
         }
         do {
             let decryptedMessageData = try signalDecrypt(
@@ -428,11 +444,11 @@ public class SimpleSignalSwiftEncryptionAPI {
                     context: nil)
                 decryptedMessageString = String(decoding: decryptedMessageData, as: UTF8.self)
             } catch {
-                return(.failure(.unableToDecrypt))
+                return(SSAPIGetMessagesOutput(id: input.id, error: .unableToDecrypt, senderAddress: address))
             }
         }
-        let output = SSAPIGetMessagesOutput(message: decryptedMessageString, senderAddress: address)
-        return(.success(output))
+        let output = SSAPIGetMessagesOutput(id: input.id, message: decryptedMessageString, senderAddress: address)
+        return(output)
         
     }
     
@@ -464,6 +480,7 @@ public class SimpleSignalSwiftEncryptionAPI {
                 if let store = self.store {
                     print("Clearing data")
                     store.clearAllData()
+                    self.store = nil
                 }
             }
             
@@ -487,20 +504,23 @@ public class SimpleSignalSwiftEncryptionAPI {
         }
         
         let path = "\(serverAddress)/v1/\(localRegistrationId)/messages/"
-        print(path)
         guard let url = URL(string: path) else {
             return .failure(.invalidUrl)
         }
         
         var request = URLRequest(url: url)
         request.httpMethod = "DELETE"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Token \(authToken)", forHTTPHeaderField: "Authorization")
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: messageIds, options: []) else {
+            return .failure(.badFormat)
+        }
         
         var result: Result<[Int: SSAPIDeleteMessageOutcome], SSAPIEncryptionError>!
         
         let semaphore = DispatchSemaphore(value: 0)
         
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
+        URLSession.shared.uploadTask(with: request, from: jsonData) { (data, response, error) in
             
             let processedResponse = self.handleURLErrors(successCode: 200, data: data, response: response, error: error)
             
@@ -518,7 +538,7 @@ public class SimpleSignalSwiftEncryptionAPI {
                     print("decoded response successfully")
                     for (index, outcomeCode) in decodedResponse.enumerated() {
                         guard let messageId = messageIds[safe: index] else {
-                            throw SSAPIEncryptionDeleteMessagesError.badResponseFromServer
+                            throw SSAPIEncryptionError.badResponseFromServer
                         }
                         if outcomeCode == "message_deleted" {
                             output[messageId] = .messageDeleted
@@ -737,6 +757,15 @@ public class SimpleSignalSwiftEncryptionAPI {
         }
         
         guard response.statusCode == successCode else {
+            do {
+                let jsonToPrint = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
+                print(jsonToPrint)
+            } catch {
+                print("unable to parse JSON")
+                let responseString = String(data: data!, encoding: .utf8)
+                print("raw response: \(responseString)")
+            }
+            
             if response.statusCode == 400 {
                 do {
                     let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
@@ -815,13 +844,13 @@ extension ProtocolAddress {
     
     convenience init(_ combinedValue: String) throws {
         let splitValues = combinedValue.split(separator: ".")
-        guard splitValues.count == 2 else {
+        guard let deviceIdString = splitValues.last else {
             throw SSAPIProtocolAddressError.incorrectNumberOfComponents
         }
-        let name = String(splitValues[0])
-        guard let deviceId = UInt32(splitValues[1]) else {
+        guard let deviceId = UInt32(deviceIdString) else {
             throw SSAPIProtocolAddressError.deviceIdIsNotInt
         }
+        let name = combinedValue.replacingOccurrences(of: ".\(deviceIdString)", with: "")
         try self.init(name: name, deviceId: deviceId)
     }
     

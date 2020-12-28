@@ -28,14 +28,16 @@ public struct SSAPIReceivedSignedPreKey: Codable {
 
 public struct SSAPIGetMessagesResponse: Codable {
     var id: Int
-    var created: Int
     var content: String
+    var recipientAddress: String
     var senderRegistrationId: Int
     var senderAddress: String
 }
 
 public struct SSAPIGetMessagesOutput {
-    var message: String
+    var id: Int
+    var error: SSAPIEncryptionError? = nil
+    var message: String? = nil
     var senderAddress: ProtocolAddress
 }
 

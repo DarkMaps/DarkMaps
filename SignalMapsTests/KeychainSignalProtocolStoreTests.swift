@@ -38,9 +38,9 @@ class KeychainSignalProtocolStoreTests: XCTestCase {
         let identityKey = try IdentityKeyPair.generate()
         let registrationId = UInt32.random(in: 0...65535)
         
-        keychainSwift.set(address.combinedValue, forKey: "address")
-        keychainSwift.set(Data(try identityKey.serialize()), forKey: "privateKey")
-        keychainSwift.set(String(registrationId), forKey: "registrationId")
+        keychainSwift.set(address.combinedValue, forKey: "-enc-address")
+        keychainSwift.set(Data(try identityKey.serialize()), forKey: "-enc-privateKey")
+        keychainSwift.set(String(registrationId), forKey: "-enc-registrationId")
         
         let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift)
         
@@ -55,9 +55,9 @@ class KeychainSignalProtocolStoreTests: XCTestCase {
         let identityKey = try IdentityKeyPair.generate()
         let registrationId = UInt32.random(in: 0...65535)
         
-        keychainSwift.set(address.combinedValue, forKey: "address")
-        keychainSwift.set(Data(try identityKey.serialize()), forKey: "privateKey")
-        keychainSwift.set(String(registrationId), forKey: "registrationId")
+        keychainSwift.set(address.combinedValue, forKey: "-enc-address")
+        keychainSwift.set(Data(try identityKey.serialize()), forKey: "-enc-privateKey")
+        keychainSwift.set(String(registrationId), forKey: "-enc-registrationId")
         
         XCTAssertThrowsError(try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, address: address, identity: identityKey, registrationId: registrationId)) {
             thrownError = $0
@@ -89,7 +89,7 @@ class KeychainSignalProtocolStoreTests: XCTestCase {
         let identityKey = try IdentityKeyPair.generate()
         let registrationId = UInt32.random(in: 0...65535)
         let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, address: address, identity: identityKey, registrationId: registrationId)
-        keychainSwift.delete("privateKey")
+        keychainSwift.delete("-enc-privateKey")
         XCTAssertThrowsError(try store.identityKeyPair(context: nil)) {
             thrownError = $0
         }
@@ -111,7 +111,7 @@ class KeychainSignalProtocolStoreTests: XCTestCase {
         let identityKey = try IdentityKeyPair.generate()
         let registrationId = UInt32.random(in: 0...65535)
         let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, address: address, identity: identityKey, registrationId: registrationId)
-        keychainSwift.delete("registrationId")
+        keychainSwift.delete("-enc-registrationId")
         XCTAssertThrowsError(try store.localRegistrationId(context: nil)) {
             thrownError = $0
         }
@@ -124,7 +124,7 @@ class KeychainSignalProtocolStoreTests: XCTestCase {
         let identityKey = try IdentityKeyPair.generate()
         let registrationId = UInt32.random(in: 0...65535)
         let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, address: address, identity: identityKey, registrationId: registrationId)
-        keychainSwift.set("jhdsgjs", forKey: "registrationId")
+        keychainSwift.set("jhdsgjs", forKey: "-enc-registrationId")
         XCTAssertThrowsError(try store.localRegistrationId(context: nil)) {
             thrownError = $0
         }
@@ -219,14 +219,14 @@ class KeychainSignalProtocolStoreTests: XCTestCase {
         
         let preKey = try PreKeyRecord.init(id: 1, privateKey: try PrivateKey.generate())
         try store.storePreKey(preKey, id: 1, context: nil)
-        var loadedKeyData = keychainSwift.getData("preKey:1")
+        var loadedKeyData = keychainSwift.getData("-enc-preKey:1")
         XCTAssertEqual(loadedKeyData, Data(try preKey.serialize()))
         
         let loadedKey = try store.loadPreKey(id: 1, context: nil)
         XCTAssertEqual(try loadedKey.serialize(), try preKey.serialize())
         
         try store.removePreKey(id: 1, context: nil)
-        loadedKeyData = keychainSwift.getData("preKey:1")
+        loadedKeyData = keychainSwift.getData("-enc-preKey:1")
         XCTAssertEqual(loadedKeyData, nil)
         
         XCTAssertThrowsError(try store.loadPreKey(id: 1, context: nil))
@@ -239,17 +239,17 @@ class KeychainSignalProtocolStoreTests: XCTestCase {
         let store = try KeychainSignalProtocolStore.init(keychainSwift: keychainSwift, address: address, identity: identityKey, registrationId: registrationId)
         
         let preKey = try PreKeyRecord.init(id: 1, privateKey: try PrivateKey.generate())
-        keychainSwift.set(Data(try preKey.serialize()), forKey: "preKey:1")
+        keychainSwift.set(Data(try preKey.serialize()), forKey: "-enc-preKey:1")
         
         let preKey2 = try PreKeyRecord.init(id: 1, privateKey: try PrivateKey.generate())
-        keychainSwift.set(Data(try preKey2.serialize()), forKey: "preKey:2")
+        keychainSwift.set(Data(try preKey2.serialize()), forKey: "-enc-preKey:2")
         
         let (count, maxKeyId) = try store.countPreKeys()
         
         XCTAssertEqual(count, 2)
         XCTAssertEqual(maxKeyId, 2)
         
-        keychainSwift.delete("preKey:1")
+        keychainSwift.delete("-enc-preKey:1")
         
         let (count2, maxKeyId2) = try store.countPreKeys()
         
@@ -271,13 +271,13 @@ class KeychainSignalProtocolStoreTests: XCTestCase {
             privateKey: signedPreKey,
             signature: signedPrekeySignature)
         try store.storeSignedPreKey(signedPreKeyRecord, id: 1, context: nil)
-        let loadedKeyData = keychainSwift.getData("signedPreKey:1")
+        let loadedKeyData = keychainSwift.getData("-enc-signedPreKey:1")
         XCTAssertEqual(loadedKeyData, Data(try signedPreKeyRecord.serialize()))
         
         let loadedKey = try store.loadSignedPreKey(id: 1, context: nil)
         XCTAssertEqual(try loadedKey.serialize(), try signedPreKeyRecord.serialize())
         
-        keychainSwift.delete("signedPreKey:1")
+        keychainSwift.delete("-enc-signedPreKey:1")
         
         XCTAssertThrowsError(try store.loadSignedPreKey(id: 1, context: nil))
     }
@@ -295,7 +295,7 @@ class KeychainSignalProtocolStoreTests: XCTestCase {
             timestamp: Date().ticks,
             privateKey: signedPreKey,
             signature: signedPrekeySignature)
-        keychainSwift.set(Data(try signedPreKeyRecord.serialize()), forKey: "signedPreKey:1")
+        keychainSwift.set(Data(try signedPreKeyRecord.serialize()), forKey: "-enc-signedPreKey:1")
         
         let (_, maxKeyId) = try store.signedPreKeyAge()
         
@@ -308,7 +308,7 @@ class KeychainSignalProtocolStoreTests: XCTestCase {
             timestamp: Date().ticks,
             privateKey: signedPreKey2,
             signature: signedPrekeySignature2)
-        keychainSwift.set(Data(try signedPreKeyRecord2.serialize()), forKey: "signedPreKey:2")
+        keychainSwift.set(Data(try signedPreKeyRecord2.serialize()), forKey: "-enc-signedPreKey:2")
         
         let (_, maxKeyId2) = try store.signedPreKeyAge()
         
