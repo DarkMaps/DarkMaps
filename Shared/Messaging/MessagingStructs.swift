@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MapKit
 
 public struct Location: Codable {
     var latitude: Float
@@ -50,6 +51,27 @@ public class LocationMessage: Codable {
         try container.encode(location, forKey: .location)
         try container.encode(sender.combinedValue, forKey: .senderCombinedValue)
         try container.encode(lastReceived, forKey: .lastReceived)
+    }
+    
+    public var toLocationCoordinate: CLLocationCoordinate2D? {
+        guard let location = self.location else {
+            return nil
+        }
+        let coordinate = CLLocationCoordinate2D(
+            latitude: CLLocationDegrees(location.latitude),
+            longitude: CLLocationDegrees(location.longitude)
+        )
+        return coordinate
+    }
+    
+    public var toAnnotation: MKPointAnnotation? {
+        guard let location = self.location else {
+            return nil
+        }
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = self.toLocationCoordinate!
+        annotation.title = self.sender.name
+        return annotation
     }
 }
 

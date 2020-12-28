@@ -6,29 +6,40 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct DetailView: View {
     
     @Binding var messageDetails: LocationMessage?
     @Binding var fetchingMessageDetails: Bool
+    @Binding var centerCoordinate: CLLocationCoordinate2D?
+    @Binding var annotations: [MKPointAnnotation]
+    
+    let dateFormatter = DateFormatter()
     
     var body: some View {
-        ZStack {
+        
+        dateFormatter.timeStyle = .short
+        dateFormatter.dateStyle = .short
+        
+        return ZStack {
             if fetchingMessageDetails {
                 Text("Loading data")
             } else if messageDetails == nil {
                 Text("Error loading data")
-            } else if (messageDetails!.location == nil) {
+            } else if (centerCoordinate == nil) {
                 Text("No location data in message")
             } else {
-                VStack {
-                    Text("Location:")
-                    Text("Latitude: \(messageDetails!.location!.latitude)")
-                    Text("Longitude: \(messageDetails!.location!.longitude)")
+                VStack(alignment: .leading) {
+                    Text(messageDetails!.sender.name).padding(.leading)
+                    Text("Last Seen: \(dateFormatter.string(from: Date(ticks: UInt64(messageDetails!.lastReceived))))").padding(.leading)
+                    MapView(
+                        centerCoordinate: Binding($centerCoordinate)!,
+                        annotations: annotations
+                    )
                 }
                 
             }
-            Text("").hidden().navigationTitle("Detail")
         }
         
     }
@@ -50,16 +61,24 @@ struct DetailView_Previews: PreviewProvider {
                 name: "test@test.com",
                 deviceId: UInt32(324)
             ),
-            location: Location(latitude: 2.345346, longitude: 5.2323535),
+            location: Location(latitude: 53.800755, longitude: -1.549077),
             lastReceived: Int(Date().ticks)
         )
         @State var fetchingMessageDetails = false
+        @State var centerCoordinate: CLLocationCoordinate2D? = nil
+        @State var annotations: [MKPointAnnotation] = []
 
         var body: some View {
             return DetailView(
                 messageDetails: $messageDetails,
-                fetchingMessageDetails: $fetchingMessageDetails
-            )
+                fetchingMessageDetails: $fetchingMessageDetails,
+                centerCoordinate: $centerCoordinate,
+                annotations: $annotations
+            ).onAppear() {
+                self.centerCoordinate = self.messageDetails!.toLocationCoordinate
+                let annotation = self.messageDetails!.toAnnotation!
+                annotations.append(annotation)
+            }
         }
     }
     
