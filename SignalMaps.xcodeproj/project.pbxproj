@@ -101,6 +101,7 @@
 		ECD126C3258679C800C2161D /* HomeViewButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD126C2258679C800C2161D /* HomeViewButton.swift */; };
 		ECD599D42599D590003AD3D0 /* NewChatErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD599D32599D590003AD3D0 /* NewChatErrors.swift */; };
 		ECD599D92599F63A003AD3D0 /* ListViewErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD599D82599F63A003AD3D0 /* ListViewErrors.swift */; };
+		ECD599DE259A381C003AD3D0 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ECD599DD259A381C003AD3D0 /* Launch Screen.storyboard */; };
 		ECDE0E3D2572B5EC009D3561 /* SignalMapsiOSFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = ECDE0E3B2572B5EC009D3561 /* SignalMapsiOSFramework.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		ECDE0E432572B615009D3561 /* DataStoreInMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9A2572ADC700F7230F /* DataStoreInMemory.swift */; };
 		ECDE0E442572B615009D3561 /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9B2572ADC700F7230F /* Protocol.swift */; };
@@ -249,6 +250,7 @@
 		ECD126C2258679C800C2161D /* HomeViewButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewButton.swift; sourceTree = "<group>"; };
 		ECD599D32599D590003AD3D0 /* NewChatErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChatErrors.swift; sourceTree = "<group>"; };
 		ECD599D82599F63A003AD3D0 /* ListViewErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewErrors.swift; sourceTree = "<group>"; };
+		ECD599DD259A381C003AD3D0 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		ECDE0E392572B5EC009D3561 /* SignalMapsiOSFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SignalMapsiOSFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECDE0E3B2572B5EC009D3561 /* SignalMapsiOSFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SignalMapsiOSFramework.h; sourceTree = "<group>"; };
 		ECDE0E3C2572B5EC009D3561 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -565,6 +567,7 @@
 				ECFFD50F257261FB00458BC8 /* SignalMapsApp.swift */,
 				ECFFD510257261FB00458BC8 /* ContentView.swift */,
 				ECFFD5112572620300458BC8 /* Assets.xcassets */,
+				ECD599DD259A381C003AD3D0 /* Launch Screen.storyboard */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -764,6 +767,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ECD599DE259A381C003AD3D0 /* Launch Screen.storyboard in Resources */,
 				ECFFD5262572620300458BC8 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
