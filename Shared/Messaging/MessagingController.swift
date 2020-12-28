@@ -47,7 +47,11 @@ public class MessagingController {
         case .failure(let error):
             print("Error creating device")
             print(error)
-            completionHandler(.failure(.unableToCreateDevice))
+            if error == .deviceExists {
+                completionHandler(.failure(.unableToCreateDevice))
+            } else {
+                completionHandler(.failure(.unableToCreateDevice))
+            }
         case .success(let registrationId):
             print("Success creating device")
             completionHandler(.success(registrationId))
