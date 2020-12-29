@@ -10,7 +10,7 @@ import SwiftUI
 struct ListView: View {
     
     @Binding var recieivingMessageArray: [ShortLocationMessage]
-    @Binding var sendingMessageArray: [ProtocolAddress]
+    @Binding var sendingMessageArray: [LiveMessage]
     @Binding var getMessagesInProgress: Bool
     @State private var selectedDirection = 0
     
@@ -18,49 +18,66 @@ struct ListView: View {
     var directions = ["Receiving", "Sending"]
                
     var performSync: () -> Void
+    var deleteLiveMessage: (IndexSet) -> Void
     
     var body: some View {
         NavigationView {
-            if isSubscriber {
-                Picker(selection: $selectedDirection, label: Text("Please choose a direction")) {
-                    ForEach(0 ..< directions.count) {
-                        Text(self.directions[$0])
-                    }
-                }.pickerStyle(SegmentedPickerStyle())
-            }
-            if selectedDirection == 0 {
-                VStack {
-                    if recieivingMessageArray.count == 0 {
-                        HStack {
-                            Spacer()
-                            Text("No locations received yet").padding()
-                            Spacer()
+            VStack {
+                if isSubscriber {
+                    Picker(selection: $selectedDirection, label: Text("Please choose a direction")) {
+                        ForEach(0 ..< directions.count) {
+                            Text(self.directions[$0])
                         }
-                    }
-                    List(recieivingMessageArray) { message in
-                        NavigationLink(destination: DetailController(sender: message.sender)) {
-                            HStack {
-                                Text(message.sender.combinedValue)
-                                Spacer()
-                                Text(String(message.lastReceived))
-                            }
-                        }
-                    }
-                    Button(action: self.performSync) {
-                        HStack {
-                            if (self.getMessagesInProgress) {
-                                ActivityIndicator(isAnimating: true)
-                            }
-                            Text("Sync")
-                        }
-                    }
-                    .disabled(getMessagesInProgress)
-                    .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
-                    .navigationTitle("Received")
+                    }.pickerStyle(SegmentedPickerStyle())
                 }
-            } else {
-                VStack {
-                    
+                if selectedDirection == 0 {
+                    VStack {
+                        if recieivingMessageArray.count == 0 {
+                            HStack {
+                                Spacer()
+                                Text("No locations received yet").padding()
+                                Spacer()
+                            }
+                        }
+                        List(recieivingMessageArray) { message in
+                            NavigationLink(destination: DetailController(sender: message.sender)) {
+                                HStack {
+                                    Text(message.sender.combinedValue)
+                                    Spacer()
+                                    Text(String(message.lastReceived))
+                                }
+                            }
+                        }
+                        Button(action: self.performSync) {
+                            HStack {
+                                if (self.getMessagesInProgress) {
+                                    ActivityIndicator(isAnimating: true)
+                                }
+                                Text("Sync")
+                            }
+                        }
+                        .disabled(getMessagesInProgress)
+                        .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
+                        .navigationTitle("Received")
+                    }
+                } else {
+                    VStack {
+                        if sendingMessageArray.count == 0 {
+                            HStack {
+                                Spacer()
+                                Text("Not sending location to anyone").padding()
+                                Spacer()
+                            }
+                        }
+                        List {
+                            ForEach(sendingMessageArray, id: \.id) { message in
+                                HStack {
+                                    Text(message.recipient.combinedValue)
+                                }
+                            }
+                            .onDelete(perform: deleteLiveMessage)
+                        }
+                    }
                 }
             }
         }
@@ -70,24 +87,31 @@ struct ListView: View {
 struct ListView_Previews: PreviewProvider {
     
     static var previews: some View {
-        PreviewWrapper().previewDisplayName("Full Set")
+        Group {
+            PreviewWrapper(isSubscriber: true).previewDisplayName("Subscriber")
+            PreviewWrapper(isSubscriber: false).previewDisplayName("Not Subscriber")
+        }
     }
     
     struct PreviewWrapper: View {
         
         @State var receivingMessageArray: [ShortLocationMessage] = []
-        @State var sendingMessageArray: [ProtocolAddress] = []
+        @State var sendingMessageArray: [LiveMessage] = []
         @State var getMessagesInProgress: Bool = false
+        
+        var isSubscriber: Bool
                    
         func performSync() {}
+        func deleteLiveMessage(_: IndexSet) {}
 
         var body: some View {
             return ListView(
                 recieivingMessageArray: $receivingMessageArray,
                 sendingMessageArray: $sendingMessageArray,
                 getMessagesInProgress: $getMessagesInProgress,
-                isSubscriber: false,
-                performSync: performSync
+                isSubscriber: isSubscriber,
+                performSync: performSync,
+                deleteLiveMessage: deleteLiveMessage
             )
         }
     }

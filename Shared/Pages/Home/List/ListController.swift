@@ -12,7 +12,7 @@ struct ListController: View {
     @EnvironmentObject var appState: AppState
     
     @State var recieivingMessageArray: [ShortLocationMessage] = []
-    @State var sendingMessageArray: [ProtocolAddress] = []
+    @State var sendingMessageArray: [LiveMessage] = []
     @State var getMessagesInProgress: Bool = false
     
     func performSync() {
@@ -52,13 +52,37 @@ struct ListController: View {
         }
     }
     
+    func deleteLiveMessage(_ offsets: IndexSet) {
+        let liveMessagesToDelete = offsets.map({ self.sendingMessageArray[$0] })
+        
+        guard let loggedInUser = appState.loggedInUser else {
+            appState.displayedError = IdentifiableError(ListViewErrors.noUserLoggedIn)
+            return
+        }
+        
+        guard let messagingController = try? MessagingController(userName: loggedInUser.userName) else {
+            appState.displayedError = IdentifiableError(ListViewErrors.noUserLoggedIn)
+            return
+        }
+        
+        do {
+            for message in liveMessagesToDelete {
+                try messagingController.removeLiveMessageRecipient(recipientAddress: message.recipient)
+            }
+        } catch {
+            appState.displayedError = IdentifiableError(error)
+        }
+        
+    }
+    
     var body: some View {
         ListView(
             recieivingMessageArray: $recieivingMessageArray,
             sendingMessageArray: $sendingMessageArray,
             getMessagesInProgress: $getMessagesInProgress,
             isSubscriber: appState.loggedInUser?.isSubscriber ?? false,
-            performSync: performSync
+            performSync: performSync,
+            deleteLiveMessage: deleteLiveMessage
         ).onAppear() { performSync() }
     }
 }

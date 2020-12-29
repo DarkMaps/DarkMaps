@@ -308,11 +308,10 @@ public class MessagingController {
         try messagingStore.storeLiveMessage(liveMessage)
     }
     
-    func removeLiveMessageRecipient(recipientName: String, recipientDeviceId: Int) throws {
+    func removeLiveMessageRecipient(recipientAddress: ProtocolAddress) throws {
         guard let messagingStore = self.messagingStore else {
             throw MessagingControllerError.noDeviceCreated
         }
-        let recipientAddress = try ProtocolAddress(name: recipientName, deviceId: UInt32(recipientDeviceId))
         try messagingStore.removeLiveMessageRecipient(recipientAddress)
     }
     

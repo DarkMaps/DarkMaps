@@ -8,8 +8,8 @@
 import Foundation
 import MapKit
 
-public class LiveMessage: Codable {
-    var id = UUID()
+public class LiveMessage: Codable, Identifiable {
+    public var id = UUID()
     var recipient: ProtocolAddress
     var expiry: Int
     
