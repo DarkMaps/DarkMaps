@@ -15,6 +15,7 @@ struct NewChatController: View {
     
     @State var recipientEmail: String = ""
     @State var recipientEmailInvalid: Bool = false
+    @State var isLiveLocation: Bool = false
     @State var sendLocationInProgress: Bool = false
     
     func performMessageSend() {
@@ -62,9 +63,10 @@ struct NewChatController: View {
                 recipientEmail: $recipientEmail,
                 recipientEmailInvalid: $recipientEmailInvalid,
                 sendLocationInProgress: $sendLocationInProgress,
+                isLiveLocation: $isLiveLocation,
+                isSubscriber: appState.loggedInUser?.isSubscriber ?? false,
                 performMessageSend: performMessageSend
             )
         }
-        
     }
 }

@@ -12,12 +12,17 @@ struct NewChatView: View {
     @Binding var recipientEmail: String
     @Binding var recipientEmailInvalid: Bool
     @Binding var sendLocationInProgress: Bool
+    @Binding var isLiveLocation: Bool
+    @State var selectedLiveLength = 0
+    var isSubscriber: Bool
+    
+    var liveLengths = ["15 Minutes", "1 Hour", "4 Hours"]
     
     var performMessageSend: () -> Void
     
     var body: some View {
         NavigationView {
-            VStack {
+            ScrollView {
                 TextFieldWithTitleAndValidation(
                     title: "Recipient's Email",
                     invalidText: "Invalid email",
@@ -25,7 +30,20 @@ struct NewChatView: View {
                     disableAutocorrection: true,
                     text: $recipientEmail,
                     showInvalidText: $recipientEmailInvalid
-                )
+                ).padding(.horizontal)
+                Toggle("Live Location", isOn: $isLiveLocation)
+                    .padding(.horizontal)
+                    .disabled(!isSubscriber)
+                Picker(
+                    selection: $selectedLiveLength,
+                    label: Text("Broadcast Length")) {
+                    ForEach(0 ..< liveLengths.count) {
+                       Text(self.liveLengths[$0])
+                    }
+                }.labelsHidden().disabled(!isSubscriber)
+                if (!isSubscriber) {
+                    Text("Subscribe to enable live location sending").padding().background(Color.accentColor).cornerRadius(3.0)
+                }
                 Button(action: self.performMessageSend) {
                     HStack {
                         if (self.sendLocationInProgress) {
@@ -46,7 +64,8 @@ struct NewChatView_Previews: PreviewProvider {
     
     static var previews: some View {
         return Group {
-            PreviewWrapper()
+            PreviewWrapper(isSubscriber: true)
+            PreviewWrapper(isSubscriber: false)
         }
     }
     
@@ -55,8 +74,11 @@ struct NewChatView_Previews: PreviewProvider {
         @State var recipientEmail: String = ""
         @State var recipientEmailInvalid: Bool = false
         @State var sendLocationInProgress: Bool = false
+        @State var isLiveLocation: Bool = false
         
         func performMessageSend() {}
+        
+        var isSubscriber: Bool
 
         var body: some View {
             
@@ -64,6 +86,8 @@ struct NewChatView_Previews: PreviewProvider {
                 recipientEmail: $recipientEmail,
                 recipientEmailInvalid: $recipientEmailInvalid,
                 sendLocationInProgress: $sendLocationInProgress,
+                isLiveLocation: $isLiveLocation,
+                isSubscriber: isSubscriber,
                 performMessageSend: performMessageSend
             )
         }
