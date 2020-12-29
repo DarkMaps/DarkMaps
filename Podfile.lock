@@ -1,0 +1,29 @@
+PODS:
+  - Mockingjay (3.0.0-alpha.1):
+    - Mockingjay/Core (= 3.0.0-alpha.1)
+    - Mockingjay/XCTest (= 3.0.0-alpha.1)
+  - Mockingjay/Core (3.0.0-alpha.1):
+    - URITemplate (~> 3.0)
+  - Mockingjay/XCTest (3.0.0-alpha.1):
+    - Mockingjay/Core
+  - SwiftLocation (5.0.0)
+  - URITemplate (3.0.0)
+
+DEPENDENCIES:
+  - Mockingjay (~> 3.0.0-alpha.1)
+  - SwiftLocation (~> 5.0)
+
+SPEC REPOS:
+  trunk:
+    - Mockingjay
+    - SwiftLocation
+    - URITemplate
+
+SPEC CHECKSUMS:
+  Mockingjay: 0f7c5aa49c7f1b95621cee3c79b557141f5a225c
+  SwiftLocation: a686601d531069f6e438d681e5f227633dfa2690
+  URITemplate: 58e0d47f967006c5d59888af5356c4a8ed3b197d
+
+PODFILE CHECKSUM: b729579d7afb7dc002d8295aa9ace9359922050b
+
+COCOAPODS: 1.8.4
