@@ -8,7 +8,7 @@
 import Foundation
 
 enum MessageStoreError: LocalizedError {
-    case noMessageFromThisSender, poorlyFormattedMessageData
+    case noMessageFromThisSender, poorlyFormattedMessageData, poorlyFormattedLiveMessageArrayData, liveMessageRecipientAlreadyExists
 }
 
 extension MessageStoreError {
@@ -18,6 +18,10 @@ extension MessageStoreError {
             return NSLocalizedString("There is no message stored from this sender.", comment: "")
         case .poorlyFormattedMessageData:
             return NSLocalizedString("The message stored for this user has been corrupted and will be deleted.", comment: "")
+        case .liveMessageRecipientAlreadyExists:
+            return NSLocalizedString("This live message recipient already exists.", comment: "")
+        case .poorlyFormattedLiveMessageArrayData:
+            return NSLocalizedString("The stored live message recipient array was poorly formatted.", comment: "")
         }
     }
 }

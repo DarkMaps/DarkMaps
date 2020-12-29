@@ -73,4 +73,74 @@ public class MessagingStore {
         return summaryMessageArray
     }
     
+    public func storeLiveMessageRecipient(_ recipient: ProtocolAddress) throws {
+        let keyName = "-msg-liveMessageRecipients"
+        var arrayToAppend: [String] = []
+        if let arrayData = keychainSwift.getData(keyName) {
+            let decoder = JSONDecoder()
+            guard let decodedResponse = try? decoder.decode([String].self, from: arrayData) else {
+                print("Error decoding LiveMessageArrayData")
+                keychainSwift.delete(keyName)
+                throw MessageStoreError.poorlyFormattedLiveMessageArrayData
+            }
+            arrayToAppend = decodedResponse
+        }
+        let stringToAppend = recipient.combinedValue
+        if let _ = arrayToAppend.firstIndex(of: stringToAppend) {
+            throw MessageStoreError.liveMessageRecipientAlreadyExists
+        } else {
+            arrayToAppend.append(stringToAppend)
+        }
+        let encoder = JSONEncoder()
+        let encodedArrayData = try! encoder.encode(arrayToAppend)
+        keychainSwift.set(encodedArrayData, forKey: keyName)
+    }
+    
+    public func getLiveMessageRecipients() throws -> [ProtocolAddress] {
+        let keyName = "-msg-liveMessageRecipients"
+        guard let arrayData = keychainSwift.getData(keyName) else {
+            return []
+        }
+        let decoder = JSONDecoder()
+        guard let decodedResponse = try? decoder.decode([String].self, from: arrayData) else {
+            print("Error decoding LiveMessageArrayData")
+            keychainSwift.delete(keyName)
+            throw MessageStoreError.poorlyFormattedLiveMessageArrayData
+        }
+        var arrayToReturn: [ProtocolAddress] = []
+        for recipientCombinedName in decodedResponse {
+            guard let address = try? ProtocolAddress(recipientCombinedName) else {
+                print("Error decoding LiveMessageArrayData")
+                keychainSwift.delete(keyName)
+                throw MessageStoreError.poorlyFormattedLiveMessageArrayData
+            }
+            arrayToReturn.append(address)
+        }
+        return arrayToReturn
+    }
+    
+    public func removeLiveMessageRecipient(_ recipient: ProtocolAddress) throws {
+        let keyName = "-msg-liveMessageRecipients"
+        var arrayToDeleteFrom: [String] = []
+        if let arrayData = keychainSwift.getData(keyName) {
+            let decoder = JSONDecoder()
+            guard let decodedResponse = try? decoder.decode([String].self, from: arrayData) else {
+                print("Error decoding LiveMessageArrayData")
+                keychainSwift.delete(keyName)
+                throw MessageStoreError.poorlyFormattedLiveMessageArrayData
+            }
+            arrayToDeleteFrom = decodedResponse
+        }
+        print(arrayToDeleteFrom)
+        let stringToDelete = recipient.combinedValue
+        print(stringToDelete)
+        arrayToDeleteFrom.removeAll { element in
+            element == stringToDelete
+        }
+        print(arrayToDeleteFrom)
+        let encoder = JSONEncoder()
+        let encodedArrayData = try! encoder.encode(arrayToDeleteFrom)
+        keychainSwift.set(encodedArrayData, forKey: keyName)
+    }
+    
 }

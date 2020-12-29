@@ -158,5 +158,50 @@ class MessagingStoreTests: XCTestCase {
         XCTAssertGreaterThan(summary[0].lastReceived, summary[1].lastReceived)
         
     }
+    
+    func testStoreLiveMessageRecipient() throws {
+        let messagingStore = MessagingStore(localAddress: address)
+        
+        let recipientToStore = try ProtocolAddress(name: "testRecipient", deviceId: 1)
+        try messagingStore.storeLiveMessageRecipient(recipientToStore)
+        
+        let arrayData = keychainSwift.getData("-msg-liveMessageRecipients")
+        let decoder = JSONDecoder()
+        let decodedArray = try decoder.decode([String].self, from: arrayData!)
+        
+        XCTAssertEqual(decodedArray, [recipientToStore.combinedValue])
+    }
+    
+    func testGetLiveMessageRecipients() throws {
+        let messagingStore = MessagingStore(localAddress: address)
+        
+        let arrayJson = ["testUser1.1", "testUser2.1"]
+        let encoder = JSONEncoder()
+        let encodedArrayData = try encoder.encode(arrayJson)
+        keychainSwift.set(encodedArrayData, forKey: "-msg-liveMessageRecipients")
+        
+        let messageRecipients = try messagingStore.getLiveMessageRecipients()
+        
+        XCTAssertEqual(messageRecipients.count, 2)
+        XCTAssertEqual(messageRecipients[0], try ProtocolAddress(name: "testUser1", deviceId: 1))
+    }
+    
+    func testRemoveLiveMessageRecipient() throws {
+        let messagingStore = MessagingStore(localAddress: address)
+        
+        let arrayJson = ["testUser1.1", "testUser2.1"]
+        let encoder = JSONEncoder()
+        let encodedArrayData = try encoder.encode(arrayJson)
+        keychainSwift.set(encodedArrayData, forKey: "-msg-liveMessageRecipients")
+        
+        let recipientToDelete = try ProtocolAddress(name: "testUser2", deviceId: 1)
+        try messagingStore.removeLiveMessageRecipient(recipientToDelete)
+        
+        let arrayData = keychainSwift.getData("-msg-liveMessageRecipients")
+        let decoder = JSONDecoder()
+        let decodedArray = try decoder.decode([String].self, from: arrayData!)
+        
+        XCTAssertEqual(decodedArray, ["testUser1.1"])
+    }
 
 }

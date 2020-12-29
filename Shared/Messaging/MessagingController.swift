@@ -25,13 +25,9 @@ public class MessagingController {
         }
         self.simpleSignalSwiftEncryptionAPI = simpleSignalSwiftEncryptionAPI
         
-        guard let messagingStore = try? MessagingStore(
-                localAddress: address
-        ) else {
-            completionHandler(.failure(.unableToCreateMessagingStore))
-            return
-        }
-        self.messagingStore = messagingStore
+        self.messagingStore = MessagingStore(
+            localAddress: address
+        )
         
         if simpleSignalSwiftEncryptionAPI.deviceExists {
             print("Device already exists")

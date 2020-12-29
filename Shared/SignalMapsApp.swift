@@ -13,9 +13,9 @@ import SwiftUI
 struct SignalMapsApp: App {
     
     @StateObject private var appState = AppState()
+    @StateObject private var locationController = LocationController()
     
     func handleInit() {
-        print("Init")
         let decoder = JSONDecoder()
         guard let storedUserData = KeychainSwift().getData("loggedInUser") else {
             return
