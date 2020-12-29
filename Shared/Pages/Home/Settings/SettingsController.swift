@@ -22,6 +22,9 @@ struct SettingsController: View {
     @State var backupCodesAlertShowing = false
     @State var backupCodes: IdentifiableBackupCodes?
     @State var actionInProgress: ActionInProgress? = nil
+    @State var isSubscriber = false {
+        didSet {updateLoggedInUserSubscriberStatus()}
+    }
     
     var authorisationController = AuthorisationController()
     
@@ -101,6 +104,12 @@ struct SettingsController: View {
         }
     }
     
+    func updateLoggedInUserSubscriberStatus() {
+        if let loggedInUser = appState.loggedInUser {
+            loggedInUser.isSubscriber = self.isSubscriber
+        }
+    }
+    
     var body: some View {
         ZStack {
             SettingsView(
@@ -109,6 +118,7 @@ struct SettingsController: View {
                 passwordAlertShowing: $passwordAlertShowing,
                 loggedInUser: $appState.loggedInUser,
                 actionInProgress: $actionInProgress,
+                isSubscriber: $isSubscriber,
                 logUserOut: logUserOut
             )
             Text("").hidden().sheet(isPresented: $activate2FAModalIsShowing, onDismiss: {

@@ -14,6 +14,7 @@ struct SettingsView: View {
     @Binding var passwordAlertShowing: Bool
     @Binding var loggedInUser: LoggedInUser?
     @Binding var actionInProgress: ActionInProgress?
+    @Binding var isSubscriber: Bool
     
     var logUserOut: () -> Void
     
@@ -53,6 +54,7 @@ struct SettingsView: View {
                         actionDefiningActivityMarker: .deleteUserAccount,
                         onTap: {passwordAlertShowing = true}
                     )
+                    Toggle("Subscriber", isOn: $isSubscriber)
                 }
             }
             .listStyle(GroupedListStyle())
@@ -78,6 +80,7 @@ struct SettingsView_Previews: PreviewProvider {
         @State var deactivate2FAModalIsShowing = false
         @State var passwordAlertShowing = false
         @State var actionInProgress: ActionInProgress? = nil
+        @State var isSubscriber = false
 
         var body: some View {
             
@@ -87,6 +90,7 @@ struct SettingsView_Previews: PreviewProvider {
                 passwordAlertShowing: $passwordAlertShowing,
                 loggedInUser: $loggedInUser,
                 actionInProgress: $actionInProgress,
+                isSubscriber: $isSubscriber,
                 logUserOut: logUserOut
             )
         }
