@@ -9,8 +9,25 @@ import Foundation
 
 public class MessagingController {
     
-    var messagingStore: MessagingStore? = nil
-    var simpleSignalSwiftEncryptionAPI: SimpleSignalSwiftEncryptionAPI? = nil
+    private var messagingStore: MessagingStore? = nil
+    private var simpleSignalSwiftEncryptionAPI: SimpleSignalSwiftEncryptionAPI? = nil
+    
+    init(userName: String? = nil) throws {
+        if let userName = userName {
+            guard let address = try? ProtocolAddress(name: userName, deviceId: UInt32(1)) else {
+                throw MessagingControllerError.unableToCreateAddress
+            }
+            
+            guard let simpleSignalSwiftEncryptionAPI = try? SimpleSignalSwiftEncryptionAPI(address: address) else {
+                throw MessagingControllerError.unableToCreateEncryptionHandler
+            }
+            self.simpleSignalSwiftEncryptionAPI = simpleSignalSwiftEncryptionAPI
+            
+            self.messagingStore = MessagingStore(
+                localAddress: address
+            )
+        }
+    }
     
     func createDevice(userName: String, serverAddress: String, authToken: String, completionHandler: @escaping (_: Result<Int, MessagingControllerError>) -> ()) {
         
@@ -280,6 +297,30 @@ public class MessagingController {
                 }
             }
         }
+    }
+    
+    func addLiveMessage(recipientName: String, recipientDeviceId: Int, expiry: Int) throws {
+        guard let messagingStore = self.messagingStore else {
+            throw MessagingControllerError.noDeviceCreated
+        }
+        let recipientAddress = try ProtocolAddress(name: recipientName, deviceId: UInt32(recipientDeviceId))
+        let liveMessage = LiveMessage(recipient: recipientAddress, expiry: expiry)
+        try messagingStore.storeLiveMessage(liveMessage)
+    }
+    
+    func removeLiveMessageRecipient(recipientName: String, recipientDeviceId: Int) throws {
+        guard let messagingStore = self.messagingStore else {
+            throw MessagingControllerError.noDeviceCreated
+        }
+        let recipientAddress = try ProtocolAddress(name: recipientName, deviceId: UInt32(recipientDeviceId))
+        try messagingStore.removeLiveMessageRecipient(recipientAddress)
+    }
+    
+    func getLiveMessageRecipients() throws -> [LiveMessage] {
+        guard let messagingStore = self.messagingStore else {
+            throw MessagingControllerError.noDeviceCreated
+        }
+        return try messagingStore.getLiveMessages()
     }
     
 }

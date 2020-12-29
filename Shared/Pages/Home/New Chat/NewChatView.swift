@@ -13,7 +13,7 @@ struct NewChatView: View {
     @Binding var recipientEmailInvalid: Bool
     @Binding var sendLocationInProgress: Bool
     @Binding var isLiveLocation: Bool
-    @State var selectedLiveLength = 0
+    @Binding var selectedLiveLength: Int
     var isSubscriber: Bool
     
     var liveLengths = ["15 Minutes", "1 Hour", "4 Hours"]
@@ -75,6 +75,7 @@ struct NewChatView_Previews: PreviewProvider {
         @State var recipientEmailInvalid: Bool = false
         @State var sendLocationInProgress: Bool = false
         @State var isLiveLocation: Bool = false
+        @State var selectedLiveLength = 0
         
         func performMessageSend() {}
         
@@ -87,6 +88,7 @@ struct NewChatView_Previews: PreviewProvider {
                 recipientEmailInvalid: $recipientEmailInvalid,
                 sendLocationInProgress: $sendLocationInProgress,
                 isLiveLocation: $isLiveLocation,
+                selectedLiveLength: $selectedLiveLength,
                 isSubscriber: isSubscriber,
                 performMessageSend: performMessageSend
             )

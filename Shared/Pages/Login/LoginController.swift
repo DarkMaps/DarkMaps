@@ -23,7 +23,6 @@ struct LoginController: View {
     @State private var storedNewUser: LoggedInUser? = nil
     
     var authorisationController = AuthorisationController()
-    var messagingController = MessagingController()
     
     func handleLogin() -> Void {
         loginInProgress = true
@@ -42,6 +41,11 @@ struct LoginController: View {
             case .success(let newUser):
                 
                 storedNewUser = newUser
+                
+                guard let messagingController = try? MessagingController(userName: newUser.userName) else {
+                    appState.displayedError = IdentifiableError(MessagingControllerError.unableToCreateAddress)
+                    return
+                }
                     
                 messagingController.createDevice(
                     userName: newUser.userName,
@@ -69,6 +73,11 @@ struct LoginController: View {
         
         guard let storedNewUser = self.storedNewUser else {
             appState.displayedError = IdentifiableError(MessagingControllerError.unableToDeleteDevice)
+            return
+        }
+        
+        guard let messagingController = try? MessagingController(userName: storedNewUser.userName) else {
+            appState.displayedError = IdentifiableError(MessagingControllerError.unableToCreateAddress)
             return
         }
         

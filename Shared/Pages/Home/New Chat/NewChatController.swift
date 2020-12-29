@@ -10,13 +10,26 @@ struct NewChatController: View {
     
     @EnvironmentObject var appState: AppState
     
-    let messagingController = MessagingController()
     let locationController = LocationController()
     
     @State var recipientEmail: String = ""
     @State var recipientEmailInvalid: Bool = false
     @State var isLiveLocation: Bool = false
     @State var sendLocationInProgress: Bool = false
+    @State var selectedLiveLength = 0
+    
+    func parseLiveLengthExpiry() -> Int {
+        let timeToAdd: Int
+        if selectedLiveLength == 0 {
+            timeToAdd = 60 * 15
+        } else if selectedLiveLength == 1 {
+            timeToAdd = 60 * 60
+        } else {
+            timeToAdd = 60 * 60 * 4
+        }
+        let now = Date().timeIntervalSinceNow
+        return Int(now) + timeToAdd
+    }
     
     func performMessageSend() {
         
@@ -25,35 +38,55 @@ struct NewChatController: View {
             return
         }
         
+        guard let messagingController = try? MessagingController(userName: loggedInUser.userName) else {
+            appState.displayedError = IdentifiableError(NewChatErrors.noUserLoggedIn)
+            return
+        }
+        
         sendLocationInProgress = true
         
-        locationController.getCurrentLocation() {
-            getLocationOutcome in
+        if isLiveLocation {
             
-            switch getLocationOutcome {
-            case .failure(let error):
+            do {
+                try messagingController.addLiveMessage(recipientName: recipientEmail, recipientDeviceId: Int(1), expiry: parseLiveLengthExpiry())
+                sendLocationInProgress = false
+            } catch {
                 appState.displayedError = IdentifiableError(error)
                 sendLocationInProgress = false
-            case .success(let location):
+            }
+            
+            
+        } else {
+            
+            locationController.getCurrentLocation() {
+                getLocationOutcome in
                 
-                messagingController.sendMessage(
-                    recipientName: recipientEmail,
-                    recipientDeviceId: Int(1),
-                    message: location,
-                    serverAddress: loggedInUser.serverAddress,
-                    authToken: loggedInUser.serverAddress) {
-                    sendMessageOutcome in
+                switch getLocationOutcome {
+                case .failure(let error):
+                    appState.displayedError = IdentifiableError(error)
+                    sendLocationInProgress = false
+                case .success(let location):
                     
-                    switch sendMessageOutcome {
-                    case .failure(let error):
-                        appState.displayedError = IdentifiableError(error)
-                        sendLocationInProgress = false
-                    case .success():
-                        recipientEmail = ""
-                        sendLocationInProgress = false
+                    messagingController.sendMessage(
+                        recipientName: recipientEmail,
+                        recipientDeviceId: Int(1),
+                        message: location,
+                        serverAddress: loggedInUser.serverAddress,
+                        authToken: loggedInUser.serverAddress) {
+                        sendMessageOutcome in
+                        
+                        switch sendMessageOutcome {
+                        case .failure(let error):
+                            appState.displayedError = IdentifiableError(error)
+                            sendLocationInProgress = false
+                        case .success():
+                            recipientEmail = ""
+                            sendLocationInProgress = false
+                        }
                     }
                 }
             }
+            
         }
     }
     
@@ -64,6 +97,7 @@ struct NewChatController: View {
                 recipientEmailInvalid: $recipientEmailInvalid,
                 sendLocationInProgress: $sendLocationInProgress,
                 isLiveLocation: $isLiveLocation,
+                selectedLiveLength: $selectedLiveLength,
                 isSubscriber: appState.loggedInUser?.isSubscriber ?? false,
                 performMessageSend: performMessageSend
             )

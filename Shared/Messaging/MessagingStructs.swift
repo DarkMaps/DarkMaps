@@ -8,6 +8,38 @@
 import Foundation
 import MapKit
 
+public class LiveMessage: Codable {
+    var id = UUID()
+    var recipient: ProtocolAddress
+    var expiry: Int
+    
+    init(recipient: ProtocolAddress, expiry: Int) {
+        self.recipient = recipient
+        self.expiry = expiry
+    }
+    
+    required public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try values.decode(UUID.self, forKey: .id)
+        let recipientString = try values.decode(String.self, forKey: .recipientCombinedValue)
+        self.recipient = try ProtocolAddress(recipientString)
+        self.expiry = try values.decode(Int.self, forKey: .expiry)
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case recipientCombinedValue
+        case expiry
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(recipient.combinedValue, forKey: .recipientCombinedValue)
+        try container.encode(expiry, forKey: .expiry)
+    }
+}
+
 public struct Location: Codable {
     var latitude: Float
     var longitude: Float

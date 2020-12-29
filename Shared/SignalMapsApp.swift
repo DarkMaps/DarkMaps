@@ -13,7 +13,6 @@ import SwiftUI
 struct SignalMapsApp: App {
     
     @StateObject private var appState = AppState()
-    @StateObject private var locationController = LocationController()
     
     func handleInit() {
         let decoder = JSONDecoder()

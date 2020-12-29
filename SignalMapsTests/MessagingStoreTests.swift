@@ -162,46 +162,56 @@ class MessagingStoreTests: XCTestCase {
     func testStoreLiveMessageRecipient() throws {
         let messagingStore = MessagingStore(localAddress: address)
         
-        let recipientToStore = try ProtocolAddress(name: "testRecipient", deviceId: 1)
-        try messagingStore.storeLiveMessageRecipient(recipientToStore)
+        let recipient = try ProtocolAddress(name: "testRecipient", deviceId: 1)
+        let liveMessage = LiveMessage(recipient: recipient, expiry: 1)
+        try messagingStore.storeLiveMessage(liveMessage)
         
         let arrayData = keychainSwift.getData("-msg-liveMessageRecipients")
         let decoder = JSONDecoder()
-        let decodedArray = try decoder.decode([String].self, from: arrayData!)
+        let decodedArray = try decoder.decode([LiveMessage].self, from: arrayData!)
         
-        XCTAssertEqual(decodedArray, [recipientToStore.combinedValue])
+        XCTAssertEqual(decodedArray.count, 1)
+        XCTAssertEqual(decodedArray[0].recipient, recipient)
     }
     
     func testGetLiveMessageRecipients() throws {
         let messagingStore = MessagingStore(localAddress: address)
         
-        let arrayJson = ["testUser1.1", "testUser2.1"]
+        let recipient1 = try ProtocolAddress(name: "testRecipient1", deviceId: 1)
+        let liveMessage1 = LiveMessage(recipient: recipient1, expiry: 1)
+        let recipient2 = try ProtocolAddress(name: "testRecipient2", deviceId: 1)
+        let liveMessage2 = LiveMessage(recipient: recipient2, expiry: 1)
+        let array = [liveMessage1, liveMessage2]
         let encoder = JSONEncoder()
-        let encodedArrayData = try encoder.encode(arrayJson)
+        let encodedArrayData = try encoder.encode(array)
         keychainSwift.set(encodedArrayData, forKey: "-msg-liveMessageRecipients")
         
-        let messageRecipients = try messagingStore.getLiveMessageRecipients()
+        let messageRecipients = try messagingStore.getLiveMessages()
         
         XCTAssertEqual(messageRecipients.count, 2)
-        XCTAssertEqual(messageRecipients[0], try ProtocolAddress(name: "testUser1", deviceId: 1))
+        XCTAssertEqual(messageRecipients[0].recipient, recipient1)
     }
     
     func testRemoveLiveMessageRecipient() throws {
         let messagingStore = MessagingStore(localAddress: address)
         
-        let arrayJson = ["testUser1.1", "testUser2.1"]
+        let recipient1 = try ProtocolAddress(name: "testRecipient1", deviceId: 1)
+        let liveMessage1 = LiveMessage(recipient: recipient1, expiry: 1)
+        let recipient2 = try ProtocolAddress(name: "testRecipient2", deviceId: 1)
+        let liveMessage2 = LiveMessage(recipient: recipient2, expiry: 1)
+        let array = [liveMessage1, liveMessage2]
         let encoder = JSONEncoder()
-        let encodedArrayData = try encoder.encode(arrayJson)
+        let encodedArrayData = try encoder.encode(array)
         keychainSwift.set(encodedArrayData, forKey: "-msg-liveMessageRecipients")
         
-        let recipientToDelete = try ProtocolAddress(name: "testUser2", deviceId: 1)
-        try messagingStore.removeLiveMessageRecipient(recipientToDelete)
+        try messagingStore.removeLiveMessageRecipient(recipient2)
         
         let arrayData = keychainSwift.getData("-msg-liveMessageRecipients")
         let decoder = JSONDecoder()
-        let decodedArray = try decoder.decode([String].self, from: arrayData!)
+        let decodedArray = try decoder.decode([LiveMessage].self, from: arrayData!)
         
-        XCTAssertEqual(decodedArray, ["testUser1.1"])
+        XCTAssertEqual(decodedArray.count, 1)
+        XCTAssertEqual(decodedArray[0].recipient, recipient1)
     }
 
 }

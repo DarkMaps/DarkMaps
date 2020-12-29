@@ -14,6 +14,7 @@ class AppState: ObservableObject {
         }
     }
     @Published var displayedError: IdentifiableError? = nil
+    @Published var locationController = LocationController()
     
     func handleNewUser() {
         if self.loggedInUser == nil {
@@ -28,4 +29,22 @@ class AppState: ObservableObject {
             KeychainSwift().set(data, forKey: "loggedInUser")
         }
     }
+    
+//    func handleRestartLiveMessages() {
+//        if let loggedInUser = self.loggedInUser {
+//            do {
+//                let messagingController = try MessagingController(userName: loggedInUser.userName)
+//                let liveMessagesArray = try messagingController.getLiveMessageRecipients()
+//                if liveMessagesArray.count > 0 {
+//                    locationController.startLocationUpdates()
+//                } else {
+//                    locationController.stopLocationUpdates()
+//                }
+//            } catch {
+//                print("Error loading live messages")
+//                return
+//            }
+//            
+//        }
+//    }
 }

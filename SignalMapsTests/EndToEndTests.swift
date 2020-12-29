@@ -71,8 +71,8 @@ class EndToEndTests: XCTestCase {
     
     func startEndToEndEncryptionTests(userDetails1: LoggedInUser, userDetails2: LoggedInUser, expectation: XCTestExpectation) throws {
         
-        let user1MessagingController = MessagingController()
-        let user2MessagingController = MessagingController()
+        let user1MessagingController = try MessagingController()
+        let user2MessagingController = try MessagingController()
         
         user1MessagingController.createDevice(userName: userDetails1.userName, serverAddress: userDetails1.serverAddress, authToken: userDetails1.authCode) { createDeviceResult1 in
             switch createDeviceResult1 {

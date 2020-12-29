@@ -27,7 +27,7 @@ extension MessageStoreError {
 }
 
 enum MessagingControllerError: LocalizedError {
-    case unableToStoreMessages, unableToRetrieveMessages, unableToDecryptMessage, poorlyFormattedLocation, unableToDeleteMessage, unableToUpdateDeviceKeys, unableToCreateAddress, unableToCreateEncryptionHandler, unableToCreateMessagingStore, noDeviceCreated, unableToSendMessage, unableToDeleteDevice, unableToCreateDevice, needToProvideUsername, remoteDeviceExists
+    case unableToStoreMessages, unableToRetrieveMessages, unableToDecryptMessage, poorlyFormattedLocation, unableToDeleteMessage, unableToUpdateDeviceKeys, unableToCreateAddress, unableToCreateEncryptionHandler, unableToCreateMessagingStore, noDeviceCreated, unableToSendMessage, unableToDeleteDevice, unableToCreateDevice, needToProvideUsername, remoteDeviceExists, poorlyFormattedLiveMessageArrayData, liveMessageRecipientAlreadyExists
 }
 
 extension MessagingControllerError {
@@ -63,6 +63,10 @@ extension MessagingControllerError {
             return NSLocalizedString("There was an error whilst trying to delete the messages we just received.", comment: "")
         case .unableToUpdateDeviceKeys:
             return NSLocalizedString("There was an error while trying to update the device keys.", comment: "")
+        case .liveMessageRecipientAlreadyExists:
+            return NSLocalizedString("This live message recipient already exists.", comment: "")
+        case .poorlyFormattedLiveMessageArrayData:
+            return NSLocalizedString("The stored live message recipient array was poorly formatted.", comment: "")
         }
     }
 }

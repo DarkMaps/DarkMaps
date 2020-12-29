@@ -11,15 +11,19 @@ struct ListController: View {
     
     @EnvironmentObject var appState: AppState
     
-    @State var messageArray: [ShortLocationMessage] = []
+    @State var recieivingMessageArray: [ShortLocationMessage] = []
+    @State var sendingMessageArray: [ProtocolAddress] = []
     @State var getMessagesInProgress: Bool = false
-    
-    var messagingController = MessagingController()
     
     func performSync() {
         getMessagesInProgress = true
         
         guard let loggedInUser = appState.loggedInUser else {
+            appState.displayedError = IdentifiableError(ListViewErrors.noUserLoggedIn)
+            return
+        }
+        
+        guard let messagingController = try? MessagingController(userName: loggedInUser.userName) else {
             appState.displayedError = IdentifiableError(ListViewErrors.noUserLoggedIn)
             return
         }
@@ -39,7 +43,7 @@ struct ListController: View {
                     )
                     let messages = try messageStore.getMessageSummary()
                     print(messages)
-                    self.messageArray.append(contentsOf: messages)
+                    self.recieivingMessageArray.append(contentsOf: messages)
                 } catch {
                     appState.displayedError = IdentifiableError(error)
                 }
@@ -50,8 +54,10 @@ struct ListController: View {
     
     var body: some View {
         ListView(
-            messageArray: $messageArray,
+            recieivingMessageArray: $recieivingMessageArray,
+            sendingMessageArray: $sendingMessageArray,
             getMessagesInProgress: $getMessagesInProgress,
+            isSubscriber: appState.loggedInUser?.isSubscriber ?? false,
             performSync: performSync
         ).onAppear() { performSync() }
     }
