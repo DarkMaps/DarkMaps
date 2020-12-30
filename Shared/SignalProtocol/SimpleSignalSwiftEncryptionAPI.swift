@@ -345,7 +345,7 @@ public class SimpleSignalSwiftEncryptionAPI {
                     print("Error creating pre key bundle")
                     print(error)
                     let responseString = String(data: data!, encoding: .utf8)
-                    print("raw response: \(responseString)")
+                    print("raw response: \(responseString ?? "Not Decipherable")")
                     result = .failure(.badResponseFromServer)
                 }
             
@@ -405,7 +405,7 @@ public class SimpleSignalSwiftEncryptionAPI {
                     print(error)
                     print("error decrypting messages")
                     let responseString = String(data: data!, encoding: .utf8)
-                    print("raw response: \(responseString)")
+                    print("raw response: \(responseString ?? "Not decipherable")")
                     result = .failure(.badResponseFromServer)
                 }
                 
@@ -779,11 +779,11 @@ public class SimpleSignalSwiftEncryptionAPI {
         guard response.statusCode == successCode else {
             do {
                 let jsonToPrint = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
-                print(jsonToPrint)
+                print(jsonToPrint as Any)
             } catch {
                 print("unable to parse JSON")
                 let responseString = String(data: data!, encoding: .utf8)
-                print("raw response: \(responseString)")
+                print("raw response: \(responseString ?? "Not decipherable")")
             }
             
             if response.statusCode == 400 {

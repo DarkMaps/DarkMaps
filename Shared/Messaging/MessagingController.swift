@@ -6,13 +6,19 @@
 //
 
 import Foundation
+import SwiftLocation
 
 public class MessagingController {
     
+    private var serverAddress: String?
+    private var authToken: String?
     private var messagingStore: MessagingStore? = nil
     private var simpleSignalSwiftEncryptionAPI: SimpleSignalSwiftEncryptionAPI? = nil
+    private let notificationCentre = NotificationCenter.default
     
-    init(userName: String? = nil) throws {
+    init(userName: String? = nil, serverAddress: String? = nil, authToken: String? = nil) throws {
+        self.serverAddress = serverAddress
+        self.authToken = authToken
         if let userName = userName {
             guard let address = try? ProtocolAddress(name: userName, deviceId: UInt32(1)) else {
                 throw MessagingControllerError.unableToCreateAddress
@@ -26,7 +32,61 @@ public class MessagingController {
             self.messagingStore = MessagingStore(
                 localAddress: address
             )
+            
+            notificationCentre.addObserver(self,
+                                           selector: #selector(self.handleLocationUpdateNotification(_:)),
+                                           name: .locationController_NewLocationReceived,
+                                           object: nil)
+            
         }
+    }
+    
+    @objc private func handleLocationUpdateNotification(_ notification: NSNotification) {
+        guard let serverAddress = self.serverAddress else {
+            print("No server address available")
+            return
+        }
+        guard let authToken = self.authToken else {
+            print("No auth token available")
+            return
+        }
+        guard let locationData = notification.userInfo?["location"] as? GPSLocationRequest.ProducedData else {
+            print("No location found in Location Update Notification")
+            return
+        }
+        guard let messageStore = self.messagingStore else {
+            print("Unable to load messaging store")
+            return
+        }
+        guard var allRecipients = try? messageStore.getLiveMessages() else {
+            print("No recipients found")
+            return
+        }
+        allRecipients = parseExpiredLiveMessages(allRecipients)
+        let locationToSend = Location(
+            latitude: locationData.coordinate.latitude,
+            longitude: locationData.coordinate.longitude)
+        for recipient in allRecipients {
+            self.sendMessage(
+                recipientName: recipient.recipient.name,
+                recipientDeviceId: Int(recipient.recipient.deviceId),
+                message: locationToSend,
+                serverAddress: serverAddress,
+                authToken: authToken) {
+                sendMessageResponse in
+                switch sendMessageResponse {
+                case .failure(let error):
+                    print("Error sending message")
+                    print(error)
+                case .success():
+                    print("Message successfully sent to \(recipient.recipient.combinedValue)")
+                }
+            }
+        }
+    }
+    
+    private func parseExpiredLiveMessages(_ array: [LiveMessage]) -> [LiveMessage] {
+        return array.filter { $0.expiry > Int(Date().timeIntervalSince1970) }
     }
     
     func createDevice(userName: String, serverAddress: String, authToken: String, completionHandler: @escaping (_: Result<Int, MessagingControllerError>) -> ()) {

@@ -15,6 +15,30 @@ struct ListController: View {
     @State var sendingMessageArray: [LiveMessage] = []
     @State var getMessagesInProgress: Bool = false
     
+    func getStoredMessages() {
+        
+        guard let loggedInUser = appState.loggedInUser else {
+            appState.displayedError = IdentifiableError(ListViewErrors.noUserLoggedIn)
+            return
+        }
+        
+        guard let address = try? ProtocolAddress(name: loggedInUser.userName, deviceId: UInt32(loggedInUser.deviceId ?? 1)) else {
+            appState.displayedError = IdentifiableError(ListViewErrors.noUserLoggedIn)
+            return
+        }
+        
+        let messageStore = MessagingStore(localAddress: address)
+        
+        do {
+            self.recieivingMessageArray = try messageStore.getMessageSummary()
+            self.sendingMessageArray = try messageStore.getLiveMessages()
+        } catch {
+            appState.displayedError = IdentifiableError(ListViewErrors.unableToRetrieveMessages)
+        }
+        
+        
+    }
+    
     func performSync() {
         getMessagesInProgress = true
         
@@ -23,7 +47,7 @@ struct ListController: View {
             return
         }
         
-        guard let messagingController = try? MessagingController(userName: loggedInUser.userName) else {
+        guard let messagingController = appState.messagingController else {
             appState.displayedError = IdentifiableError(ListViewErrors.noUserLoggedIn)
             return
         }
@@ -55,12 +79,7 @@ struct ListController: View {
     func deleteLiveMessage(_ offsets: IndexSet) {
         let liveMessagesToDelete = offsets.map({ self.sendingMessageArray[$0] })
         
-        guard let loggedInUser = appState.loggedInUser else {
-            appState.displayedError = IdentifiableError(ListViewErrors.noUserLoggedIn)
-            return
-        }
-        
-        guard let messagingController = try? MessagingController(userName: loggedInUser.userName) else {
+        guard let messagingController = appState.messagingController else {
             appState.displayedError = IdentifiableError(ListViewErrors.noUserLoggedIn)
             return
         }
@@ -68,6 +87,7 @@ struct ListController: View {
         do {
             for message in liveMessagesToDelete {
                 try messagingController.removeLiveMessageRecipient(recipientAddress: message.recipient)
+                sendingMessageArray.remove(atOffsets: offsets)
             }
         } catch {
             appState.displayedError = IdentifiableError(error)
@@ -83,6 +103,9 @@ struct ListController: View {
             isSubscriber: appState.loggedInUser?.isSubscriber ?? false,
             performSync: performSync,
             deleteLiveMessage: deleteLiveMessage
-        ).onAppear() { performSync() }
+        ).onAppear() {
+            getStoredMessages()
+            performSync()
+        }
     }
 }

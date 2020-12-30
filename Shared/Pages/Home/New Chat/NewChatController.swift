@@ -38,8 +38,8 @@ struct NewChatController: View {
             return
         }
         
-        guard let messagingController = try? MessagingController(userName: loggedInUser.userName) else {
-            appState.displayedError = IdentifiableError(NewChatErrors.noUserLoggedIn)
+        guard let messagingController = appState.messagingController else {
+            appState.displayedError = IdentifiableError(ListViewErrors.noUserLoggedIn)
             return
         }
         

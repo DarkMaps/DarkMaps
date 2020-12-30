@@ -73,6 +73,12 @@ struct ListView: View {
                             ForEach(sendingMessageArray, id: \.id) { message in
                                 HStack {
                                     Text(message.recipient.combinedValue)
+                                    Spacer()
+                                    if Double(message.expiry) < Date().timeIntervalSince1970 {
+                                        Text("Expired")
+                                    } else {
+                                        Text(message.humanReadableExpiry)
+                                    }
                                 }
                             }
                             .onDelete(perform: deleteLiveMessage)

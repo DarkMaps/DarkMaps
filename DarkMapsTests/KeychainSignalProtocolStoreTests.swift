@@ -7,7 +7,7 @@
 
 import XCTest
 
-@testable import SignalMaps
+@testable import DarkMaps
 
 class KeychainSignalProtocolStoreTests: XCTestCase {
     

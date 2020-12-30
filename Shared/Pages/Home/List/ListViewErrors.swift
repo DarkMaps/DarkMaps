@@ -8,7 +8,7 @@
 import Foundation
 
 public enum ListViewErrors: LocalizedError {
-    case noUserLoggedIn
+    case noUserLoggedIn, unableToRetrieveMessages
 }
 
 extension ListViewErrors {
@@ -16,6 +16,8 @@ extension ListViewErrors {
         switch self {
         case .noUserLoggedIn:
             return NSLocalizedString("There is no user logged in.", comment: "")
+        case .unableToRetrieveMessages:
+            return NSLocalizedString("There was a problem retrieving the stored messages.", comment: "")
         }
     }
 }

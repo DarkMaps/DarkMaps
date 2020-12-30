@@ -12,8 +12,33 @@ import CoreLocation
 /// Contains the logic for storing location and starting / stopping background location tracking
 public class LocationController: ObservableObject {
     
-    private var subscription: String?
     @Published var subscriptionOutput: GPSLocationRequest.ProducedData?
+    
+    private var subscription: String?
+    private let notificationCentre = NotificationCenter.default
+    
+    init() {
+        notificationCentre.addObserver(self,
+                                       selector: #selector(self.handleLiveMessageUpdateNotification(_:)),
+                                       name: .messagingStore_LiveMessagesUpdates,
+                                       object: nil)
+    }
+    
+    @objc private func handleLiveMessageUpdateNotification(_ notification: NSNotification) {
+        guard let count = notification.userInfo?["count"] as? Int else {
+            print("No count found in Live Message Update Notification")
+            return
+        }
+        if count == 0 {
+            self.stopLocationUpdates()
+        } else {
+            self.startLocationUpdates()
+        }
+    }
+    
+    private func sendNotification(location: GPSLocationRequest.ProducedData) {
+        notificationCentre.post(name: .locationController_NewLocationReceived, object: nil, userInfo: ["location": location])
+    }
     
     public func startLocationUpdates() {
         print("Starting GPS Subscription")
@@ -26,6 +51,7 @@ public class LocationController: ObservableObject {
             case .success(let newData):
                 print("New location: \(newData)")
                 self.subscriptionOutput = newData
+                self.sendNotification(location: newData)
             case .failure(let error):
                 print("An error has occurred: \(error.localizedDescription)")
             }
@@ -46,8 +72,8 @@ public class LocationController: ObservableObject {
                 return
             }
             let newLocation = Location(
-                latitude: Float(extractedLocation.coordinate.latitude),
-                longitude: Float(extractedLocation.coordinate.longitude))
+                latitude: extractedLocation.coordinate.latitude,
+                longitude: extractedLocation.coordinate.longitude)
             completionHandler(.success(newLocation))
         }
     }

@@ -38,11 +38,18 @@ public class LiveMessage: Codable, Identifiable {
         try container.encode(recipient.combinedValue, forKey: .recipientCombinedValue)
         try container.encode(expiry, forKey: .expiry)
     }
+    
+    public var humanReadableExpiry: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .short
+        dateFormatter.timeStyle = .short
+        return dateFormatter.string(from: Date(timeIntervalSince1970: Double(self.expiry)))
+    }
 }
 
 public struct Location: Codable {
-    var latitude: Float
-    var longitude: Float
+    var latitude: Double
+    var longitude: Double
 }
 
 public class LocationMessage: Codable {
@@ -97,9 +104,6 @@ public class LocationMessage: Codable {
     }
     
     public var toAnnotation: MKPointAnnotation? {
-        guard let location = self.location else {
-            return nil
-        }
         let annotation = MKPointAnnotation()
         annotation.coordinate = self.toLocationCoordinate!
         annotation.title = self.sender.name

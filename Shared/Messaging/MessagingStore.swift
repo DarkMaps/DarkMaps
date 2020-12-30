@@ -9,10 +9,15 @@ import Foundation
 
 public class MessagingStore {
     
-    private var keychainSwift: KeychainSwift
+    private let keychainSwift: KeychainSwift
+    private let notificationCentre = NotificationCenter.default
 
     public init(localAddress: ProtocolAddress) {
         self.keychainSwift = KeychainSwift(keyPrefix: localAddress.combinedValue)
+    }
+    
+    private func sendNotification(count: Int) {
+        notificationCentre.post(name: .messagingStore_LiveMessagesUpdates, object: nil, userInfo: ["count": count])
     }
     
     public func clearAllData() {
@@ -94,6 +99,7 @@ public class MessagingStore {
         let encoder = JSONEncoder()
         let encodedArrayData = try! encoder.encode(arrayToAppend)
         keychainSwift.set(encodedArrayData, forKey: keyName)
+        sendNotification(count: arrayToAppend.count)
     }
     
     public func getLiveMessages() throws -> [LiveMessage] {
@@ -128,6 +134,7 @@ public class MessagingStore {
         let encoder = JSONEncoder()
         let encodedArrayData = try! encoder.encode(arrayToDeleteFrom)
         keychainSwift.set(encodedArrayData, forKey: keyName)
+        sendNotification(count: arrayToDeleteFrom.count)
     }
     
 }

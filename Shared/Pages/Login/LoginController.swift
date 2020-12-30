@@ -24,6 +24,32 @@ struct LoginController: View {
     
     var authorisationController = AuthorisationController()
     
+    private func handleCreateDevice(newUser: LoggedInUser) -> Void {
+        
+        guard let messagingController = try? MessagingController(userName: newUser.userName, serverAddress: newUser.serverAddress, authToken: newUser.authCode) else {
+            appState.displayedError = IdentifiableError(MessagingControllerError.unableToCreateAddress)
+            return
+        }
+            
+        messagingController.createDevice(
+            userName: newUser.userName,
+            serverAddress: newUser.serverAddress,
+            authToken: newUser.authCode) {
+            createDeviceOutcome in
+            
+            loginInProgress = false
+            
+            switch createDeviceOutcome {
+            case .failure(let error):
+                appState.displayedError = IdentifiableError(error)
+            case .success(let registrationId):
+                print("Registration Id: \(registrationId)")
+                appState.loggedInUser = newUser
+                appState.messagingController = messagingController
+            }
+        }
+    }
+    
     func handleLogin() -> Void {
         loginInProgress = true
         authorisationController.login(
@@ -39,30 +65,8 @@ struct LoginController: View {
             case .failure(let error):
                 appState.displayedError = IdentifiableError(error)
             case .success(let newUser):
-                
                 storedNewUser = newUser
-                
-                guard let messagingController = try? MessagingController(userName: newUser.userName) else {
-                    appState.displayedError = IdentifiableError(MessagingControllerError.unableToCreateAddress)
-                    return
-                }
-                    
-                messagingController.createDevice(
-                    userName: newUser.userName,
-                    serverAddress: newUser.serverAddress,
-                    authToken: newUser.authCode) {
-                    createDeviceOutcome in
-                    
-                    loginInProgress = false
-                    
-                    switch createDeviceOutcome {
-                    case .failure(let error):
-                        appState.displayedError = IdentifiableError(error)
-                    case .success(let registrationId):
-                        print("Registration Id: \(registrationId)")
-                        appState.loggedInUser = newUser
-                    }
-                }
+                handleCreateDevice(newUser: newUser)
             }
         }
     }
@@ -91,22 +95,7 @@ struct LoginController: View {
                 appState.displayedError = IdentifiableError(error)
             case .success():
                 
-                messagingController.createDevice(
-                    userName: storedNewUser.userName,
-                    serverAddress: storedNewUser.serverAddress,
-                    authToken: storedNewUser.authCode) {
-                    createDeviceOutcome in
-                    
-                    loginInProgress = false
-                    
-                    switch createDeviceOutcome {
-                    case .failure(let error):
-                        appState.displayedError = IdentifiableError(error)
-                    case .success(let registrationId):
-                        print("Registration Id: \(registrationId)")
-                        appState.loggedInUser = storedNewUser
-                    }
-                }
+                handleCreateDevice(newUser: storedNewUser)
             }
         }
     }
@@ -123,7 +112,8 @@ struct LoginController: View {
                 twoFactorModalVisible = false
                 switch outcome {
                 case .success(let newUser):
-                    appState.loggedInUser = newUser
+                    storedNewUser = newUser
+                    handleCreateDevice(newUser: newUser)
                 case .failure(let error):
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
                         appState.displayedError = IdentifiableError(error)

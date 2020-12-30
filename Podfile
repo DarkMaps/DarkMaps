@@ -1,16 +1,17 @@
 # Uncomment the next line to define a global platform for your project
 # platform :ios, '9.0'
 
-target 'SignalMaps (iOS)' do
+target 'DarkMaps (iOS)' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
   # Pods for SignalMaps (iOS)
   pod 'SwiftLocation', '~> 5.0'
+  pod 'SwiftyStoreKit'
 
 end
 
-target 'SignalMaps (macOS)' do
+target 'DarkMaps (macOS)' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
@@ -18,7 +19,7 @@ target 'SignalMaps (macOS)' do
 
 end
 
-target 'SignalMapsiOSFramework' do
+target 'DarkMapsiOSFramework' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
@@ -26,7 +27,7 @@ target 'SignalMapsiOSFramework' do
 
 end
 
-target 'SignalMapsTests' do
+target 'DarkMapsTests' do
   use_frameworks!
   pod 'Mockingjay', '~> 3.0.0-alpha.1'
 end

@@ -7,23 +7,27 @@ PODS:
   - Mockingjay/XCTest (3.0.0-alpha.1):
     - Mockingjay/Core
   - SwiftLocation (5.0.0)
+  - SwiftyStoreKit (0.16.1)
   - URITemplate (3.0.0)
 
 DEPENDENCIES:
   - Mockingjay (~> 3.0.0-alpha.1)
   - SwiftLocation (~> 5.0)
+  - SwiftyStoreKit
 
 SPEC REPOS:
   trunk:
     - Mockingjay
     - SwiftLocation
+    - SwiftyStoreKit
     - URITemplate
 
 SPEC CHECKSUMS:
   Mockingjay: 0f7c5aa49c7f1b95621cee3c79b557141f5a225c
   SwiftLocation: a686601d531069f6e438d681e5f227633dfa2690
+  SwiftyStoreKit: 6b9c08810269f030586dac1fae8e75871a82e84a
   URITemplate: 58e0d47f967006c5d59888af5356c4a8ed3b197d
 
-PODFILE CHECKSUM: b729579d7afb7dc002d8295aa9ace9359922050b
+PODFILE CHECKSUM: a3b253625f5d8321eb75698487f437811f688a0c
 
 COCOAPODS: 1.8.4
