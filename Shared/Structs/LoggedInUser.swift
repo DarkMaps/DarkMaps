@@ -22,23 +22,24 @@ public class LoggedInUser: Equatable, Hashable, Codable {
             handleStoreObject()
         }
     }
-    public var isSubscriber: Bool = false {
+    public var subscriptionExpiryDate: Date? = nil {
         didSet {
             handleStoreObject()
         }
     }
+
     
     var combinedName: String {
-        return "\(self.userName):\(self.deviceId ?? -1):\(String(describing: self.serverAddress.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed))):\(self.authCode):\(self.is2FAUser ? "true" : "false"):\(self.isSubscriber ? "true" : "false")"
+        return "\(self.userName):\(self.deviceId ?? -1):\(String(describing: self.serverAddress.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed))):\(self.authCode):\(self.is2FAUser ? "true" : "false"):\(self.subscriptionExpiryDate?.timeIntervalSince1970 ?? -1)"
     }
     
-    public init(userName: String, deviceId: Int? = nil, serverAddress: String, authCode: String, is2FAUser: Bool, isSubscriber: Bool = false) {
+    public init(userName: String, deviceId: Int? = nil, serverAddress: String, authCode: String, is2FAUser: Bool, subscriptionExpiryDate: Date? = nil) {
         self.userName = userName
         self.deviceId = deviceId
         self.serverAddress = serverAddress
         self.authCode = authCode
         self.is2FAUser = is2FAUser
-        self.isSubscriber = isSubscriber
+        self.subscriptionExpiryDate = subscriptionExpiryDate
     }
     
     
@@ -51,7 +52,14 @@ public class LoggedInUser: Equatable, Hashable, Codable {
         self.serverAddress = components[2]
         self.authCode = String(components[3]).removingPercentEncoding!
         self.is2FAUser = (components[4] == "true") ? true : false
-        self.isSubscriber = (components[5] == "true") ? true : false
+        if Int(components[5]) == -1 {
+            self.subscriptionExpiryDate = nil
+        } else {
+            guard let subscriptionExpiryTimeInterval = Double(components[5]) else {
+                throw LoggedInUserError.invalidCombinedName
+            }
+            self.subscriptionExpiryDate = Date(timeIntervalSince1970: subscriptionExpiryTimeInterval)
+        }
     }
     
     
@@ -66,16 +74,40 @@ public class LoggedInUser: Equatable, Hashable, Codable {
         hasher.combine(serverAddress)
         hasher.combine(authCode)
         hasher.combine(is2FAUser ? "true" : "false")
-        hasher.combine(isSubscriber ? "true" : "false")
+        hasher.combine(subscriptionExpiryDate)
     }
     
-    func handleStoreObject() {
+    private func handleStoreObject() {
         let encoder = JSONEncoder()
         guard let data = try? encoder.encode(self) else {
             print("Error encoding object, unable to save user")
             return
         }
         KeychainSwift().set(data, forKey: "loggedInUser")
+    }
+    
+    private func handleAddObservers() {
+        let notificationCentre = NotificationCenter.default
+        notificationCentre.addObserver(self,
+                                       selector: #selector(self.handleSubscriptionVerified(_:)),
+                                       name: .subscriptionController_SubscriptionVerified,
+                                       object: nil)
+        notificationCentre.addObserver(self,
+                                       selector: #selector(self.handleSubscriptionFailed(_:)),
+                                       name: .subscriptionController_SubscriptionFailed,
+                                       object: nil)
+    }
+    
+    @objc private func handleSubscriptionVerified(_ notification: NSNotification) {
+        guard let expiryDate = notification.userInfo?["expiry"] as? Date else {
+            print("No expiry date found in Subscription Verified Notification")
+            return
+        }
+        self.subscriptionExpiryDate = expiryDate
+    }
+    
+    @objc private func handleSubscriptionFailed(_ notification: NSNotification) {
+        self.subscriptionExpiryDate = nil
     }
 }
 

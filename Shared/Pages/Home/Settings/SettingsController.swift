@@ -106,7 +106,12 @@ struct SettingsController: View {
     
     func updateLoggedInUserSubscriberStatus() {
         if let loggedInUser = appState.loggedInUser {
-            loggedInUser.isSubscriber = self.isSubscriber
+            if loggedInUser.subscriptionExpiryDate == nil {
+                let fakeExpiryDate = Date().addingTimeInterval(60*5)
+                loggedInUser.subscriptionExpiryDate = fakeExpiryDate
+            } else {
+                loggedInUser.subscriptionExpiryDate = nil
+            }
         }
     }
     

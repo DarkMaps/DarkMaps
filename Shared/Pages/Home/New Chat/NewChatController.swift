@@ -98,7 +98,7 @@ struct NewChatController: View {
                 sendLocationInProgress: $sendLocationInProgress,
                 isLiveLocation: $isLiveLocation,
                 selectedLiveLength: $selectedLiveLength,
-                isSubscriber: appState.loggedInUser?.isSubscriber ?? false,
+                isSubscriber: appState.loggedInUser?.subscriptionExpiryDate != nil,
                 performMessageSend: performMessageSend
             )
         }
