@@ -22,10 +22,14 @@ public class LoggedInUser: Equatable, Hashable, Codable {
             handleStoreObject()
         }
     }
-    public var subscriptionExpiryDate: Date? = nil {
+    @Published public var subscriptionExpiryDate: Date? = nil {
         didSet {
             handleStoreObject()
         }
+    }
+    
+    enum CodingKeys: CodingKey {
+        case userName, deviceId, serverAddress, authCode, is2FAUser, subscriptionExpiryDate
     }
 
     
@@ -40,6 +44,16 @@ public class LoggedInUser: Equatable, Hashable, Codable {
         self.authCode = authCode
         self.is2FAUser = is2FAUser
         self.subscriptionExpiryDate = subscriptionExpiryDate
+    }
+    
+    required public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        userName = try container.decode(String.self, forKey: .userName)
+        deviceId = try container.decodeIfPresent(Int.self, forKey: .deviceId)
+        serverAddress = try container.decode(String.self, forKey: .serverAddress)
+        authCode = try container.decode(String.self, forKey: .authCode)
+        is2FAUser = try container.decode(Bool.self, forKey: .is2FAUser)
+        subscriptionExpiryDate = try container.decodeIfPresent(Date.self, forKey: .subscriptionExpiryDate)
     }
     
     
@@ -60,6 +74,16 @@ public class LoggedInUser: Equatable, Hashable, Codable {
             }
             self.subscriptionExpiryDate = Date(timeIntervalSince1970: subscriptionExpiryTimeInterval)
         }
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(userName, forKey: .userName)
+        try container.encode(deviceId, forKey: .deviceId)
+        try container.encode(serverAddress, forKey: .serverAddress)
+        try container.encode(authCode, forKey: .authCode)
+        try container.encode(is2FAUser, forKey: .is2FAUser)
+        try container.encode(subscriptionExpiryDate, forKey: .subscriptionExpiryDate)
     }
     
     

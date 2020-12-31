@@ -220,6 +220,7 @@
 		EC23C0F4258BEE4600ABDE84 /* SimpleSignalSwiftAuthAPIStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleSignalSwiftAuthAPIStructs.swift; sourceTree = "<group>"; };
 		EC247FE3259CA2EE00EEBAA1 /* SubscriptionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionController.swift; sourceTree = "<group>"; };
 		EC265A79259C8D2900D5B7CD /* MessagingStoreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagingStoreTests.swift; sourceTree = "<group>"; };
+		EC3712DE259DD825001E5422 /* secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = secrets.xcconfig; sourceTree = "<group>"; };
 		EC4520D425896275002768C8 /* Activate2FAModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activate2FAModal.swift; sourceTree = "<group>"; };
 		EC4520D825896287002768C8 /* Deactivate2FAModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deactivate2FAModal.swift; sourceTree = "<group>"; };
 		EC4520DC258B66F8002768C8 /* SimpleSignalSwiftAuthAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleSignalSwiftAuthAPI.swift; sourceTree = "<group>"; };
@@ -570,6 +571,7 @@
 		ECFFD509257261FB00458BC8 = {
 			isa = PBXGroup;
 			children = (
+				EC3712DE259DD825001E5422 /* secrets.xcconfig */,
 				EC12FB992572ADC700F7230F /* SignalClient */,
 				EC12FB8F2572AB9B00F7230F /* SignalClient Build Details.md */,
 				ECFFD50E257261FB00458BC8 /* Shared */,

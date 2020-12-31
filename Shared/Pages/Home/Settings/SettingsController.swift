@@ -5,6 +5,7 @@
 //  Created by Matthew Roche on 08/12/2020.
 //
 import SwiftUI
+import StoreKit
 
 struct SettingsController: View {
     
@@ -25,8 +26,11 @@ struct SettingsController: View {
     @State var isSubscriber = false {
         didSet {updateLoggedInUserSubscriberStatus()}
     }
-    
+    @State var subscriptionOptionsSheetShowing = false
+    @State var subscriptionOptions: [SKProduct] = []
+     
     var authorisationController = AuthorisationController()
+    var subscriptionController = SubscriptionController()
     
     func logUserOut() {
         actionInProgress = .logUserOut
@@ -104,6 +108,46 @@ struct SettingsController: View {
         }
     }
     
+    func getSubscriptionOptions() {
+        actionInProgress = .getSubscriptionOptions
+        subscriptionController.getSubscriptions() { result in
+            actionInProgress = nil
+            switch result {
+            case .success(let options):
+                self.subscriptionOptions = options
+                self.subscriptionOptionsSheetShowing = true
+            case .failure(let error):
+                appState.displayedError = IdentifiableError(error)
+            }
+        }
+    }
+    
+    func subscribe(product: SKProduct) {
+        actionInProgress = .subscribe
+        subscriptionController.purchaseSubscription(product: product) { result in
+            actionInProgress = nil
+            switch result {
+            case .success(let date):
+                print(date)
+            case .failure(let error):
+                appState.displayedError = IdentifiableError(error)
+            }
+        }
+    }
+    
+    func restoreSubscription() {
+        actionInProgress = .restoreSubscription
+        subscriptionController.restoreSubscription() { result in
+            actionInProgress = nil
+            switch result {
+            case .success():
+                return
+            case .failure(let error):
+                appState.displayedError = IdentifiableError(error)
+            }
+        }
+    }
+    
     func updateLoggedInUserSubscriberStatus() {
         if let loggedInUser = appState.loggedInUser {
             if loggedInUser.subscriptionExpiryDate == nil {
@@ -115,6 +159,13 @@ struct SettingsController: View {
         }
     }
     
+    func generateActionSheetButtons(options: [SKProduct]) -> [Alert.Button] {
+        let buttons = options.enumerated().map { i, option in
+            Alert.Button.default(Text("\(option.localizedDescription): \(option.price)")) {self.subscribe(product: option)}
+        }
+        return buttons
+    }
+    
     var body: some View {
         ZStack {
             SettingsView(
@@ -124,7 +175,10 @@ struct SettingsController: View {
                 loggedInUser: $appState.loggedInUser,
                 actionInProgress: $actionInProgress,
                 isSubscriber: $isSubscriber,
-                logUserOut: logUserOut
+                subscriptionExpiryDate: appState.loggedInUser?.subscriptionExpiryDate ?? nil,
+                logUserOut: logUserOut,
+                getSubscriptionOptions: getSubscriptionOptions,
+                restoreSubscription: restoreSubscription
             )
             Text("").hidden().sheet(isPresented: $activate2FAModalIsShowing, onDismiss: {
                 if backupCodes != nil {
@@ -158,6 +212,9 @@ struct SettingsController: View {
                     dismissButton: .cancel()
                 )
             }
+            Text("").hidden().actionSheet(isPresented: $subscriptionOptionsSheetShowing) {
+                ActionSheet(title: Text("Subscribe"), message: Text("Choose a subscription type"), buttons: generateActionSheetButtons(options: self.subscriptionOptions) + [Alert.Button.cancel()])
+            }
             
         }
         
@@ -170,5 +227,5 @@ struct IdentifiableBackupCodes: Identifiable {
 }
 
 enum ActionInProgress {
-    case obtain2FAQRCode, confirm2FA, deactivate2FA, logUserOut, deleteUserAccount
+    case obtain2FAQRCode, confirm2FA, deactivate2FA, logUserOut, deleteUserAccount, subscribe, restoreSubscription, getSubscriptionOptions
 }

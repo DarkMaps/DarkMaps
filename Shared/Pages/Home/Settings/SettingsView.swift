@@ -16,7 +16,19 @@ struct SettingsView: View {
     @Binding var actionInProgress: ActionInProgress?
     @Binding var isSubscriber: Bool
     
+    var subscriptionExpiryDate: Date?
+    
     var logUserOut: () -> Void
+    var getSubscriptionOptions: () -> Void
+    var restoreSubscription: () -> Void
+    var dateFormatter = DateFormatter()
+    
+    func formatDate(_ date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .short
+        dateFormatter.timeStyle = .short
+        return dateFormatter.string(from: date)
+    }
     
     var body: some View {
         NavigationView {
@@ -54,7 +66,26 @@ struct SettingsView: View {
                         actionDefiningActivityMarker: .deleteUserAccount,
                         onTap: {passwordAlertShowing = true}
                     )
+                }
+                Section(header: Text("Subscription")) {
                     Toggle("Subscriber", isOn: $isSubscriber)
+                    if subscriptionExpiryDate == nil {
+                        SettingsRow(
+                            actionInProgress: $actionInProgress,
+                            title: "Subscribe",
+                            actionDefiningActivityMarker: .logUserOut,
+                            onTap: getSubscriptionOptions
+                        )
+                        SettingsRow(
+                            actionInProgress: $actionInProgress,
+                            title: "Restore Subscription",
+                            actionDefiningActivityMarker: .logUserOut,
+                            onTap: restoreSubscription
+                        )
+                    } else {
+                        Text("You are subscribed until: \(formatDate(subscriptionExpiryDate!))")
+                    }
+
                 }
             }
             .listStyle(GroupedListStyle())
@@ -74,6 +105,8 @@ struct SettingsView_Previews: PreviewProvider {
     struct PreviewWrapper: View {
         
         func logUserOut() {}
+        func getSubscriptionOptions() {}
+        func restoreSubscription() {}
         
         @State var loggedInUser: LoggedInUser? = nil
         @State var activate2FAModalIsShowing = false
@@ -81,6 +114,8 @@ struct SettingsView_Previews: PreviewProvider {
         @State var passwordAlertShowing = false
         @State var actionInProgress: ActionInProgress? = nil
         @State var isSubscriber = false
+        
+        let subscriptionExpiryDate: Date? = nil
 
         var body: some View {
             
@@ -91,7 +126,10 @@ struct SettingsView_Previews: PreviewProvider {
                 loggedInUser: $loggedInUser,
                 actionInProgress: $actionInProgress,
                 isSubscriber: $isSubscriber,
-                logUserOut: logUserOut
+                subscriptionExpiryDate: subscriptionExpiryDate,
+                logUserOut: logUserOut,
+                getSubscriptionOptions: getSubscriptionOptions,
+                restoreSubscription: restoreSubscription
             )
         }
     }

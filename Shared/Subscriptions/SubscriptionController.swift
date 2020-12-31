@@ -15,15 +15,14 @@ public enum SubscriptionError: LocalizedError {
 
 public class SubscriptionController {
     
-    let productId = "mtr.DarkMaps.Subscription.Monthly"
     private let notificationCentre = NotificationCenter.default
     
-    public func getSubscriptions(completionHandler: @escaping (Result<SKProduct, SubscriptionError>) -> ()) {
-        SwiftyStoreKit.retrieveProductsInfo([productId]) { result in
+    public func getSubscriptions(completionHandler: @escaping (Result<[SKProduct], SubscriptionError>) -> ()) {
+        SwiftyStoreKit.retrieveProductsInfo(["mtr.DarkMaps.Subscription"]) { result in
             if let product = result.retrievedProducts.first {
                 let priceString = product.localizedPrice!
                 print("Product: \(product.localizedDescription), price: \(priceString)")
-                completionHandler(.success(product))
+                completionHandler(.success(Array(result.retrievedProducts)))
             }
             else if let invalidProductId = result.invalidProductIDs.first {
                 print("Invalid product identifier: \(invalidProductId)")
@@ -36,8 +35,8 @@ public class SubscriptionController {
         }
     }
     
-    public func purchaseSubscription(completionHandler: @escaping (Result<Date, SubscriptionError>) -> ()) {
-        SwiftyStoreKit.purchaseProduct(productId, atomically: true) { purchaseResult in
+    public func purchaseSubscription(product: SKProduct, completionHandler: @escaping (Result<Date, SubscriptionError>) -> ()) {
+        SwiftyStoreKit.purchaseProduct(product.productIdentifier, atomically: true) { purchaseResult in
             
             switch purchaseResult {
             case .success(let purchase):
@@ -46,14 +45,14 @@ public class SubscriptionController {
                     SwiftyStoreKit.finishTransaction(purchase.transaction)
                 }
                 
-                let appleValidator = AppleReceiptValidator(service: .sandbox, sharedSecret: "a1728d88ff3b4ddcada70eb884b9bb79")
+                let appleValidator = AppleReceiptValidator(service: .sandbox, sharedSecret: Bundle.main.infoDictionary?["STOREKIT_SECRET"] as? String ?? "no storekit secret available")
                 SwiftyStoreKit.verifyReceipt(using: appleValidator) { verifyRecieptResult in
                     
                     switch verifyRecieptResult {
                     case .success(let receipt):
                         let verifySubscriptionResult = SwiftyStoreKit.verifySubscription(
                             ofType: .autoRenewable,
-                            productId: self.productId,
+                            productId: product.productIdentifier,
                             inReceipt: receipt)
                         
                         switch verifySubscriptionResult {
@@ -79,6 +78,12 @@ public class SubscriptionController {
             }
         }
     }
+
+    
+    public func verifyIsStillSubscriber(completionHandler: (Result<Bool, SubscriptionError>) -> ()) {
+        completionHandler(.success(true))
+    }
+    
     
     public func restoreSubscription(completionHandler: @escaping (Result<Void, SubscriptionError>) -> ()) {
         SwiftyStoreKit.restorePurchases(atomically: true) { results in
