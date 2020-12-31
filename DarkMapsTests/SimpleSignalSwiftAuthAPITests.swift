@@ -23,7 +23,7 @@ class SimpleSignalSwiftAuthAPITests: XCTestCase {
     
     func testLogin() throws {
         let expectation = XCTestExpectation(description: "Successfully logs in")
-        let uriValue = "https://www.simplesignal.co.uk/v1/auth/login/"
+        let uriValue = "https://api.dark-maps.com/v1/auth/login/"
         let data: NSDictionary = [
             "auth_token": "testToken"
         ]
@@ -32,12 +32,12 @@ class SimpleSignalSwiftAuthAPITests: XCTestCase {
         authController.login(
             username: "testUser",
             password: "testPassword",
-            serverAddress: "https://www.simplesignal.co.uk") { result in
+            serverAddress: "https://api.dark-maps.com") { result in
             switch result {
             case .success(let newUser):
                 XCTAssertEqual(newUser.authCode, "testToken")
                 XCTAssertEqual(newUser.is2FAUser, false)
-                XCTAssertEqual(newUser.serverAddress, "https://www.simplesignal.co.uk")
+                XCTAssertEqual(newUser.serverAddress, "https://api.dark-maps.com")
                 XCTAssertEqual(newUser.userName, "testUser")
                 XCTAssertEqual(newUser.deviceId, nil)
                 expectation.fulfill()
@@ -52,7 +52,7 @@ class SimpleSignalSwiftAuthAPITests: XCTestCase {
     
     func testSubmit2FA() throws {
         let expectation = XCTestExpectation(description: "Successfully logs in")
-        let uriValue = "https://www.simplesignal.co.uk/v1/auth/login/code/"
+        let uriValue = "https://api.dark-maps.com/v1/auth/login/code/"
         let data: NSDictionary = [
             "auth_token": "testToken"
         ]
@@ -62,12 +62,12 @@ class SimpleSignalSwiftAuthAPITests: XCTestCase {
             username: "testUser",
             code: "1234",
             ephemeralToken: "testEphemeralToken",
-            serverAddress: "https://www.simplesignal.co.uk") { result in
+            serverAddress: "https://api.dark-maps.com") { result in
             switch result {
             case .success(let newUser):
                 XCTAssertEqual(newUser.authCode, "testToken")
                 XCTAssertEqual(newUser.is2FAUser, true)
-                XCTAssertEqual(newUser.serverAddress, "https://www.simplesignal.co.uk")
+                XCTAssertEqual(newUser.serverAddress, "https://api.dark-maps.com")
                 XCTAssertEqual(newUser.userName, "testUser")
                 XCTAssertEqual(newUser.deviceId, nil)
                 expectation.fulfill()
@@ -82,7 +82,7 @@ class SimpleSignalSwiftAuthAPITests: XCTestCase {
     
     func testActivate2FA() throws {
         let expectation = XCTestExpectation(description: "Successfully activates 2FA")
-        let uriValue = "https://www.simplesignal.co.uk/v1/auth/app/activate/"
+        let uriValue = "https://api.dark-maps.com/v1/auth/app/activate/"
         let data: NSDictionary = [
             "qr_link": "otpauth://totp/myApplication:test%40test.co.uk?secret=AVYSQYWDUNGQBTP2&issuer=test"
         ]
@@ -90,7 +90,7 @@ class SimpleSignalSwiftAuthAPITests: XCTestCase {
         let authController = AuthorisationController()
         authController.request2FAQRCode(
             authToken: "testAuthToken",
-            serverAddress: "https://www.simplesignal.co.uk") {result in
+            serverAddress: "https://api.dark-maps.com") {result in
             switch result {
             case .success(let qrcode):
                 XCTAssertEqual(qrcode, "otpauth://totp/myApplication:test%40test.co.uk?secret=AVYSQYWDUNGQBTP2&issuer=test")
@@ -105,7 +105,7 @@ class SimpleSignalSwiftAuthAPITests: XCTestCase {
     
     func testConfirm2FA() throws {
         let expectation = XCTestExpectation(description: "Successfully confirms 2FA")
-        let uriValue = "https://www.simplesignal.co.uk/v1/auth/app/activate/confirm/"
+        let uriValue = "https://api.dark-maps.com/v1/auth/app/activate/confirm/"
         let data: NSDictionary = [
             "backup_codes": [
                 "test_backup_code"
@@ -116,7 +116,7 @@ class SimpleSignalSwiftAuthAPITests: XCTestCase {
         authController.confirm2FA(
             code: "1234",
             authToken: "testAuthToken",
-            serverAddress: "https://www.simplesignal.co.uk") {result in
+            serverAddress: "https://api.dark-maps.com") {result in
             switch result {
             case .success(let backupCodes):
                 XCTAssertEqual(backupCodes.first, "test_backup_code")
@@ -131,13 +131,13 @@ class SimpleSignalSwiftAuthAPITests: XCTestCase {
     
     func testDeactivate2FA() throws {
         let expectation = XCTestExpectation(description: "Successfully deactivates 2FA")
-        let uriValue = "https://www.simplesignal.co.uk/v1/auth/app/deactivate/"
+        let uriValue = "https://api.dark-maps.com/v1/auth/app/deactivate/"
         self.stub(uri(uriValue), http(204))
         let authController = AuthorisationController()
         authController.deactivate2FA(
             code: "1234",
             authToken: "testAuthToken",
-            serverAddress: "https://www.simplesignal.co.uk") {result in
+            serverAddress: "https://api.dark-maps.com") {result in
             switch result {
             case .success():
                 expectation.fulfill()
@@ -151,10 +151,10 @@ class SimpleSignalSwiftAuthAPITests: XCTestCase {
     
     func testLogOut() throws {
         let expectation = XCTestExpectation(description: "Successfully logs user out")
-        let uriValue = "https://www.simplesignal.co.uk/v1/auth/logout/"
+        let uriValue = "https://api.dark-maps.com/v1/auth/logout/"
         self.stub(uri(uriValue), http(204))
         let authController = AuthorisationController()
-        authController.logUserOut(authToken: "testAuthToken", serverAddress: "https://www.simplesignal.co.uk") {result in
+        authController.logUserOut(authToken: "testAuthToken", serverAddress: "https://api.dark-maps.com") {result in
             switch result {
             case .success():
                 expectation.fulfill()
@@ -168,13 +168,13 @@ class SimpleSignalSwiftAuthAPITests: XCTestCase {
     
     func testDeleteUserAccount() throws {
         let expectation = XCTestExpectation(description: "Successfully deletes account")
-        let uriValue = "https://www.simplesignal.co.uk/v1/auth/users/me/"
+        let uriValue = "https://api.dark-maps.com/v1/auth/users/me/"
         self.stub(uri(uriValue), http(204))
         let authController = AuthorisationController()
         authController.deleteUserAccount(
             currentPassword: "testPassword",
             authToken: "testAuthToken",
-            serverAddress: "https://www.simplesignal.co.uk") {result in
+            serverAddress: "https://api.dark-maps.com") {result in
             switch result {
             case .success():
                 expectation.fulfill()

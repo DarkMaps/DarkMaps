@@ -14,7 +14,6 @@ struct SettingsView: View {
     @Binding var passwordAlertShowing: Bool
     @Binding var loggedInUser: LoggedInUser?
     @Binding var actionInProgress: ActionInProgress?
-    @Binding var isSubscriber: Bool
     
     var subscriptionExpiryDate: Date?
     
@@ -25,8 +24,7 @@ struct SettingsView: View {
     
     func formatDate(_ date: Date) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .short
-        dateFormatter.timeStyle = .short
+        dateFormatter.dateFormat = "dd MMM yyyy"
         return dateFormatter.string(from: date)
     }
     
@@ -68,7 +66,6 @@ struct SettingsView: View {
                     )
                 }
                 Section(header: Text("Subscription")) {
-                    Toggle("Subscriber", isOn: $isSubscriber)
                     if subscriptionExpiryDate == nil {
                         SettingsRow(
                             actionInProgress: $actionInProgress,
@@ -99,6 +96,12 @@ struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
         return Group {
             PreviewWrapper()
+            PreviewWrapper(subscriptionExpiryDate: Date())
+            PreviewWrapper(loggedInUser: LoggedInUser(
+                            userName: "testUser@test.com",
+                            serverAddress: "https://api.test.com",
+                            authCode: "testAuthCode",
+                            is2FAUser: true))
         }
     }
     
@@ -113,9 +116,13 @@ struct SettingsView_Previews: PreviewProvider {
         @State var deactivate2FAModalIsShowing = false
         @State var passwordAlertShowing = false
         @State var actionInProgress: ActionInProgress? = nil
-        @State var isSubscriber = false
         
-        let subscriptionExpiryDate: Date? = nil
+        var subscriptionExpiryDate: Date?
+        
+        init(subscriptionExpiryDate: Date? = nil, loggedInUser: LoggedInUser? = nil) {
+            self.subscriptionExpiryDate = subscriptionExpiryDate
+            self.loggedInUser = loggedInUser
+        }
 
         var body: some View {
             
@@ -125,7 +132,6 @@ struct SettingsView_Previews: PreviewProvider {
                 passwordAlertShowing: $passwordAlertShowing,
                 loggedInUser: $loggedInUser,
                 actionInProgress: $actionInProgress,
-                isSubscriber: $isSubscriber,
                 subscriptionExpiryDate: subscriptionExpiryDate,
                 logUserOut: logUserOut,
                 getSubscriptionOptions: getSubscriptionOptions,

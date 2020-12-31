@@ -23,9 +23,6 @@ struct SettingsController: View {
     @State var backupCodesAlertShowing = false
     @State var backupCodes: IdentifiableBackupCodes?
     @State var actionInProgress: ActionInProgress? = nil
-    @State var isSubscriber = false {
-        didSet {updateLoggedInUserSubscriberStatus()}
-    }
     @State var subscriptionOptionsSheetShowing = false
     @State var subscriptionOptions: [SKProduct] = []
      
@@ -137,24 +134,14 @@ struct SettingsController: View {
     
     func restoreSubscription() {
         actionInProgress = .restoreSubscription
-        subscriptionController.restoreSubscription() { result in
+        subscriptionController.verifyIsStillSubscriber() { result in
             actionInProgress = nil
             switch result {
-            case .success():
+            case .success(let expiryDate):
+                print("Expiry date: \(expiryDate.timeIntervalSince1970)")
                 return
             case .failure(let error):
                 appState.displayedError = IdentifiableError(error)
-            }
-        }
-    }
-    
-    func updateLoggedInUserSubscriberStatus() {
-        if let loggedInUser = appState.loggedInUser {
-            if loggedInUser.subscriptionExpiryDate == nil {
-                let fakeExpiryDate = Date().addingTimeInterval(60*5)
-                loggedInUser.subscriptionExpiryDate = fakeExpiryDate
-            } else {
-                loggedInUser.subscriptionExpiryDate = nil
             }
         }
     }
@@ -174,7 +161,6 @@ struct SettingsController: View {
                 passwordAlertShowing: $passwordAlertShowing,
                 loggedInUser: $appState.loggedInUser,
                 actionInProgress: $actionInProgress,
-                isSubscriber: $isSubscriber,
                 subscriptionExpiryDate: appState.loggedInUser?.subscriptionExpiryDate ?? nil,
                 logUserOut: logUserOut,
                 getSubscriptionOptions: getSubscriptionOptions,

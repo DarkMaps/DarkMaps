@@ -25,7 +25,7 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
         
     func testCreateDevice() throws {
         let expectation = XCTestExpectation(description: "Successfully creates and uploads device")
-        let uriValue = "https://www.simplesignal.co.uk/v1/devices/"
+        let uriValue = "https://api.dark-maps.com/v1/devices/"
         let data: NSDictionary = [
             "code": "device_created",
             "message": "Device successfully created"
@@ -35,7 +35,7 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
         let address = try ProtocolAddress(name: "testName", deviceId: 1)
         let encryptionAPI = try SimpleSignalSwiftEncryptionAPI(address: address)
         
-        let result = encryptionAPI.createDevice(authToken: "testAuthToken", serverAddress: "https://www.simplesignal.co.uk")
+        let result = encryptionAPI.createDevice(authToken: "testAuthToken", serverAddress: "https://api.dark-maps.com")
         
         print(result)
         
@@ -51,7 +51,7 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
     func testSendMessage() throws {
         let expectation = XCTestExpectation(description: "Successfully obtains prekey bundle and sends message")
         
-        let uriValue = "https://www.simplesignal.co.uk/v1/devices/"
+        let uriValue = "https://api.dark-maps.com/v1/devices/"
         let data: NSDictionary = [
             "code": "device_created",
             "message": "Device successfully created"
@@ -60,7 +60,7 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
         
         let address = try ProtocolAddress(name: "testName", deviceId: 1)
         let encryptionAPI = try SimpleSignalSwiftEncryptionAPI(address: address)
-        let _ = encryptionAPI.createDevice(authToken: "testAuthToken", serverAddress: "https://www.simplesignal.co.uk")
+        let _ = encryptionAPI.createDevice(authToken: "testAuthToken", serverAddress: "https://api.dark-maps.com")
         
         let registrationId = KeychainSwift().get("testName.1-enc-registrationId")!
         
@@ -84,7 +84,7 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
             privateKey: recipientSignedPrekey,
             signature: recipientSignedPrekeySignature)
         
-        let uriValue2 = "https://www.simplesignal.co.uk/v1/prekeybundles/\(recipientHex)/\(registrationId)/"
+        let uriValue2 = "https://api.dark-maps.com/v1/prekeybundles/\(recipientHex)/\(registrationId)/"
         let data2: NSDictionary = [
             "address": recipientAddress.combinedValue,
             "identity_key": try recipientIdentity.publicKey.serialize().toBase64String(),
@@ -101,7 +101,7 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
         ]
         self.stub(uri(uriValue2), json(data2, status: 200))
         
-        let uriValue3 = "https://www.simplesignal.co.uk/v1/\(registrationId)/messages/"
+        let uriValue3 = "https://api.dark-maps.com/v1/\(registrationId)/messages/"
         let data3: NSDictionary = [
             "id": 1,
             "content": "testEncryptedContent",
@@ -111,7 +111,7 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
         ]
         self.stub(uri(uriValue3), json(data3, status: 201))
         
-        let result = encryptionAPI.sendMessage(message: "testMessage", recipientName: recipient, recipientDeviceId: UInt32(recipientDeviceId), authToken: "testAuthToken", serverAddress: "https://www.simplesignal.co.uk")
+        let result = encryptionAPI.sendMessage(message: "testMessage", recipientName: recipient, recipientDeviceId: UInt32(recipientDeviceId), authToken: "testAuthToken", serverAddress: "https://api.dark-maps.com")
         
         print(result)
         
@@ -158,7 +158,7 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
             id: 1,
             context: nil)
         
-        let uriValue = "https://www.simplesignal.co.uk/v1/devices/"
+        let uriValue = "https://api.dark-maps.com/v1/devices/"
         let data: NSDictionary = [
             "code": "device_created",
             "message": "Device successfully created"
@@ -169,7 +169,7 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
         let recipientDeviceId = UInt32(1)
         let recipientAddress = try ProtocolAddress(name: recipient, deviceId: UInt32(recipientDeviceId))
         let encryptionAPI = try SimpleSignalSwiftEncryptionAPI(address: recipientAddress)
-        let _ = encryptionAPI.createDevice(authToken: "testAuthToken", serverAddress: "https://www.simplesignal.co.uk")
+        let _ = encryptionAPI.createDevice(authToken: "testAuthToken", serverAddress: "https://api.dark-maps.com")
         
         let recipientRegistrationId = UInt32(KeychainSwift().get("\(recipientAddress.combinedValue)-enc-registrationId")!)!
         let recipientIdentity = try IdentityKeyPair(bytes: KeychainSwift().getData("\(recipientAddress.combinedValue)-enc-privateKey")!)
@@ -203,7 +203,7 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
         
         let message = try! PreKeySignalMessage(bytes: try! cipherText.serialize())
         
-        let uriValue2 = "https://www.simplesignal.co.uk/v1/\(recipientRegistrationId)/messages/"
+        let uriValue2 = "https://api.dark-maps.com/v1/\(recipientRegistrationId)/messages/"
         print(uriValue2)
         let messageInArray: NSDictionary = [
             "id": 1,
@@ -216,7 +216,7 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
         
         self.stub(uri(uriValue2), json(data2, status: 200))
         
-        let result = encryptionAPI.getMessages(authToken: "testAuthToken", serverAddress: "https://www.simplesignal.co.uk")
+        let result = encryptionAPI.getMessages(authToken: "testAuthToken", serverAddress: "https://api.dark-maps.com")
         
         switch result {
         case .success(let decryptedMessages):
@@ -235,7 +235,7 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
     func testDeleteDevice() throws {
         let expectation = XCTestExpectation(description: "Successfully delete a device")
         
-        let uriValue = "https://www.simplesignal.co.uk/v1/devices/"
+        let uriValue = "https://api.dark-maps.com/v1/devices/"
         let data: NSDictionary = [
             "code": "device_created",
             "message": "Device successfully created"
@@ -246,12 +246,12 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
         let deviceId = UInt32(1)
         let address = try ProtocolAddress(name: name, deviceId: UInt32(deviceId))
         let encryptionAPI = try SimpleSignalSwiftEncryptionAPI(address: address)
-        let _ = encryptionAPI.createDevice(authToken: "testAuthToken", serverAddress: "https://www.simplesignal.co.uk")
+        let _ = encryptionAPI.createDevice(authToken: "testAuthToken", serverAddress: "https://api.dark-maps.com")
         
-        let uriValue2 = "https://www.simplesignal.co.uk/v1/devices/"
+        let uriValue2 = "https://api.dark-maps.com/v1/devices/"
         self.stub(uri(uriValue2), http(204))
         
-        let result = encryptionAPI.deleteDevice(authToken: "testAuthToken", serverAddress: "https://www.simplesignal.co.uk")
+        let result = encryptionAPI.deleteDevice(authToken: "testAuthToken", serverAddress: "https://api.dark-maps.com")
         
         switch result {
         case .success():
@@ -267,7 +267,7 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
     func testDeleteMessage() throws {
         let expectation = XCTestExpectation(description: "Successfully delete a message")
         
-        let uriValue = "https://www.simplesignal.co.uk/v1/devices/"
+        let uriValue = "https://api.dark-maps.com/v1/devices/"
         let data: NSDictionary = [
             "code": "device_created",
             "message": "Device successfully created"
@@ -278,17 +278,17 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
         let deviceId = UInt32(1)
         let address = try ProtocolAddress(name: name, deviceId: UInt32(deviceId))
         let encryptionAPI = try SimpleSignalSwiftEncryptionAPI(address: address)
-        let _ = encryptionAPI.createDevice(authToken: "testAuthToken", serverAddress: "https://www.simplesignal.co.uk")
+        let _ = encryptionAPI.createDevice(authToken: "testAuthToken", serverAddress: "https://api.dark-maps.com")
         
         let registrationId = UInt32(KeychainSwift().get("\(address.combinedValue)-enc-registrationId")!)!
         
-        let uriValue2 = "https://www.simplesignal.co.uk/v1/\(registrationId)/messages/"
+        let uriValue2 = "https://api.dark-maps.com/v1/\(registrationId)/messages/"
         let data2: NSArray = [
             "message_deleted"
         ]
         self.stub(uri(uriValue2), json(data2, status: 200))
         
-        let result = encryptionAPI.deleteMessage(authToken: "testAuthToken", serverAddress: "https://www.simplesignal.co.uk", messageIds: [1])
+        let result = encryptionAPI.deleteMessage(authToken: "testAuthToken", serverAddress: "https://api.dark-maps.com", messageIds: [1])
         
         switch result {
         case .success(let outcomeArray):
@@ -306,7 +306,7 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
         
         let expectation = XCTestExpectation(description: "Successfully updates prekeys")
         
-        let uriValue = "https://www.simplesignal.co.uk/v1/devices/"
+        let uriValue = "https://api.dark-maps.com/v1/devices/"
         let data: NSDictionary = [
             "code": "device_created",
             "message": "Device successfully created"
@@ -317,7 +317,7 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
         let deviceId = UInt32(1)
         let address = try ProtocolAddress(name: name, deviceId: UInt32(deviceId))
         let encryptionAPI = try SimpleSignalSwiftEncryptionAPI(address: address)
-        let _ = encryptionAPI.createDevice(authToken: "testAuthToken", serverAddress: "https://www.simplesignal.co.uk")
+        let _ = encryptionAPI.createDevice(authToken: "testAuthToken", serverAddress: "https://api.dark-maps.com")
         
         let registrationId = UInt32(KeychainSwift().get("\(address.combinedValue)-enc-registrationId")!)!
         
@@ -329,14 +329,14 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
             }
         }
         
-        let uriValue2 = "https://www.simplesignal.co.uk/v1/\(registrationId)/prekeys/"
+        let uriValue2 = "https://api.dark-maps.com/v1/\(registrationId)/prekeys/"
         let data2: NSDictionary = [
             "code": "prekeys_stored",
             "message": "Prekeys successfully stored"
         ]
         self.stub(uri(uriValue2), json(data2, status: 200))
         
-        let result = encryptionAPI.updatePreKeys(authToken: "testAuthToken", serverAddress: "https://www.simplesignal.co.uk")
+        let result = encryptionAPI.updatePreKeys(authToken: "testAuthToken", serverAddress: "https://api.dark-maps.com")
         
         switch result {
         case .success():
@@ -353,7 +353,7 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
         
         let expectation = XCTestExpectation(description: "Successfully updates signed prekeys")
         
-        let uriValue = "https://www.simplesignal.co.uk/v1/devices/"
+        let uriValue = "https://api.dark-maps.com/v1/devices/"
         let data: NSDictionary = [
             "code": "device_created",
             "message": "Device successfully created"
@@ -364,7 +364,7 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
         let deviceId = UInt32(1)
         let address = try ProtocolAddress(name: name, deviceId: UInt32(deviceId))
         let encryptionAPI = try SimpleSignalSwiftEncryptionAPI(address: address)
-        let _ = encryptionAPI.createDevice(authToken: "testAuthToken", serverAddress: "https://www.simplesignal.co.uk")
+        let _ = encryptionAPI.createDevice(authToken: "testAuthToken", serverAddress: "https://api.dark-maps.com")
         
         let registrationId = UInt32(KeychainSwift().get("\(address.combinedValue)-enc-registrationId")!)!
         
@@ -376,14 +376,14 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
             signature: try currentSignedPreKey.signature())
         KeychainSwift().set(Data(try newSignedPreKey.serialize()), forKey: "\(address.combinedValue)-enc-signedPreKey:1")
         
-        let uriValue2 = "https://www.simplesignal.co.uk/v1/\(registrationId)/signedprekeys/"
+        let uriValue2 = "https://api.dark-maps.com/v1/\(registrationId)/signedprekeys/"
         let data2: NSDictionary = [
             "code": "signed_prekey_stored",
             "message": "Signed prekey successfully stored"
         ]
         self.stub(uri(uriValue2), json(data2, status: 200))
         
-        let result = encryptionAPI.updateSignedPreKey(authToken: "testAuthToken", serverAddress: "https://www.simplesignal.co.uk")
+        let result = encryptionAPI.updateSignedPreKey(authToken: "testAuthToken", serverAddress: "https://api.dark-maps.com")
         
         switch result {
         case .success():

@@ -15,7 +15,7 @@ struct LoginController: View {
     @State private var loginInProgress = false
     @State private var password = ""
     @State private var username = ""
-    @State private var serverAddress = "https://www.simplesignal.co.uk"
+    @State private var serverAddress = "https://api.dark-maps.com"
     @State private var ephemeralCode: String? = nil
     @State private var twoFactorCode = ""
     @State private var twoFactorModalVisible = false

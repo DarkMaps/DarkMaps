@@ -39,13 +39,12 @@ struct SignalMapsApp: App {
                             let subscriptionController = SubscriptionController()
                             subscriptionController.verifyIsStillSubscriber() { verifyResult in
                                 switch verifyResult {
-                                case .success(let isSubscriber):
-                                    if !isSubscriber {
-                                        print("User is no longer subscribed")
-                                        self.appState.loggedInUser?.subscriptionExpiryDate = nil
-                                    }
+                                case .success(let expirationDate):
+                                    print("User is still subscribed")
+                                    self.appState.loggedInUser?.subscriptionExpiryDate = expirationDate
                                 default:
                                     print("Failed to verify subscription status")
+                                    self.appState.loggedInUser?.subscriptionExpiryDate = nil
                                 }
                             }
                         }
