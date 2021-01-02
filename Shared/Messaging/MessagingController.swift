@@ -110,7 +110,7 @@ public class MessagingController {
             localAddress: address
         )
         
-        if simpleSignalSwiftEncryptionAPI.deviceExists {
+        if simpleSignalSwiftEncryptionAPI.deviceExists(authToken: authToken, serverAddress: serverAddress) {
             print("Device already exists locally")
             if let registrationId = simpleSignalSwiftEncryptionAPI.registrationId {
                 completionHandler(.success(registrationId))
@@ -191,10 +191,7 @@ public class MessagingController {
             DispatchQueue.main.async {
                 switch response {
                 case .success(let outputArray):
-                    print("Message retrieval successful")
-                    print("Got \(outputArray.count) messages")
                     for output in outputArray {
-                        print(output)
                         messageIdsToDelete.append(output.id)
                         do {
                             if let error = output.error {
@@ -226,8 +223,6 @@ public class MessagingController {
                                     try messagingStore.storeMessage(newMessage)
                                     continue
                                 }
-                                let jsonToPrint = try JSONSerialization.jsonObject(with: locationData, options: []) as? [String: Any]
-                                print(jsonToPrint)
                                 guard let decodedLocation = try? decoder.decode(Location.self, from: locationData) else {
                                     let newMessage = LocationMessage(
                                         id: output.id,
@@ -236,8 +231,6 @@ public class MessagingController {
                                     try messagingStore.storeMessage(newMessage)
                                     continue
                                 }
-                                print("Obtained location")
-                                print(decodedLocation)
                                 let newMessage = LocationMessage(
                                     id: output.id,
                                     sender: output.senderAddress,

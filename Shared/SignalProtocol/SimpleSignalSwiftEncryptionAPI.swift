@@ -27,8 +27,23 @@ public class SimpleSignalSwiftEncryptionAPI {
         self.store = try? KeychainSignalProtocolStore(keychainSwift: keychainSwift)
     }
     
-    public var deviceExists: Bool {
-        return store != nil
+    public func deviceExists(authToken: String, serverAddress: String) -> Bool {
+        guard let store = self.store else { return false }
+        // If a device exists locally need to check it matches server
+        let getDeviceOutcome = self.getDevice(authToken: authToken, serverAddress: serverAddress)
+        switch getDeviceOutcome {
+        case .failure:
+            let _ = self.deleteDevice(authToken: authToken, serverAddress: serverAddress)
+            return false
+        case .success(let deviceDetails):
+            let localRegistrationId = try? store.localRegistrationId(context: nil)
+            if deviceDetails.registrationId == (localRegistrationId ?? UInt32(0)) {
+                return true
+            } else {
+                let _ = self.deleteDevice(authToken: authToken, serverAddress: serverAddress)
+                return false
+            }
+        }
     }
     
     public var registrationId: Int? {
@@ -493,6 +508,50 @@ public class SimpleSignalSwiftEncryptionAPI {
         let output = SSAPIGetMessagesOutput(id: input.id, message: decryptedMessageString, senderAddress: address)
         return(output)
         
+    }
+    
+    public func getDevice(authToken: String, serverAddress: String) -> Result<SSAPIGetDeviceOutput, SSAPIEncryptionError> {
+        
+        let path = "\(serverAddress)/v1/devices/"
+        guard let url = URL(string: path) else {
+            return .failure(.invalidUrl)
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Token \(authToken)", forHTTPHeaderField: "Authorization")
+        
+        var result: Result<SSAPIGetDeviceOutput, SSAPIEncryptionError>!
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            
+            let processedResponse = self.handleURLErrors(successCode: 200, data: data, response: response, error: error)
+            
+            switch processedResponse {
+            case .failure(let error):
+                result = .failure(error)
+            case .success:
+                do {
+                    let decoder = JSONDecoder()
+                    decoder.keyDecodingStrategy = .convertFromSnakeCase
+                    let decodedResponse = try decoder.decode(SSAPIGetDeviceOutput.self, from: data!)
+                    result = .success(decodedResponse)
+                } catch {
+                    print(error)
+                    print("error decoding device")
+                    result = .failure(.badResponseFromServer)
+                }
+            }
+            
+            semaphore.signal()
+            
+        }.resume()
+        
+        _ = semaphore.wait(wallTimeout: .distantFuture)
+        
+        return result
     }
     
     public func deleteDevice(authToken: String, serverAddress: String) -> Result<Void, SSAPIEncryptionError> {

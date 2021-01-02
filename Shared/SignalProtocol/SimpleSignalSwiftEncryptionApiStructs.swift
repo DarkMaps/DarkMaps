@@ -46,6 +46,14 @@ public struct SSAPIGetMessagesOutput {
     var senderAddress: ProtocolAddress
 }
 
+public struct SSAPIGetDeviceOutput: Codable {
+    var id: Int
+    var user: Int
+    var identityKey: String
+    var registrationId: Int
+    var address: String
+}
+
 public enum SSAPIDeleteMessageOutcome {
     case messageDeleted, notMessageOwner, nonExistantMessage, serverError
 }
