@@ -102,9 +102,9 @@ class EndToEndTests: XCTestCase {
         
     func startEndToEndEncryptionMessagingTests(userDetails1: LoggedInUser, userDetails2: LoggedInUser, user1MessagingController: MessagingController, user2MessagingController: MessagingController, expectation: XCTestExpectation) throws {
         
-        let location = Location(latitude: 1.2345, longitude: 6.7891)
+        let location = Location(latitude: 1.2345, longitude: 6.7891, time: Date())
         
-        user1MessagingController.sendMessage(recipientName: userDetails2.userName, recipientDeviceId: userDetails2.deviceId ?? 1, message: location, serverAddress: userDetails1.serverAddress, authToken: userDetails1.authCode) {
+        user1MessagingController.sendMessage(recipientName: userDetails2.userName, recipientDeviceId: userDetails2.deviceId, message: location, serverAddress: userDetails1.serverAddress, authToken: userDetails1.authCode) {
             (sendMessageOutcome) in
             switch sendMessageOutcome {
             case .failure(let error):
@@ -123,8 +123,47 @@ class EndToEndTests: XCTestCase {
                         
                         
                         do {
-                            let user2Address = try ProtocolAddress(name: userDetails2.userName, deviceId: UInt32(userDetails2.deviceId ?? 1))
+                            let user2Address = try ProtocolAddress(name: userDetails2.userName, deviceId: UInt32(userDetails2.deviceId))
                             let messageStore = MessagingStore(localAddress: user2Address)
+                            let messageSummary = try messageStore.getMessageSummary()
+                            print(messageSummary)
+                            try self.startEndToEndEncryptionMessagingReturnTests(userDetails1: userDetails1, userDetails2: userDetails2, user1MessagingController: user1MessagingController, user2MessagingController: user2MessagingController, expectation: expectation)
+                            
+                            
+                        } catch {
+                            print("Error getting message summary")
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func startEndToEndEncryptionMessagingReturnTests(userDetails1: LoggedInUser, userDetails2: LoggedInUser, user1MessagingController: MessagingController, user2MessagingController: MessagingController, expectation: XCTestExpectation) throws {
+        
+        let location = Location(latitude: 1.2345, longitude: 6.7891, time: Date())
+        print("Sending return message")
+        user2MessagingController.sendMessage(recipientName: userDetails1.userName, recipientDeviceId: userDetails1.deviceId, message: location, serverAddress: userDetails2.serverAddress, authToken: userDetails2.authCode) {
+            (sendMessageOutcome) in
+            switch sendMessageOutcome {
+            case .failure(let error):
+                print("Error sending message")
+                print(error)
+            case .success:
+                
+                user1MessagingController.getMessages(serverAddress: userDetails1.serverAddress, authToken: userDetails1.authCode) {
+                    (getMessageOutcome) in
+                    switch getMessageOutcome {
+                    case .failure(let error):
+                        print("Error getting messages")
+                        print(error)
+                    case .success:
+                        print("Success getting messages")
+                        
+                        
+                        do {
+                            let user1Address = try ProtocolAddress(name: userDetails1.userName, deviceId: UInt32(userDetails1.deviceId))
+                            let messageStore = MessagingStore(localAddress: user1Address)
                             let messageSummary = try messageStore.getMessageSummary()
                             print(messageSummary)
                             self.startDeleteDevices(userDetails1: userDetails1, userDetails2: userDetails2, user1MessagingController: user1MessagingController, user2MessagingController: user2MessagingController, expectation: expectation)

@@ -65,12 +65,16 @@ public class MessagingController {
         allRecipients = parseExpiredLiveMessages(allRecipients)
         let locationToSend = Location(
             latitude: locationData.coordinate.latitude,
-            longitude: locationData.coordinate.longitude)
+            longitude: locationData.coordinate.longitude,
+            time: Date()
+            )
         for recipient in allRecipients {
+            var personalLocationToSend = locationToSend
+            personalLocationToSend.liveExpiryDate = Date(timeIntervalSince1970: Double(recipient.expiry))
             self.sendMessage(
                 recipientName: recipient.recipient.name,
                 recipientDeviceId: Int(recipient.recipient.deviceId),
-                message: locationToSend,
+                message: personalLocationToSend,
                 serverAddress: serverAddress,
                 authToken: authToken) {
                 sendMessageResponse in
@@ -107,7 +111,7 @@ public class MessagingController {
         )
         
         if simpleSignalSwiftEncryptionAPI.deviceExists {
-            print("Device already exists")
+            print("Device already exists locally")
             if let registrationId = simpleSignalSwiftEncryptionAPI.registrationId {
                 completionHandler(.success(registrationId))
                 return
@@ -188,50 +192,56 @@ public class MessagingController {
                 switch response {
                 case .success(let outputArray):
                     print("Message retrieval successful")
+                    print("Got \(outputArray.count) messages")
                     for output in outputArray {
+                        print(output)
                         messageIdsToDelete.append(output.id)
                         do {
                             if let error = output.error {
+                                print("Found error in message output")
                                 let newMessage = LocationMessage(
                                     id: output.id,
                                     sender: output.senderAddress,
-                                    error: error,
-                                    lastReceived: Int(Date().ticks))
+                                    error: error)
+                                print(newMessage)
                                 try messagingStore.storeMessage(newMessage)
+                                continue
                             } else {
                                 let decoder = JSONDecoder()
                                 guard let messageString = output.message else {
+                                    print("No message data found in message")
                                     let newMessage = LocationMessage(
                                         id: output.id,
                                         sender: output.senderAddress,
-                                        error: .badFormat,
-                                        lastReceived: Int(Date().ticks))
+                                        error: .badFormat)
                                     try messagingStore.storeMessage(newMessage)
                                     continue
                                 }
                                 guard let locationData = messageString.data(using: .utf8) else {
+                                    print("Unable to create message string")
                                     let newMessage = LocationMessage(
                                         id: output.id,
                                         sender: output.senderAddress,
-                                        error: .badFormat,
-                                        lastReceived: Int(Date().ticks))
+                                        error: .badFormat)
                                     try messagingStore.storeMessage(newMessage)
                                     continue
                                 }
+                                let jsonToPrint = try JSONSerialization.jsonObject(with: locationData, options: []) as? [String: Any]
+                                print(jsonToPrint)
                                 guard let decodedLocation = try? decoder.decode(Location.self, from: locationData) else {
                                     let newMessage = LocationMessage(
                                         id: output.id,
                                         sender: output.senderAddress,
-                                        error: .badFormat,
-                                        lastReceived: Int(Date().ticks))
+                                        error: .badFormat)
                                     try messagingStore.storeMessage(newMessage)
                                     continue
                                 }
+                                print("Obtained location")
+                                print(decodedLocation)
                                 let newMessage = LocationMessage(
                                     id: output.id,
                                     sender: output.senderAddress,
-                                    location: decodedLocation,
-                                    lastReceived: Int(Date().ticks))
+                                    location: decodedLocation)
                                 try messagingStore.storeMessage(newMessage)
                             }
                         } catch {
@@ -240,30 +250,40 @@ public class MessagingController {
                     }
                     print("Finished processing messages")
                     
-                    self.handleDeleteMessages(messageIds: messageIdsToDelete, serverAddress: serverAddress, authToken: authToken) { deleteMessageOutcome in
-                        switch deleteMessageOutcome {
-                        case .failure(let error):
-                            print(error)
-                            completionHandler(.failure(.unableToDeleteMessage))
-                        case .success():
-                            
-                            self.handleUpdateDevice(serverAddress: serverAddress, authToken: authToken) { updateDeviceOutcome in
+                    if messageIdsToDelete.count > 0 {
+                     
+                        self.handleDeleteMessages(messageIds: messageIdsToDelete, serverAddress: serverAddress, authToken: authToken) { deleteMessageOutcome in
+                            switch deleteMessageOutcome {
+                            case .failure(let error):
+                                print(error)
+                                completionHandler(.failure(.unableToDeleteMessage))
+                            case .success():
                                 
-                                switch updateDeviceOutcome {
-                                case .failure(let error):
-                                    print(error)
-                                    completionHandler(.failure(.unableToUpdateDeviceKeys))
-                                case .success():
-                                    completionHandler(.success(()))
+                                self.handleUpdateDevice(serverAddress: serverAddress, authToken: authToken) { updateDeviceOutcome in
+                                    
+                                    switch updateDeviceOutcome {
+                                    case .failure(let error):
+                                        print(error)
+                                        completionHandler(.failure(.unableToUpdateDeviceKeys))
+                                    case .success():
+                                        completionHandler(.success(()))
+                                    }
+                                    
                                 }
-                                
                             }
                         }
+                        
+                    } else {
+                        completionHandler(.success(()))
                     }
                     
-                case .failure( _):
+                case .failure(let error):
                     print("Message retrieval unsuccessful")
-                    completionHandler(.failure(.unableToRetrieveMessages))
+                    if error == .senderHasNoRegisteredDevice {
+                        completionHandler(.failure(.noDeviceOnServer))
+                    } else {
+                        completionHandler(.failure(.unableToRetrieveMessages))
+                    }
                 }
             }
         }
@@ -289,6 +309,13 @@ public class MessagingController {
                 completionHandler(.failure(.unableToDeleteMessage))
             }
         }
+    }
+    
+    public func handleDeleteMessageLocally(sender: ProtocolAddress) throws {
+        guard let messagingStore = self.messagingStore else {
+            throw MessagingControllerError.noDeviceCreated
+        }
+        try messagingStore.removeMessage(sender: sender)
     }
     
     private func handleUpdateDevice(serverAddress: String, authToken: String, completionHandler: @escaping (_: Result<Void, MessagingControllerError>) -> ()) {
@@ -380,6 +407,17 @@ public class MessagingController {
             throw MessagingControllerError.noDeviceCreated
         }
         return try messagingStore.getLiveMessages()
+    }
+    
+    func deleteAllLocalData() {
+        if let messagingStore = self.messagingStore {
+            messagingStore.clearAllData()
+        }
+        self.messagingStore = nil
+        if let simpleSignalSwiftEncryptionAPI = self.simpleSignalSwiftEncryptionAPI {
+            simpleSignalSwiftEncryptionAPI.deleteLocalDeviceDetails()
+        }
+        self.simpleSignalSwiftEncryptionAPI = nil
     }
     
 }

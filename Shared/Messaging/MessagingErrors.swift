@@ -27,12 +27,14 @@ extension MessageStoreError {
 }
 
 enum MessagingControllerError: LocalizedError {
-    case unableToStoreMessages, unableToRetrieveMessages, unableToDecryptMessage, poorlyFormattedLocation, unableToDeleteMessage, unableToUpdateDeviceKeys, unableToCreateAddress, unableToCreateEncryptionHandler, unableToCreateMessagingStore, noDeviceCreated, unableToSendMessage, unableToDeleteDevice, unableToCreateDevice, needToProvideUsername, remoteDeviceExists, poorlyFormattedLiveMessageArrayData, liveMessageRecipientAlreadyExists
+    case unableToStoreMessages, unableToRetrieveMessages, unableToDecryptMessage, poorlyFormattedLocation, unableToDeleteMessage, unableToUpdateDeviceKeys, unableToCreateAddress, unableToCreateEncryptionHandler, unableToCreateMessagingStore, noDeviceCreated, unableToSendMessage, unableToDeleteDevice, unableToCreateDevice, needToProvideUsername, remoteDeviceExists, poorlyFormattedLiveMessageArrayData, liveMessageRecipientAlreadyExists, noDeviceOnServer
 }
 
 extension MessagingControllerError {
     var localisedDescription: String? {
         switch self {
+        case .noDeviceOnServer:
+            return NSLocalizedString("There is no device stored on the server, logging out.", comment: "")
         case .remoteDeviceExists:
             return NSLocalizedString("A device already exists on the server.", comment: "")
         case .needToProvideUsername:

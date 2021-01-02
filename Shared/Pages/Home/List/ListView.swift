@@ -19,6 +19,7 @@ struct ListView: View {
                
     var performSync: () -> Void
     var deleteLiveMessage: (IndexSet) -> Void
+    var deleteMessage: (IndexSet) -> Void
     
     var body: some View {
         NavigationView {
@@ -39,14 +40,30 @@ struct ListView: View {
                                 Spacer()
                             }
                         }
-                        List(recieivingMessageArray) { message in
-                            NavigationLink(destination: DetailController(sender: message.sender)) {
-                                HStack {
-                                    Text(message.sender.combinedValue)
-                                    Spacer()
-                                    Text(String(message.lastReceived))
+                        List {
+                            ForEach(recieivingMessageArray, id: \.id) { message in
+                                NavigationLink(destination: DetailController(sender: message.sender)) {
+                                    HStack {
+                                        VStack(alignment: .leading) {
+                                            Text(message.sender.name)
+                                            if message.isError {
+                                                Text("Error").italic().foregroundColor(.red)
+                                                    .font(.footnote)
+                                            } else {
+                                                Text(message.relativeDate)
+                                                    .italic()
+                                                    .font(.footnote)
+                                            }
+                                        }
+                                        Spacer()
+                                        if message.isLive {
+                                            Image(systemName: "bolt").foregroundColor(.yellow)
+                                        }
+                                        
+                                    }
                                 }
                             }
+                            .onDelete(perform: deleteMessage)
                         }
                         Button(action: self.performSync) {
                             HStack {
@@ -101,7 +118,45 @@ struct ListView_Previews: PreviewProvider {
     
     struct PreviewWrapper: View {
         
-        @State var receivingMessageArray: [ShortLocationMessage] = []
+        @State var receivingMessageArray: [ShortLocationMessage] =
+            [
+                ShortLocationMessage(
+                    LocationMessage(
+                        id: 1,
+                        sender: try! ProtocolAddress(
+                            name: "test@test.com",
+                            deviceId: UInt32(1)),
+                        location: Location(
+                            latitude: 1,
+                            longitude: 1,
+                            liveExpiryDate: Date().addingTimeInterval(-300000),
+                            time: Date().addingTimeInterval(-3000)
+                        )
+                    )
+                ),
+                ShortLocationMessage(
+                    LocationMessage(
+                        id: 2,
+                        sender: try! ProtocolAddress(
+                            name: "test2@test.com",
+                            deviceId: UInt32(1)),
+                        location: Location(
+                            latitude: 1,
+                            longitude: 1,
+                            time: Date().addingTimeInterval(-1000)
+                        )
+                    )
+                ),
+                ShortLocationMessage(
+                    LocationMessage(
+                        id: 3,
+                        sender: try! ProtocolAddress(
+                            name: "test3@test.com",
+                            deviceId: UInt32(1)),
+                        error: .badResponseFromServer
+                    )
+                )
+            ]
         @State var sendingMessageArray: [LiveMessage] = []
         @State var getMessagesInProgress: Bool = false
         
@@ -109,6 +164,7 @@ struct ListView_Previews: PreviewProvider {
                    
         func performSync() {}
         func deleteLiveMessage(_: IndexSet) {}
+        func deleteMessage(_: IndexSet) {}
 
         var body: some View {
             return ListView(
@@ -117,7 +173,8 @@ struct ListView_Previews: PreviewProvider {
                 getMessagesInProgress: $getMessagesInProgress,
                 isSubscriber: isSubscriber,
                 performSync: performSync,
-                deleteLiveMessage: deleteLiveMessage
+                deleteLiveMessage: deleteLiveMessage,
+                deleteMessage: deleteMessage
             )
         }
     }

@@ -489,7 +489,7 @@ public class SimpleSignalSwiftAuthAPI{
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Token \(authToken)", forHTTPHeaderField: "Authorization")
         let json = [
-            "currentPassword": currentPassword
+            "current_password": currentPassword
         ]
         guard let jsonData = try? JSONSerialization.data(withJSONObject: json, options: []) else {
             return .failure(.badFormat)

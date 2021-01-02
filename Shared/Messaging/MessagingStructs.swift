@@ -50,6 +50,23 @@ public class LiveMessage: Codable, Identifiable {
 public struct Location: Codable {
     var latitude: Double
     var longitude: Double
+    var liveExpiryDate: Date?
+    var time: Date
+    
+    public var relativeDate: String {
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .full
+        return formatter.localizedString(for: self.time, relativeTo: Date())
+    }
+    
+    public var toLocationCoordinate: CLLocationCoordinate2D {
+        let coordinate = CLLocationCoordinate2D(
+            latitude: CLLocationDegrees(self.latitude),
+            longitude: CLLocationDegrees(self.longitude)
+        )
+        return coordinate
+    }
+
 }
 
 public class LocationMessage: Codable {
@@ -57,13 +74,12 @@ public class LocationMessage: Codable {
     var sender: ProtocolAddress
     var location: Location?
     var error: SSAPIEncryptionError?
-    var lastReceived: Int
     
-    init(id: Int, sender: ProtocolAddress, location: Location? = nil, error: SSAPIEncryptionError? = nil, lastReceived: Int) {
+    init(id: Int, sender: ProtocolAddress, location: Location? = nil, error: SSAPIEncryptionError? = nil) {
         self.id = id
         self.sender = sender
         self.location = location
-        self.lastReceived = lastReceived
+        self.error = error
     }
     
     required public init(from decoder: Decoder) throws {
@@ -73,14 +89,12 @@ public class LocationMessage: Codable {
         self.sender = try ProtocolAddress(senderString)
         self.location = try values.decodeIfPresent(Location.self, forKey: .location)
         self.error = try values.decodeIfPresent(SSAPIEncryptionError.self, forKey: .error)
-        self.lastReceived = try values.decode(Int.self, forKey: .lastReceived)
     }
     
     enum CodingKeys: String, CodingKey {
         case id
         case location
         case senderCombinedValue
-        case lastReceived
         case error
     }
     
@@ -89,37 +103,40 @@ public class LocationMessage: Codable {
         try container.encode(id, forKey: .id)
         try container.encode(location, forKey: .location)
         try container.encode(sender.combinedValue, forKey: .senderCombinedValue)
-        try container.encode(lastReceived, forKey: .lastReceived)
-    }
-    
-    public var toLocationCoordinate: CLLocationCoordinate2D? {
-        guard let location = self.location else {
-            return nil
-        }
-        let coordinate = CLLocationCoordinate2D(
-            latitude: CLLocationDegrees(location.latitude),
-            longitude: CLLocationDegrees(location.longitude)
-        )
-        return coordinate
+        try container.encode(error, forKey: .error)
     }
     
     public var toAnnotation: MKPointAnnotation? {
+        guard let location = self.location else {
+            return nil
+        }
         let annotation = MKPointAnnotation()
-        annotation.coordinate = self.toLocationCoordinate!
+        annotation.coordinate = location.toLocationCoordinate
         annotation.title = self.sender.name
         return annotation
     }
+    
 }
 
 public class ShortLocationMessage: Identifiable {
     
     public var id: Int
     var sender: ProtocolAddress
-    var lastReceived: Int
+    var time: Date
+    var isError: Bool
+    var isLive: Bool
     
     init(_ locationMessage: LocationMessage) {
         self.id = locationMessage.id
         self.sender = locationMessage.sender
-        self.lastReceived = locationMessage.lastReceived
+        self.time = locationMessage.location?.time ?? Date()
+        self.isError = locationMessage.error != nil
+        self.isLive = locationMessage.location?.liveExpiryDate != nil
+    }
+    
+    public var relativeDate: String {
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .full
+        return formatter.localizedString(for: self.time, relativeTo: Date())
     }
 }

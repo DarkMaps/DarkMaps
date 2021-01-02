@@ -48,7 +48,7 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
         wait(for: [expectation], timeout: 2.0)
     }
     
-    func testSendMessage() throws {
+    func testSendPreKeyMessage() throws {
         let expectation = XCTestExpectation(description: "Successfully obtains prekey bundle and sends message")
         
         let uriValue = "https://api.dark-maps.com/v1/devices/"
@@ -110,6 +110,128 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
             "recipient_address": recipientAddress.combinedValue
         ]
         self.stub(uri(uriValue3), json(data3, status: 201))
+        
+        let result = encryptionAPI.sendMessage(message: "testMessage", recipientName: recipient, recipientDeviceId: UInt32(recipientDeviceId), authToken: "testAuthToken", serverAddress: "https://api.dark-maps.com")
+        
+        print(result)
+        
+        switch result {
+        case .success():
+            expectation.fulfill()
+        case .failure(let error):
+            print(error)
+        }
+        wait(for: [expectation], timeout: 2.0)
+        
+    }
+    
+    func testSendStandardMessage() throws {
+        let expectation = XCTestExpectation(description: "Successfully obtains sends message when a session already exists")
+        
+        let uriValue = "https://api.dark-maps.com/v1/devices/"
+        let data: NSDictionary = [
+            "code": "device_created",
+            "message": "Device successfully created"
+        ]
+        self.stub(uri(uriValue), json(data, status: 201))
+        
+        let address = try ProtocolAddress(name: "testName", deviceId: 1)
+        let encryptionAPI = try SimpleSignalSwiftEncryptionAPI(address: address)
+        let _ = encryptionAPI.createDevice(authToken: "testAuthToken", serverAddress: "https://api.dark-maps.com")
+        
+        let registrationId = KeychainSwift().get("testName.1-enc-registrationId")!
+        
+        let recipient = "testRecipient"
+        let recipientRegistrationId = 1234
+        let recipientDeviceId = 1
+        let recipientAddress = try ProtocolAddress(name: recipient, deviceId: UInt32(recipientDeviceId))
+        let recipientData = Data(recipientAddress.combinedValue.utf8)
+        let recipientHex = recipientData.map{ String(format:"%02x", $0) }.joined()
+        let recipientIdentity = try IdentityKeyPair.generate()
+        let recipientPrekeyId = 1
+        let recipientPrekey = try PreKeyRecord.init(id: UInt32(1), privateKey: try PrivateKey.generate())
+        let recipientSignedPrekeyId = 1
+        let recipientSignedPrekey = try PrivateKey.generate()
+        let recipientSignedPrekeySignature = try recipientIdentity.privateKey.generateSignature(
+            message: recipientSignedPrekey.publicKey().serialize()
+        )
+        let recipientSignedPreKeyRecord = try SignedPreKeyRecord.init(
+            id: UInt32(recipientSignedPrekeyId),
+            timestamp: Date().ticks,
+            privateKey: recipientSignedPrekey,
+            signature: recipientSignedPrekeySignature)
+        
+        let uriValue2 = "https://api.dark-maps.com/v1/prekeybundles/\(recipientHex)/\(registrationId)/"
+        let data2: NSDictionary = [
+            "address": recipientAddress.combinedValue,
+            "identity_key": try recipientIdentity.publicKey.serialize().toBase64String(),
+            "registration_id": recipientRegistrationId,
+            "pre_key": [
+                "key_id": UInt32(recipientPrekeyId),
+                "public_key": try recipientPrekey.publicKey().serialize().toBase64String()
+            ],
+            "signed_pre_key": [
+                "key_id": UInt32(recipientSignedPrekeyId),
+                "public_key": try recipientSignedPreKeyRecord.publicKey().serialize().toBase64String(),
+                "signature": try recipientSignedPreKeyRecord.signature().toBase64String()
+            ]
+        ]
+        self.stub(uri(uriValue2), json(data2, status: 200))
+        
+        let uriValue3 = "https://api.dark-maps.com/v1/\(registrationId)/messages/"
+        let data3: NSDictionary = [
+            "id": 1,
+            "content": "testEncryptedContent",
+            "sender_address": address.combinedValue,
+            "sender_registration_id": registrationId,
+            "recipient_address": recipientAddress.combinedValue
+        ]
+        self.stub(uri(uriValue3), json(data3, status: 201))
+        
+        let senderStore = encryptionAPI.exposePrivateStore()!
+        let preKeyBundle = try PreKeyBundle(registrationId: UInt32(recipientRegistrationId), deviceId: UInt32(recipientDeviceId), prekeyId: UInt32(recipientPrekeyId), prekey: try recipientPrekey.publicKey(), signedPrekeyId: UInt32(recipientSignedPrekeyId), signedPrekey: try recipientSignedPreKeyRecord.publicKey(), signedPrekeySignature: recipientSignedPrekeySignature, identity: recipientIdentity.identityKey)
+        try processPreKeyBundle(preKeyBundle,
+                            for: recipientAddress,
+                            sessionStore: senderStore,
+                            identityStore: senderStore,
+                            context: nil)
+        let cipherTextForPreKeyMessage = try signalEncrypt(
+            message: "message".data(using: .utf8)!,
+            for: recipientAddress,
+            sessionStore: senderStore,
+            identityStore: senderStore,
+            context: nil)
+        var preKeyMessage = try PreKeySignalMessage(bytes: try cipherTextForPreKeyMessage.serialize())
+        let recipientStore = try KeychainSignalProtocolStore(
+            keychainSwift: KeychainSwift(keyPrefix: "test2"),
+            address: recipientAddress,
+            identity: recipientIdentity,
+            registrationId: UInt32(recipientRegistrationId))
+        try recipientStore.storePreKey(recipientPrekey, id: UInt32(recipientPrekeyId), context: nil)
+        try recipientStore.storeSignedPreKey(recipientSignedPreKeyRecord, id: UInt32(recipientSignedPrekeyId), context: nil)
+        let _ = try signalDecryptPreKey(
+            message: preKeyMessage,
+            from: address,
+            sessionStore: recipientStore,
+            identityStore: recipientStore,
+            preKeyStore: recipientStore,
+            signedPreKeyStore: recipientStore,
+            context: nil)
+        let cipherTextForReturnMessage = try signalEncrypt(
+            message: "message".data(using: .utf8)!,
+            for: address,
+            sessionStore: recipientStore,
+            identityStore: recipientStore,
+            context: nil)
+        var standardMessage = try SignalMessage(bytes: try cipherTextForReturnMessage.serialize())
+        let _ = try signalDecrypt(
+            message: standardMessage,
+            from: recipientAddress,
+            sessionStore: senderStore,
+            identityStore: senderStore,
+            context: nil)
+        
+        XCTAssertNotNil(try senderStore.loadSession(for: recipientAddress, context: nil))
         
         let result = encryptionAPI.sendMessage(message: "testMessage", recipientName: recipient, recipientDeviceId: UInt32(recipientDeviceId), authToken: "testAuthToken", serverAddress: "https://api.dark-maps.com")
         
@@ -205,9 +327,16 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
         
         let uriValue2 = "https://api.dark-maps.com/v1/\(recipientRegistrationId)/messages/"
         print(uriValue2)
+        let contentObject = [
+            "registration_id": senderRegistrationId,
+            "content": try message.serialize().toBase64String()
+        ] as [String : Any]
+        let contentJsonData = try! JSONSerialization.data(withJSONObject: contentObject, options: [])
+        let contentText = String(data: contentJsonData, encoding: .utf8)!
+        print(messageText)
         let messageInArray: NSDictionary = [
             "id": 1,
-            "content": try message.serialize().toBase64String(),
+            "content": contentText,
             "recipient_address": recipientAddress.combinedValue,
             "sender_registration_id": senderRegistrationId,
             "sender_address": senderAddress.combinedValue

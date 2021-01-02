@@ -26,6 +26,8 @@ struct LoginController: View {
     
     private func handleCreateDevice(newUser: LoggedInUser) -> Void {
         
+        loginInProgress = true
+        
         guard let messagingController = try? MessagingController(userName: newUser.userName, serverAddress: newUser.serverAddress, authToken: newUser.authCode) else {
             appState.displayedError = IdentifiableError(MessagingControllerError.unableToCreateAddress)
             return
@@ -44,10 +46,33 @@ struct LoginController: View {
                 appState.displayedError = IdentifiableError(error)
             case .success(let registrationId):
                 print("Registration Id: \(registrationId)")
-                appState.loggedInUser = newUser
                 appState.messagingController = messagingController
+                handleCheckSubscriptionStatus(newUser: newUser)
             }
         }
+    }
+    
+    func handleCheckSubscriptionStatus(newUser: LoggedInUser) -> Void {
+        
+        loginInProgress = true
+        
+        let subscriptionController = SubscriptionController()
+        
+        subscriptionController.verifyIsStillSubscriber { verifyResult in
+            
+            loginInProgress = false
+            
+            switch verifyResult {
+            case.failure(let error):
+                print(error)
+                appState.displayedError = IdentifiableError(error)
+                appState.loggedInUser = newUser
+            case .success(let expiryDate):
+                print(expiryDate)
+                appState.loggedInUser = newUser
+            }
+        }
+        
     }
     
     func handleLogin() -> Void {
@@ -57,6 +82,7 @@ struct LoginController: View {
             password: password,
             serverAddress: serverAddress
         ) { loginOutcome in
+            loginInProgress = false
             
             switch loginOutcome {
             case .twoFactorRequired(let ephemeralCodeReceived):

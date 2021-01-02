@@ -34,6 +34,11 @@ public struct SSAPIGetMessagesResponse: Codable {
     var senderAddress: String
 }
 
+public struct SSAPIGetMessagesContent: Codable {
+    var registrationId: Int
+    var content: String
+}
+
 public struct SSAPIGetMessagesOutput {
     var id: Int
     var error: SSAPIEncryptionError? = nil

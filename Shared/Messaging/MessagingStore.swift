@@ -60,7 +60,13 @@ public class MessagingStore {
         let keys = keychainSwift.allKeys
         for key in keys {
             if key.starts(with: "\(keychainSwift.keyPrefix)-msg-") {
-                let keyToGet = key.replacingOccurrences(of: keychainSwift.keyPrefix, with: "")
+                var keyToGet: String
+                // Removing only first occurence of prefix so can send location to self
+                if let range = key.range(of: keychainSwift.keyPrefix){
+                    keyToGet = key.replacingCharacters(in: range, with: "")
+                } else {
+                    keyToGet = key
+                }
                 guard let messageData = keychainSwift.getData(keyToGet) else {
                     throw MessageStoreError.noMessageFromThisSender
                 }
@@ -73,7 +79,7 @@ public class MessagingStore {
             }
         }
         summaryMessageArray.sort { (first, second) -> Bool in
-            first.lastReceived > second.lastReceived
+            first.time.timeIntervalSince1970 > second.time.timeIntervalSince1970
         }
         return summaryMessageArray
     }

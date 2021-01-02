@@ -94,10 +94,14 @@ struct SettingsController: View {
     
     func deleteUserAccount() {
         actionInProgress = .deleteUserAccount
+        print(currentPassword)
         authorisationController.deleteUserAccount(currentPassword: currentPassword, authToken: appState.loggedInUser?.authCode ?? "unknown", serverAddress: appState.loggedInUser?.serverAddress ?? "unknown") { result in
             actionInProgress = nil
             switch result {
             case .success():
+                if let messagingController = self.appState.messagingController {
+                    messagingController.deleteAllLocalData()
+                }
                 appState.loggedInUser = nil
             case .failure(let error):
                 appState.displayedError = IdentifiableError(error)
@@ -106,7 +110,7 @@ struct SettingsController: View {
     }
     
     func getSubscriptionOptions() {
-        actionInProgress = .getSubscriptionOptions
+        actionInProgress = .subscribe
         subscriptionController.getSubscriptions() { result in
             actionInProgress = nil
             switch result {
@@ -148,7 +152,7 @@ struct SettingsController: View {
     
     func generateActionSheetButtons(options: [SKProduct]) -> [Alert.Button] {
         let buttons = options.enumerated().map { i, option in
-            Alert.Button.default(Text("\(option.localizedDescription): \(option.price)")) {self.subscribe(product: option)}
+            Alert.Button.default(Text("\(option.localizedTitle): \(option.localizedPrice ?? String(describing: option.price))")) {self.subscribe(product: option)}
         }
         return buttons
     }
@@ -161,7 +165,6 @@ struct SettingsController: View {
                 passwordAlertShowing: $passwordAlertShowing,
                 loggedInUser: $appState.loggedInUser,
                 actionInProgress: $actionInProgress,
-                subscriptionExpiryDate: appState.loggedInUser?.subscriptionExpiryDate ?? nil,
                 logUserOut: logUserOut,
                 getSubscriptionOptions: getSubscriptionOptions,
                 restoreSubscription: restoreSubscription
@@ -213,5 +216,5 @@ struct IdentifiableBackupCodes: Identifiable {
 }
 
 enum ActionInProgress {
-    case obtain2FAQRCode, confirm2FA, deactivate2FA, logUserOut, deleteUserAccount, subscribe, restoreSubscription, getSubscriptionOptions
+    case obtain2FAQRCode, confirm2FA, deactivate2FA, logUserOut, deleteUserAccount, subscribe, restoreSubscription
 }

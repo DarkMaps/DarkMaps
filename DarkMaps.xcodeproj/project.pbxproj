@@ -76,6 +76,7 @@
 		EC4A05CF2595F99F00DE81A8 /* MessagingStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4A05CE2595F99F00DE81A8 /* MessagingStore.swift */; };
 		EC5FDA5425933A8E006448AB /* SimpleSignalSwiftEncryptionAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC5FDA5325933A8E006448AB /* SimpleSignalSwiftEncryptionAPITests.swift */; };
 		EC67E4C6258BC39100CACBE7 /* SimpleSignalSwiftAuthAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC67E4C5258BC39100CACBE7 /* SimpleSignalSwiftAuthAPITests.swift */; };
+		EC7226F6259F3A53009F6104 /* StoreKitTestCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = EC7226F5259F3A53009F6104 /* StoreKitTestCertificate.cer */; };
 		EC912986257BB67500E12BF6 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC912985257BB67500E12BF6 /* AppState.swift */; };
 		EC912992257BB85400E12BF6 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC912985257BB67500E12BF6 /* AppState.swift */; };
 		EC91299A257CC13900E12BF6 /* AuthorisationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC912999257CC13800E12BF6 /* AuthorisationController.swift */; };
@@ -91,6 +92,50 @@
 		EC9129D9257D6C6400E12BF6 /* AuthorisationEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129D8257D6C6400E12BF6 /* AuthorisationEnum.swift */; };
 		EC9129DD257D828200E12BF6 /* ErrorAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129DC257D828200E12BF6 /* ErrorAlert.swift */; };
 		EC9129E1257D82D000E12BF6 /* IdentifiableError.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129E0257D82D000E12BF6 /* IdentifiableError.swift */; };
+		ECAEF0C525A1211200525760 /* SubscriptionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC247FE3259CA2EE00EEBAA1 /* SubscriptionController.swift */; };
+		ECAEF0C925A1211600525760 /* configuration.storekit in Resources */ = {isa = PBXBuildFile; fileRef = EC7226F1259F39F8009F6104 /* configuration.storekit */; };
+		ECAEF0CD25A1211C00525760 /* NotificationCentreExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF3E231259BDC22002E4291 /* NotificationCentreExtensions.swift */; };
+		ECAEF0D125A1212000525760 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAFE37B259A80F5008E9318 /* MapView.swift */; };
+		ECAEF0D525A1212400525760 /* LocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1CC2E02599CAC30047E9AF /* LocationController.swift */; };
+		ECAEF0D925A1212800525760 /* MessagingStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4A05CE2595F99F00DE81A8 /* MessagingStore.swift */; };
+		ECAEF0DD25A1212B00525760 /* MessagingErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC0BB6AD25975B4100A2F3CB /* MessagingErrors.swift */; };
+		ECAEF0E125A1212E00525760 /* MessagingStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC0BB6B225975B4E00A2F3CB /* MessagingStructs.swift */; };
+		ECAEF0E525A1213100525760 /* MessagingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC0BB6B725975B7E00A2F3CB /* MessagingController.swift */; };
+		ECAEF0E925A1213600525760 /* TextFieldWithTitleAndValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129B2257CC60A00E12BF6 /* TextFieldWithTitleAndValidation.swift */; };
+		ECAEF0ED25A1213800525760 /* RoundedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129B8257CC61B00E12BF6 /* RoundedButton.swift */; };
+		ECAEF0F125A1213B00525760 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129BC257CC72500E12BF6 /* ActivityIndicator.swift */; };
+		ECAEF0F525A1213D00525760 /* ErrorAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129DC257D828200E12BF6 /* ErrorAlert.swift */; };
+		ECAEF0F925A1214000525760 /* TextFieldAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFC593F258DF803005CCDA2 /* TextFieldAlert.swift */; };
+		ECAEF0FD25A1214500525760 /* AuthorisationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC912999257CC13800E12BF6 /* AuthorisationController.swift */; };
+		ECAEF10125A1214800525760 /* AuthorisationEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129D8257D6C6400E12BF6 /* AuthorisationEnum.swift */; };
+		ECAEF10525A1214C00525760 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC912985257BB67500E12BF6 /* AppState.swift */; };
+		ECAEF10925A1214F00525760 /* LoggedInUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129C0257CF7DB00E12BF6 /* LoggedInUser.swift */; };
+		ECAEF10D25A1215200525760 /* IdentifiableError.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129E0257D82D000E12BF6 /* IdentifiableError.swift */; };
+		ECAEF11125A1215700525760 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129CC257D59DF00E12BF6 /* HomeView.swift */; };
+		ECAEF11525A1215A00525760 /* HomeViewButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD126C2258679C800C2161D /* HomeViewButton.swift */; };
+		ECAEF11925A1215D00525760 /* DetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECC0A5C8257FE8C4001D5E60 /* DetailController.swift */; };
+		ECAEF11D25A1216100525760 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECC0A5CC257FE8CE001D5E60 /* DetailView.swift */; };
+		ECAEF12125A1216300525760 /* ListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECC0A5BE257FE8A6001D5E60 /* ListController.swift */; };
+		ECAEF12525A1216600525760 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECC0A5C4257FE8B8001D5E60 /* ListView.swift */; };
+		ECAEF12925A1216900525760 /* ListViewErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD599D82599F63A003AD3D0 /* ListViewErrors.swift */; };
+		ECAEF12D25A1216C00525760 /* NewChatController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECC0A5D0257FE8DF001D5E60 /* NewChatController.swift */; };
+		ECAEF13125A1216F00525760 /* NewChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECC0A5D4257FE8E8001D5E60 /* NewChatView.swift */; };
+		ECAEF13525A1217200525760 /* NewChatErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD599D32599D590003AD3D0 /* NewChatErrors.swift */; };
+		ECAEF13925A1217600525760 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECC0A5D8257FE8F5001D5E60 /* SettingsController.swift */; };
+		ECAEF13D25A1217900525760 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECC0A5DC257FE8FF001D5E60 /* SettingsView.swift */; };
+		ECAEF14125A1217B00525760 /* Activate2FAModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4520D425896275002768C8 /* Activate2FAModal.swift */; };
+		ECAEF14525A1217E00525760 /* Deactivate2FAModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4520D825896287002768C8 /* Deactivate2FAModal.swift */; };
+		ECAEF14925A1218100525760 /* SettingsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFC5944258E0AAB005CCDA2 /* SettingsRow.swift */; };
+		ECAEF14D25A1218400525760 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129A5257CC33800E12BF6 /* LoginController.swift */; };
+		ECAEF15125A1218700525760 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129A9257CC34900E12BF6 /* LoginView.swift */; };
+		ECAEF15525A1218B00525760 /* CustomServerModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129AD257CC51E00E12BF6 /* CustomServerModal.swift */; };
+		ECAEF15925A1218E00525760 /* TwoFactorModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129D0257D5EC100E12BF6 /* TwoFactorModal.swift */; };
+		ECAEF15D25A1219400525760 /* SimpleSignalSwiftAuthAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4520DC258B66F8002768C8 /* SimpleSignalSwiftAuthAPI.swift */; };
+		ECAEF16125A1219700525760 /* SimpleSignalSwiftAuthAPIErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC23C0EB258BEE2D00ABDE84 /* SimpleSignalSwiftAuthAPIErrors.swift */; };
+		ECAEF16525A1219A00525760 /* SimpleSignalSwiftAuthAPIStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC23C0F4258BEE4600ABDE84 /* SimpleSignalSwiftAuthAPIStructs.swift */; };
+		ECAEF16925A1219D00525760 /* SimpleSignalSwiftEncryptionAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1EDB19258EB1A000B8F4D4 /* SimpleSignalSwiftEncryptionAPI.swift */; };
+		ECAEF16D25A121A000525760 /* SimpleSignalSwiftEncryptionAPIErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1EDB1E258EB1C000B8F4D4 /* SimpleSignalSwiftEncryptionAPIErrors.swift */; };
+		ECAEF17125A121A300525760 /* SimpleSignalSwiftEncryptionApiStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1EDB23258EB1ED00B8F4D4 /* SimpleSignalSwiftEncryptionApiStructs.swift */; };
 		ECAFE37C259A80F5008E9318 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAFE37B259A80F5008E9318 /* MapView.swift */; };
 		ECC0A5BF257FE8A6001D5E60 /* ListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECC0A5BE257FE8A6001D5E60 /* ListController.swift */; };
 		ECC0A5C5257FE8B8001D5E60 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECC0A5C4257FE8B8001D5E60 /* ListView.swift */; };
@@ -229,6 +274,8 @@
 		EC67E4C3258BC39100CACBE7 /* DarkMapsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DarkMapsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC67E4C5258BC39100CACBE7 /* SimpleSignalSwiftAuthAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleSignalSwiftAuthAPITests.swift; sourceTree = "<group>"; };
 		EC67E4C7258BC39100CACBE7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EC7226F1259F39F8009F6104 /* configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = configuration.storekit; sourceTree = "<group>"; };
+		EC7226F5259F3A53009F6104 /* StoreKitTestCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = StoreKitTestCertificate.cer; sourceTree = "<group>"; };
 		EC912985257BB67500E12BF6 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		EC912999257CC13800E12BF6 /* AuthorisationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorisationController.swift; sourceTree = "<group>"; };
 		EC9129A5257CC33800E12BF6 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
@@ -388,6 +435,8 @@
 			isa = PBXGroup;
 			children = (
 				EC247FE3259CA2EE00EEBAA1 /* SubscriptionController.swift */,
+				EC7226F1259F39F8009F6104 /* configuration.storekit */,
+				EC7226F5259F3A53009F6104 /* StoreKitTestCertificate.cer */,
 			);
 			path = Subscriptions;
 			sourceTree = "<group>";
@@ -795,6 +844,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ECAEF0C925A1211600525760 /* configuration.storekit in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -804,6 +854,7 @@
 			files = (
 				ECD599DE259A381C003AD3D0 /* Launch Screen.storyboard in Resources */,
 				ECFFD5262572620300458BC8 /* Assets.xcassets in Resources */,
+				EC7226F6259F3A53009F6104 /* StoreKitTestCertificate.cer in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -959,19 +1010,51 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ECAEF0F925A1214000525760 /* TextFieldAlert.swift in Sources */,
+				ECAEF16525A1219A00525760 /* SimpleSignalSwiftAuthAPIStructs.swift in Sources */,
+				ECAEF10925A1214F00525760 /* LoggedInUser.swift in Sources */,
 				ECDE0E432572B615009D3561 /* DataStoreInMemory.swift in Sources */,
+				ECAEF0E925A1213600525760 /* TextFieldWithTitleAndValidation.swift in Sources */,
+				ECAEF0F125A1213B00525760 /* ActivityIndicator.swift in Sources */,
 				ECDE0E442572B615009D3561 /* Protocol.swift in Sources */,
+				ECAEF0DD25A1212B00525760 /* MessagingErrors.swift in Sources */,
 				ECDE0E452572B615009D3561 /* PreKeySignalMessage.swift in Sources */,
+				ECAEF14125A1217B00525760 /* Activate2FAModal.swift in Sources */,
 				ECDE0E462572B615009D3561 /* SenderKeyMessage.swift in Sources */,
 				ECDE0E472572B615009D3561 /* SenderKeyDistributionMessage.swift in Sources */,
 				ECDE0E482572B615009D3561 /* CiphertextMessage.swift in Sources */,
+				ECAEF16925A1219D00525760 /* SimpleSignalSwiftEncryptionAPI.swift in Sources */,
+				ECAEF12925A1216900525760 /* ListViewErrors.swift in Sources */,
+				ECAEF0E525A1213100525760 /* MessagingController.swift in Sources */,
+				ECAEF13525A1217200525760 /* NewChatErrors.swift in Sources */,
 				ECDE0E492572B615009D3561 /* SignalMessage.swift in Sources */,
+				ECAEF0D125A1212000525760 /* MapView.swift in Sources */,
+				ECAEF14D25A1218400525760 /* LoginController.swift in Sources */,
+				ECAEF14925A1218100525760 /* SettingsRow.swift in Sources */,
 				ECDE0E4A2572B615009D3561 /* PublicKey.swift in Sources */,
+				ECAEF0D525A1212400525760 /* LocationController.swift in Sources */,
+				ECAEF14525A1217E00525760 /* Deactivate2FAModal.swift in Sources */,
+				ECAEF15125A1218700525760 /* LoginView.swift in Sources */,
+				ECAEF13D25A1217900525760 /* SettingsView.swift in Sources */,
+				ECAEF0C525A1211200525760 /* SubscriptionController.swift in Sources */,
 				ECDE0E4B2572B615009D3561 /* Address.swift in Sources */,
+				ECAEF13125A1216F00525760 /* NewChatView.swift in Sources */,
+				ECAEF0F525A1213D00525760 /* ErrorAlert.swift in Sources */,
 				ECDE0E4C2572B615009D3561 /* Error.swift in Sources */,
+				ECAEF15525A1218B00525760 /* CustomServerModal.swift in Sources */,
+				ECAEF12525A1216600525760 /* ListView.swift in Sources */,
+				ECAEF13925A1217600525760 /* SettingsController.swift in Sources */,
+				ECAEF17125A121A300525760 /* SimpleSignalSwiftEncryptionApiStructs.swift in Sources */,
+				ECAEF12D25A1216C00525760 /* NewChatController.swift in Sources */,
+				ECAEF10D25A1215200525760 /* IdentifiableError.swift in Sources */,
+				ECAEF11125A1215700525760 /* HomeView.swift in Sources */,
+				ECAEF16D25A121A000525760 /* SimpleSignalSwiftEncryptionAPIErrors.swift in Sources */,
+				ECAEF15D25A1219400525760 /* SimpleSignalSwiftAuthAPI.swift in Sources */,
 				ECDE0E4D2572B615009D3561 /* Kdf.swift in Sources */,
+				ECAEF0E125A1212E00525760 /* MessagingStructs.swift in Sources */,
 				ECDE0E4E2572B615009D3561 /* SessionRecord.swift in Sources */,
 				ECDE0E4F2572B615009D3561 /* SignedPreKeyRecord.swift in Sources */,
+				ECAEF10125A1214800525760 /* AuthorisationEnum.swift in Sources */,
 				ECDE0E502572B615009D3561 /* SenderKeyRecord.swift in Sources */,
 				ECDE0E512572B615009D3561 /* PreKeyRecord.swift in Sources */,
 				ECDE0E522572B615009D3561 /* PreKeyBundle.swift in Sources */,
@@ -981,10 +1064,21 @@
 				ECDE0E562572B615009D3561 /* Fingerprint.swift in Sources */,
 				ECDE0E572572B615009D3561 /* SenderKeyName.swift in Sources */,
 				ECDE0E582572B615009D3561 /* ClonableHandleOwner.swift in Sources */,
+				ECAEF11525A1215A00525760 /* HomeViewButton.swift in Sources */,
 				ECDE0E592572B615009D3561 /* IdentityKey.swift in Sources */,
+				ECAEF11D25A1216100525760 /* DetailView.swift in Sources */,
+				ECAEF0D925A1212800525760 /* MessagingStore.swift in Sources */,
+				ECAEF15925A1218E00525760 /* TwoFactorModal.swift in Sources */,
+				ECAEF16125A1219700525760 /* SimpleSignalSwiftAuthAPIErrors.swift in Sources */,
 				ECDE0E5A2572B615009D3561 /* SignalMapsApp.swift in Sources */,
+				ECAEF12125A1216300525760 /* ListController.swift in Sources */,
+				ECAEF11925A1215D00525760 /* DetailController.swift in Sources */,
+				ECAEF10525A1214C00525760 /* AppState.swift in Sources */,
 				ECDE0E5B2572B615009D3561 /* ContentView.swift in Sources */,
 				ECDE0E5C2572B615009D3561 /* KeychainSignalProtocolStore.swift in Sources */,
+				ECAEF0FD25A1214500525760 /* AuthorisationController.swift in Sources */,
+				ECAEF0CD25A1211C00525760 /* NotificationCentreExtensions.swift in Sources */,
+				ECAEF0ED25A1213800525760 /* RoundedButton.swift in Sources */,
 				ECDE0E5D2572B615009D3561 /* KeychainSwiftDistrib.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1230,6 +1324,7 @@
 		};
 		ECFFD5282572620300458BC8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EC3712DE259DD825001E5422 /* secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -1291,6 +1386,7 @@
 		};
 		ECFFD5292572620300458BC8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EC3712DE259DD825001E5422 /* secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;

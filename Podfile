@@ -8,6 +8,7 @@ target 'DarkMaps (iOS)' do
   # Pods for SignalMaps (iOS)
   pod 'SwiftLocation', '~> 5.0'
   pod 'SwiftyStoreKit'
+  pod 'TPInAppReceipt'
 
 end
 
@@ -24,6 +25,9 @@ target 'DarkMapsiOSFramework' do
   use_frameworks!
 
   # Pods for SignalMapsiOSFramework
+  pod 'SwiftLocation', '~> 5.0'
+  pod 'SwiftyStoreKit'
+  pod 'TPInAppReceipt'
 
 end
 

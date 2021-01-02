@@ -20,6 +20,7 @@ public class AuthorisationController {
                     case let .success(data):
                         let newUser =  LoggedInUser(
                             userName: username,
+                            deviceId: 1,
                             serverAddress: serverAddress,
                             authCode: data.authToken,
                             is2FAUser: false
@@ -48,6 +49,7 @@ public class AuthorisationController {
                     case let .success(data):
                         let newUser =  LoggedInUser(
                             userName: username,
+                            deviceId: 1,
                             serverAddress: serverAddress,
                             authCode: data.authToken,
                             is2FAUser: true
@@ -142,6 +144,7 @@ public class AuthorisationController {
     
     func deleteUserAccount(currentPassword: String, authToken: String, serverAddress: String, completionHandler: @escaping (_: Result<Void, SSAPIAuthDeleteUserAccountError>) -> ()) {
         print("Delete User Account")
+        print(currentPassword)
         DispatchQueue.global(qos: .utility).async {
             let response = self.simpleSignalSwiftAuthAPI.deleteUserAccount(
                 currentPassword: currentPassword,

@@ -15,12 +15,7 @@ struct DetailView: View {
     @Binding var centerCoordinate: CLLocationCoordinate2D?
     @Binding var annotations: [MKPointAnnotation]
     
-    let dateFormatter = DateFormatter()
-    
     var body: some View {
-        
-        dateFormatter.timeStyle = .short
-        dateFormatter.dateStyle = .short
         
         return ZStack {
             if fetchingMessageDetails {
@@ -32,7 +27,7 @@ struct DetailView: View {
             } else {
                 VStack(alignment: .leading) {
                     Text(messageDetails!.sender.name).padding(.leading)
-                    Text("Last Seen: \(dateFormatter.string(from: Date(ticks: UInt64(messageDetails!.lastReceived))))").padding(.leading)
+                    Text("Last Seen: \(messageDetails!.location!.relativeDate)").padding(.leading)
                     MapView(
                         centerCoordinate: Binding($centerCoordinate)!,
                         annotations: annotations
@@ -61,8 +56,7 @@ struct DetailView_Previews: PreviewProvider {
                 name: "test@test.com",
                 deviceId: UInt32(324)
             ),
-            location: Location(latitude: 53.800755, longitude: -1.549077),
-            lastReceived: Int(Date().ticks)
+            location: Location(latitude: 53.800755, longitude: -1.549077, time: Date())
         )
         @State var fetchingMessageDetails = false
         @State var centerCoordinate: CLLocationCoordinate2D? = nil
@@ -75,7 +69,7 @@ struct DetailView_Previews: PreviewProvider {
                 centerCoordinate: $centerCoordinate,
                 annotations: $annotations
             ).onAppear() {
-                self.centerCoordinate = self.messageDetails!.toLocationCoordinate
+                self.centerCoordinate = self.messageDetails!.location!.toLocationCoordinate
                 let annotation = self.messageDetails!.toAnnotation!
                 annotations.append(annotation)
             }

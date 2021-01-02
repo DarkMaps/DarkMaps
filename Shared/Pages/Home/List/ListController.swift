@@ -22,7 +22,7 @@ struct ListController: View {
             return
         }
         
-        guard let address = try? ProtocolAddress(name: loggedInUser.userName, deviceId: UInt32(loggedInUser.deviceId ?? 1)) else {
+        guard let address = try? ProtocolAddress(name: loggedInUser.userName, deviceId: UInt32(loggedInUser.deviceId)) else {
             appState.displayedError = IdentifiableError(ListViewErrors.noUserLoggedIn)
             return
         }
@@ -52,27 +52,66 @@ struct ListController: View {
             return
         }
         
-        messagingController.getMessages(serverAddress: loggedInUser.serverAddress, authToken: loggedInUser.authCode) {
-            getMessagesOutcome in
+        messagingController.getMessages(serverAddress: loggedInUser.serverAddress, authToken: loggedInUser.authCode) { getMessagesOutcome in
+            
+            getMessagesInProgress = false
+            
             switch getMessagesOutcome {
             case .failure(let error):
-                appState.displayedError = IdentifiableError(error)
+                if error == .noDeviceOnServer {
+                    messagingController.deleteAllLocalData()
+                    let authorisationController = AuthorisationController()
+                    authorisationController.logUserOut(authToken: loggedInUser.authCode, serverAddress: loggedInUser.serverAddress) { logOutOutcome in
+                        switch logOutOutcome {
+                        case .success():
+                            appState.loggedInUser = nil
+                        case .failure(let error):
+                            appState.displayedError = IdentifiableError(error)
+                            appState.loggedInUser = nil
+                        }
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        appState.displayedError = IdentifiableError(error)
+                    }
+                }
             case .success():
-                
+                print("Success getting messages")
                 do {
                     let messageStore = MessagingStore(
                         localAddress: try ProtocolAddress(
                             name: loggedInUser.userName,
-                            deviceId: UInt32(loggedInUser.deviceId ?? 1))
+                            deviceId: UInt32(loggedInUser.deviceId))
                     )
                     let messages = try messageStore.getMessageSummary()
                     print(messages)
                     self.recieivingMessageArray.append(contentsOf: messages)
                 } catch {
-                    appState.displayedError = IdentifiableError(error)
+                    DispatchQueue.main.async {
+                        print(error)
+                        appState.displayedError = IdentifiableError(error)
+                    }
                 }
                 
             }
+        }
+    }
+    
+    func deleteMessage(_ offsets: IndexSet) {
+        let messagesToDelete = offsets.map({ self.recieivingMessageArray[$0] })
+        
+        guard let messagingController = appState.messagingController else {
+            appState.displayedError = IdentifiableError(ListViewErrors.noUserLoggedIn)
+            return
+        }
+        
+        do {
+            for message in messagesToDelete {
+                try messagingController.handleDeleteMessageLocally(sender: message.sender)
+                recieivingMessageArray.remove(atOffsets: offsets)
+            }
+        } catch {
+            appState.displayedError = IdentifiableError(error)
         }
     }
     
@@ -92,7 +131,6 @@ struct ListController: View {
         } catch {
             appState.displayedError = IdentifiableError(error)
         }
-        
     }
     
     var body: some View {
@@ -102,7 +140,8 @@ struct ListController: View {
             getMessagesInProgress: $getMessagesInProgress,
             isSubscriber: appState.loggedInUser?.subscriptionExpiryDate != nil,
             performSync: performSync,
-            deleteLiveMessage: deleteLiveMessage
+            deleteLiveMessage: deleteLiveMessage,
+            deleteMessage: deleteMessage
         ).onAppear() {
             getStoredMessages()
             performSync()

@@ -72,7 +72,7 @@ struct NewChatController: View {
                         recipientDeviceId: Int(1),
                         message: location,
                         serverAddress: loggedInUser.serverAddress,
-                        authToken: loggedInUser.serverAddress) {
+                        authToken: loggedInUser.authCode) {
                         sendMessageOutcome in
                         
                         switch sendMessageOutcome {

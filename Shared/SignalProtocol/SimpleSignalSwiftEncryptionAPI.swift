@@ -14,6 +14,12 @@ public class SimpleSignalSwiftEncryptionAPI {
     let address: ProtocolAddress
     private let keychainSwift: KeychainSwift
     private var store: KeychainSignalProtocolStore? = nil
+    #if DEBUG
+    //Required for testing
+    public func exposePrivateStore() -> KeychainSignalProtocolStore? {
+        return self.store
+    }
+    #endif
     
     init(address: ProtocolAddress) throws {
         self.address = address
@@ -167,7 +173,7 @@ public class SimpleSignalSwiftEncryptionAPI {
             
             if let session = try? store.loadSession(for: recipientAddress, context: nil) {
                 print("Session exists: Sending message")
-                return (sendMessageUsingStore(message: message, isPreKeyMessage: false, recipientAddress: recipientAddress, recipientRegistrationId: Int(try session.remoteRegistrationId()), authToken: authToken, serverAddress: serverAddress))
+                return (sendMessageUsingStore(message: message, recipientAddress: recipientAddress, recipientRegistrationId: Int(try session.remoteRegistrationId()), authToken: authToken, serverAddress: serverAddress))
             } else {
                 print("No session: Obtaining preKeyBundle")
                 let registrationId = try store.localRegistrationId(context: nil)
@@ -180,7 +186,7 @@ public class SimpleSignalSwiftEncryptionAPI {
                         sessionStore: store,
                         identityStore: store,
                         context: nil)
-                    return (sendMessageUsingStore(message: message, isPreKeyMessage: true, recipientAddress: recipientAddress, recipientRegistrationId: Int(try preKeyBundle.registrationId()), authToken: authToken, serverAddress: serverAddress))
+                    return (sendMessageUsingStore(message: message, recipientAddress: recipientAddress, recipientRegistrationId: Int(try preKeyBundle.registrationId()), authToken: authToken, serverAddress: serverAddress))
                 case .failure(let error):
                     return(.failure(error))
                 }
@@ -192,24 +198,34 @@ public class SimpleSignalSwiftEncryptionAPI {
         
     }
     
-    private func sendMessageUsingStore(message: String, isPreKeyMessage: Bool, recipientAddress: ProtocolAddress, recipientRegistrationId: Int, authToken: String, serverAddress: String) -> Result<Void, SSAPIEncryptionError> {
+    private func sendMessageUsingStore(message: String, recipientAddress: ProtocolAddress, recipientRegistrationId: Int, authToken: String, serverAddress: String) -> Result<Void, SSAPIEncryptionError> {
         
         guard let store = self.store else {
             return(.failure(.noStore))
         }
         
+        guard let messageData = message.data(using: .utf8) else {
+            return(.failure(.badFormat))
+        }
+        
         do {
             let cipherText = try signalEncrypt(
-                message: message.data(using: .utf8)!,
+                message: messageData,
                 for: recipientAddress,
                 sessionStore: store,
                 identityStore: store,
                 context: nil)
+            
+            
             var messageData: String
-            if isPreKeyMessage {
-                messageData = (try! PreKeySignalMessage(bytes: try! cipherText.serialize()).serialize()).toBase64String()
+            if try cipherText.messageType() == .preKey {
+                print("Creating prekey message")
+                messageData = (try PreKeySignalMessage(bytes: try cipherText.serialize()).serialize()).toBase64String()
+            } else if try cipherText.messageType() == .whisper {
+                print("Creating standard message")
+                messageData = (try SignalMessage(bytes: try cipherText.serialize()).serialize()).toBase64String()
             } else {
-                messageData = (try! SignalMessage(bytes: try! cipherText.serialize()).serialize()).toBase64String()
+                return(.failure(.badFormat))
             }
             
             guard let registrationId = try? store.localRegistrationId(context: nil) else {
@@ -267,6 +283,7 @@ public class SimpleSignalSwiftEncryptionAPI {
             
             return result
         } catch {
+            print(error)
             return(.failure(.badFormat))
         }
     }
@@ -300,7 +317,6 @@ public class SimpleSignalSwiftEncryptionAPI {
                     let decoder = JSONDecoder()
                     decoder.keyDecodingStrategy = .convertFromSnakeCase
                     let decodedResponse = try decoder.decode(SSAPIPreKeyBundleResponse.self, from: data!)
-                    print(decodedResponse)
                     guard let deviceIdString = decodedResponse.address.split(separator: ".").last else {
                         print("Error decoding address")
                         result = .failure(.badFormat)
@@ -427,16 +443,28 @@ public class SimpleSignalSwiftEncryptionAPI {
         }
         
         let address: ProtocolAddress
-        print(input.senderAddress)
         do {
             address = try ProtocolAddress(input.senderAddress)
         } catch {
             throw SSAPIEncryptionError.invalidSenderAddress
         }
-        let decryptedMessageString: String
-        guard let contentArray = input.content.toUint8Array() else {
+        
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        guard let messageContentData = input.content.data(using: .utf8) else {
             return(SSAPIGetMessagesOutput(id: input.id, error: .badResponseFromServer, senderAddress: address))
         }
+        guard let messageContent = try? decoder.decode(SSAPIGetMessagesContent.self, from: messageContentData) else {
+            print("Unable to create SSAPIGetMessagesContent from string")
+            return(SSAPIGetMessagesOutput(id: input.id, error: .badResponseFromServer, senderAddress: address))
+        }
+        
+        let decryptedMessageString: String
+        guard let contentArray = messageContent.content.toUint8Array() else {
+            print("Unable to convert content array to Uint8Array")
+            return(SSAPIGetMessagesOutput(id: input.id, error: .badResponseFromServer, senderAddress: address))
+        }
+        
         do {
             let decryptedMessageData = try signalDecrypt(
                 message: SignalMessage(bytes: contentArray),
@@ -458,6 +486,7 @@ public class SimpleSignalSwiftEncryptionAPI {
                     context: nil)
                 decryptedMessageString = String(decoding: decryptedMessageData, as: UTF8.self)
             } catch {
+                // TODO: Need to catch untrusted identity here
                 return(SSAPIGetMessagesOutput(id: input.id, error: .unableToDecrypt, senderAddress: address))
             }
         }
@@ -648,6 +677,7 @@ public class SimpleSignalSwiftEncryptionAPI {
             return .failure(.badFormat)
         }
         
+        
         var result: Result<Void, SSAPIEncryptionError>!
         
         let semaphore = DispatchSemaphore(value: 0)
@@ -778,6 +808,7 @@ public class SimpleSignalSwiftEncryptionAPI {
         
         guard response.statusCode == successCode else {
             do {
+                print("Printing data:")
                 let jsonToPrint = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
                 print(jsonToPrint as Any)
             } catch {

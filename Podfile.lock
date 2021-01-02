@@ -1,4 +1,5 @@
 PODS:
+  - ASN1Swift (1.2.3)
   - Mockingjay (3.0.0-alpha.1):
     - Mockingjay/Core (= 3.0.0-alpha.1)
     - Mockingjay/XCTest (= 3.0.0-alpha.1)
@@ -8,26 +9,33 @@ PODS:
     - Mockingjay/Core
   - SwiftLocation (5.0.0)
   - SwiftyStoreKit (0.16.1)
+  - TPInAppReceipt (3.0.2):
+    - ASN1Swift (~> 1.2.3)
   - URITemplate (3.0.0)
 
 DEPENDENCIES:
   - Mockingjay (~> 3.0.0-alpha.1)
   - SwiftLocation (~> 5.0)
   - SwiftyStoreKit
+  - TPInAppReceipt
 
 SPEC REPOS:
   trunk:
+    - ASN1Swift
     - Mockingjay
     - SwiftLocation
     - SwiftyStoreKit
+    - TPInAppReceipt
     - URITemplate
 
 SPEC CHECKSUMS:
+  ASN1Swift: 73ba94f1d97c1c1d059d180708ad42845aeac4f9
   Mockingjay: 0f7c5aa49c7f1b95621cee3c79b557141f5a225c
   SwiftLocation: a686601d531069f6e438d681e5f227633dfa2690
   SwiftyStoreKit: 6b9c08810269f030586dac1fae8e75871a82e84a
+  TPInAppReceipt: 8e397b2e493c2f2904d5ce67cd8adfdf007a3644
   URITemplate: 58e0d47f967006c5d59888af5356c4a8ed3b197d
 
-PODFILE CHECKSUM: a3b253625f5d8321eb75698487f437811f688a0c
+PODFILE CHECKSUM: 84c7bdc585a0980a7e4be3b4346f58a8a7d07b05
 
 COCOAPODS: 1.10.0

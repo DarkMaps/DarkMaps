@@ -24,55 +24,62 @@ struct LoginView: View {
     var submitTwoFactor: (_ twoFactorCode: String) -> Void
     
     var body: some View {
-        VStack(alignment: .leading) {
-            TextFieldWithTitleAndValidation(
-                title: "Username",
-                invalidText: "Invalid username",
-                validRegex: "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$",
-                disableAutocorrection: true,
-                text: $username,
-                showInvalidText: $invalidUsername
-            )
-            TextFieldWithTitleAndValidation(
-                title: "Password",
-                invalidText: "Invalid password",
-                secureField: true,
-                text: $password,
-                showInvalidText: $invalidPassword,
-                onCommit: self.performLogin
-            )
-            Spacer()
-            Button(action: self.performLogin) {
-                HStack {
-                    if (self.loginInProgress) {
-                        ActivityIndicator(isAnimating: true)
+        NavigationView {
+            VStack(alignment: .center) {
+                Image("Main Icon")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .cornerRadius(20)
+                    .padding()
+                TextFieldWithTitleAndValidation(
+                    title: "Username",
+                    invalidText: "Invalid username",
+                    validRegex: "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$",
+                    disableAutocorrection: true,
+                    text: $username,
+                    showInvalidText: $invalidUsername
+                )
+                TextFieldWithTitleAndValidation(
+                    title: "Password",
+                    invalidText: "Invalid password",
+                    secureField: true,
+                    text: $password,
+                    showInvalidText: $invalidPassword,
+                    onCommit: self.performLogin
+                )
+                Spacer()
+                Button(action: self.performLogin) {
+                    HStack {
+                        if (self.loginInProgress) {
+                            ActivityIndicator(isAnimating: true)
+                        }
+                        Text("Login")
                     }
-                    Text("Login")
+                }
+                .disabled(invalidUsername || invalidPassword || loginInProgress)
+                .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
+                Text("").hidden().sheet(
+                isPresented: $twoFactorModalVisible) {
+                    TwoFactorModal(
+                        twoFactorCode: $twoFactorCode,
+                        loginInProgress: $loginInProgress,
+                        submitTwoFactor: submitTwoFactor
+                    )
+                }
+                Text("").hidden().sheet(
+                isPresented: $customServerModalVisible) {
+                    CustomServerModal(serverAddress: $serverAddress)
                 }
             }
-            .disabled(invalidUsername || invalidPassword || loginInProgress)
-            .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
-            Text("").hidden().sheet(
-            isPresented: $twoFactorModalVisible) {
-                TwoFactorModal(
-                    twoFactorCode: $twoFactorCode,
-                    loginInProgress: $loginInProgress,
-                    submitTwoFactor: submitTwoFactor
-                )
-            }
-            Text("").hidden().sheet(
-            isPresented: $customServerModalVisible) {
-                CustomServerModal(serverAddress: $serverAddress)
-            }
+            .padding()
+            .navigationBarTitle("Log In")
+            .navigationBarBackButtonHidden(true)
+            .navigationBarItems(
+                leading: Text(""),
+                trailing: Button(action: {self.customServerModalVisible.toggle()}) {
+                    Image(systemName: "gear").imageScale(.large).foregroundColor(Color("AccentColor"))
+            })
         }
-        .padding()
-        .navigationBarTitle("Log In")
-        .navigationBarBackButtonHidden(true)
-        .navigationBarItems(
-            leading: Text(""),
-            trailing: Button(action: {self.customServerModalVisible.toggle()}) {
-                Image(systemName: "gear").imageScale(.large).foregroundColor(Color("AccentColor"))
-        })
     }
 }
 

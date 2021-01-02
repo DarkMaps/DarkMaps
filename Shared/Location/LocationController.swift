@@ -73,7 +73,8 @@ public class LocationController: ObservableObject {
             }
             let newLocation = Location(
                 latitude: extractedLocation.coordinate.latitude,
-                longitude: extractedLocation.coordinate.longitude)
+                longitude: extractedLocation.coordinate.longitude,
+                time: Date())
             completionHandler(.success(newLocation))
         }
     }

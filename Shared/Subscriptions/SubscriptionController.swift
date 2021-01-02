@@ -8,18 +8,22 @@
 import Foundation
 import SwiftyStoreKit
 import StoreKit
+import TPInAppReceipt
 
 public enum SubscriptionError: LocalizedError {
-    case invalidIdentifier, unableToRetrieveProductInfo, errorPerformingPurchase, errorVerifyingReceipt, expiredPurchase, neverPurchased, restoreFailed, nothingToRestore, errorRetreivingReceipts
+    case invalidIdentifier, unableToRetrieveProductInfo, errorPerformingPurchase, errorVerifyingReceipt, expiredPurchase, neverPurchased, restoreFailed, nothingToRestore, errorRetreivingReceipts, errorCompletingPurchase
 }
 
 public class SubscriptionController {
     
+    private let productArray = Set(["mtr.DarkMaps.Subscription.Monthly"])
     private let notificationCentre = NotificationCenter.default
     
     public func getSubscriptions(completionHandler: @escaping (Result<[SKProduct], SubscriptionError>) -> ()) {
-        SwiftyStoreKit.retrieveProductsInfo(["mtr.DarkMaps.Subscription"]) { result in
+        print("Getting subscription options")
+        SwiftyStoreKit.retrieveProductsInfo(productArray) { result in
             if let product = result.retrievedProducts.first {
+                print("Successsfully retrieved options")
                 let priceString = product.localizedPrice!
                 print("Product: \(product.localizedDescription), price: \(priceString)")
                 completionHandler(.success(Array(result.retrievedProducts)))
@@ -37,23 +41,28 @@ public class SubscriptionController {
     
     public func purchaseSubscription(product: SKProduct, completionHandler: @escaping (Result<Date, SubscriptionError>) -> ()) {
         SwiftyStoreKit.purchaseProduct(product.productIdentifier, atomically: true) { purchaseResult in
-            
+            print(purchaseResult)
             switch purchaseResult {
             case .success(let purchase):
+                print("Purchase successful")
                 // Deliver content from server, then:
                 if purchase.needsFinishTransaction {
                     SwiftyStoreKit.finishTransaction(purchase.transaction)
+                    print("Finished transaction")
                 }
                 
-                self.verifyReceipt() { verifyResult in
+                self.verifyReceiptLocally() { verifyResult in
                     switch verifyResult {
                     case .success(let expiryDate):
+                        print("Successfully verified")
                         completionHandler(.success(expiryDate))
                     case .failure(let error):
+                        print("Error verifying")
                         completionHandler(.failure(error))
                     }
                 }
             default:
+                print("Error performing purchase")
                 completionHandler(.failure(.errorPerformingPurchase))
             }
         }
@@ -61,13 +70,12 @@ public class SubscriptionController {
 
     
     public func verifyIsStillSubscriber(completionHandler: @escaping (Result<Date, SubscriptionError>) -> ()) {
-        SwiftyStoreKit.fetchReceipt(forceRefresh: true) { result in
-            switch result {
-            case .success(let receiptData):
-                let encryptedReceipt = receiptData.base64EncodedString(options: [])
-                print("Fetch receipt success:\n\(encryptedReceipt)")
-                
-                self.verifyReceipt() { verifyResult in
+        InAppReceipt.refresh { (error) in
+            if let err = error {
+                print("Fetch receipt failed: \(error)")
+                completionHandler(.failure(.errorRetreivingReceipts))
+            } else {
+                self.verifyReceiptLocally() { verifyResult in
                     switch verifyResult {
                     case .success(let expiryDate):
                         completionHandler(.success(expiryDate))
@@ -75,11 +83,40 @@ public class SubscriptionController {
                         completionHandler(.failure(error))
                     }
                 }
-                
-            case .error(let error):
-                print("Fetch receipt failed: \(error)")
-                completionHandler(.failure(.errorRetreivingReceipts))
             }
+        }
+    }
+    
+    private func verifyReceiptLocally(completionHandler: @escaping (Result<Date, SubscriptionError>) -> ()) {
+        if let receipt = try? InAppReceipt.localReceipt() {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd MMM yyyy"
+            print("Creation Date: \(dateFormatter.string(from: receipt.creationDate))")
+            print("Expiry Date: \(dateFormatter.string(from: receipt.expirationDate ?? Date()))")
+            let activeSubscriptions = receipt.activeAutoRenewableSubscriptionPurchases
+            let activeSubscriptionsProductIds = activeSubscriptions.map({$0.productIdentifier})
+            let validSubscriptionIds = activeSubscriptionsProductIds.filter{ self.productArray.contains($0) }
+            if validSubscriptionIds.count > 0 {
+                do {
+                    try receipt.verify()
+                    guard let expirationDate = receipt.expirationDate else {
+                        self.sendFailureNotification()
+                        completionHandler(.failure(.errorVerifyingReceipt))
+                        return
+                    }
+                    self.sendSuccessNotification(expiry: expirationDate)
+                    completionHandler(.success(expirationDate))
+                } catch {
+                    self.sendFailureNotification()
+                    completionHandler(.failure(.errorVerifyingReceipt))
+                }
+            } else {
+                self.sendFailureNotification()
+                completionHandler(.failure(.errorVerifyingReceipt))
+            }
+        } else {
+            self.sendFailureNotification()
+            completionHandler(.failure(.errorVerifyingReceipt))
         }
     }
     
@@ -88,42 +125,57 @@ public class SubscriptionController {
         let sharedSecret = Bundle.main.infoDictionary?["STOREKIT_SECRET"] as? String ?? "no storekit secret available"
         let appleValidator = AppleReceiptValidator(service: .sandbox, sharedSecret: sharedSecret)
         print("Verifying with secret: \(sharedSecret)")
-        SwiftyStoreKit.verifyReceipt(using: appleValidator) { verifyRecieptResult in
-            
-            switch verifyRecieptResult {
+        SwiftyStoreKit.verifyReceipt(using: appleValidator) { verifyReceiptResult in
+            print(verifyReceiptResult)
+            switch verifyReceiptResult {
             case .success(let receipt):
+                        
+                let verifySubscriptionResult = SwiftyStoreKit.verifySubscriptions(
+                    ofType: .autoRenewable,
+                    productIds: self.productArray,
+                    inReceipt: receipt)
                 
-                self.getSubscriptions() { getSubscriptionsResult in
-                    switch getSubscriptionsResult {
-                    case .success(let productArray):
-                        
-                        let productIds = Set(productArray.map({$0.productIdentifier}))
-                        
-                        let verifySubscriptionResult = SwiftyStoreKit.verifySubscriptions(
-                            ofType: .autoRenewable,
-                            productIds: productIds,
-                            inReceipt: receipt)
-                        
-                        switch verifySubscriptionResult {
-                        case .purchased(let expiryDate, let receiptItems):
-                            print("Product is valid until \(expiryDate)")
-                            self.sendSuccessNotification(expiry: expiryDate)
-                            completionHandler(.success(expiryDate))
-                        case .expired(let expiryDate, let receiptItems):
-                            print("Product is expired since \(expiryDate)")
-                            self.sendFailureNotification()
-                            completionHandler(.failure(.expiredPurchase))
-                        case .notPurchased:
-                            print("This product has never been purchased")
-                            self.sendFailureNotification()
-                            completionHandler(.failure(.neverPurchased))
-                        }
-                    case .failure(let error):
-                        completionHandler(.failure(error))
-                    }
+                switch verifySubscriptionResult {
+                case .purchased(let expiryDate, let receiptItems):
+                    print("Product is valid until \(expiryDate)")
+                    self.sendSuccessNotification(expiry: expiryDate)
+                    completionHandler(.success(expiryDate))
+                case .expired(let expiryDate, let receiptItems):
+                    print("Product is expired since \(expiryDate)")
+                    self.sendFailureNotification()
+                    completionHandler(.failure(.expiredPurchase))
+                case .notPurchased:
+                    print("This product has never been purchased")
+                    self.sendFailureNotification()
+                    completionHandler(.failure(.neverPurchased))
                 }
-            default:
+                
+            case .error(let error):
+                print(error)
                 completionHandler(.failure(.errorVerifyingReceipt))
+            }
+        }
+    }
+    
+    public func handleCompleteTransactions(completionHandler: @escaping (Result<Date, SubscriptionError>) -> ()) {
+        SwiftyStoreKit.completeTransactions(atomically: true) { purchases in
+            for purchase in purchases {
+                switch purchase.transaction.transactionState {
+                case .purchased, .restored:
+                    if purchase.needsFinishTransaction {
+                        SwiftyStoreKit.finishTransaction(purchase.transaction)
+                    }
+                    self.verifyReceiptLocally() { verifyReceiptResult in
+                        switch verifyReceiptResult {
+                        case .success(let expiryDate):
+                            completionHandler(.success(expiryDate))
+                        case .failure(let error):
+                            completionHandler(.failure(error))
+                        }
+                    }
+                default:
+                    completionHandler(.failure(.nothingToRestore))
+                }
             }
         }
     }

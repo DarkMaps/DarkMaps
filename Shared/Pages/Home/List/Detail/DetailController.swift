@@ -33,7 +33,7 @@ struct DetailController: View {
             }
             guard let localUserAddress = try? ProtocolAddress(
                     name: loggedInUser.userName,
-                    deviceId: UInt32(loggedInUser.deviceId ?? 1)) else {
+                    deviceId: UInt32(loggedInUser.deviceId)) else {
                 fetchingMessageDetails = false
                 return
             }
@@ -43,7 +43,11 @@ struct DetailController: View {
             do {
                 let messageDetails = try messagingStore.loadMessage(sender: sender)
                 self.messageDetails = messageDetails
-                self.centerCoordinate = messageDetails.toLocationCoordinate
+                guard let location = messageDetails.location else {
+                    fetchingMessageDetails = false
+                    return
+                }
+                self.centerCoordinate = location.toLocationCoordinate
                 if let annotation = messageDetails.toAnnotation {
                     self.annotations.append(annotation)
                 }

@@ -54,5 +54,7 @@
 	</array>
 	<key>STOREKIT_SECRET</key>
 	<string>$(STOREKIT_SECRET)</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We need to access your location in order to encrypt it and send it on to your chosen recipients.</string>
 </dict>
 </plist>

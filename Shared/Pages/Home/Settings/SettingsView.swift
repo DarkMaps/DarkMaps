@@ -15,8 +15,6 @@ struct SettingsView: View {
     @Binding var loggedInUser: LoggedInUser?
     @Binding var actionInProgress: ActionInProgress?
     
-    var subscriptionExpiryDate: Date?
-    
     var logUserOut: () -> Void
     var getSubscriptionOptions: () -> Void
     var restoreSubscription: () -> Void
@@ -66,21 +64,21 @@ struct SettingsView: View {
                     )
                 }
                 Section(header: Text("Subscription")) {
-                    if subscriptionExpiryDate == nil {
+                    if loggedInUser?.subscriptionExpiryDate == nil {
                         SettingsRow(
                             actionInProgress: $actionInProgress,
                             title: "Subscribe",
-                            actionDefiningActivityMarker: .logUserOut,
+                            actionDefiningActivityMarker: .subscribe,
                             onTap: getSubscriptionOptions
                         )
                         SettingsRow(
                             actionInProgress: $actionInProgress,
                             title: "Restore Subscription",
-                            actionDefiningActivityMarker: .logUserOut,
+                            actionDefiningActivityMarker: .restoreSubscription,
                             onTap: restoreSubscription
                         )
                     } else {
-                        Text("You are subscribed until: \(formatDate(subscriptionExpiryDate!))")
+                        Text("You are subscribed until: \(formatDate(loggedInUser!.subscriptionExpiryDate!))")
                     }
 
                 }
@@ -96,9 +94,16 @@ struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
         return Group {
             PreviewWrapper()
-            PreviewWrapper(subscriptionExpiryDate: Date())
+            PreviewWrapper(loggedInUser: LoggedInUser(
+                userName: "testUser@test.com",
+                deviceId: 1,
+                serverAddress: "https://api.test.com",
+                authCode: "testAuthCode",
+                is2FAUser: false,
+                subscriptionExpiryDate: Date()))
             PreviewWrapper(loggedInUser: LoggedInUser(
                             userName: "testUser@test.com",
+                            deviceId: 1,
                             serverAddress: "https://api.test.com",
                             authCode: "testAuthCode",
                             is2FAUser: true))
@@ -111,17 +116,14 @@ struct SettingsView_Previews: PreviewProvider {
         func getSubscriptionOptions() {}
         func restoreSubscription() {}
         
-        @State var loggedInUser: LoggedInUser? = nil
+        @State var loggedInUser: LoggedInUser?
         @State var activate2FAModalIsShowing = false
         @State var deactivate2FAModalIsShowing = false
         @State var passwordAlertShowing = false
         @State var actionInProgress: ActionInProgress? = nil
         
-        var subscriptionExpiryDate: Date?
-        
-        init(subscriptionExpiryDate: Date? = nil, loggedInUser: LoggedInUser? = nil) {
-            self.subscriptionExpiryDate = subscriptionExpiryDate
-            self.loggedInUser = loggedInUser
+        init(loggedInUser: LoggedInUser? = nil) {
+            _loggedInUser = State(initialValue: loggedInUser)
         }
 
         var body: some View {
@@ -132,7 +134,6 @@ struct SettingsView_Previews: PreviewProvider {
                 passwordAlertShowing: $passwordAlertShowing,
                 loggedInUser: $loggedInUser,
                 actionInProgress: $actionInProgress,
-                subscriptionExpiryDate: subscriptionExpiryDate,
                 logUserOut: logUserOut,
                 getSubscriptionOptions: getSubscriptionOptions,
                 restoreSubscription: restoreSubscription

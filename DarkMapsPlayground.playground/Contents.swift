@@ -1,4 +1,4 @@
-import SignalMapsFramework
+import DarkMapsiOSFramework
 import Foundation
 
 var str = "Hello, playground"

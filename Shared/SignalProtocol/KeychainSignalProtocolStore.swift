@@ -68,7 +68,7 @@ public class KeychainSignalProtocolStore: IdentityKeyStore, PreKeyStore, SignedP
     }
 
     public func saveIdentity(_ identity: IdentityKey, for address: ProtocolAddress, context: UnsafeMutableRawPointer?) throws -> Bool {
-        let keyName = "-enc-publicKey:\(address)"
+        let keyName = "-enc-publicKey:\(address.hashValue)"
         let existingIdentity = keychainSwift.getData(keyName)
         keychainSwift.set(Data(try identity.serialize()), forKey: keyName)
         if existingIdentity == nil {
@@ -79,15 +79,15 @@ public class KeychainSignalProtocolStore: IdentityKeyStore, PreKeyStore, SignedP
     }
 
     public func isTrustedIdentity(_ identity: IdentityKey, for address: ProtocolAddress, direction: Direction, context: UnsafeMutableRawPointer?) throws -> Bool {
-        let keyName = "-enc-publicKey:\(address)"
+        let keyName = "-enc-publicKey:\(address.hashValue)"
         guard let pkData = keychainSwift.getData(keyName) else {
             return true
         }
-        return try IdentityKey(bytes: pkData) == identity
+        return (try IdentityKey(bytes: pkData).publicKey.compare(identity.publicKey) == 0)
     }
 
     public func identity(for address: ProtocolAddress, context: UnsafeMutableRawPointer?) throws -> IdentityKey? {
-        let keyName = "-enc-publicKey:\(address)"
+        let keyName = "-enc-publicKey:\(address.hashValue)"
         guard let pkData = keychainSwift.getData(keyName) else {
             return nil
         }

@@ -30,11 +30,10 @@ class MessagingStoreTests: XCTestCase {
     func testLoadMessage() throws {
         let messagingStore = MessagingStore(localAddress: address)
         
-        let location = Location(latitude: 1.1, longitude: 1.1)
+        let location = Location(latitude: 1.1, longitude: 1.1, time: Date())
         let message = LocationMessage(
             id: 1, sender: try ProtocolAddress(name: "testSender", deviceId: 1),
-            location: location,
-            lastReceived: 1
+            location: location
         )
         let keyName = "-msg-\(message.sender.combinedValue)"
         let jsonEncoder = JSONEncoder()
@@ -44,7 +43,6 @@ class MessagingStoreTests: XCTestCase {
         let receivedMessage = try messagingStore.loadMessage(sender:message.sender)
         
         XCTAssertEqual(receivedMessage.sender.combinedValue, message.sender.combinedValue)
-        XCTAssertEqual(receivedMessage.lastReceived, message.lastReceived)
         XCTAssertEqual(receivedMessage.location!.latitude, message.location!.latitude)
         XCTAssertEqual(receivedMessage.location!.longitude, message.location!.longitude)
     }
@@ -52,11 +50,10 @@ class MessagingStoreTests: XCTestCase {
     func testStoreMessage() throws {
         let messagingStore = MessagingStore(localAddress: address)
         
-        let location = Location(latitude: 1.1, longitude: 1.1)
+        let location = Location(latitude: 1.1, longitude: 1.1, time: Date())
         let message = LocationMessage(id: 1, 
             sender: try ProtocolAddress(name: "testSender", deviceId: 1),
-            location: location,
-            lastReceived: 1
+            location: location
         )
         
         try messagingStore.storeMessage(message)
@@ -67,7 +64,6 @@ class MessagingStoreTests: XCTestCase {
         let receivedMessage = try! decoder.decode(LocationMessage.self, from: receivedMessageData!)
         
         XCTAssertEqual(receivedMessage.sender.combinedValue, message.sender.combinedValue)
-        XCTAssertEqual(receivedMessage.lastReceived, message.lastReceived)
         XCTAssertEqual(receivedMessage.location!.latitude, message.location!.latitude)
         XCTAssertEqual(receivedMessage.location!.longitude, message.location!.longitude)
     }
@@ -75,11 +71,10 @@ class MessagingStoreTests: XCTestCase {
     func testRemoveMessage() throws {
         let messagingStore = MessagingStore(localAddress: address)
         
-        let location = Location(latitude: 1.1, longitude: 1.1)
+        let location = Location(latitude: 1.1, longitude: 1.1, time: Date())
         let message = LocationMessage(
             id: 1, sender: try ProtocolAddress(name: "testSender", deviceId: 1),
-            location: location,
-            lastReceived: 1
+            location: location
         )
         let keyName = "-msg-\(message.sender.combinedValue)"
         let jsonEncoder = JSONEncoder()
@@ -96,22 +91,20 @@ class MessagingStoreTests: XCTestCase {
         
         let messagingStore = MessagingStore(localAddress: address)
         
-        let location = Location(latitude: 1.1, longitude: 1.1)
+        let location = Location(latitude: 1.1, longitude: 1.1, time: Date())
         let message = LocationMessage(
             id: 1, sender: try ProtocolAddress(name: "testSender", deviceId: 1),
-            location: location,
-            lastReceived: 1
+            location: location
         )
         let keyName = "-msg-\(message.sender.combinedValue)"
         let jsonEncoder = JSONEncoder()
         let jsonData = try jsonEncoder.encode(message)
         keychainSwift.set(jsonData, forKey: keyName)
         
-        let location2 = Location(latitude: 1.1, longitude: 1.1)
+        let location2 = Location(latitude: 1.1, longitude: 1.1, time: Date())
         let message2 = LocationMessage(
             id: 1, sender: try ProtocolAddress(name: "testSender2", deviceId: 1),
-            location: location2,
-            lastReceived: 2
+            location: location2
         )
         let keyName2 = "-msg-\(message2.sender.combinedValue)"
         let jsonData2 = try jsonEncoder.encode(message2)
@@ -130,22 +123,20 @@ class MessagingStoreTests: XCTestCase {
         
         let messagingStore = MessagingStore(localAddress: address)
         
-        let location = Location(latitude: 1.1, longitude: 1.1)
+        let location = Location(latitude: 1.1, longitude: 1.1, time: Date())
         let message = LocationMessage(
             id: 1, sender: try ProtocolAddress(name: "testSender", deviceId: 1),
-            location: location,
-            lastReceived: 1
+            location: location
         )
         let keyName = "-msg-\(message.sender.combinedValue)"
         let jsonEncoder = JSONEncoder()
         let jsonData = try jsonEncoder.encode(message)
         keychainSwift.set(jsonData, forKey: keyName)
         
-        let location2 = Location(latitude: 1.1, longitude: 1.1)
+        let location2 = Location(latitude: 1.1, longitude: 1.1, time: Date())
         let message2 = LocationMessage(
             id: 1, sender: try ProtocolAddress(name: "testSender2", deviceId: 1),
-            location: location2,
-            lastReceived: 2
+            location: location2
         )
         let keyName2 = "-msg-\(message2.sender.combinedValue)"
         let jsonData2 = try jsonEncoder.encode(message2)
@@ -154,8 +145,8 @@ class MessagingStoreTests: XCTestCase {
         let summary = try messagingStore.getMessageSummary()
         
         XCTAssertEqual(summary.count, 2)
-        XCTAssertEqual(summary[1].lastReceived, message.lastReceived)
-        XCTAssertGreaterThan(summary[0].lastReceived, summary[1].lastReceived)
+        XCTAssertEqual(summary[1].time, message.location!.time)
+        XCTAssertGreaterThan(summary[0].time, summary[1].time)
         
     }
     

@@ -39,7 +39,7 @@ class SimpleSignalSwiftAuthAPITests: XCTestCase {
                 XCTAssertEqual(newUser.is2FAUser, false)
                 XCTAssertEqual(newUser.serverAddress, "https://api.dark-maps.com")
                 XCTAssertEqual(newUser.userName, "testUser")
-                XCTAssertEqual(newUser.deviceId, nil)
+                XCTAssertEqual(newUser.deviceId, 1)
                 expectation.fulfill()
             default:
                 print(result)
@@ -69,7 +69,7 @@ class SimpleSignalSwiftAuthAPITests: XCTestCase {
                 XCTAssertEqual(newUser.is2FAUser, true)
                 XCTAssertEqual(newUser.serverAddress, "https://api.dark-maps.com")
                 XCTAssertEqual(newUser.userName, "testUser")
-                XCTAssertEqual(newUser.deviceId, nil)
+                XCTAssertEqual(newUser.deviceId, 1)
                 expectation.fulfill()
             default:
                 print(result)
