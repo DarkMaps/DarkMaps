@@ -11,16 +11,20 @@ struct LoginController: View {
     
     @EnvironmentObject var appState: AppState
     
+    @Binding var customAuthServer: String
+    
     @State private var customServerModalVisible = false
     @State private var loginInProgress = false
     @State private var password = ""
     @State private var username = ""
-    @State private var serverAddress = "https://api.dark-maps.com"
     @State private var ephemeralCode: String? = nil
     @State private var twoFactorCode = ""
     @State private var twoFactorModalVisible = false
     @State private var showingDeleteDeviceSheet = false
     @State private var storedNewUser: LoggedInUser? = nil
+    @State private var resetPasswordAlertShowing = false
+    @State private var resetPasswordRequestedEmail = ""
+    @State private var resetPasswordSuccessAlertShowing = false
     
     var authorisationController = AuthorisationController()
     
@@ -80,7 +84,7 @@ struct LoginController: View {
         authorisationController.login(
             username: username,
             password: password,
-            serverAddress: serverAddress
+            serverAddress: customAuthServer
         ) { loginOutcome in
             loginInProgress = false
             
@@ -132,7 +136,7 @@ struct LoginController: View {
             username: username,
             code: twoFactorCode,
             ephemeralToken: ephemeralCode ?? "unknown",
-            serverAddress: serverAddress) { outcome in
+            serverAddress: customAuthServer) { outcome in
             DispatchQueue.main.async {
                 loginInProgress = false
                 twoFactorModalVisible = false
@@ -149,18 +153,29 @@ struct LoginController: View {
         }
     }
     
+    func resetPassword() {
+        authorisationController.resetPassword(username: resetPasswordRequestedEmail, serverAddress: customAuthServer) { resetOutcome in
+            
+            switch resetOutcome {
+            case .success:
+                resetPasswordSuccessAlertShowing = true
+            case .failure (let error):
+                appState.displayedError = IdentifiableError(error)
+            }
+            
+        }
+        
+    }
+    
     var body: some View {
         ZStack {
             LoginView(
                 username: $username,
                 password: $password,
                 customServerModalVisible: $customServerModalVisible,
-                twoFactorModalVisible: $twoFactorModalVisible,
                 loginInProgress: $loginInProgress,
-                serverAddress: $serverAddress,
-                twoFactorCode: $twoFactorCode,
-                performLogin: handleLogin,
-                submitTwoFactor: submitTwoFactor
+                resetPasswordAlertShowing: $resetPasswordAlertShowing,
+                performLogin: handleLogin
             )
             Text("").hidden().actionSheet(isPresented: $showingDeleteDeviceSheet) {
                 ActionSheet(
@@ -172,6 +187,34 @@ struct LoginController: View {
                     ]
                 )
             }
+            Text("").hidden().textFieldAlert(
+                isShowing: $resetPasswordAlertShowing,
+                text: $resetPasswordRequestedEmail,
+                title: "Enter the email address of the user you would like to reset the password for.",
+                textBoxPlaceholder: "Email",
+                secureField: false,
+                onDismiss: resetPassword
+            )
+            Text("").hidden().alert(isPresented: $resetPasswordSuccessAlertShowing) {
+                Alert(
+                    title: Text("Success"),
+                    message: Text("If \(resetPasswordRequestedEmail) is registered on our server then a reset passwor demail will have been sent to them."),
+                    dismissButton: .default(Text("OK"))
+                )
+            }
+            Text("").hidden().sheet(
+                isPresented: $twoFactorModalVisible) {
+                    TwoFactorModal(
+                        twoFactorCode: $twoFactorCode,
+                        loginInProgress: $loginInProgress,
+                        submitTwoFactor: submitTwoFactor
+                    )
+            }
+            Text("").hidden().sheet(
+                isPresented: $customServerModalVisible) {
+                    CustomServerModal(serverAddress: $customAuthServer)
+            }
+                
         }
         
     }

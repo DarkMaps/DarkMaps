@@ -1,27 +1,23 @@
 //
-//  LoginView.swift
-//  SignalMaps (iOS)
+//  RegisterView.swift
+//  DarkMaps (iOS)
 //
-//  Created by Matthew Roche on 06/12/2020.
+//  Created by Matthew Roche on 05/01/2021.
 //
 
 import SwiftUI
 
-struct LoginView: View {
+struct RegisterView: View {
     
     @Binding var username: String
     @Binding var password: String
+    @Binding var registerInProgress: Bool
     @Binding var customServerModalVisible: Bool
-    @Binding var twoFactorModalVisible: Bool
-    @Binding var loginInProgress: Bool
-    @Binding var serverAddress: String
-    @Binding var twoFactorCode: String
     
     @State private var invalidUsername: Bool = false
     @State private var invalidPassword: Bool = false
     
-    var performLogin: () -> Void
-    var submitTwoFactor: (_ twoFactorCode: String) -> Void
+    var performRegister: () -> Void
     
     var body: some View {
         NavigationView {
@@ -45,34 +41,23 @@ struct LoginView: View {
                     secureField: true,
                     text: $password,
                     showInvalidText: $invalidPassword,
-                    onCommit: self.performLogin
+                    onCommit: self.performRegister
                 )
                 Spacer()
-                Button(action: self.performLogin) {
+                Button(action: self.performRegister) {
                     HStack {
-                        if (self.loginInProgress) {
+                        if (self.registerInProgress) {
                             ActivityIndicator(isAnimating: true)
                         }
-                        Text("Login")
+                        Text("Register")
                     }
                 }
-                .disabled(invalidUsername || invalidPassword || loginInProgress)
+                .disabled(invalidUsername || invalidPassword || registerInProgress)
                 .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
-                Text("").hidden().sheet(
-                isPresented: $twoFactorModalVisible) {
-                    TwoFactorModal(
-                        twoFactorCode: $twoFactorCode,
-                        loginInProgress: $loginInProgress,
-                        submitTwoFactor: submitTwoFactor
-                    )
-                }
-                Text("").hidden().sheet(
-                isPresented: $customServerModalVisible) {
-                    CustomServerModal(serverAddress: $serverAddress)
-                }
+                
             }
             .padding()
-            .navigationBarTitle("Log In")
+            .navigationBarTitle("Register")
             .navigationBarBackButtonHidden(true)
             .navigationBarItems(
                 leading: Text(""),
@@ -83,7 +68,7 @@ struct LoginView: View {
     }
 }
 
-struct LoginView_Previews: PreviewProvider {
+struct RegisterView_Previews: PreviewProvider {
     
     static var previews: some View {
         Group {
@@ -95,31 +80,20 @@ struct LoginView_Previews: PreviewProvider {
     struct PreviewWrapper: View {
         @State(initialValue: "matrixMapsTest") var username: String
         @State(initialValue: "") var password: String
+        @State(initialValue: false) var registerInProgress: Bool
         @State(initialValue: false) var customServerModalVisible: Bool
-        @State(initialValue: false) var loginInProgress: Bool
-        @State(initialValue: "https://www.reallyreallyreallylongserveraddress.com") var serverAddress: String
-        @State(initialValue: false) var twoFactorModalVisible: Bool
-        @State(initialValue: "") var twoFactorCode: String
         
-        func login () -> Void {
-            return
-        }
-        
-        func submitTwoFactor(_ twoFactorCode: String) -> Void {
+        func register () -> Void {
             return
         }
 
           var body: some View {
-            LoginView(
+            RegisterView(
                 username: $username,
                 password: $password,
+                registerInProgress: $registerInProgress,
                 customServerModalVisible: $customServerModalVisible,
-                twoFactorModalVisible: $twoFactorModalVisible,
-                loginInProgress: $loginInProgress,
-                serverAddress: $serverAddress,
-                twoFactorCode: $twoFactorCode,
-                performLogin: login,
-                submitTwoFactor: submitTwoFactor
+                performRegister: register
             )
           }
     }

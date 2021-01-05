@@ -191,6 +191,7 @@ struct SettingsController: View {
                 isShowing: $passwordAlertShowing,
                 text: $currentPassword,
                 title: "Password Required",
+                textBoxPlaceholder: "Password",
                 secureField: true,
                 onDismiss: deleteUserAccount
             )

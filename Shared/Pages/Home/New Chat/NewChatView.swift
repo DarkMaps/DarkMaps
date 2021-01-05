@@ -31,6 +31,12 @@ struct NewChatView: View {
                     text: $recipientEmail,
                     showInvalidText: $recipientEmailInvalid
                 ).padding(.horizontal)
+                if (!isSubscriber) {
+                    Text("Subscribe to enable live location sending")
+                        .padding()
+                        .background(Color(UIColor(Color.accentColor).withAlphaComponent(0.7)))
+                        .cornerRadius(10.0)
+                }
                 Toggle("Live Location", isOn: $isLiveLocation)
                     .padding(.horizontal)
                     .disabled(!isSubscriber)
@@ -40,10 +46,10 @@ struct NewChatView: View {
                     ForEach(0 ..< liveLengths.count) {
                        Text(self.liveLengths[$0])
                     }
-                }.labelsHidden().disabled(!isSubscriber)
-                if (!isSubscriber) {
-                    Text("Subscribe to enable live location sending").padding().background(Color.accentColor).cornerRadius(3.0)
                 }
+                .pickerStyle(SegmentedPickerStyle())
+                .padding(.horizontal)
+                .disabled(!isSubscriber)
                 Button(action: self.performMessageSend) {
                     HStack {
                         if (self.sendLocationInProgress) {
@@ -52,6 +58,7 @@ struct NewChatView: View {
                         Text("Send")
                     }
                 }
+                .padding(.top)
                 .disabled(recipientEmailInvalid || sendLocationInProgress)
                 .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
                 .navigationTitle("Send Location")

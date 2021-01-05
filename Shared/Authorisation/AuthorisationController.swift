@@ -11,6 +11,23 @@ public class AuthorisationController {
     
     var simpleSignalSwiftAuthAPI = SimpleSignalSwiftAuthAPI()
     
+    func register(username: String, password: String, serverAddress: String, completionHandler: @escaping (Result<Void, SSAPIAuthRegisterError>) -> ()) {
+        print("Attempting Register")
+        DispatchQueue.global(qos: .utility).async {
+            let response = self.simpleSignalSwiftAuthAPI.register(username: username, password: password, serverAddress: serverAddress)
+            DispatchQueue.main.async {
+                switch response {
+                    case .success:
+                        print("Register Successful")
+                        completionHandler(.success(()))
+                    case let .failure(error):
+                        print("Register Unsuccessful")
+                        completionHandler(.failure(error))
+                    }
+            }
+        }
+    }
+    
     func login(username: String, password: String, serverAddress: String, completionHandler: @escaping (_: LoginOutcome) -> ()) {
         print("Attempting Login")
         DispatchQueue.global(qos: .utility).async {
@@ -35,6 +52,23 @@ public class AuthorisationController {
                         default:
                             completionHandler(.failure(error))
                         }
+                    }
+            }
+        }
+    }
+    
+    func resetPassword(username: String, serverAddress: String, completionHandler: @escaping (Result<Void, SSAPIAuthResetPasswordError>) -> ()) {
+        print("Attempting Reset Password")
+        DispatchQueue.global(qos: .utility).async {
+            let response = self.simpleSignalSwiftAuthAPI.resetPassword(username: username, serverAddress: serverAddress)
+            DispatchQueue.main.async {
+                switch response {
+                    case .success:
+                        print("Reset Password Successful")
+                        completionHandler(.success(()))
+                    case let .failure(error):
+                        print("Reset Password Unsuccessful")
+                        completionHandler(.failure(error))
                     }
             }
         }

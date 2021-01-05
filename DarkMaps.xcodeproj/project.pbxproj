@@ -87,11 +87,15 @@
 		EC9129B9257CC61B00E12BF6 /* RoundedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129B8257CC61B00E12BF6 /* RoundedButton.swift */; };
 		EC9129BD257CC72500E12BF6 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129BC257CC72500E12BF6 /* ActivityIndicator.swift */; };
 		EC9129C1257CF7DB00E12BF6 /* LoggedInUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129C0257CF7DB00E12BF6 /* LoggedInUser.swift */; };
-		EC9129CD257D59DF00E12BF6 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129CC257D59DF00E12BF6 /* HomeView.swift */; };
 		EC9129D1257D5EC100E12BF6 /* TwoFactorModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129D0257D5EC100E12BF6 /* TwoFactorModal.swift */; };
 		EC9129D9257D6C6400E12BF6 /* AuthorisationEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129D8257D6C6400E12BF6 /* AuthorisationEnum.swift */; };
 		EC9129DD257D828200E12BF6 /* ErrorAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129DC257D828200E12BF6 /* ErrorAlert.swift */; };
 		EC9129E1257D82D000E12BF6 /* IdentifiableError.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129E0257D82D000E12BF6 /* IdentifiableError.swift */; };
+		ECAC078425A4D65D00FCCD7C /* RegisterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAC078325A4D65D00FCCD7C /* RegisterController.swift */; };
+		ECAC078C25A4D67600FCCD7C /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAC078B25A4D67600FCCD7C /* RegisterView.swift */; };
+		ECAC079425A4EABC00FCCD7C /* SendingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAC079325A4EABC00FCCD7C /* SendingList.swift */; };
+		ECAC079825A4EABF00FCCD7C /* SendingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAC079325A4EABC00FCCD7C /* SendingList.swift */; };
+		ECAC079D25A4EACD00FCCD7C /* ReceivingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAC079C25A4EACD00FCCD7C /* ReceivingList.swift */; };
 		ECAEF0C525A1211200525760 /* SubscriptionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC247FE3259CA2EE00EEBAA1 /* SubscriptionController.swift */; };
 		ECAEF0C925A1211600525760 /* configuration.storekit in Resources */ = {isa = PBXBuildFile; fileRef = EC7226F1259F39F8009F6104 /* configuration.storekit */; };
 		ECAEF0CD25A1211C00525760 /* NotificationCentreExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF3E231259BDC22002E4291 /* NotificationCentreExtensions.swift */; };
@@ -111,8 +115,6 @@
 		ECAEF10525A1214C00525760 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC912985257BB67500E12BF6 /* AppState.swift */; };
 		ECAEF10925A1214F00525760 /* LoggedInUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129C0257CF7DB00E12BF6 /* LoggedInUser.swift */; };
 		ECAEF10D25A1215200525760 /* IdentifiableError.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129E0257D82D000E12BF6 /* IdentifiableError.swift */; };
-		ECAEF11125A1215700525760 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9129CC257D59DF00E12BF6 /* HomeView.swift */; };
-		ECAEF11525A1215A00525760 /* HomeViewButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD126C2258679C800C2161D /* HomeViewButton.swift */; };
 		ECAEF11925A1215D00525760 /* DetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECC0A5C8257FE8C4001D5E60 /* DetailController.swift */; };
 		ECAEF11D25A1216100525760 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECC0A5CC257FE8CE001D5E60 /* DetailView.swift */; };
 		ECAEF12125A1216300525760 /* ListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECC0A5BE257FE8A6001D5E60 /* ListController.swift */; };
@@ -145,7 +147,6 @@
 		ECC0A5D5257FE8E8001D5E60 /* NewChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECC0A5D4257FE8E8001D5E60 /* NewChatView.swift */; };
 		ECC0A5D9257FE8F5001D5E60 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECC0A5D8257FE8F5001D5E60 /* SettingsController.swift */; };
 		ECC0A5DD257FE8FF001D5E60 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECC0A5DC257FE8FF001D5E60 /* SettingsView.swift */; };
-		ECD126C3258679C800C2161D /* HomeViewButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD126C2258679C800C2161D /* HomeViewButton.swift */; };
 		ECD599D42599D590003AD3D0 /* NewChatErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD599D32599D590003AD3D0 /* NewChatErrors.swift */; };
 		ECD599D92599F63A003AD3D0 /* ListViewErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD599D82599F63A003AD3D0 /* ListViewErrors.swift */; };
 		ECD599DE259A381C003AD3D0 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ECD599DD259A381C003AD3D0 /* Launch Screen.storyboard */; };
@@ -270,6 +271,7 @@
 		EC4520D825896287002768C8 /* Deactivate2FAModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deactivate2FAModal.swift; sourceTree = "<group>"; };
 		EC4520DC258B66F8002768C8 /* SimpleSignalSwiftAuthAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleSignalSwiftAuthAPI.swift; sourceTree = "<group>"; };
 		EC4A05CE2595F99F00DE81A8 /* MessagingStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagingStore.swift; sourceTree = "<group>"; };
+		EC538C8725A1D50500DA57B6 /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TODO.md; sourceTree = "<group>"; };
 		EC5FDA5325933A8E006448AB /* SimpleSignalSwiftEncryptionAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleSignalSwiftEncryptionAPITests.swift; sourceTree = "<group>"; };
 		EC67E4C3258BC39100CACBE7 /* DarkMapsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DarkMapsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC67E4C5258BC39100CACBE7 /* SimpleSignalSwiftAuthAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleSignalSwiftAuthAPITests.swift; sourceTree = "<group>"; };
@@ -285,11 +287,14 @@
 		EC9129B8257CC61B00E12BF6 /* RoundedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedButton.swift; sourceTree = "<group>"; };
 		EC9129BC257CC72500E12BF6 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		EC9129C0257CF7DB00E12BF6 /* LoggedInUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggedInUser.swift; sourceTree = "<group>"; };
-		EC9129CC257D59DF00E12BF6 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		EC9129D0257D5EC100E12BF6 /* TwoFactorModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoFactorModal.swift; sourceTree = "<group>"; };
 		EC9129D8257D6C6400E12BF6 /* AuthorisationEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorisationEnum.swift; sourceTree = "<group>"; };
 		EC9129DC257D828200E12BF6 /* ErrorAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorAlert.swift; sourceTree = "<group>"; };
 		EC9129E0257D82D000E12BF6 /* IdentifiableError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifiableError.swift; sourceTree = "<group>"; };
+		ECAC078325A4D65D00FCCD7C /* RegisterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterController.swift; sourceTree = "<group>"; };
+		ECAC078B25A4D67600FCCD7C /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
+		ECAC079325A4EABC00FCCD7C /* SendingList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendingList.swift; sourceTree = "<group>"; };
+		ECAC079C25A4EACD00FCCD7C /* ReceivingList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceivingList.swift; sourceTree = "<group>"; };
 		ECAFE37B259A80F5008E9318 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		ECC0A5BE257FE8A6001D5E60 /* ListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListController.swift; sourceTree = "<group>"; };
 		ECC0A5C4257FE8B8001D5E60 /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
@@ -299,7 +304,6 @@
 		ECC0A5D4257FE8E8001D5E60 /* NewChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChatView.swift; sourceTree = "<group>"; };
 		ECC0A5D8257FE8F5001D5E60 /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
 		ECC0A5DC257FE8FF001D5E60 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		ECD126C2258679C800C2161D /* HomeViewButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewButton.swift; sourceTree = "<group>"; };
 		ECD599D32599D590003AD3D0 /* NewChatErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChatErrors.swift; sourceTree = "<group>"; };
 		ECD599D82599F63A003AD3D0 /* ListViewErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewErrors.swift; sourceTree = "<group>"; };
 		ECD599DD259A381C003AD3D0 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
@@ -490,8 +494,8 @@
 		EC912980257BB5CE00E12BF6 /* Pages */ = {
 			isa = PBXGroup;
 			children = (
+				ECAC078125A4D63400FCCD7C /* Auth */,
 				EC912982257BB61700E12BF6 /* Home */,
-				EC912981257BB60C00E12BF6 /* Login */,
 			);
 			path = Pages;
 			sourceTree = "<group>";
@@ -501,7 +505,6 @@
 			children = (
 				EC9129A5257CC33800E12BF6 /* LoginController.swift */,
 				EC9129A9257CC34900E12BF6 /* LoginView.swift */,
-				EC9129AD257CC51E00E12BF6 /* CustomServerModal.swift */,
 				EC9129D0257D5EC100E12BF6 /* TwoFactorModal.swift */,
 			);
 			path = Login;
@@ -510,8 +513,6 @@
 		EC912982257BB61700E12BF6 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				EC9129CC257D59DF00E12BF6 /* HomeView.swift */,
-				ECD126C2258679C800C2161D /* HomeViewButton.swift */,
 				ECC0A5BB257FE84B001D5E60 /* List */,
 				ECC0A5BC257FE86A001D5E60 /* New Chat */,
 				ECC0A5BD257FE87C001D5E60 /* Settings */,
@@ -559,6 +560,25 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
+		ECAC078125A4D63400FCCD7C /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				EC9129AD257CC51E00E12BF6 /* CustomServerModal.swift */,
+				ECAC078225A4D64300FCCD7C /* Register */,
+				EC912981257BB60C00E12BF6 /* Login */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		ECAC078225A4D64300FCCD7C /* Register */ = {
+			isa = PBXGroup;
+			children = (
+				ECAC078325A4D65D00FCCD7C /* RegisterController.swift */,
+				ECAC078B25A4D67600FCCD7C /* RegisterView.swift */,
+			);
+			path = Register;
+			sourceTree = "<group>";
+		};
 		ECAFE377259A80E0008E9318 /* Maps */ = {
 			isa = PBXGroup;
 			children = (
@@ -574,6 +594,8 @@
 				ECC0A5BE257FE8A6001D5E60 /* ListController.swift */,
 				ECC0A5C4257FE8B8001D5E60 /* ListView.swift */,
 				ECD599D82599F63A003AD3D0 /* ListViewErrors.swift */,
+				ECAC079325A4EABC00FCCD7C /* SendingList.swift */,
+				ECAC079C25A4EACD00FCCD7C /* ReceivingList.swift */,
 			);
 			path = List;
 			sourceTree = "<group>";
@@ -620,6 +642,7 @@
 		ECFFD509257261FB00458BC8 = {
 			isa = PBXGroup;
 			children = (
+				EC538C8725A1D50500DA57B6 /* TODO.md */,
 				EC3712DE259DD825001E5422 /* secrets.xcconfig */,
 				EC12FB992572ADC700F7230F /* SignalClient */,
 				EC12FB8F2572AB9B00F7230F /* SignalClient Build Details.md */,
@@ -1047,7 +1070,6 @@
 				ECAEF17125A121A300525760 /* SimpleSignalSwiftEncryptionApiStructs.swift in Sources */,
 				ECAEF12D25A1216C00525760 /* NewChatController.swift in Sources */,
 				ECAEF10D25A1215200525760 /* IdentifiableError.swift in Sources */,
-				ECAEF11125A1215700525760 /* HomeView.swift in Sources */,
 				ECAEF16D25A121A000525760 /* SimpleSignalSwiftEncryptionAPIErrors.swift in Sources */,
 				ECAEF15D25A1219400525760 /* SimpleSignalSwiftAuthAPI.swift in Sources */,
 				ECDE0E4D2572B615009D3561 /* Kdf.swift in Sources */,
@@ -1059,12 +1081,12 @@
 				ECDE0E512572B615009D3561 /* PreKeyRecord.swift in Sources */,
 				ECDE0E522572B615009D3561 /* PreKeyBundle.swift in Sources */,
 				ECDE0E532572B615009D3561 /* PrivateKey.swift in Sources */,
+				ECAC079825A4EABF00FCCD7C /* SendingList.swift in Sources */,
 				ECDE0E542572B615009D3561 /* DataStoreProtocols.swift in Sources */,
 				ECDE0E552572B615009D3561 /* Utils.swift in Sources */,
 				ECDE0E562572B615009D3561 /* Fingerprint.swift in Sources */,
 				ECDE0E572572B615009D3561 /* SenderKeyName.swift in Sources */,
 				ECDE0E582572B615009D3561 /* ClonableHandleOwner.swift in Sources */,
-				ECAEF11525A1215A00525760 /* HomeViewButton.swift in Sources */,
 				ECDE0E592572B615009D3561 /* IdentityKey.swift in Sources */,
 				ECAEF11D25A1216100525760 /* DetailView.swift in Sources */,
 				ECAEF0D925A1212800525760 /* MessagingStore.swift in Sources */,
@@ -1107,17 +1129,18 @@
 				EC4520D925896287002768C8 /* Deactivate2FAModal.swift in Sources */,
 				EC12FBB32572ADC700F7230F /* DataStoreInMemory.swift in Sources */,
 				ECFFD5242572620300458BC8 /* ContentView.swift in Sources */,
-				EC9129CD257D59DF00E12BF6 /* HomeView.swift in Sources */,
 				ECD599D92599F63A003AD3D0 /* ListViewErrors.swift in Sources */,
 				ECFFD64F2572A9C900458BC8 /* KeychainSignalProtocolStore.swift in Sources */,
 				EC4A05CF2595F99F00DE81A8 /* MessagingStore.swift in Sources */,
 				ECFFD5222572620300458BC8 /* SignalMapsApp.swift in Sources */,
 				EC12FBB72572ADC700F7230F /* PreKeySignalMessage.swift in Sources */,
 				EC9129D9257D6C6400E12BF6 /* AuthorisationEnum.swift in Sources */,
+				ECAC078425A4D65D00FCCD7C /* RegisterController.swift in Sources */,
 				EC9129A6257CC33800E12BF6 /* LoginController.swift in Sources */,
 				EC12FBBB2572ADC700F7230F /* SenderKeyDistributionMessage.swift in Sources */,
 				EC9129E1257D82D000E12BF6 /* IdentifiableError.swift in Sources */,
 				EC12FBCF2572ADC700F7230F /* PreKeyRecord.swift in Sources */,
+				ECAC078C25A4D67600FCCD7C /* RegisterView.swift in Sources */,
 				EC12FBDB2572ADC700F7230F /* SenderKeyName.swift in Sources */,
 				EC12FBDD2572ADC700F7230F /* ClonableHandleOwner.swift in Sources */,
 				EC12FBD92572ADC700F7230F /* Fingerprint.swift in Sources */,
@@ -1143,12 +1166,12 @@
 				ECC0A5C9257FE8C4001D5E60 /* DetailController.swift in Sources */,
 				ECC0A5D5257FE8E8001D5E60 /* NewChatView.swift in Sources */,
 				ECF3E232259BDC22002E4291 /* NotificationCentreExtensions.swift in Sources */,
+				ECAC079425A4EABC00FCCD7C /* SendingList.swift in Sources */,
 				EC12FBC52572ADC700F7230F /* Error.swift in Sources */,
 				ECC0A5BF257FE8A6001D5E60 /* ListController.swift in Sources */,
 				EC9129B9257CC61B00E12BF6 /* RoundedButton.swift in Sources */,
 				EC0BB6B825975B7E00A2F3CB /* MessagingController.swift in Sources */,
 				ECC0A5DD257FE8FF001D5E60 /* SettingsView.swift in Sources */,
-				ECD126C3258679C800C2161D /* HomeViewButton.swift in Sources */,
 				EC9129AA257CC34900E12BF6 /* LoginView.swift in Sources */,
 				EC1EDB1A258EB1A000B8F4D4 /* SimpleSignalSwiftEncryptionAPI.swift in Sources */,
 				EC247FE4259CA2EE00EEBAA1 /* SubscriptionController.swift in Sources */,
@@ -1156,6 +1179,7 @@
 				EC12FBB52572ADC700F7230F /* Protocol.swift in Sources */,
 				EC9129B3257CC60A00E12BF6 /* TextFieldWithTitleAndValidation.swift in Sources */,
 				EC12FBD32572ADC700F7230F /* PrivateKey.swift in Sources */,
+				ECAC079D25A4EACD00FCCD7C /* ReceivingList.swift in Sources */,
 				EC1EDB1F258EB1C000B8F4D4 /* SimpleSignalSwiftEncryptionAPIErrors.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

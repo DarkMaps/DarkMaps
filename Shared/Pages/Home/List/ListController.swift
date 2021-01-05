@@ -11,7 +11,7 @@ struct ListController: View {
     
     @EnvironmentObject var appState: AppState
     
-    @State var recieivingMessageArray: [ShortLocationMessage] = []
+    @State var receivingMessageArray: [ShortLocationMessage] = []
     @State var sendingMessageArray: [LiveMessage] = []
     @State var getMessagesInProgress: Bool = false
     
@@ -30,7 +30,7 @@ struct ListController: View {
         let messageStore = MessagingStore(localAddress: address)
         
         do {
-            self.recieivingMessageArray = try messageStore.getMessageSummary()
+            self.receivingMessageArray = try messageStore.getMessageSummary()
             self.sendingMessageArray = try messageStore.getLiveMessages()
         } catch {
             appState.displayedError = IdentifiableError(ListViewErrors.unableToRetrieveMessages)
@@ -85,7 +85,7 @@ struct ListController: View {
                     )
                     let messages = try messageStore.getMessageSummary()
                     print(messages)
-                    self.recieivingMessageArray.append(contentsOf: messages)
+                    self.receivingMessageArray.append(contentsOf: messages)
                 } catch {
                     DispatchQueue.main.async {
                         print(error)
@@ -98,7 +98,7 @@ struct ListController: View {
     }
     
     func deleteMessage(_ offsets: IndexSet) {
-        let messagesToDelete = offsets.map({ self.recieivingMessageArray[$0] })
+        let messagesToDelete = offsets.map({ self.receivingMessageArray[$0] })
         
         guard let messagingController = appState.messagingController else {
             appState.displayedError = IdentifiableError(ListViewErrors.noUserLoggedIn)
@@ -108,7 +108,7 @@ struct ListController: View {
         do {
             for message in messagesToDelete {
                 try messagingController.handleDeleteMessageLocally(sender: message.sender)
-                recieivingMessageArray.remove(atOffsets: offsets)
+                receivingMessageArray.remove(atOffsets: offsets)
             }
         } catch {
             appState.displayedError = IdentifiableError(error)
@@ -135,7 +135,7 @@ struct ListController: View {
     
     var body: some View {
         ListView(
-            recieivingMessageArray: $recieivingMessageArray,
+            receivingMessageArray: $receivingMessageArray,
             sendingMessageArray: $sendingMessageArray,
             getMessagesInProgress: $getMessagesInProgress,
             isSubscriber: appState.loggedInUser?.subscriptionExpiryDate != nil,

@@ -7,6 +7,31 @@
 
 import Foundation
 
+public enum SSAPIAuthRegisterError: LocalizedError {
+    case emailExists, invalidUrl, badFormat, badResponseFromServer, serverError, requestThrottled, loginError
+}
+
+extension SSAPIAuthRegisterError {
+    public var errorDescription: String? {
+        switch self {
+        case .emailExists:
+            return NSLocalizedString("A user with that email already exists", comment: "")
+        case .invalidUrl:
+            return NSLocalizedString("The server address provided is invalid", comment: "")
+        case .badFormat:
+            return NSLocalizedString("The values you provided were in the wrong format", comment: "")
+        case .badResponseFromServer:
+            return NSLocalizedString("The response from the server was invalid", comment: "")
+        case .serverError:
+            return NSLocalizedString("The server returned an error", comment: "")
+        case .requestThrottled:
+            return NSLocalizedString("The request was throttled", comment: "")
+        case .loginError:
+            return NSLocalizedString("You have registered but there was an error logging in. Try logging in.", comment: "")
+        }
+    }
+}
+
 public enum SSAPIAuthLoginError: LocalizedError {
     case invalidCredentials, invalidUrl, badFormat, badResponseFromServer, serverError, needsTwoFactorAuthentication(String), requestThrottled
 }
@@ -28,6 +53,27 @@ extension SSAPIAuthLoginError {
             return NSLocalizedString("The request was throttled", comment: "")
         case .needsTwoFactorAuthentication:
             return NSLocalizedString("This user has two factor authentication enabled", comment: "")
+        }
+    }
+}
+
+public enum SSAPIAuthResetPasswordError: LocalizedError {
+    case invalidUrl, badFormat, badResponseFromServer, serverError, requestThrottled
+}
+
+extension SSAPIAuthResetPasswordError {
+    public var errorDescription: String? {
+        switch self {
+        case .invalidUrl:
+            return NSLocalizedString("The server address provided is invalid", comment: "")
+        case .badFormat:
+            return NSLocalizedString("The values you provided were in the wrong format", comment: "")
+        case .badResponseFromServer:
+            return NSLocalizedString("The response from the server was invalid", comment: "")
+        case .serverError:
+            return NSLocalizedString("The server returned an error", comment: "")
+        case .requestThrottled:
+            return NSLocalizedString("The request was throttled", comment: "")
         }
     }
 }

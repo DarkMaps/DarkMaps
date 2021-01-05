@@ -11,6 +11,80 @@ import Foundation
 
 public class SimpleSignalSwiftAuthAPI{
     
+    public func register(username: String, password: String, serverAddress: String) -> Result<Void, SSAPIAuthRegisterError> {
+        
+        let path = "\(serverAddress)/v1/auth/users/"
+        guard let url = URL(string: path) else {
+            return .failure(.invalidUrl)
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let json = [
+            "email": username,
+            "password": password
+        ]
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: json, options: []) else {
+            return .failure(.badFormat)
+        }
+        
+        var result: Result<Void, SSAPIAuthRegisterError>!
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        URLSession.shared.uploadTask(with: request, from: jsonData) { (data, response, error) in
+            
+            if error != nil || data == nil {
+                result = .failure(.badResponseFromServer)
+                semaphore.signal()
+                return
+            }
+
+            guard let response = response as? HTTPURLResponse else {
+                result = .failure(.badResponseFromServer)
+                semaphore.signal()
+                return
+            }
+            
+            guard response.statusCode == 201 else {
+                if response.statusCode == 400 {
+                    do {
+                        // For 400 errors we need to parse the returned JSON and determine the type of error
+                        let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]
+                        if let nonFieldErrors = (json?["non_field_errors"] as? [String]) {
+                            if nonFieldErrors.contains("A user with that email address already exists.") {
+                                result = .failure(.emailExists)
+                            } else {
+                                result = .failure(.serverError)
+                            }
+                        } else {
+                            result = .failure(.serverError)
+                        }
+                    } catch {
+                        result = .failure(.badResponseFromServer)
+                    }
+                } else if response.statusCode == 429 {
+                    result = .failure(.requestThrottled)
+                } else {
+                    result = .failure(.serverError)
+                }
+                semaphore.signal()
+                return
+            }
+            
+            result = .success(())
+            
+            semaphore.signal()
+            
+        }.resume()
+        
+        _ = semaphore.wait(wallTimeout: .distantFuture)
+        
+        return result
+        
+    }
+    
     public func login(username: String, password: String, serverAddress: String) -> Result<SSAPILoginResponse, SSAPIAuthLoginError> {
         
         let path = "\(serverAddress)/v1/auth/login/"
@@ -92,6 +166,65 @@ public class SimpleSignalSwiftAuthAPI{
                     result = .failure(.badResponseFromServer)
                 }
             }
+            
+            semaphore.signal()
+            
+        }.resume()
+        
+        _ = semaphore.wait(wallTimeout: .distantFuture)
+        
+        return result
+        
+    }
+    
+    public func resetPassword(username: String, serverAddress: String) -> Result<Void, SSAPIAuthResetPasswordError> {
+        
+        let path = "\(serverAddress)/v1/auth/password/reset"
+        guard let url = URL(string: path) else {
+            return .failure(.invalidUrl)
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let json = [
+            "email": username
+        ]
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: json, options: []) else {
+            return .failure(.badFormat)
+        }
+        
+        var result: Result<Void, SSAPIAuthResetPasswordError>!
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        URLSession.shared.uploadTask(with: request, from: jsonData) { (data, response, error) in
+            
+            if error != nil || data == nil {
+                result = .failure(.badResponseFromServer)
+                semaphore.signal()
+                return
+            }
+
+            guard let response = response as? HTTPURLResponse else {
+                result = .failure(.badResponseFromServer)
+                semaphore.signal()
+                return
+            }
+            
+            guard response.statusCode == 204 else {
+                if response.statusCode == 400 {
+                    result = .failure(.badResponseFromServer)
+                } else if response.statusCode == 429 {
+                    result = .failure(.requestThrottled)
+                } else {
+                    result = .failure(.serverError)
+                }
+                semaphore.signal()
+                return
+            }
+            
+            result = .success(())
             
             semaphore.signal()
             

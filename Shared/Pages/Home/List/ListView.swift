@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ListView: View {
     
-    @Binding var recieivingMessageArray: [ShortLocationMessage]
+    @Binding var receivingMessageArray: [ShortLocationMessage]
     @Binding var sendingMessageArray: [LiveMessage]
     @Binding var getMessagesInProgress: Bool
     @State private var selectedDirection = 0
@@ -32,75 +32,15 @@ struct ListView: View {
                     }.pickerStyle(SegmentedPickerStyle())
                 }
                 if selectedDirection == 0 {
-                    VStack {
-                        if recieivingMessageArray.count == 0 {
-                            HStack {
-                                Spacer()
-                                Text("No locations received yet").padding()
-                                Spacer()
-                            }
-                        }
-                        List {
-                            ForEach(recieivingMessageArray, id: \.id) { message in
-                                NavigationLink(destination: DetailController(sender: message.sender)) {
-                                    HStack {
-                                        VStack(alignment: .leading) {
-                                            Text(message.sender.name)
-                                            if message.isError {
-                                                Text("Error").italic().foregroundColor(.red)
-                                                    .font(.footnote)
-                                            } else {
-                                                Text(message.relativeDate)
-                                                    .italic()
-                                                    .font(.footnote)
-                                            }
-                                        }
-                                        Spacer()
-                                        if message.isLive {
-                                            Image(systemName: "bolt").foregroundColor(.yellow)
-                                        }
-                                        
-                                    }
-                                }
-                            }
-                            .onDelete(perform: deleteMessage)
-                        }
-                        Button(action: self.performSync) {
-                            HStack {
-                                if (self.getMessagesInProgress) {
-                                    ActivityIndicator(isAnimating: true)
-                                }
-                                Text("Sync")
-                            }
-                        }
-                        .disabled(getMessagesInProgress)
-                        .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
-                        .navigationTitle("Received")
-                    }
+                    ReceivingList(
+                        receivingMessageArray: $receivingMessageArray,
+                        getMessagesInProgress: $getMessagesInProgress,
+                        deleteMessage: deleteMessage,
+                        performSync: performSync)
                 } else {
-                    VStack {
-                        if sendingMessageArray.count == 0 {
-                            HStack {
-                                Spacer()
-                                Text("Not sending location to anyone").padding()
-                                Spacer()
-                            }
-                        }
-                        List {
-                            ForEach(sendingMessageArray, id: \.id) { message in
-                                HStack {
-                                    Text(message.recipient.combinedValue)
-                                    Spacer()
-                                    if Double(message.expiry) < Date().timeIntervalSince1970 {
-                                        Text("Expired")
-                                    } else {
-                                        Text(message.humanReadableExpiry)
-                                    }
-                                }
-                            }
-                            .onDelete(perform: deleteLiveMessage)
-                        }
-                    }
+                    SendingList(
+                        sendingMessageArray: $sendingMessageArray,
+                        deleteLiveMessage: deleteLiveMessage)
                 }
             }
         }
@@ -168,7 +108,7 @@ struct ListView_Previews: PreviewProvider {
 
         var body: some View {
             return ListView(
-                recieivingMessageArray: $receivingMessageArray,
+                receivingMessageArray: $receivingMessageArray,
                 sendingMessageArray: $sendingMessageArray,
                 getMessagesInProgress: $getMessagesInProgress,
                 isSubscriber: isSubscriber,

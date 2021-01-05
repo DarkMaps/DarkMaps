@@ -17,6 +17,7 @@ struct NewChatController: View {
     @State var isLiveLocation: Bool = false
     @State var sendLocationInProgress: Bool = false
     @State var selectedLiveLength = 0
+    @State var messageSendSuccessAlertShowing = false
     
     func parseLiveLengthExpiry() -> Int {
         let timeToAdd: Int
@@ -80,6 +81,7 @@ struct NewChatController: View {
                             appState.displayedError = IdentifiableError(error)
                             sendLocationInProgress = false
                         case .success():
+                            messageSendSuccessAlertShowing = true
                             recipientEmail = ""
                             sendLocationInProgress = false
                         }
@@ -101,6 +103,13 @@ struct NewChatController: View {
                 isSubscriber: appState.loggedInUser?.subscriptionExpiryDate != nil,
                 performMessageSend: performMessageSend
             )
+            Text("").hidden().alert(isPresented: $messageSendSuccessAlertShowing) {
+                Alert(
+                    title: Text("Success"),
+                    message: Text("The message was sent successfully."),
+                    dismissButton: .default(Text("OK"))
+                )
+            }
         }
     }
 }

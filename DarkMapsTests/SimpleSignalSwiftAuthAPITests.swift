@@ -21,6 +21,31 @@ class SimpleSignalSwiftAuthAPITests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
+    func testRegister() throws {
+        let expectation = XCTestExpectation(description: "Successfully registers user")
+        let uriValue = "https://api.dark-maps.com/v1/auth/users/"
+        let data: NSDictionary = [
+            "email": "testUser1@test.com",
+            "id": 1
+        ]
+        self.stub(uri(uriValue), json(data, status: 201))
+        let authController = AuthorisationController()
+        authController.register(
+            username: "testUser1@test.com",
+            password: "testPassword1",
+            serverAddress: "https://api.dark-maps.com") { result in
+            switch result {
+            case .success:
+                expectation.fulfill()
+            default:
+                print(result)
+                return
+            }
+            
+        }
+        wait(for: [expectation], timeout: 2.0)
+    }
+    
     func testLogin() throws {
         let expectation = XCTestExpectation(description: "Successfully logs in")
         let uriValue = "https://api.dark-maps.com/v1/auth/login/"
@@ -40,6 +65,26 @@ class SimpleSignalSwiftAuthAPITests: XCTestCase {
                 XCTAssertEqual(newUser.serverAddress, "https://api.dark-maps.com")
                 XCTAssertEqual(newUser.userName, "testUser")
                 XCTAssertEqual(newUser.deviceId, 1)
+                expectation.fulfill()
+            default:
+                print(result)
+                return
+            }
+            
+        }
+        wait(for: [expectation], timeout: 2.0)
+    }
+    
+    func testResetPassword() throws {
+        let expectation = XCTestExpectation(description: "Successfully requests reset email")
+        let uriValue = "https://api.dark-maps.com/v1/auth/password/reset"
+        self.stub(uri(uriValue), http(204))
+        let authController = AuthorisationController()
+        authController.resetPassword(
+            username: "testUser1@test.com",
+            serverAddress: "https://api.dark-maps.com") { result in
+            switch result {
+            case .success:
                 expectation.fulfill()
             default:
                 print(result)

@@ -29,10 +29,17 @@ struct SettingsView: View {
     var body: some View {
         NavigationView {
             List {
+                Section(header: Text("App")) {
+                    Text("Version: \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown")")
+                    Text("Build: \(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown")")
+                }
                 Section(header: Text("User")) {
-                    Text("Username: \(loggedInUser?.userName ?? "Unknown")")
+                    Text("Username: \(loggedInUser?.userName ?? "Unknown")").lineLimit(2)
                     Text("Device ID: \(String(loggedInUser?.deviceId ?? -1))")
-                    Text("Server Address: \(loggedInUser?.serverAddress ?? "Unknown")")
+                    VStack(alignment: .leading) {
+                        Text("Server Address:")
+                        Text("\(loggedInUser?.serverAddress ?? "Unknown")")
+                    }
                 }
                 Section(header: Text("Account")) {
                     if (loggedInUser?.is2FAUser ?? false) {
@@ -102,9 +109,9 @@ struct SettingsView_Previews: PreviewProvider {
                 is2FAUser: false,
                 subscriptionExpiryDate: Date()))
             PreviewWrapper(loggedInUser: LoggedInUser(
-                            userName: "testUser@test.com",
+                            userName: "reallyreallyLongTestUser@test.com",
                             deviceId: 1,
-                            serverAddress: "https://api.test.com",
+                            serverAddress: "https://api.reallyreallylongtesturl.com",
                             authCode: "testAuthCode",
                             is2FAUser: true))
         }
