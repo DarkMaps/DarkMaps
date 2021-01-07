@@ -72,7 +72,7 @@ public class SubscriptionController {
     public func verifyIsStillSubscriber(completionHandler: @escaping (Result<Date, SubscriptionError>) -> ()) {
         InAppReceipt.refresh { (error) in
             if let err = error {
-                print("Fetch receipt failed: \(error)")
+                print("Fetch receipt failed: \(err.localizedDescription)")
                 completionHandler(.failure(.errorRetreivingReceipts))
             } else {
                 self.verifyReceiptLocally() { verifyResult in
@@ -91,28 +91,26 @@ public class SubscriptionController {
         if let receipt = try? InAppReceipt.localReceipt() {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "dd MMM yyyy"
-            print("Creation Date: \(dateFormatter.string(from: receipt.creationDate))")
-            print("Expiry Date: \(dateFormatter.string(from: receipt.expirationDate ?? Date()))")
-            let activeSubscriptions = receipt.activeAutoRenewableSubscriptionPurchases
-            let activeSubscriptionsProductIds = activeSubscriptions.map({$0.productIdentifier})
-            let validSubscriptionIds = activeSubscriptionsProductIds.filter{ self.productArray.contains($0) }
-            if validSubscriptionIds.count > 0 {
-                do {
-                    try receipt.verify()
-                    guard let expirationDate = receipt.expirationDate else {
+            print(String(decoding: receipt.payloadRawData, as: UTF8.self))
+            for purchase in receipt.activeAutoRenewableSubscriptionPurchases {
+                print(purchase.productIdentifier)
+                print(purchase.subscriptionExpirationDate)
+                if self.productArray.contains(purchase.productIdentifier) {
+                    do {
+                        try receipt.verify()
+                        guard let expirationDate = purchase.subscriptionExpirationDate else {
+                            self.sendFailureNotification()
+                            completionHandler(.failure(.errorVerifyingReceipt))
+                            return
+                        }
+                        self.sendSuccessNotification(expiry: expirationDate)
+                        completionHandler(.success(expirationDate))
+                        return
+                    } catch {
                         self.sendFailureNotification()
                         completionHandler(.failure(.errorVerifyingReceipt))
-                        return
                     }
-                    self.sendSuccessNotification(expiry: expirationDate)
-                    completionHandler(.success(expirationDate))
-                } catch {
-                    self.sendFailureNotification()
-                    completionHandler(.failure(.errorVerifyingReceipt))
                 }
-            } else {
-                self.sendFailureNotification()
-                completionHandler(.failure(.errorVerifyingReceipt))
             }
         } else {
             self.sendFailureNotification()
@@ -136,11 +134,11 @@ public class SubscriptionController {
                     inReceipt: receipt)
                 
                 switch verifySubscriptionResult {
-                case .purchased(let expiryDate, let receiptItems):
+                case .purchased(let expiryDate, _):
                     print("Product is valid until \(expiryDate)")
                     self.sendSuccessNotification(expiry: expiryDate)
                     completionHandler(.success(expiryDate))
-                case .expired(let expiryDate, let receiptItems):
+                case .expired(let expiryDate, _):
                     print("Product is expired since \(expiryDate)")
                     self.sendFailureNotification()
                     completionHandler(.failure(.expiredPurchase))
