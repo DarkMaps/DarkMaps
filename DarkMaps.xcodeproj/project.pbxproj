@@ -180,6 +180,7 @@
 		ECDE0E5D2572B615009D3561 /* KeychainSwiftDistrib.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFFD64E2572A9C900458BC8 /* KeychainSwiftDistrib.swift */; };
 		ECDE0E602572B674009D3561 /* libsignal_ffi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ECFFD6442572A82500458BC8 /* libsignal_ffi.a */; };
 		ECF3E232259BDC22002E4291 /* NotificationCentreExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF3E231259BDC22002E4291 /* NotificationCentreExtensions.swift */; };
+		ECF4CB0E25A782F50069993C /* SubscriptionActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF4CB0D25A782F50069993C /* SubscriptionActionSheet.swift */; };
 		ECFC5940258DF804005CCDA2 /* TextFieldAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFC593F258DF803005CCDA2 /* TextFieldAlert.swift */; };
 		ECFC5945258E0AAC005CCDA2 /* SettingsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFC5944258E0AAB005CCDA2 /* SettingsRow.swift */; };
 		ECFFD5222572620300458BC8 /* SignalMapsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFFD50F257261FB00458BC8 /* SignalMapsApp.swift */; };
@@ -311,6 +312,7 @@
 		ECDE0E3B2572B5EC009D3561 /* SignalMapsiOSFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SignalMapsiOSFramework.h; sourceTree = "<group>"; };
 		ECDE0E3C2572B5EC009D3561 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ECF3E231259BDC22002E4291 /* NotificationCentreExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCentreExtensions.swift; sourceTree = "<group>"; };
+		ECF4CB0D25A782F50069993C /* SubscriptionActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionActionSheet.swift; sourceTree = "<group>"; };
 		ECFC593F258DF803005CCDA2 /* TextFieldAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldAlert.swift; sourceTree = "<group>"; };
 		ECFC5944258E0AAB005CCDA2 /* SettingsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRow.swift; sourceTree = "<group>"; };
 		ECFFD50F257261FB00458BC8 /* SignalMapsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalMapsApp.swift; sourceTree = "<group>"; };
@@ -441,6 +443,7 @@
 				EC247FE3259CA2EE00EEBAA1 /* SubscriptionController.swift */,
 				EC7226F1259F39F8009F6104 /* configuration.storekit */,
 				EC7226F5259F3A53009F6104 /* StoreKitTestCertificate.cer */,
+				ECF4CB0D25A782F50069993C /* SubscriptionActionSheet.swift */,
 			);
 			path = Subscriptions;
 			sourceTree = "<group>";
@@ -1178,6 +1181,7 @@
 				EC23C0EC258BEE2D00ABDE84 /* SimpleSignalSwiftAuthAPIErrors.swift in Sources */,
 				EC12FBB52572ADC700F7230F /* Protocol.swift in Sources */,
 				EC9129B3257CC60A00E12BF6 /* TextFieldWithTitleAndValidation.swift in Sources */,
+				ECF4CB0E25A782F50069993C /* SubscriptionActionSheet.swift in Sources */,
 				EC12FBD32572ADC700F7230F /* PrivateKey.swift in Sources */,
 				ECAC079D25A4EACD00FCCD7C /* ReceivingList.swift in Sources */,
 				EC1EDB1F258EB1C000B8F4D4 /* SimpleSignalSwiftEncryptionAPIErrors.swift in Sources */,

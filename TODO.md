@@ -10,6 +10,7 @@
 8) Fix New Message page doesn't update after subscribing (x)
 9) Add confirm alert after sending live message (x)
 10) Handle live message sending errors (x)
+11) Fix remote device exists error (o)
 
 
 

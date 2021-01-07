@@ -24,7 +24,7 @@ struct ListView: View {
     var body: some View {
         NavigationView {
             VStack {
-                if (loggedInUser?.is2FAUser ?? false) {
+                if (loggedInUser?.subscriptionExpiryDate != nil) {
                     Picker(selection: $selectedDirection, label: Text("Please choose a direction")) {
                         ForEach(0 ..< directions.count) {
                             Text(self.directions[$0])

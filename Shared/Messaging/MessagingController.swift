@@ -134,7 +134,7 @@ public class MessagingController {
             print("Error creating device")
             print(error)
             if error == .deviceExists {
-                completionHandler(.failure(.unableToCreateDevice))
+                completionHandler(.failure(.remoteDeviceExists))
             } else {
                 completionHandler(.failure(.unableToCreateDevice))
             }

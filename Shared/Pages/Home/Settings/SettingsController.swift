@@ -202,9 +202,10 @@ struct SettingsController: View {
                     dismissButton: .cancel()
                 )
             }
-            Text("").hidden().actionSheet(isPresented: $subscriptionOptionsSheetShowing) {
-                ActionSheet(title: Text("Subscribe"), message: Text("Choose a subscription type"), buttons: generateActionSheetButtons(options: self.subscriptionOptions) + [Alert.Button.cancel()])
-            }
+            SubscriptionActionSheet(
+                isShowing: $subscriptionOptionsSheetShowing,
+                subscriptionOptions: $subscriptionOptions,
+                subscribe: subscribe)
             
         }
         

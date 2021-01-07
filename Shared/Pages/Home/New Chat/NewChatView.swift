@@ -15,14 +15,17 @@ struct NewChatView: View {
     @Binding var isLiveLocation: Bool
     @Binding var selectedLiveLength: Int
     @Binding var loggedInUser: LoggedInUser?
+    @Binding var subscribeInProgress: Bool
     
     var liveLengths = ["15 Minutes", "1 Hour", "4 Hours"]
     
     var performMessageSend: () -> Void
+    var getSubscriptionOptions: () -> Void
     
     var body: some View {
         NavigationView {
-            ScrollView {
+            VStack {
+                Text((loggedInUser?.subscriptionExpiryDate != nil) ? "True" : "False")
                 TextFieldWithTitleAndValidation(
                     title: "Recipient's Email",
                     invalidText: "Invalid email",
@@ -31,15 +34,9 @@ struct NewChatView: View {
                     text: $recipientEmail,
                     showInvalidText: $recipientEmailInvalid
                 ).padding(.horizontal).padding(.top)
-                if (!(loggedInUser?.is2FAUser ?? false)) {
-                    Text("Subscribe to enable live location sending")
-                        .padding()
-                        .background(Color(UIColor(Color.accentColor).withAlphaComponent(0.7)))
-                        .cornerRadius(10.0)
-                }
                 Toggle("Live Location", isOn: $isLiveLocation)
                     .padding(.horizontal)
-                    .disabled(!(loggedInUser?.is2FAUser ?? false))
+                    .disabled(loggedInUser?.subscriptionExpiryDate == nil)
                 Picker(
                     selection: $selectedLiveLength,
                     label: Text("Broadcast Length")) {
@@ -49,7 +46,8 @@ struct NewChatView: View {
                 }
                 .pickerStyle(SegmentedPickerStyle())
                 .padding(.horizontal)
-                .disabled((!(loggedInUser?.is2FAUser ?? false)) || !isLiveLocation)
+                .disabled((loggedInUser?.subscriptionExpiryDate == nil) || !isLiveLocation)
+                Spacer()
                 Button(action: self.performMessageSend) {
                     HStack {
                         if (self.sendLocationInProgress) {
@@ -63,8 +61,25 @@ struct NewChatView: View {
                 .padding(.top)
                 .disabled(recipientEmailInvalid || sendLocationInProgress)
                 .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
-                .navigationTitle("Send Location")
-            }
+                if (loggedInUser?.subscriptionExpiryDate == nil) {
+                    VStack {
+                        Text("Subscribe to enable live location sending")
+                            .padding()
+                            .cornerRadius(10.0)
+                        Button(action: getSubscriptionOptions) {
+                            HStack {
+                                if (self.subscribeInProgress) {
+                                    ActivityIndicator(isAnimating: true)
+                                }
+                                Text("Subscribe")
+                            }
+                        }
+                        .disabled(subscribeInProgress)
+                        .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
+                    }
+                    .background(Color(UIColor(Color.accentColor).withAlphaComponent(0.5)))
+                }
+            }.navigationTitle("Send Location")
         }
     }
 }
@@ -86,6 +101,7 @@ struct NewChatView_Previews: PreviewProvider {
         @State var isLiveLocation: Bool = false
         @State var selectedLiveLength = 0
         @State var loggedInUser: LoggedInUser? = nil
+        @State var subscribeInProgress: Bool = false
         
         init(isSubscriber: Bool = false) {
             let loggedInUser = LoggedInUser(
@@ -98,6 +114,7 @@ struct NewChatView_Previews: PreviewProvider {
         }
         
         func performMessageSend() {}
+        func getSubscriptionOptions() {}
 
         var body: some View {
             
@@ -108,7 +125,9 @@ struct NewChatView_Previews: PreviewProvider {
                 isLiveLocation: $isLiveLocation,
                 selectedLiveLength: $selectedLiveLength,
                 loggedInUser: $loggedInUser,
-                performMessageSend: performMessageSend
+                subscribeInProgress: $subscribeInProgress,
+                performMessageSend: performMessageSend,
+                getSubscriptionOptions: getSubscriptionOptions
             )
         }
     }

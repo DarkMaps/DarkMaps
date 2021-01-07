@@ -5,6 +5,7 @@
 //  Created by Matthew Roche on 08/12/2020.
 //
 import SwiftUI
+import StoreKit
 
 struct NewChatController: View {
     
@@ -17,6 +18,11 @@ struct NewChatController: View {
     @State var selectedLiveLength = 0
     @State var messageSendSuccessAlertShowing = false
     @State var liveMessageSendSuccessAlertShowing = false
+    @State var subscribeInProgress = false
+    @State var subscriptionOptions: [SKProduct] = []
+    @State var subscriptionOptionsSheetShowing = false
+    
+    var subscriptionController = SubscriptionController()
     
     func parseLiveExpiry() -> Date {
         let timeToAdd: Int
@@ -91,6 +97,33 @@ struct NewChatController: View {
         }
     }
     
+    func getSubscriptionOptions() {
+        subscribeInProgress = true
+        subscriptionController.getSubscriptions() { result in
+            subscribeInProgress = false
+            switch result {
+            case .success(let options):
+                self.subscriptionOptions = options
+                self.subscriptionOptionsSheetShowing = true
+            case .failure(let error):
+                appState.displayedError = IdentifiableError(error)
+            }
+        }
+    }
+    
+    func subscribe(product: SKProduct) {
+        subscribeInProgress = true
+        subscriptionController.purchaseSubscription(product: product) { result in
+            subscribeInProgress = false
+            switch result {
+            case .success(let date):
+                print(date)
+            case .failure(let error):
+                appState.displayedError = IdentifiableError(error)
+            }
+        }
+    }
+    
     var body: some View {
         ZStack {
             NewChatView(
@@ -100,7 +133,9 @@ struct NewChatController: View {
                 isLiveLocation: $isLiveLocation,
                 selectedLiveLength: $selectedLiveLength,
                 loggedInUser: $appState.loggedInUser,
-                performMessageSend: performMessageSend
+                subscribeInProgress: $subscribeInProgress,
+                performMessageSend: performMessageSend,
+                getSubscriptionOptions: getSubscriptionOptions
             )
             Text("").hidden().alert(isPresented: $messageSendSuccessAlertShowing) {
                 Alert(
@@ -116,6 +151,11 @@ struct NewChatController: View {
                     dismissButton: .default(Text("OK"), action: {recipientEmail = ""})
                 )
             }
+            SubscriptionActionSheet(
+                isShowing: $subscriptionOptionsSheetShowing,
+                subscriptionOptions: $subscriptionOptions,
+                subscribe: subscribe
+            )
         }
     }
 }
