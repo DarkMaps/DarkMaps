@@ -8,7 +8,7 @@
 import Foundation
 
 enum MessageStoreError: LocalizedError {
-    case noMessageFromThisSender, poorlyFormattedMessageData, poorlyFormattedLiveMessageArrayData, liveMessageRecipientAlreadyExists
+    case noMessageFromThisSender, poorlyFormattedMessageData, poorlyFormattedLiveMessageArrayData, liveMessageRecipientAlreadyExists, liveMessageRecipientDoesNotExist
 }
 
 extension MessageStoreError {
@@ -22,11 +22,13 @@ extension MessageStoreError {
             return NSLocalizedString("This live message recipient already exists.", comment: "")
         case .poorlyFormattedLiveMessageArrayData:
             return NSLocalizedString("The stored live message recipient array was poorly formatted.", comment: "")
+        case .liveMessageRecipientDoesNotExist:
+            return NSLocalizedString("The recipient you asked to update does not exist.", comment: "")
         }
     }
 }
 
-enum MessagingControllerError: LocalizedError {
+enum MessagingControllerError: String, LocalizedError, Codable {
     case unableToStoreMessages, unableToRetrieveMessages, unableToDecryptMessage, poorlyFormattedLocation, unableToDeleteMessage, unableToUpdateDeviceKeys, unableToCreateAddress, unableToCreateEncryptionHandler, unableToCreateMessagingStore, noDeviceCreated, unableToSendMessage, unableToDeleteDevice, unableToCreateDevice, needToProvideUsername, remoteDeviceExists, poorlyFormattedLiveMessageArrayData, liveMessageRecipientAlreadyExists, noDeviceOnServer
 }
 

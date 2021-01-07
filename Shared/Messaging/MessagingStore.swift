@@ -122,6 +122,28 @@ public class MessagingStore {
         return decodedResponse
     }
     
+    public func updateLiveMessage(newMessage: LiveMessage) throws {
+        let keyName = "-msg-liveMessageRecipients"
+        guard let arrayData = keychainSwift.getData(keyName) else {
+            throw MessageStoreError.liveMessageRecipientDoesNotExist
+        }
+        let decoder = JSONDecoder()
+        guard var arrayToUpdate = try? decoder.decode([LiveMessage].self, from: arrayData) else {
+            keychainSwift.delete(keyName)
+            throw MessageStoreError.poorlyFormattedLiveMessageArrayData
+        }
+        // Remove old message
+        arrayToUpdate.removeAll { element in
+            element.recipient == newMessage.recipient
+        }
+        // Add new message
+        arrayToUpdate.append(newMessage)
+        let encoder = JSONEncoder()
+        let encodedArrayData = try! encoder.encode(arrayToUpdate)
+        keychainSwift.set(encodedArrayData, forKey: keyName)
+        sendNotification(count: arrayToUpdate.count)
+    }
+    
     public func removeLiveMessageRecipient(_ recipient: ProtocolAddress) throws {
         let keyName = "-msg-liveMessageRecipients"
         var arrayToDeleteFrom: [LiveMessage] = []

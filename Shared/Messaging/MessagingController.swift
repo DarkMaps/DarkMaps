@@ -82,6 +82,14 @@ public class MessagingController {
                 case .failure(let error):
                     print("Error sending message")
                     print(error)
+                    recipient.error = error
+                    do {
+                        try messageStore.updateLiveMessage(newMessage: recipient)
+                    } catch {
+                        print("Error storing live message with error")
+                        print(error)
+                        // Do nothing if we can't store the error -
+                    }
                 case .success():
                     print("Message successfully sent to \(recipient.recipient.combinedValue)")
                 }
@@ -90,7 +98,7 @@ public class MessagingController {
     }
     
     private func parseExpiredLiveMessages(_ array: [LiveMessage]) -> [LiveMessage] {
-        return array.filter { $0.expiry > Date() }
+        return array.filter { ($0.expiry > Date()) }
     }
     
     func createDevice(userName: String, serverAddress: String, authToken: String, completionHandler: @escaping (_: Result<Int, MessagingControllerError>) -> ()) {

@@ -20,9 +20,16 @@ struct SendingList: View {
                     HStack {
                         VStack(alignment: .leading) {
                             Text(message.recipient.name)
-                            Text(message.humanReadableExpiry)
-                                .italic()
-                                .font(.footnote)
+                            if message.error != nil {
+                                Text("Error")
+                                    .italic()
+                                    .foregroundColor(.red)
+                                    .font(.footnote)
+                            } else {
+                                Text(message.humanReadableExpiry)
+                                    .italic()
+                                    .font(.footnote)
+                            }
                         }
                         Spacer()
                         Image(systemName: "bolt").foregroundColor(.yellow)

@@ -12,8 +12,9 @@ public class LiveMessage: Codable, Identifiable {
     public var id = UUID()
     var recipient: ProtocolAddress
     var expiry: Date
+    var error: MessagingControllerError?
     
-    init(recipient: ProtocolAddress, expiry: Date) {
+    init(recipient: ProtocolAddress, expiry: Date, error: Error? = nil) {
         self.recipient = recipient
         self.expiry = expiry
     }
@@ -24,12 +25,14 @@ public class LiveMessage: Codable, Identifiable {
         let recipientString = try values.decode(String.self, forKey: .recipientCombinedValue)
         self.recipient = try ProtocolAddress(recipientString)
         self.expiry = try values.decode(Date.self, forKey: .expiry)
+        self.error = try values.decodeIfPresent(MessagingControllerError.self, forKey: .expiry)
     }
     
     enum CodingKeys: String, CodingKey {
         case id
         case recipientCombinedValue
         case expiry
+        case error
     }
     
     public func encode(to encoder: Encoder) throws {
@@ -37,6 +40,7 @@ public class LiveMessage: Codable, Identifiable {
         try container.encode(id, forKey: .id)
         try container.encode(recipient.combinedValue, forKey: .recipientCombinedValue)
         try container.encode(expiry, forKey: .expiry)
+        try container.encode(error, forKey: .error)
     }
     
     public var humanReadableExpiry: String {
@@ -47,7 +51,7 @@ public class LiveMessage: Codable, Identifiable {
             prefixString = "Expires: "
         }
         let dateFormatter = RelativeDateTimeFormatter()
-        return prefixString + dateFormatter.localizedString(for: self.expiry, relativeTo: Date())
+        return prefixString + dateFormatter.localizedString(for: expiry, relativeTo: Date())
     }
 }
 
