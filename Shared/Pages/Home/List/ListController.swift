@@ -85,7 +85,7 @@ struct ListController: View {
                     )
                     let messages = try messageStore.getMessageSummary()
                     print(messages)
-                    self.receivingMessageArray.append(contentsOf: messages)
+                    self.receivingMessageArray = messages
                 } catch {
                     DispatchQueue.main.async {
                         print(error)

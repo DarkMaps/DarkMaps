@@ -26,7 +26,7 @@ struct DetailView: View {
                 Text("No location data in message")
             } else {
                 VStack(alignment: .leading) {
-                    Text(messageDetails!.sender.name).padding(.leading)
+                    Text(messageDetails!.sender.name).padding(.leading).padding(.top)
                     Text("Last Seen: \(messageDetails!.location!.relativeDate)").padding(.leading)
                     MapView(
                         centerCoordinate: Binding($centerCoordinate)!,
@@ -35,7 +35,7 @@ struct DetailView: View {
                 }
                 
             }
-        }
+        }.navigationBarTitle(Text("Detail"), displayMode: .inline)
         
     }
 }
