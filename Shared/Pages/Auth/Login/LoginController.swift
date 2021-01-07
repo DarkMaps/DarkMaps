@@ -47,6 +47,9 @@ struct LoginController: View {
             
             switch createDeviceOutcome {
             case .failure(let error):
+                if error == .remoteDeviceExists {
+                    self.showingDeleteDeviceSheet = true
+                }
                 appState.displayedError = IdentifiableError(error)
             case .success(let registrationId):
                 print("Registration Id: \(registrationId)")
