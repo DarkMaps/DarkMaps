@@ -84,7 +84,6 @@ public class LoggedInUser: Equatable, Hashable, Codable {
     }
     
     private func handleAddObservers() {
-        print("Creating observers")
         let notificationCentre = NotificationCenter.default
         notificationCentre.addObserver(self,
                                        selector: #selector(self.handleSubscriptionVerified(_:)),

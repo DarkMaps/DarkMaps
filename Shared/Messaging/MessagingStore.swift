@@ -118,7 +118,6 @@ public class MessagingStore {
             keychainSwift.delete(keyName)
             throw MessageStoreError.poorlyFormattedLiveMessageArrayData
         }
-        print(decodedResponse)
         return decodedResponse
     }
     

@@ -78,7 +78,6 @@ struct ListController: View {
                     }
                 }
             case .success():
-                print("Success getting messages")
                 do {
                     let messageStore = MessagingStore(
                         localAddress: try ProtocolAddress(
@@ -86,7 +85,6 @@ struct ListController: View {
                             deviceId: UInt32(loggedInUser.deviceId))
                     )
                     let messages = try messageStore.getMessageSummary()
-                    print(messages)
                     self.receivingMessageArray = messages
                 } catch {
                     DispatchQueue.main.async {

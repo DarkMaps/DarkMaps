@@ -28,7 +28,6 @@ struct SignalMapsApp: App {
         }
         self.appState.loggedInUser = storedUser
         self.appState.messagingController = messagingController
-        handleCheckUserIsSubscriber()
     }
     
     func handleCheckUserIsSubscriber() {
