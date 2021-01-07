@@ -49,8 +49,9 @@ struct LoginController: View {
             case .failure(let error):
                 if error == .remoteDeviceExists {
                     self.showingDeleteDeviceSheet = true
+                } else {
+                    appState.displayedError = IdentifiableError(error)
                 }
-                appState.displayedError = IdentifiableError(error)
             case .success(let registrationId):
                 print("Registration Id: \(registrationId)")
                 appState.messagingController = messagingController
