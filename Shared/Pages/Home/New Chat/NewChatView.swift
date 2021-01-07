@@ -30,7 +30,7 @@ struct NewChatView: View {
                     disableAutocorrection: true,
                     text: $recipientEmail,
                     showInvalidText: $recipientEmailInvalid
-                ).padding(.horizontal)
+                ).padding(.horizontal).padding(.top)
                 if (!isSubscriber) {
                     Text("Subscribe to enable live location sending")
                         .padding()
@@ -49,11 +49,13 @@ struct NewChatView: View {
                 }
                 .pickerStyle(SegmentedPickerStyle())
                 .padding(.horizontal)
-                .disabled(!isSubscriber)
+                .disabled(!isSubscriber || !isLiveLocation)
                 Button(action: self.performMessageSend) {
                     HStack {
                         if (self.sendLocationInProgress) {
                             ActivityIndicator(isAnimating: true)
+                        } else if (self.isLiveLocation) {
+                            Image(systemName: "bolt.fill").foregroundColor(.yellow)
                         }
                         Text("Send")
                     }

@@ -15,26 +15,27 @@ struct SendingList: View {
     
     var body: some View {
         VStack {
-            if sendingMessageArray.count == 0 {
-                HStack {
-                    Spacer()
-                    Text("Not sending location to anyone").padding()
-                    Spacer()
-                }
-            }
             List {
                 ForEach(sendingMessageArray, id: \.id) { message in
                     HStack {
-                        Text(message.recipient.combinedValue)
-                        Spacer()
-                        if Double(message.expiry) < Date().timeIntervalSince1970 {
-                            Text("Expired")
-                        } else {
+                        VStack(alignment: .leading) {
+                            Text(message.recipient.name)
                             Text(message.humanReadableExpiry)
+                                .italic()
+                                .font(.footnote)
                         }
-                    }
+                        Spacer()
+                        Image(systemName: "bolt").foregroundColor(.yellow)
+                    }.padding()
                 }
                 .onDelete(perform: deleteLiveMessage)
+                if sendingMessageArray.count == 0 {
+                    HStack {
+                        Spacer()
+                        Text("Not sending location to anyone").padding()
+                        Spacer()
+                    }
+                }
             }
         }
     }

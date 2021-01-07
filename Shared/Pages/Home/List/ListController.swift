@@ -17,22 +17,24 @@ struct ListController: View {
     
     func getStoredMessages() {
         
-        guard let loggedInUser = appState.loggedInUser else {
+        guard let messagingController = appState.messagingController else {
             appState.displayedError = IdentifiableError(ListViewErrors.noUserLoggedIn)
             return
         }
-        
-        guard let address = try? ProtocolAddress(name: loggedInUser.userName, deviceId: UInt32(loggedInUser.deviceId)) else {
-            appState.displayedError = IdentifiableError(ListViewErrors.noUserLoggedIn)
-            return
-        }
-        
-        let messageStore = MessagingStore(localAddress: address)
         
         do {
-            self.receivingMessageArray = try messageStore.getMessageSummary()
-            self.sendingMessageArray = try messageStore.getLiveMessages()
+            self.receivingMessageArray = try messagingController.getMessageSummary()
         } catch {
+            print("Error getting received messages")
+            print(error)
+            appState.displayedError = IdentifiableError(ListViewErrors.unableToRetrieveMessages)
+        }
+        
+        do {
+            self.sendingMessageArray = try messagingController.getLiveMessages()
+        } catch {
+            print("Error getting sent messages")
+            print(error)
             appState.displayedError = IdentifiableError(ListViewErrors.unableToRetrieveMessages)
         }
         

@@ -31,7 +31,7 @@ public class MessagingStore {
     }
 
     public func loadMessage(sender: ProtocolAddress) throws -> LocationMessage {
-        let keyName = "-msg-\(sender.combinedValue)"
+        let keyName = "-msg-rcv-\(sender.combinedValue)"
         guard let messageData = keychainSwift.getData(keyName) else {
             throw MessageStoreError.noMessageFromThisSender
         }
@@ -44,14 +44,14 @@ public class MessagingStore {
     }
 
     public func storeMessage(_ message: LocationMessage) throws {
-        let keyName = "-msg-\(message.sender.combinedValue)"
+        let keyName = "-msg-rcv-\(message.sender.combinedValue)"
         let jsonEncoder = JSONEncoder()
         let jsonData = try jsonEncoder.encode(message)
         keychainSwift.set(jsonData, forKey: keyName)
     }
 
     public func removeMessage(sender: ProtocolAddress) throws {
-        let keyName = "-msg-\(sender.combinedValue)"
+        let keyName = "-msg-rcv-\(sender.combinedValue)"
         keychainSwift.delete(keyName)
     }
     
@@ -59,7 +59,7 @@ public class MessagingStore {
         var summaryMessageArray: [ShortLocationMessage] = []
         let keys = keychainSwift.allKeys
         for key in keys {
-            if key.starts(with: "\(keychainSwift.keyPrefix)-msg-") {
+            if key.starts(with: "\(keychainSwift.keyPrefix)-msg-rcv-") {
                 var keyToGet: String
                 // Removing only first occurence of prefix so can send location to self
                 if let range = key.range(of: keychainSwift.keyPrefix){
@@ -115,10 +115,10 @@ public class MessagingStore {
         }
         let decoder = JSONDecoder()
         guard let decodedResponse = try? decoder.decode([LiveMessage].self, from: arrayData) else {
-            print("Error decoding LiveMessageArrayData")
             keychainSwift.delete(keyName)
             throw MessageStoreError.poorlyFormattedLiveMessageArrayData
         }
+        print(decodedResponse)
         return decodedResponse
     }
     
@@ -128,7 +128,6 @@ public class MessagingStore {
         if let arrayData = keychainSwift.getData(keyName) {
             let decoder = JSONDecoder()
             guard let decodedResponse = try? decoder.decode([LiveMessage].self, from: arrayData) else {
-                print("Error decoding LiveMessageArrayData")
                 keychainSwift.delete(keyName)
                 throw MessageStoreError.poorlyFormattedLiveMessageArrayData
             }

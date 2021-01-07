@@ -10,16 +10,15 @@ struct NewChatController: View {
     
     @EnvironmentObject var appState: AppState
     
-    let locationController = LocationController()
-    
     @State var recipientEmail: String = ""
     @State var recipientEmailInvalid: Bool = false
     @State var isLiveLocation: Bool = false
     @State var sendLocationInProgress: Bool = false
     @State var selectedLiveLength = 0
     @State var messageSendSuccessAlertShowing = false
+    @State var liveMessageSendSuccessAlertShowing = false
     
-    func parseLiveLengthExpiry() -> Int {
+    func parseLiveExpiry() -> Date {
         let timeToAdd: Int
         if selectedLiveLength == 0 {
             timeToAdd = 60 * 15
@@ -28,8 +27,8 @@ struct NewChatController: View {
         } else {
             timeToAdd = 60 * 60 * 4
         }
-        let now = Date().timeIntervalSinceNow
-        return Int(now) + timeToAdd
+        let now = Date().addingTimeInterval(Double(timeToAdd))
+        return now
     }
     
     func performMessageSend() {
@@ -49,8 +48,9 @@ struct NewChatController: View {
         if isLiveLocation {
             
             do {
-                try messagingController.addLiveMessage(recipientName: recipientEmail, recipientDeviceId: Int(1), expiry: parseLiveLengthExpiry())
+                try messagingController.addLiveMessage(recipientName: recipientEmail, recipientDeviceId: Int(1), expiry: parseLiveExpiry())
                 sendLocationInProgress = false
+                liveMessageSendSuccessAlertShowing = true
             } catch {
                 appState.displayedError = IdentifiableError(error)
                 sendLocationInProgress = false
@@ -59,7 +59,7 @@ struct NewChatController: View {
             
         } else {
             
-            locationController.getCurrentLocation() {
+            appState.locationController.getCurrentLocation() {
                 getLocationOutcome in
                 
                 switch getLocationOutcome {
@@ -82,7 +82,6 @@ struct NewChatController: View {
                             sendLocationInProgress = false
                         case .success():
                             messageSendSuccessAlertShowing = true
-                            recipientEmail = ""
                             sendLocationInProgress = false
                         }
                     }
@@ -107,7 +106,14 @@ struct NewChatController: View {
                 Alert(
                     title: Text("Success"),
                     message: Text("The message was sent successfully."),
-                    dismissButton: .default(Text("OK"))
+                    dismissButton: .default(Text("OK"), action: {recipientEmail = ""})
+                )
+            }
+            Text("").hidden().alert(isPresented: $liveMessageSendSuccessAlertShowing) {
+                Alert(
+                    title: Text("Success"),
+                    message: Text("You are now broadcasting your location to \(recipientEmail)."),
+                    dismissButton: .default(Text("OK"), action: {recipientEmail = ""})
                 )
             }
         }

@@ -70,7 +70,7 @@ public class MessagingController {
             )
         for recipient in allRecipients {
             var personalLocationToSend = locationToSend
-            personalLocationToSend.liveExpiryDate = Date(timeIntervalSince1970: Double(recipient.expiry))
+            personalLocationToSend.liveExpiryDate = recipient.expiry
             self.sendMessage(
                 recipientName: recipient.recipient.name,
                 recipientDeviceId: Int(recipient.recipient.deviceId),
@@ -90,7 +90,7 @@ public class MessagingController {
     }
     
     private func parseExpiredLiveMessages(_ array: [LiveMessage]) -> [LiveMessage] {
-        return array.filter { $0.expiry > Int(Date().timeIntervalSince1970) }
+        return array.filter { $0.expiry > Date() }
     }
     
     func createDevice(userName: String, serverAddress: String, authToken: String, completionHandler: @escaping (_: Result<Int, MessagingControllerError>) -> ()) {
@@ -379,7 +379,7 @@ public class MessagingController {
         }
     }
     
-    func addLiveMessage(recipientName: String, recipientDeviceId: Int, expiry: Int) throws {
+    func addLiveMessage(recipientName: String, recipientDeviceId: Int, expiry: Date) throws {
         guard let messagingStore = self.messagingStore else {
             throw MessagingControllerError.noDeviceCreated
         }
@@ -395,11 +395,18 @@ public class MessagingController {
         try messagingStore.removeLiveMessageRecipient(recipientAddress)
     }
     
-    func getLiveMessageRecipients() throws -> [LiveMessage] {
+    func getLiveMessages() throws -> [LiveMessage] {
         guard let messagingStore = self.messagingStore else {
             throw MessagingControllerError.noDeviceCreated
         }
         return try messagingStore.getLiveMessages()
+    }
+    
+    func getMessageSummary() throws -> [ShortLocationMessage]  {
+        guard let messagingStore = self.messagingStore else {
+            throw MessagingControllerError.noDeviceCreated
+        }
+        return try messagingStore.getMessageSummary()
     }
     
     func deleteAllLocalData() {

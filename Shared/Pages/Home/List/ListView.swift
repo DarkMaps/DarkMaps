@@ -42,7 +42,7 @@ struct ListView: View {
                         sendingMessageArray: $sendingMessageArray,
                         deleteLiveMessage: deleteLiveMessage)
                 }
-            }
+            }.navigationTitle("Received")
         }
     }
 }

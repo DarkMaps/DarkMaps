@@ -17,13 +17,6 @@ struct ReceivingList: View {
     
     var body: some View {
         VStack {
-            if receivingMessageArray.count == 0 {
-                HStack {
-                    Spacer()
-                    Text("No locations received yet").padding()
-                    Spacer()
-                }
-            }
             List {
                 ForEach(receivingMessageArray, id: \.id) { message in
                     NavigationLink(destination: DetailController(sender: message.sender)) {
@@ -45,9 +38,16 @@ struct ReceivingList: View {
                             }
                             
                         }
-                    }
+                    }.padding()
                 }
                 .onDelete(perform: deleteMessage)
+                if receivingMessageArray.count == 0 {
+                    HStack {
+                        Spacer()
+                        Text("No locations received yet").padding()
+                        Spacer()
+                    }
+                }
             }
             Button(action: self.performSync) {
                 HStack {
@@ -59,7 +59,6 @@ struct ReceivingList: View {
             }
             .disabled(getMessagesInProgress)
             .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
-            .navigationTitle("Received")
         }
     }
 }

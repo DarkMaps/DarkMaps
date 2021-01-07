@@ -11,9 +11,9 @@ import MapKit
 public class LiveMessage: Codable, Identifiable {
     public var id = UUID()
     var recipient: ProtocolAddress
-    var expiry: Int
+    var expiry: Date
     
-    init(recipient: ProtocolAddress, expiry: Int) {
+    init(recipient: ProtocolAddress, expiry: Date) {
         self.recipient = recipient
         self.expiry = expiry
     }
@@ -23,7 +23,7 @@ public class LiveMessage: Codable, Identifiable {
         self.id = try values.decode(UUID.self, forKey: .id)
         let recipientString = try values.decode(String.self, forKey: .recipientCombinedValue)
         self.recipient = try ProtocolAddress(recipientString)
-        self.expiry = try values.decode(Int.self, forKey: .expiry)
+        self.expiry = try values.decode(Date.self, forKey: .expiry)
     }
     
     enum CodingKeys: String, CodingKey {
@@ -40,10 +40,14 @@ public class LiveMessage: Codable, Identifiable {
     }
     
     public var humanReadableExpiry: String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .short
-        dateFormatter.timeStyle = .short
-        return dateFormatter.string(from: Date(timeIntervalSince1970: Double(self.expiry)))
+        let prefixString: String
+        if self.expiry < Date() {
+            prefixString = "Expired: "
+        } else {
+            prefixString = "Expires: "
+        }
+        let dateFormatter = RelativeDateTimeFormatter()
+        return prefixString + dateFormatter.localizedString(for: self.expiry, relativeTo: Date())
     }
 }
 
