@@ -99,7 +99,7 @@ struct NewChatController: View {
                 sendLocationInProgress: $sendLocationInProgress,
                 isLiveLocation: $isLiveLocation,
                 selectedLiveLength: $selectedLiveLength,
-                isSubscriber: appState.loggedInUser?.subscriptionExpiryDate != nil,
+                loggedInUser: $appState.loggedInUser,
                 performMessageSend: performMessageSend
             )
             Text("").hidden().alert(isPresented: $messageSendSuccessAlertShowing) {

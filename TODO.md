@@ -7,7 +7,7 @@
 5) Fix appearance of TextFieldAlert (x)
 6) Fix Live Messages (x)
 7) Handle changed identity (o)
-8) Fix New Message page doesn't update after subscribing (o)
+8) Fix New Message page doesn't update after subscribing (x)
 9) Add confirm alert after sending live message (x)
 10) Handle live message sending errors (x)
 

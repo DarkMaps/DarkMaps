@@ -14,7 +14,7 @@ struct NewChatView: View {
     @Binding var sendLocationInProgress: Bool
     @Binding var isLiveLocation: Bool
     @Binding var selectedLiveLength: Int
-    var isSubscriber: Bool
+    @Binding var loggedInUser: LoggedInUser?
     
     var liveLengths = ["15 Minutes", "1 Hour", "4 Hours"]
     
@@ -31,7 +31,7 @@ struct NewChatView: View {
                     text: $recipientEmail,
                     showInvalidText: $recipientEmailInvalid
                 ).padding(.horizontal).padding(.top)
-                if (!isSubscriber) {
+                if (!(loggedInUser?.is2FAUser ?? false)) {
                     Text("Subscribe to enable live location sending")
                         .padding()
                         .background(Color(UIColor(Color.accentColor).withAlphaComponent(0.7)))
@@ -39,7 +39,7 @@ struct NewChatView: View {
                 }
                 Toggle("Live Location", isOn: $isLiveLocation)
                     .padding(.horizontal)
-                    .disabled(!isSubscriber)
+                    .disabled(!(loggedInUser?.is2FAUser ?? false))
                 Picker(
                     selection: $selectedLiveLength,
                     label: Text("Broadcast Length")) {
@@ -49,7 +49,7 @@ struct NewChatView: View {
                 }
                 .pickerStyle(SegmentedPickerStyle())
                 .padding(.horizontal)
-                .disabled(!isSubscriber || !isLiveLocation)
+                .disabled((!(loggedInUser?.is2FAUser ?? false)) || !isLiveLocation)
                 Button(action: self.performMessageSend) {
                     HStack {
                         if (self.sendLocationInProgress) {
@@ -85,10 +85,19 @@ struct NewChatView_Previews: PreviewProvider {
         @State var sendLocationInProgress: Bool = false
         @State var isLiveLocation: Bool = false
         @State var selectedLiveLength = 0
+        @State var loggedInUser: LoggedInUser? = nil
+        
+        init(isSubscriber: Bool = false) {
+            let loggedInUser = LoggedInUser(
+                userName: "test@test.com",
+                deviceId: 1,
+                serverAddress: "test.com",
+                authCode: "testAuthCode",
+                is2FAUser: isSubscriber)
+            _loggedInUser = State(initialValue: loggedInUser)
+        }
         
         func performMessageSend() {}
-        
-        var isSubscriber: Bool
 
         var body: some View {
             
@@ -98,7 +107,7 @@ struct NewChatView_Previews: PreviewProvider {
                 sendLocationInProgress: $sendLocationInProgress,
                 isLiveLocation: $isLiveLocation,
                 selectedLiveLength: $selectedLiveLength,
-                isSubscriber: isSubscriber,
+                loggedInUser: $loggedInUser,
                 performMessageSend: performMessageSend
             )
         }

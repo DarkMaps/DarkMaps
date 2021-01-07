@@ -12,9 +12,9 @@ struct ListView: View {
     @Binding var receivingMessageArray: [ShortLocationMessage]
     @Binding var sendingMessageArray: [LiveMessage]
     @Binding var getMessagesInProgress: Bool
+    @Binding var loggedInUser: LoggedInUser?
     @State private var selectedDirection = 0
     
-    var isSubscriber: Bool
     var directions = ["Receiving", "Sending"]
                
     var performSync: () -> Void
@@ -24,7 +24,7 @@ struct ListView: View {
     var body: some View {
         NavigationView {
             VStack {
-                if isSubscriber {
+                if (loggedInUser?.is2FAUser ?? false) {
                     Picker(selection: $selectedDirection, label: Text("Please choose a direction")) {
                         ForEach(0 ..< directions.count) {
                             Text(self.directions[$0])
@@ -99,19 +99,28 @@ struct ListView_Previews: PreviewProvider {
             ]
         @State var sendingMessageArray: [LiveMessage] = []
         @State var getMessagesInProgress: Bool = false
-        
-        var isSubscriber: Bool
+        @State var loggedInUser: LoggedInUser?
                    
         func performSync() {}
         func deleteLiveMessage(_: IndexSet) {}
         func deleteMessage(_: IndexSet) {}
+        
+        init(isSubscriber: Bool = false) {
+            let loggedInUser = LoggedInUser(
+                userName: "test@test.com",
+                deviceId: 1,
+                serverAddress: "test.com",
+                authCode: "testAuthCode",
+                is2FAUser: isSubscriber)
+            _loggedInUser = State(initialValue: loggedInUser)
+        }
 
         var body: some View {
             return ListView(
                 receivingMessageArray: $receivingMessageArray,
                 sendingMessageArray: $sendingMessageArray,
                 getMessagesInProgress: $getMessagesInProgress,
-                isSubscriber: isSubscriber,
+                loggedInUser: $loggedInUser,
                 performSync: performSync,
                 deleteLiveMessage: deleteLiveMessage,
                 deleteMessage: deleteMessage

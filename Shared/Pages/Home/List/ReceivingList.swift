@@ -34,7 +34,7 @@ struct ReceivingList: View {
                             }
                             Spacer()
                             if message.isLive {
-                                Image(systemName: "bolt").foregroundColor(.yellow)
+                                Image(systemName: "bolt.fill").foregroundColor(.yellow)
                             }
                             
                         }

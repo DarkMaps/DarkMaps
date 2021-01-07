@@ -140,7 +140,7 @@ struct ListController: View {
             receivingMessageArray: $receivingMessageArray,
             sendingMessageArray: $sendingMessageArray,
             getMessagesInProgress: $getMessagesInProgress,
-            isSubscriber: appState.loggedInUser?.subscriptionExpiryDate != nil,
+            loggedInUser: $appState.loggedInUser,
             performSync: performSync,
             deleteLiveMessage: deleteLiveMessage,
             deleteMessage: deleteMessage
