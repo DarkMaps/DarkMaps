@@ -14,12 +14,19 @@ public class SimpleSignalSwiftEncryptionAPI {
     let address: ProtocolAddress
     private let keychainSwift: KeychainSwift
     private var store: KeychainSignalProtocolStore? = nil
+    
+    private var timeoutDuration: DispatchTime {
+        return .now() + 5
+    }
+    
+    
     #if DEBUG
     //Required for testing
     public func exposePrivateStore() -> KeychainSignalProtocolStore? {
         return self.store
     }
     #endif
+    
     
     init(address: ProtocolAddress) throws {
         self.address = address
@@ -170,7 +177,9 @@ public class SimpleSignalSwiftEncryptionAPI {
             
         }.resume()
         
-        _ = semaphore.wait(wallTimeout: .distantFuture)
+        if semaphore.wait(timeout: timeoutDuration) == .timedOut {
+            result = .failure(.timeout)
+        }
         
         return result
         
@@ -294,7 +303,9 @@ public class SimpleSignalSwiftEncryptionAPI {
                 
             }.resume()
             
-            _ = semaphore.wait(wallTimeout: .distantFuture)
+            if semaphore.wait(timeout: timeoutDuration) == .timedOut {
+                result = .failure(.timeout)
+            }
             
             return result
         } catch {
@@ -386,7 +397,9 @@ public class SimpleSignalSwiftEncryptionAPI {
             
         }.resume()
         
-        _ = semaphore.wait(wallTimeout: .distantFuture)
+        if semaphore.wait(timeout: timeoutDuration) == .timedOut {
+            result = .failure(.timeout)
+        }
         
         return result
     }
@@ -446,7 +459,9 @@ public class SimpleSignalSwiftEncryptionAPI {
             
         }.resume()
         
-        _ = semaphore.wait(wallTimeout: .distantFuture)
+        if semaphore.wait(timeout: timeoutDuration) == .timedOut {
+            result = .failure(.timeout)
+        }
         
         return result
     }
@@ -549,7 +564,9 @@ public class SimpleSignalSwiftEncryptionAPI {
             
         }.resume()
         
-        _ = semaphore.wait(wallTimeout: .distantFuture)
+        if semaphore.wait(timeout: timeoutDuration) == .timedOut {
+            result = .failure(.timeout)
+        }
         
         return result
     }
@@ -588,7 +605,9 @@ public class SimpleSignalSwiftEncryptionAPI {
             
         }.resume()
         
-        _ = semaphore.wait(wallTimeout: .distantFuture)
+        if semaphore.wait(timeout: timeoutDuration) == .timedOut {
+            result = .failure(.timeout)
+        }
         
         return result
     }
@@ -669,7 +688,9 @@ public class SimpleSignalSwiftEncryptionAPI {
             
         }.resume()
         
-        _ = semaphore.wait(wallTimeout: .distantFuture)
+        if semaphore.wait(timeout: timeoutDuration) == .timedOut {
+            result = .failure(.timeout)
+        }
         
         return result
     }
@@ -756,7 +777,9 @@ public class SimpleSignalSwiftEncryptionAPI {
             
         }.resume()
         
-        _ = semaphore.wait(wallTimeout: .distantFuture)
+        if semaphore.wait(timeout: timeoutDuration) == .timedOut {
+            result = .failure(.timeout)
+        }
         
         return result
         
@@ -825,8 +848,6 @@ public class SimpleSignalSwiftEncryptionAPI {
             return(.failure(.badFormat))
         }
         
-        print(json)
-        
         guard let jsonData = try? JSONSerialization.data(withJSONObject: json, options: []) else {
             return .failure(.badFormat)
         }
@@ -850,7 +871,9 @@ public class SimpleSignalSwiftEncryptionAPI {
             
         }.resume()
         
-        _ = semaphore.wait(wallTimeout: .distantFuture)
+        if semaphore.wait(timeout: timeoutDuration) == .timedOut {
+            result = .failure(.timeout)
+        }
         
         return result
         

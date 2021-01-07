@@ -8,7 +8,7 @@
 import Foundation
 
 public enum SSAPIAuthRegisterError: LocalizedError {
-    case emailExists, invalidUrl, badFormat, badResponseFromServer, serverError, requestThrottled, loginError
+    case emailExists, invalidUrl, badFormat, badResponseFromServer, serverError, requestThrottled, loginError, timeout
 }
 
 extension SSAPIAuthRegisterError {
@@ -28,12 +28,14 @@ extension SSAPIAuthRegisterError {
             return NSLocalizedString("The request was throttled", comment: "")
         case .loginError:
             return NSLocalizedString("You have registered but there was an error logging in. Try logging in.", comment: "")
+        case .timeout:
+            return NSLocalizedString("The request timed out. Please try again.", comment: "")
         }
     }
 }
 
 public enum SSAPIAuthLoginError: LocalizedError {
-    case invalidCredentials, invalidUrl, badFormat, badResponseFromServer, serverError, needsTwoFactorAuthentication(String), requestThrottled
+    case invalidCredentials, invalidUrl, badFormat, badResponseFromServer, serverError, needsTwoFactorAuthentication(String), requestThrottled, timeout
 }
 
 extension SSAPIAuthLoginError {
@@ -53,12 +55,14 @@ extension SSAPIAuthLoginError {
             return NSLocalizedString("The request was throttled", comment: "")
         case .needsTwoFactorAuthentication:
             return NSLocalizedString("This user has two factor authentication enabled", comment: "")
+        case .timeout:
+            return NSLocalizedString("The request timed out. Please try again.", comment: "")
         }
     }
 }
 
 public enum SSAPIAuthResetPasswordError: LocalizedError {
-    case invalidUrl, badFormat, badResponseFromServer, serverError, requestThrottled
+    case invalidUrl, badFormat, badResponseFromServer, serverError, requestThrottled, timeout
 }
 
 extension SSAPIAuthResetPasswordError {
@@ -74,12 +78,14 @@ extension SSAPIAuthResetPasswordError {
             return NSLocalizedString("The server returned an error", comment: "")
         case .requestThrottled:
             return NSLocalizedString("The request was throttled", comment: "")
+        case .timeout:
+            return NSLocalizedString("The request timed out. Please try again.", comment: "")
         }
     }
 }
 
 public enum SSAPIAuthSubmit2FAError: LocalizedError {
-    case invalidToken, invalidCode, invalidUrl, badFormat, badResponseFromServer, serverError, requestThrottled
+    case invalidToken, invalidCode, invalidUrl, badFormat, badResponseFromServer, serverError, requestThrottled, timeout
 }
 
 extension SSAPIAuthSubmit2FAError {
@@ -99,6 +105,8 @@ extension SSAPIAuthSubmit2FAError {
             return NSLocalizedString("The server returned an error", comment: "")
         case .requestThrottled:
             return NSLocalizedString("The request was throttled", comment: "")
+        case .timeout:
+            return NSLocalizedString("The request timed out. Please try again.", comment: "")
         }
     }
 }
@@ -106,7 +114,7 @@ extension SSAPIAuthSubmit2FAError {
 
 
 public enum SSAPIAuthActivate2FAError: LocalizedError {
-    case twoFactorAlreadyExists, invalidUrl, badFormat, badResponseFromServer, serverError, possibleIncorrectMFAMethodName, requestThrottled
+    case twoFactorAlreadyExists, invalidUrl, badFormat, badResponseFromServer, serverError, possibleIncorrectMFAMethodName, requestThrottled, timeout
 }
 
 extension SSAPIAuthActivate2FAError {
@@ -126,12 +134,14 @@ extension SSAPIAuthActivate2FAError {
             return NSLocalizedString("The request was throttled", comment: "")
         case .possibleIncorrectMFAMethodName:
             return NSLocalizedString("This type of two factor authentication does not exist on the server", comment: "")
+        case .timeout:
+            return NSLocalizedString("The request timed out. Please try again.", comment: "")
         }
     }
 }
 
 public enum SSAPIAuthConfirm2FAError: LocalizedError {
-    case invalidUrl, badFormat, badResponseFromServer, serverError, possibleIncorrectMFAMethodName, requestThrottled, invalidAuthorisation, invalidCode
+    case invalidUrl, badFormat, badResponseFromServer, serverError, possibleIncorrectMFAMethodName, requestThrottled, invalidAuthorisation, invalidCode, timeout
 }
 
 extension SSAPIAuthConfirm2FAError {
@@ -153,13 +163,15 @@ extension SSAPIAuthConfirm2FAError {
             return NSLocalizedString("The authorisation details provided were incorrect", comment: "")
         case .invalidCode:
             return NSLocalizedString("The 2FA code provided was incorrect", comment: "")
+        case .timeout:
+            return NSLocalizedString("The request timed out. Please try again.", comment: "")
         }
         
     }
 }
 
 public enum SSAPIAuthDeactivate2FAError: LocalizedError {
-    case invalidUrl, badFormat, badResponseFromServer, serverError, possibleIncorrectMFAMethodName, requestThrottled, invalidAuthorisation, invalidCode
+    case invalidUrl, badFormat, badResponseFromServer, serverError, possibleIncorrectMFAMethodName, requestThrottled, invalidAuthorisation, invalidCode, timeout
 }
 
 extension SSAPIAuthDeactivate2FAError {
@@ -181,13 +193,15 @@ extension SSAPIAuthDeactivate2FAError {
             return NSLocalizedString("The authorisation details provided were incorrect", comment: "")
         case .invalidCode:
             return NSLocalizedString("The 2FA code provided was incorrect", comment: "")
+        case .timeout:
+            return NSLocalizedString("The request timed out. Please try again.", comment: "")
         }
         
     }
 }
 
 public enum SSAPIAuthLogOutError: LocalizedError {
-    case invalidUrl, badFormat, badResponseFromServer, serverError, requestThrottled, invalidAuthorisation
+    case invalidUrl, badFormat, badResponseFromServer, serverError, requestThrottled, invalidAuthorisation, timeout
 }
 
 extension SSAPIAuthLogOutError {
@@ -205,13 +219,15 @@ extension SSAPIAuthLogOutError {
             return NSLocalizedString("The request was throttled", comment: "")
         case .invalidAuthorisation:
             return NSLocalizedString("The authorisation details provided were incorrect", comment: "")
+        case .timeout:
+            return NSLocalizedString("The request timed out. Please try again.", comment: "")
         }
         
     }
 }
 
 public enum SSAPIAuthDeleteUserAccountError: LocalizedError {
-    case invalidPassword, invalidUrl, badFormat, badResponseFromServer, serverError, requestThrottled, invalidAuthorisation
+    case invalidPassword, invalidUrl, badFormat, badResponseFromServer, serverError, requestThrottled, invalidAuthorisation, timeout
 }
 
 extension SSAPIAuthDeleteUserAccountError {
@@ -231,6 +247,8 @@ extension SSAPIAuthDeleteUserAccountError {
             return NSLocalizedString("The request was throttled", comment: "")
         case .invalidAuthorisation:
             return NSLocalizedString("The authorisation details provided were incorrect", comment: "")
+        case .timeout:
+            return NSLocalizedString("The request timed out. Please try again.", comment: "")
         }
         
     }

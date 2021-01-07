@@ -11,6 +11,10 @@ import Foundation
 
 public class SimpleSignalSwiftAuthAPI{
     
+    var timeoutDuration: DispatchTime {
+        return .now() + 5
+    }
+    
     public func register(username: String, password: String, serverAddress: String) -> Result<Void, SSAPIAuthRegisterError> {
         
         let path = "\(serverAddress)/v1/auth/users/"
@@ -79,7 +83,9 @@ public class SimpleSignalSwiftAuthAPI{
             
         }.resume()
         
-        _ = semaphore.wait(wallTimeout: .distantFuture)
+        if semaphore.wait(timeout: timeoutDuration) == .timedOut {
+            result = .failure(.timeout)
+        }
         
         return result
         
@@ -171,7 +177,9 @@ public class SimpleSignalSwiftAuthAPI{
             
         }.resume()
         
-        _ = semaphore.wait(wallTimeout: .distantFuture)
+        if semaphore.wait(timeout: timeoutDuration) == .timedOut {
+            result = .failure(.timeout)
+        }
         
         return result
         
@@ -230,7 +238,9 @@ public class SimpleSignalSwiftAuthAPI{
             
         }.resume()
         
-        _ = semaphore.wait(wallTimeout: .distantFuture)
+        if semaphore.wait(timeout: timeoutDuration) == .timedOut {
+            result = .failure(.timeout)
+        }
         
         return result
         
@@ -317,7 +327,9 @@ public class SimpleSignalSwiftAuthAPI{
             
         }.resume()
         
-        _ = semaphore.wait(wallTimeout: .distantFuture)
+        if semaphore.wait(timeout: timeoutDuration) == .timedOut {
+            result = .failure(.timeout)
+        }
         
         return result
         
@@ -399,7 +411,9 @@ public class SimpleSignalSwiftAuthAPI{
             
         }.resume()
         
-        _ = semaphore.wait(wallTimeout: .distantFuture)
+        if semaphore.wait(timeout: timeoutDuration) == .timedOut {
+            result = .failure(.timeout)
+        }
         
         return result
         
@@ -475,7 +489,9 @@ public class SimpleSignalSwiftAuthAPI{
             
         }.resume()
         
-        _ = semaphore.wait(wallTimeout: .distantFuture)
+        if semaphore.wait(timeout: timeoutDuration) == .timedOut {
+            result = .failure(.timeout)
+        }
         
         return result
         
@@ -545,7 +561,9 @@ public class SimpleSignalSwiftAuthAPI{
             
         }.resume()
         
-        _ = semaphore.wait(wallTimeout: .distantFuture)
+        if semaphore.wait(timeout: timeoutDuration) == .timedOut {
+            result = .failure(.timeout)
+        }
         
         return result
         
@@ -604,7 +622,9 @@ public class SimpleSignalSwiftAuthAPI{
             
         }.resume()
         
-        _ = semaphore.wait(wallTimeout: .distantFuture)
+        if semaphore.wait(timeout: timeoutDuration) == .timedOut {
+            result = .failure(.timeout)
+        }
         
         return result
         
@@ -667,7 +687,9 @@ public class SimpleSignalSwiftAuthAPI{
             
         }.resume()
         
-        _ = semaphore.wait(wallTimeout: .distantFuture)
+        if semaphore.wait(timeout: timeoutDuration) == .timedOut {
+            result = .failure(.timeout)
+        }
         
         return result
         
