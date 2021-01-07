@@ -60,9 +60,13 @@ struct TextFieldWithTitleAndValidation: View {
             ZStack {
                 // A blank Text is retained when no error is show to prevent vertical movement on insertion
                 // of the error text
-                Text("").frame(maxWidth: .infinity).padding(.top, 10)
+                Text("")
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical)
+                    .padding(.top, 10)
                 if (showInvalidText && text.count > 0) {
                     Text(invalidText)
+                        .padding(.vertical)
                         .frame(maxWidth: .infinity)
                         .background(Color.orange)
                         .transition(.move(edge: .leading))
@@ -87,7 +91,7 @@ struct TextFieldWithTitleAndValidation_Previews: PreviewProvider {
         @State var text: String = ""
         @State var showInvalidText: Bool = false
         
-        func startChat () {return}
+        func startChat () {}
 
         var body: some View {
             
