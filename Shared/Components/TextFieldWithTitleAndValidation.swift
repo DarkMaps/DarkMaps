@@ -48,12 +48,14 @@ struct TextFieldWithTitleAndValidation: View {
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .autocapitalization(.none)
                         .disableAutocorrection(disableAutocorrection)
+                        .padding(.bottom, -8)
                 } else {
                     SecureField(
                         title,
                         text: $text)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .autocapitalization(.none)
+                        .padding(.bottom, -8)
                 }
                 
             }
@@ -62,13 +64,14 @@ struct TextFieldWithTitleAndValidation: View {
                 // of the error text
                 Text("")
                     .frame(maxWidth: .infinity)
-                    .padding(.vertical)
-                    .padding(.top, 10)
+                    .padding(.vertical, 3)
                 if (showInvalidText && text.count > 0) {
                     Text(invalidText)
-                        .padding(.vertical)
+                        .foregroundColor(.white)
+                        .padding(.vertical, 3)
                         .frame(maxWidth: .infinity)
-                        .background(Color.orange)
+                        .background(Color.accentColor)
+                        .cornerRadius(3.0)
                         .transition(.move(edge: .leading))
                         .animation(.easeInOut(duration: 0.2))
                 }

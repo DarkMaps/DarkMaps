@@ -20,6 +20,7 @@ struct Activate2FAModal: View {
     
     let obtain2FAQRCode: () -> Void
     let confirm2FA: () -> Void
+    let copyCodeToClipboard: () -> Void
     
     let context = CIContext()
     let filter = CIFilter.qrCodeGenerator()
@@ -52,9 +53,15 @@ struct Activate2FAModal: View {
                         .frame(width: 200, height: 200)
                 } else {
                     ActivityIndicator(isAnimating: true)
+                        .frame(width: 200, height: 200)
                 }
                 Spacer()
             }
+            Button(action: self.copyCodeToClipboard) {
+                    Text("Copy to clipboard")
+            }
+            .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
+            .disabled(QRCodeFor2FA == nil)
             Spacer()
             TextFieldWithTitleAndValidation(
                 title: "Enter the code from your programme",
@@ -86,19 +93,25 @@ struct Activate2FAModal_Previews: PreviewProvider {
     static var previews: some View {
         return Group {
             PreviewWrapper()
+            PreviewWrapper(QRCode: "testCode")
         }
     }
     
     struct PreviewWrapper: View {
         
         @State var confirm2FACode = ""
-        @State var QRCodeFor2FA: String? = nil
+        @State var QRCodeFor2FA: String?
         @State var actionInProgress: ActionInProgress? = nil
         func obtain2FAQRCode() {
             return
         }
         func confirm2FA() {
             return
+        }
+        func copyCodeToClipboard() {}
+        
+        init(QRCode: String? = nil) {
+            self._QRCodeFor2FA = State(initialValue: QRCode)
         }
 
         var body: some View {
@@ -108,7 +121,8 @@ struct Activate2FAModal_Previews: PreviewProvider {
                 QRCodeFor2FA: $QRCodeFor2FA,
                 actionInProgress: $actionInProgress,
                 obtain2FAQRCode: obtain2FAQRCode,
-                confirm2FA: confirm2FA
+                confirm2FA: confirm2FA,
+                copyCodeToClipboard: copyCodeToClipboard
             )
         }
     }

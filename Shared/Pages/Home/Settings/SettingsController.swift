@@ -6,6 +6,7 @@
 //
 import SwiftUI
 import StoreKit
+import MobileCoreServices
 
 struct SettingsController: View {
     
@@ -150,11 +151,9 @@ struct SettingsController: View {
         }
     }
     
-    func generateActionSheetButtons(options: [SKProduct]) -> [Alert.Button] {
-        let buttons = options.enumerated().map { i, option in
-            Alert.Button.default(Text("\(option.localizedTitle): \(option.localizedPrice ?? String(describing: option.price))")) {self.subscribe(product: option)}
-        }
-        return buttons
+    func copyCodeToClipboard() {
+        UIPasteboard.general.setValue(QRCodeFor2FA ?? "No code available",
+                                      forPasteboardType: kUTTypePlainText as String)
     }
     
     var body: some View {
@@ -179,7 +178,8 @@ struct SettingsController: View {
                     QRCodeFor2FA: $QRCodeFor2FA,
                     actionInProgress: $actionInProgress,
                     obtain2FAQRCode: obtain2FAQRCode,
-                    confirm2FA: confirm2FA)
+                    confirm2FA: confirm2FA,
+                    copyCodeToClipboard: copyCodeToClipboard)
             })
             Text("").hidden().sheet(isPresented: $deactivate2FAModalIsShowing, content: {
                 Deactivate2FAModal(

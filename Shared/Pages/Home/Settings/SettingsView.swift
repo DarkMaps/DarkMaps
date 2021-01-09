@@ -139,6 +139,13 @@ struct SettingsView_Previews: PreviewProvider {
                             serverAddress: "https://api.reallyreallylongtesturl.com",
                             authCode: "testAuthCode",
                             is2FAUser: true))
+            PreviewWrapper(loggedInUser: LoggedInUser(
+                            userName: "reallyreallyLongTestUser@test.com",
+                            deviceId: 1,
+                            serverAddress: "https://api.reallyreallylongtesturl.com",
+                            authCode: "testAuthCode",
+                            is2FAUser: true))
+                .preferredColorScheme(.dark)
         }
     }
     
