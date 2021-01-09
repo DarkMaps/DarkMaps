@@ -29,58 +29,19 @@ struct SettingsView: View {
     var body: some View {
         NavigationView {
             List {
-                Section(header: Text("App")) {
-                    Text("Version: \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown")")
-                    Text("Build: \(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown")")
-                }
-                Section(header: Text("User")) {
-                    Text("Username: \(loggedInUser?.userName ?? "Unknown")").lineLimit(2)
-                    Text("Device ID: \(String(loggedInUser?.deviceId ?? -1))")
-                    VStack(alignment: .leading) {
-                        Text("Server Address:")
-                        Text("\(loggedInUser?.serverAddress ?? "Unknown")")
-                    }
-                }
-                Section(header: Text("Account")) {
-                    if (loggedInUser?.is2FAUser ?? false) {
-                        SettingsRow(
-                            actionInProgress: $actionInProgress,
-                            title: "Deactivate 2FA",
-                            actionDefiningActivityMarker: .deactivate2FA,
-                            onTap: {deactivate2FAModalIsShowing = true}
-                        )
-                    } else {
-                        SettingsRow(
-                            actionInProgress: $actionInProgress,
-                            title: "Activate 2FA",
-                            actionDefiningActivityMarker: .confirm2FA,
-                            onTap: {activate2FAModalIsShowing = true}
-                        )
-                    }
-                    SettingsRow(
-                        actionInProgress: $actionInProgress,
-                        title: "Log Out",
-                        actionDefiningActivityMarker: .logUserOut,
-                        onTap: logUserOut
-                    )
-                    SettingsRow(
-                        actionInProgress: $actionInProgress,
-                        title: "Delete Account",
-                        actionDefiningActivityMarker: .deleteUserAccount,
-                        onTap: {passwordAlertShowing = true}
-                    )
-                }
                 Section(header: Text("Subscription")) {
                     if loggedInUser?.subscriptionExpiryDate == nil {
                         SettingsRow(
                             actionInProgress: $actionInProgress,
                             title: "Subscribe",
+                            iconName: "creditcard.fill",
                             actionDefiningActivityMarker: .subscribe,
                             onTap: getSubscriptionOptions
                         )
                         SettingsRow(
                             actionInProgress: $actionInProgress,
                             title: "Restore Subscription",
+                            iconName: "arrow.clockwise",
                             actionDefiningActivityMarker: .restoreSubscription,
                             onTap: restoreSubscription
                         )
@@ -89,6 +50,70 @@ struct SettingsView: View {
                     }
 
                 }
+                Section(header: Text("Account")) {
+                    if (loggedInUser?.is2FAUser ?? false) {
+                        SettingsRow(
+                            actionInProgress: $actionInProgress,
+                            title: "Deactivate 2FA",
+                            iconName: "minus.diamond.fill",
+                            actionDefiningActivityMarker: .deactivate2FA,
+                            onTap: {deactivate2FAModalIsShowing = true}
+                        )
+                    } else {
+                        SettingsRow(
+                            actionInProgress: $actionInProgress,
+                            title: "Activate 2FA",
+                            iconName: "plus.diamond.fill",
+                            actionDefiningActivityMarker: .confirm2FA,
+                            onTap: {activate2FAModalIsShowing = true}
+                        )
+                    }
+                    SettingsRow(
+                        actionInProgress: $actionInProgress,
+                        title: "Log Out",
+                        iconName: "person.fill.badge.minus",
+                        actionDefiningActivityMarker: .logUserOut,
+                        onTap: logUserOut
+                    )
+                    SettingsRow(
+                        actionInProgress: $actionInProgress,
+                        title: "Delete Account",
+                        iconName: "figure.wave",
+                        actionDefiningActivityMarker: .deleteUserAccount,
+                        onTap: {passwordAlertShowing = true}
+                    )
+                }
+                Section(header: Text("User")) {
+                    SettingsRow(
+                        actionInProgress: $actionInProgress,
+                        title: "Username: \(loggedInUser?.userName ?? "Unknown")",
+                        iconName: "person.fill",
+                        actionDefiningActivityMarker: nil)
+                    SettingsRow(
+                        actionInProgress: $actionInProgress,
+                        title: "Device ID: \(String(loggedInUser?.deviceId ?? -1))",
+                        iconName: "number",
+                        actionDefiningActivityMarker: nil)
+                    SettingsRow(
+                        actionInProgress: $actionInProgress,
+                        title: "Server Address",
+                        subtitle: "\(loggedInUser?.serverAddress ?? "Unknown")",
+                        iconName: "curlybraces",
+                        actionDefiningActivityMarker: nil)
+                }
+                Section(header: Text("App")) {
+                    SettingsRow(
+                        actionInProgress: $actionInProgress,
+                        title: "Version: \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown")",
+                        iconName: "number",
+                        actionDefiningActivityMarker: nil)
+                    SettingsRow(
+                        actionInProgress: $actionInProgress,
+                        title: "Build: \(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown")",
+                        iconName: "number",
+                        actionDefiningActivityMarker: nil)
+                }
+                
             }
             .listStyle(GroupedListStyle())
             .navigationTitle("Settings")

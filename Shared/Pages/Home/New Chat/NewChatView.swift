@@ -27,7 +27,6 @@ struct NewChatView: View {
     var body: some View {
         NavigationView {
             VStack {
-                Text(loggedInUser?.subscriptionExpiryDate == nil ? "False" : "True")
                 TextFieldWithTitleAndValidation(
                     title: "Recipient's Email",
                     invalidText: "Invalid email",
