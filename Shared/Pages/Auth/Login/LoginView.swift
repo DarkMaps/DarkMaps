@@ -23,28 +23,31 @@ struct LoginView: View {
     var body: some View {
         NavigationView {
             VStack(alignment: .center) {
-                Image("Main Icon")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .cornerRadius(20)
-                    .padding()
-                TextFieldWithTitleAndValidation(
-                    title: "Username",
-                    invalidText: "Invalid username",
-                    validRegex: "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$",
-                    disableAutocorrection: true,
-                    text: $username,
-                    showInvalidText: $invalidUsername
-                )
-                TextFieldWithTitleAndValidation(
-                    title: "Password",
-                    invalidText: "Invalid password",
-                    secureField: true,
-                    text: $password,
-                    showInvalidText: $invalidPassword,
-                    onCommit: self.performLogin
-                )
-                Spacer()
+                ScrollView {
+                    Image("Main Icon")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: UIScreen.main.bounds.size.width * 0.4)
+                        .cornerRadius(20)
+                        .padding(.bottom)
+                    TextFieldWithTitleAndValidation(
+                        title: "Username",
+                        invalidText: "Invalid username",
+                        validRegex: "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$",
+                        disableAutocorrection: true,
+                        text: $username,
+                        showInvalidText: $invalidUsername
+                    )
+                    TextFieldWithTitleAndValidation(
+                        title: "Password",
+                        invalidText: "Invalid password",
+                        secureField: true,
+                        text: $password,
+                        showInvalidText: $invalidPassword,
+                        onCommit: self.performLogin
+                    )
+                }.padding()
+                Rectangle().fill(Color.accentColor).frame(width: .infinity, height: 4)
                 Button(action: self.performLogin) {
                     HStack {
                         if (self.loginInProgress) {
@@ -58,8 +61,8 @@ struct LoginView: View {
                 Button(action: {self.resetPasswordAlertShowing.toggle()}) { Text("Reset Password")
                 }
                 .disabled(loginInProgress)
+                .padding(.bottom)
             }
-            .padding()
             .navigationBarTitle("Log In")
             .navigationBarBackButtonHidden(true)
             .navigationBarItems(

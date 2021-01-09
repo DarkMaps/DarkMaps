@@ -22,28 +22,32 @@ struct RegisterView: View {
     var body: some View {
         NavigationView {
             VStack(alignment: .center) {
-                Image("Main Icon")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .cornerRadius(20)
-                    .padding()
-                TextFieldWithTitleAndValidation(
-                    title: "Username",
-                    invalidText: "Invalid username",
-                    validRegex: "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$",
-                    disableAutocorrection: true,
-                    text: $username,
-                    showInvalidText: $invalidUsername
-                )
-                TextFieldWithTitleAndValidation(
-                    title: "Password",
-                    invalidText: "Invalid password",
-                    secureField: true,
-                    text: $password,
-                    showInvalidText: $invalidPassword,
-                    onCommit: self.performRegister
-                )
-                Spacer()
+                ScrollView {
+                    Image("Main Icon")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: UIScreen.main.bounds.size.width * 0.4)
+                        .cornerRadius(20)
+                        .padding(.bottom)
+                    TextFieldWithTitleAndValidation(
+                        title: "Username",
+                        invalidText: "Invalid username",
+                        validRegex: "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$",
+                        disableAutocorrection: true,
+                        text: $username,
+                        showInvalidText: $invalidUsername
+                    )
+                    TextFieldWithTitleAndValidation(
+                        title: "Password",
+                        invalidText: "Invalid password",
+                        secureField: true,
+                        text: $password,
+                        showInvalidText: $invalidPassword,
+                        onCommit: self.performRegister
+                    )
+                }.padding()
+                Rectangle().fill(Color.accentColor)
+                    .frame(width: .infinity, height: 4)
                 Button(action: self.performRegister) {
                     HStack {
                         if (self.registerInProgress) {
@@ -54,9 +58,8 @@ struct RegisterView: View {
                 }
                 .disabled(invalidUsername || invalidPassword || registerInProgress)
                 .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
-                
+                .padding(.bottom)
             }
-            .padding()
             .navigationBarTitle("Register")
             .navigationBarBackButtonHidden(true)
             .navigationBarItems(
