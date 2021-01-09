@@ -8,9 +8,12 @@
 import SwiftUI
 
 struct TextFieldAlert<Presenting>: View where Presenting: View {
+    
+    @Environment(\.colorScheme) var colorScheme
 
     @Binding var isShowing: Bool
     @Binding var text: String
+    
     let presenting: Presenting
     let title: String
     let textBoxPlaceholder: String?
@@ -26,15 +29,20 @@ struct TextFieldAlert<Presenting>: View where Presenting: View {
                     Spacer()
                     VStack {
                         VStack {
-                            Text(self.title)
+                            Text(self.title).padding(.bottom, 5)
                             if (secureField) {
                                 SecureField(self.title, text: self.$text)
                                     .id(self.isShowing)
+                                    .textFieldStyle(RoundedBorderTextFieldStyle())
                             } else {
                                 TextField(self.textBoxPlaceholder ?? self.title, text: self.$text)
                                     .id(self.isShowing)
+                                    .padding(10)
+                                    .overlay(
+                                        RoundedRectangle(
+                                            cornerRadius: 10)
+                                            .stroke(Color.gray, lineWidth: 1))
                             }
-                            Divider().padding(.vertical)
                             HStack {
                                 Button(action: {
                                     withAnimation {
@@ -54,13 +62,17 @@ struct TextFieldAlert<Presenting>: View where Presenting: View {
                             }
                         }.padding()
                     }
-                    .background(Color.white)
+                    .background(colorScheme == .dark ?
+                        Color.black :
+                        Color.white)
                     .cornerRadius(10)
                     .shadow(radius: 1)
                     .padding()
                     Spacer()
                 }
-                .background(Color(UIColor.gray.withAlphaComponent(0.7)))
+                .background(
+                    Color(UIColor.black.withAlphaComponent(0.7))
+                )
                 .frame(
                     width: deviceSize.size.width,
                     height: deviceSize.size.height
@@ -88,4 +100,35 @@ extension View {
                        onDismiss: onDismiss)
     }
 
+}
+
+struct TextFieldAlert_Previews: PreviewProvider {
+    
+    static var previews: some View {
+        
+        return Group {
+            PreviewWrapper()
+                .previewLayout(.fixed(width: 350, height: 120))
+            PreviewWrapper()
+                .preferredColorScheme(.dark)
+                .previewLayout(.fixed(width: 350, height: 120))
+        }
+    }
+    
+    struct PreviewWrapper: View {
+        
+        @State var isShowing = false
+        @State var text = ""
+
+        var body: some View {
+            
+            return Button("Click to show alert") { isShowing.toggle() }
+                .textFieldAlert(
+                    isShowing: $isShowing,
+                    text: $text,
+                    title: "A title",
+                    onDismiss: {})
+        }
+    }
+    
 }
