@@ -33,8 +33,7 @@ struct SettingsRow: View {
         HStack {
             ZStack {
                 Rectangle()
-                    .fill(colorScheme == .dark ?
-                                    Color.black : Color.white)
+                    .fill(Color.black.opacity(0))
                     .frame(width: 25)
                 if (iconName != nil) {
                     Image(systemName: iconName!)
