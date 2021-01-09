@@ -9,6 +9,8 @@ import SwiftUI
 
 struct NewChatView: View {
     
+    @Environment(\.colorScheme) var colorScheme
+    
     @Binding var recipientEmail: String
     @Binding var recipientEmailInvalid: Bool
     @Binding var sendLocationInProgress: Bool
@@ -25,7 +27,7 @@ struct NewChatView: View {
     var body: some View {
         NavigationView {
             VStack {
-                Text((loggedInUser?.subscriptionExpiryDate != nil) ? "True" : "False")
+                Text(loggedInUser?.subscriptionExpiryDate == nil ? "False" : "True")
                 TextFieldWithTitleAndValidation(
                     title: "Recipient's Email",
                     invalidText: "Invalid email",
@@ -47,7 +49,6 @@ struct NewChatView: View {
                 .pickerStyle(SegmentedPickerStyle())
                 .padding(.horizontal)
                 .disabled((loggedInUser?.subscriptionExpiryDate == nil) || !isLiveLocation)
-                Spacer()
                 Button(action: self.performMessageSend) {
                     HStack {
                         if (self.sendLocationInProgress) {
@@ -61,11 +62,11 @@ struct NewChatView: View {
                 .padding(.top)
                 .disabled(recipientEmailInvalid || sendLocationInProgress)
                 .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
+                Spacer()
                 if (loggedInUser?.subscriptionExpiryDate == nil) {
                     VStack {
                         Text("Subscribe to enable live location sending")
-                            .padding()
-                            .cornerRadius(10.0)
+                            .padding(.top)
                         Button(action: getSubscriptionOptions) {
                             HStack {
                                 if (self.subscribeInProgress) {
@@ -77,7 +78,9 @@ struct NewChatView: View {
                         .disabled(subscribeInProgress)
                         .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
                     }
-                    .background(Color(UIColor(Color.accentColor).withAlphaComponent(0.5)))
+                    .background(colorScheme == .dark ?
+                                    LinearGradient(gradient: Gradient(colors: [Color.black, Color.accentColor.opacity(0.7)]), startPoint: .top, endPoint: .bottom) :
+                                    LinearGradient(gradient: Gradient(colors: [Color.white, Color.accentColor.opacity(0.7)]), startPoint: .top, endPoint: .bottom))
                 }
             }.navigationTitle("Send Location")
         }
@@ -90,6 +93,8 @@ struct NewChatView_Previews: PreviewProvider {
         return Group {
             PreviewWrapper(isSubscriber: true)
             PreviewWrapper(isSubscriber: false)
+            PreviewWrapper(isSubscriber: false)
+                .preferredColorScheme(.dark)
         }
     }
     
@@ -109,7 +114,8 @@ struct NewChatView_Previews: PreviewProvider {
                 deviceId: 1,
                 serverAddress: "test.com",
                 authCode: "testAuthCode",
-                is2FAUser: isSubscriber)
+                is2FAUser: true,
+                subscriptionExpiryDate: isSubscriber ? Date() : nil)
             _loggedInUser = State(initialValue: loggedInUser)
         }
         
