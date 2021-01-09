@@ -13,6 +13,7 @@ struct RegisterView: View {
     @Binding var password: String
     @Binding var registerInProgress: Bool
     @Binding var customServerModalVisible: Bool
+    @Binding var loginBoxShowing: Bool
     
     @State private var invalidUsername: Bool = false
     @State private var invalidPassword: Bool = false
@@ -46,19 +47,23 @@ struct RegisterView: View {
                         onCommit: self.performRegister
                     )
                 }.padding()
-                Rectangle().fill(Color.accentColor)
-                    .frame(width: .infinity, height: 4)
-                Button(action: self.performRegister) {
-                    HStack {
-                        if (self.registerInProgress) {
-                            ActivityIndicator(isAnimating: true)
+                if loginBoxShowing {
+                    VStack {
+                        Rectangle().fill(Color.accentColor)
+                            .frame(maxWidth: .infinity, maxHeight: 4)
+                        Button(action: self.performRegister) {
+                            HStack {
+                                if (self.registerInProgress) {
+                                    ActivityIndicator(isAnimating: true)
+                                }
+                                Text("Register")
+                            }
                         }
-                        Text("Register")
-                    }
+                        .disabled(invalidUsername || invalidPassword || registerInProgress)
+                        .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
+                        .padding(.bottom)
+                    }.transition(.move(edge: .bottom))
                 }
-                .disabled(invalidUsername || invalidPassword || registerInProgress)
-                .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
-                .padding(.bottom)
             }
             .navigationBarTitle("Register")
             .navigationBarBackButtonHidden(true)

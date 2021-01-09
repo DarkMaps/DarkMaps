@@ -94,7 +94,7 @@ public class SubscriptionController {
             print(String(decoding: receipt.payloadRawData, as: UTF8.self))
             for purchase in receipt.activeAutoRenewableSubscriptionPurchases {
                 print(purchase.productIdentifier)
-                print(purchase.subscriptionExpirationDate)
+                print(purchase.subscriptionExpirationDate as Any)
                 if self.productArray.contains(purchase.productIdentifier) {
                     do {
                         try receipt.verify()

@@ -16,8 +16,9 @@ struct NewChatView: View {
     @Binding var sendLocationInProgress: Bool
     @Binding var isLiveLocation: Bool
     @Binding var selectedLiveLength: Int
-    @Binding var loggedInUser: LoggedInUser?
     @Binding var subscribeInProgress: Bool
+    // This is unfortunately necessary for animation
+    @Binding var isSubscribed: Bool
     
     var liveLengths = ["15 Minutes", "1 Hour", "4 Hours"]
     
@@ -37,7 +38,7 @@ struct NewChatView: View {
                 ).padding(.horizontal).padding(.top)
                 Toggle("Live Location", isOn: $isLiveLocation)
                     .padding(.horizontal)
-                    .disabled(loggedInUser?.subscriptionExpiryDate == nil)
+                    .disabled(isSubscribed == false)
                 Picker(
                     selection: $selectedLiveLength,
                     label: Text("Broadcast Length")) {
@@ -47,7 +48,7 @@ struct NewChatView: View {
                 }
                 .pickerStyle(SegmentedPickerStyle())
                 .padding(.horizontal)
-                .disabled((loggedInUser?.subscriptionExpiryDate == nil) || !isLiveLocation)
+                .disabled((isSubscribed == false) || !isLiveLocation)
                 Button(action: self.performMessageSend) {
                     HStack {
                         if (self.sendLocationInProgress) {
@@ -62,7 +63,7 @@ struct NewChatView: View {
                 .disabled(recipientEmailInvalid || sendLocationInProgress)
                 .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
                 Spacer()
-                if (loggedInUser?.subscriptionExpiryDate == nil) {
+                if (isSubscribed == false) {
                     VStack {
                         Text("Subscribe to enable live location sending")
                             .padding(.top)
@@ -77,11 +78,14 @@ struct NewChatView: View {
                         .disabled(subscribeInProgress)
                         .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
                     }
+                    .transition(.move(edge: .bottom))
                     .background(colorScheme == .dark ?
                                     LinearGradient(gradient: Gradient(colors: [Color.black, Color.accentColor.opacity(0.7)]), startPoint: .top, endPoint: .bottom) :
                                     LinearGradient(gradient: Gradient(colors: [Color.white, Color.accentColor.opacity(0.7)]), startPoint: .top, endPoint: .bottom))
                 }
-            }.navigationTitle("Send Location")
+            }
+            .navigationTitle("Send Location")
+            
         }
     }
 }
@@ -104,22 +108,23 @@ struct NewChatView_Previews: PreviewProvider {
         @State var sendLocationInProgress: Bool = false
         @State var isLiveLocation: Bool = false
         @State var selectedLiveLength = 0
-        @State var loggedInUser: LoggedInUser? = nil
         @State var subscribeInProgress: Bool = false
+        @State var isSubscribed: Bool = false
         
         init(isSubscriber: Bool = false) {
-            let loggedInUser = LoggedInUser(
-                userName: "test@test.com",
-                deviceId: 1,
-                serverAddress: "test.com",
-                authCode: "testAuthCode",
-                is2FAUser: true,
-                subscriptionExpiryDate: isSubscriber ? Date() : nil)
-            _loggedInUser = State(initialValue: loggedInUser)
+            isSubscribed = isSubscriber
         }
         
         func performMessageSend() {}
-        func getSubscriptionOptions() {}
+        func getSubscriptionOptions() {
+            if self.isSubscribed == true {
+                self.isSubscribed = false
+            } else {
+                withAnimation {
+                    self.isSubscribed = true
+                }
+            }
+        }
 
         var body: some View {
             
@@ -129,8 +134,8 @@ struct NewChatView_Previews: PreviewProvider {
                 sendLocationInProgress: $sendLocationInProgress,
                 isLiveLocation: $isLiveLocation,
                 selectedLiveLength: $selectedLiveLength,
-                loggedInUser: $loggedInUser,
                 subscribeInProgress: $subscribeInProgress,
+                isSubscribed: $isSubscribed,
                 performMessageSend: performMessageSend,
                 getSubscriptionOptions: getSubscriptionOptions
             )

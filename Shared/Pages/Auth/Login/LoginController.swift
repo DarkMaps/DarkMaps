@@ -25,6 +25,7 @@ struct LoginController: View {
     @State private var resetPasswordAlertShowing = false
     @State private var resetPasswordRequestedEmail = ""
     @State private var resetPasswordSuccessAlertShowing = false
+    @State private var loginBoxShowing = true
     
     var authorisationController = AuthorisationController()
     
@@ -179,15 +180,26 @@ struct LoginController: View {
                 customServerModalVisible: $customServerModalVisible,
                 loginInProgress: $loginInProgress,
                 resetPasswordAlertShowing: $resetPasswordAlertShowing,
+                loginBoxShowing: $loginBoxShowing,
                 performLogin: handleLogin
             )
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification), perform: {_ in
+                withAnimation {
+                    self.loginBoxShowing = false
+                }
+            })
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidHideNotification), perform: {_ in
+                withAnimation {
+                    self.loginBoxShowing = true
+                }
+            })
             Text("").hidden().actionSheet(isPresented: $showingDeleteDeviceSheet) {
                 ActionSheet(
                     title: Text("Device already exists"),
                     message: Text("This account already has a registered device. Do you wish to delete it? This is irreversible."),
                     buttons: [
                         .cancel(),
-                        .destructive(Text("Delete device from server."), action: handleDeleteDeviceThenLogin)
+                        .destructive(Text("Delete device from server"), action: handleDeleteDeviceThenLogin)
                     ]
                 )
             }
@@ -202,7 +214,7 @@ struct LoginController: View {
             Text("").hidden().alert(isPresented: $resetPasswordSuccessAlertShowing) {
                 Alert(
                     title: Text("Success"),
-                    message: Text("If \(resetPasswordRequestedEmail) is registered on our server then a reset passwor demail will have been sent to them."),
+                    message: Text("If \(resetPasswordRequestedEmail) is registered on our server then a reset password email will have been sent to them."),
                     dismissButton: .default(Text("OK"))
                 )
             }

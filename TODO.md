@@ -11,7 +11,7 @@
 9) Add confirm alert after sending live message (x)
 10) Handle live message sending errors (x)
 11) Fix remote device exists error (x)
-12) Allow copy QR code to clipboard (o)
+12) Allow copy QR code to clipboard (x)
 
 
 
@@ -19,5 +19,6 @@ Long Term:
 - Notifications
 - Emails to users not signed up
 - Auto fill recent users
+- Validate fingerprints
 
 

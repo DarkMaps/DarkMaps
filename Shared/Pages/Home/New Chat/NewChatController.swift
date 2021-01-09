@@ -21,6 +21,7 @@ struct NewChatController: View {
     @State var subscribeInProgress = false
     @State var subscriptionOptions: [SKProduct] = []
     @State var subscriptionOptionsSheetShowing = false
+    @State var isSubscribed = false //Necessary for animation
     
     var subscriptionController = SubscriptionController()
     
@@ -132,11 +133,16 @@ struct NewChatController: View {
                 sendLocationInProgress: $sendLocationInProgress,
                 isLiveLocation: $isLiveLocation,
                 selectedLiveLength: $selectedLiveLength,
-                loggedInUser: $appState.loggedInUser,
                 subscribeInProgress: $subscribeInProgress,
+                isSubscribed: $isSubscribed,
                 performMessageSend: performMessageSend,
                 getSubscriptionOptions: getSubscriptionOptions
             )
+            .onReceive(NotificationCenter.default.publisher(for: .subscriptionController_SubscriptionVerified), perform: {_ in
+                withAnimation {
+                    self.isSubscribed = true
+                }
+            })
             Text("").hidden().alert(isPresented: $messageSendSuccessAlertShowing) {
                 Alert(
                     title: Text("Success"),
