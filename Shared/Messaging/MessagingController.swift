@@ -42,22 +42,10 @@ public class MessagingController {
     }
     
     @objc private func handleLocationUpdateNotification(_ notification: NSNotification) {
-        guard let serverAddress = self.serverAddress else {
-            print("No server address available")
-            return
-        }
-        guard let authToken = self.authToken else {
-            print("No auth token available")
-            return
-        }
-        guard let locationData = notification.userInfo?["location"] as? GPSLocationRequest.ProducedData else {
-            print("No location found in Location Update Notification")
-            return
-        }
-        guard let messageStore = self.messagingStore else {
-            print("Unable to load messaging store")
-            return
-        }
+        guard let serverAddress = self.serverAddress else {  return }
+        guard let authToken = self.authToken else {  return }
+        guard let locationData = notification.userInfo?["location"] as? GPSLocationRequest.ProducedData else {  return }
+        guard let messageStore = self.messagingStore else {  return }
         guard var allRecipients = try? messageStore.getLiveMessages() else {
             print("No recipients found")
             return
@@ -155,6 +143,7 @@ public class MessagingController {
         
         DispatchQueue.global(qos: .utility).async {
             let encoder = JSONEncoder()
+            encoder.dateEncodingStrategy = .iso8601
             guard let locationData = try? encoder.encode(message)  else {
                 completionHandler(.failure(.poorlyFormattedLocation))
                 return
@@ -213,6 +202,7 @@ public class MessagingController {
                                 continue
                             } else {
                                 let decoder = JSONDecoder()
+                                decoder.dateDecodingStrategy = .iso8601
                                 guard let messageString = output.message else {
                                     print("No message data found in message")
                                     let newMessage = LocationMessage(

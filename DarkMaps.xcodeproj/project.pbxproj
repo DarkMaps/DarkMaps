@@ -179,6 +179,8 @@
 		ECDE0E5C2572B615009D3561 /* KeychainSignalProtocolStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFFD64D2572A9C900458BC8 /* KeychainSignalProtocolStore.swift */; };
 		ECDE0E5D2572B615009D3561 /* KeychainSwiftDistrib.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFFD64E2572A9C900458BC8 /* KeychainSwiftDistrib.swift */; };
 		ECDE0E602572B674009D3561 /* libsignal_ffi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ECFFD6442572A82500458BC8 /* libsignal_ffi.a */; };
+		ECEFB8A825AB1FE400E815D2 /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECEFB8A725AB1FE400E815D2 /* URLSession.swift */; };
+		ECEFB8A925AB1FE400E815D2 /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECEFB8A725AB1FE400E815D2 /* URLSession.swift */; };
 		ECF3E232259BDC22002E4291 /* NotificationCentreExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF3E231259BDC22002E4291 /* NotificationCentreExtensions.swift */; };
 		ECF4CB0E25A782F50069993C /* SubscriptionActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF4CB0D25A782F50069993C /* SubscriptionActionSheet.swift */; };
 		ECFC5940258DF804005CCDA2 /* TextFieldAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFC593F258DF803005CCDA2 /* TextFieldAlert.swift */; };
@@ -311,6 +313,7 @@
 		ECDE0E392572B5EC009D3561 /* DarkMapsiOSFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DarkMapsiOSFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECDE0E3B2572B5EC009D3561 /* SignalMapsiOSFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SignalMapsiOSFramework.h; sourceTree = "<group>"; };
 		ECDE0E3C2572B5EC009D3561 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		ECEFB8A725AB1FE400E815D2 /* URLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSession.swift; sourceTree = "<group>"; };
 		ECF3E231259BDC22002E4291 /* NotificationCentreExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCentreExtensions.swift; sourceTree = "<group>"; };
 		ECF4CB0D25A782F50069993C /* SubscriptionActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionActionSheet.swift; sourceTree = "<group>"; };
 		ECFC593F258DF803005CCDA2 /* TextFieldAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldAlert.swift; sourceTree = "<group>"; };
@@ -490,6 +493,7 @@
 				EC1EDB19258EB1A000B8F4D4 /* SimpleSignalSwiftEncryptionAPI.swift */,
 				EC1EDB1E258EB1C000B8F4D4 /* SimpleSignalSwiftEncryptionAPIErrors.swift */,
 				EC1EDB23258EB1ED00B8F4D4 /* SimpleSignalSwiftEncryptionApiStructs.swift */,
+				ECEFB8A725AB1FE400E815D2 /* URLSession.swift */,
 			);
 			path = SignalProtocol;
 			sourceTree = "<group>";
@@ -1058,6 +1062,7 @@
 				ECAEF14D25A1218400525760 /* LoginController.swift in Sources */,
 				ECAEF14925A1218100525760 /* SettingsRow.swift in Sources */,
 				ECDE0E4A2572B615009D3561 /* PublicKey.swift in Sources */,
+				ECEFB8A925AB1FE400E815D2 /* URLSession.swift in Sources */,
 				ECAEF0D525A1212400525760 /* LocationController.swift in Sources */,
 				ECAEF14525A1217E00525760 /* Deactivate2FAModal.swift in Sources */,
 				ECAEF15125A1218700525760 /* LoginView.swift in Sources */,
@@ -1136,6 +1141,7 @@
 				ECFFD64F2572A9C900458BC8 /* KeychainSignalProtocolStore.swift in Sources */,
 				EC4A05CF2595F99F00DE81A8 /* MessagingStore.swift in Sources */,
 				ECFFD5222572620300458BC8 /* SignalMapsApp.swift in Sources */,
+				ECEFB8A825AB1FE400E815D2 /* URLSession.swift in Sources */,
 				EC12FBB72572ADC700F7230F /* PreKeySignalMessage.swift in Sources */,
 				EC9129D9257D6C6400E12BF6 /* AuthorisationEnum.swift in Sources */,
 				ECAC078425A4D65D00FCCD7C /* RegisterController.swift in Sources */,

@@ -90,6 +90,7 @@ struct RegisterView_Previews: PreviewProvider {
         @State(initialValue: "") var password: String
         @State(initialValue: false) var registerInProgress: Bool
         @State(initialValue: false) var customServerModalVisible: Bool
+        @State(initialValue: false) var loginBoxShowing: Bool
         
         func register () -> Void {
             return
@@ -101,6 +102,7 @@ struct RegisterView_Previews: PreviewProvider {
                 password: $password,
                 registerInProgress: $registerInProgress,
                 customServerModalVisible: $customServerModalVisible,
+                loginBoxShowing: $loginBoxShowing,
                 performRegister: register
             )
           }

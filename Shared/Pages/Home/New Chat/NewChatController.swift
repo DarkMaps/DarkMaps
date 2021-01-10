@@ -143,6 +143,14 @@ struct NewChatController: View {
                     self.isSubscribed = true
                 }
             })
+            .onAppear(perform: {
+                guard let loggedInUser = appState.loggedInUser else {
+                    return
+                }
+                if loggedInUser.subscriptionExpiryDate != nil {
+                    self.isSubscribed = true
+                }
+            })
             Text("").hidden().alert(isPresented: $messageSendSuccessAlertShowing) {
                 Alert(
                     title: Text("Success"),

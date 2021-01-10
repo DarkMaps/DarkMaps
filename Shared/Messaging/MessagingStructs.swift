@@ -25,7 +25,7 @@ public class LiveMessage: Codable, Identifiable {
         let recipientString = try values.decode(String.self, forKey: .recipientCombinedValue)
         self.recipient = try ProtocolAddress(recipientString)
         self.expiry = try values.decode(Date.self, forKey: .expiry)
-        self.error = try values.decodeIfPresent(MessagingControllerError.self, forKey: .expiry)
+        self.error = try values.decodeIfPresent(MessagingControllerError.self, forKey: .error)
     }
     
     enum CodingKeys: String, CodingKey {

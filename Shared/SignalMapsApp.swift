@@ -17,6 +17,7 @@ struct SignalMapsApp: App {
     
     func handleLoadStoredUser() {
         let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
         guard let storedUserData = KeychainSwift().getData("loggedInUser") else {
             return
         }

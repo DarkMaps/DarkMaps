@@ -76,6 +76,7 @@ public class LoggedInUser: Equatable, Hashable, Codable {
     
     private func handleStoreObject() {
         let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
         guard let data = try? encoder.encode(self) else {
             print("Error encoding object, unable to save user")
             return

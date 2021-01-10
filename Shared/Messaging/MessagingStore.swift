@@ -11,9 +11,15 @@ public class MessagingStore {
     
     private let keychainSwift: KeychainSwift
     private let notificationCentre = NotificationCenter.default
+    private let decoder: JSONDecoder
+    private let encoder: JSONEncoder
 
     public init(localAddress: ProtocolAddress) {
         self.keychainSwift = KeychainSwift(keyPrefix: localAddress.combinedValue)
+        self.decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        self.encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
     }
     
     private func sendNotification(count: Int) {
@@ -35,7 +41,6 @@ public class MessagingStore {
         guard let messageData = keychainSwift.getData(keyName) else {
             throw MessageStoreError.noMessageFromThisSender
         }
-        let decoder = JSONDecoder()
         guard let decodedResponse = try? decoder.decode(LocationMessage.self, from: messageData) else {
             keychainSwift.delete(keyName)
             throw MessageStoreError.poorlyFormattedMessageData
@@ -45,8 +50,7 @@ public class MessagingStore {
 
     public func storeMessage(_ message: LocationMessage) throws {
         let keyName = "-msg-rcv-\(message.sender.combinedValue)"
-        let jsonEncoder = JSONEncoder()
-        let jsonData = try jsonEncoder.encode(message)
+        let jsonData = try encoder.encode(message)
         keychainSwift.set(jsonData, forKey: keyName)
     }
 
@@ -70,7 +74,6 @@ public class MessagingStore {
                 guard let messageData = keychainSwift.getData(keyToGet) else {
                     throw MessageStoreError.noMessageFromThisSender
                 }
-                let decoder = JSONDecoder()
                 guard let decodedResponse = try? decoder.decode(LocationMessage.self, from: messageData) else {
                     keychainSwift.delete(keyToGet)
                     throw MessageStoreError.poorlyFormattedMessageData
@@ -88,7 +91,6 @@ public class MessagingStore {
         let keyName = "-msg-liveMessageRecipients"
         var arrayToAppend: [LiveMessage] = []
         if let arrayData = keychainSwift.getData(keyName) {
-            let decoder = JSONDecoder()
             guard let decodedResponse = try? decoder.decode([LiveMessage].self, from: arrayData) else {
                 print("Error decoding LiveMessageArrayData")
                 keychainSwift.delete(keyName)
@@ -102,7 +104,6 @@ public class MessagingStore {
             }
         }
         arrayToAppend.append(message)
-        let encoder = JSONEncoder()
         let encodedArrayData = try! encoder.encode(arrayToAppend)
         keychainSwift.set(encodedArrayData, forKey: keyName)
         sendNotification(count: arrayToAppend.count)
@@ -113,8 +114,8 @@ public class MessagingStore {
         guard let arrayData = keychainSwift.getData(keyName) else {
             return []
         }
-        let decoder = JSONDecoder()
         guard let decodedResponse = try? decoder.decode([LiveMessage].self, from: arrayData) else {
+            print("Decoding live messages failed - deleting..")
             keychainSwift.delete(keyName)
             throw MessageStoreError.poorlyFormattedLiveMessageArrayData
         }
@@ -126,7 +127,6 @@ public class MessagingStore {
         guard let arrayData = keychainSwift.getData(keyName) else {
             throw MessageStoreError.liveMessageRecipientDoesNotExist
         }
-        let decoder = JSONDecoder()
         guard var arrayToUpdate = try? decoder.decode([LiveMessage].self, from: arrayData) else {
             keychainSwift.delete(keyName)
             throw MessageStoreError.poorlyFormattedLiveMessageArrayData
@@ -137,7 +137,6 @@ public class MessagingStore {
         }
         // Add new message
         arrayToUpdate.append(newMessage)
-        let encoder = JSONEncoder()
         let encodedArrayData = try! encoder.encode(arrayToUpdate)
         keychainSwift.set(encodedArrayData, forKey: keyName)
         sendNotification(count: arrayToUpdate.count)
@@ -147,7 +146,6 @@ public class MessagingStore {
         let keyName = "-msg-liveMessageRecipients"
         var arrayToDeleteFrom: [LiveMessage] = []
         if let arrayData = keychainSwift.getData(keyName) {
-            let decoder = JSONDecoder()
             guard let decodedResponse = try? decoder.decode([LiveMessage].self, from: arrayData) else {
                 keychainSwift.delete(keyName)
                 throw MessageStoreError.poorlyFormattedLiveMessageArrayData
@@ -157,7 +155,6 @@ public class MessagingStore {
         arrayToDeleteFrom.removeAll { element in
             element.recipient == recipient
         }
-        let encoder = JSONEncoder()
         let encodedArrayData = try! encoder.encode(arrayToDeleteFrom)
         keychainSwift.set(encodedArrayData, forKey: keyName)
         sendNotification(count: arrayToDeleteFrom.count)

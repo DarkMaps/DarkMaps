@@ -35,8 +35,9 @@ class MessagingStoreTests: XCTestCase {
             id: 1, sender: try ProtocolAddress(name: "testSender", deviceId: 1),
             location: location
         )
-        let keyName = "-msg-\(message.sender.combinedValue)"
+        let keyName = "-msg-rcv-\(message.sender.combinedValue)"
         let jsonEncoder = JSONEncoder()
+        jsonEncoder.dateEncodingStrategy = .iso8601
         let jsonData = try jsonEncoder.encode(message)
         keychainSwift.set(jsonData, forKey: keyName)
         
@@ -58,9 +59,10 @@ class MessagingStoreTests: XCTestCase {
         
         try messagingStore.storeMessage(message)
         
-        let keyName = "-msg-\(message.sender.combinedValue)"
+        let keyName = "-msg-rcv-\(message.sender.combinedValue)"
         let receivedMessageData = keychainSwift.getData(keyName)
         let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
         let receivedMessage = try! decoder.decode(LocationMessage.self, from: receivedMessageData!)
         
         XCTAssertEqual(receivedMessage.sender.combinedValue, message.sender.combinedValue)
@@ -76,8 +78,9 @@ class MessagingStoreTests: XCTestCase {
             id: 1, sender: try ProtocolAddress(name: "testSender", deviceId: 1),
             location: location
         )
-        let keyName = "-msg-\(message.sender.combinedValue)"
+        let keyName = "-msg-rcv-\(message.sender.combinedValue)"
         let jsonEncoder = JSONEncoder()
+        jsonEncoder.dateEncodingStrategy = .iso8601
         let jsonData = try jsonEncoder.encode(message)
         keychainSwift.set(jsonData, forKey: keyName)
         
@@ -96,8 +99,9 @@ class MessagingStoreTests: XCTestCase {
             id: 1, sender: try ProtocolAddress(name: "testSender", deviceId: 1),
             location: location
         )
-        let keyName = "-msg-\(message.sender.combinedValue)"
+        let keyName = "-msg-rcv-\(message.sender.combinedValue)"
         let jsonEncoder = JSONEncoder()
+        jsonEncoder.dateEncodingStrategy = .iso8601
         let jsonData = try jsonEncoder.encode(message)
         keychainSwift.set(jsonData, forKey: keyName)
         
@@ -106,7 +110,7 @@ class MessagingStoreTests: XCTestCase {
             id: 1, sender: try ProtocolAddress(name: "testSender2", deviceId: 1),
             location: location2
         )
-        let keyName2 = "-msg-\(message2.sender.combinedValue)"
+        let keyName2 = "-msg-rcv-\(message2.sender.combinedValue)"
         let jsonData2 = try jsonEncoder.encode(message2)
         keychainSwift.set(jsonData2, forKey: keyName2)
         
@@ -128,25 +132,28 @@ class MessagingStoreTests: XCTestCase {
             id: 1, sender: try ProtocolAddress(name: "testSender", deviceId: 1),
             location: location
         )
-        let keyName = "-msg-\(message.sender.combinedValue)"
+        let keyName = "-msg-rcv-\(message.sender.combinedValue)"
         let jsonEncoder = JSONEncoder()
+        jsonEncoder.dateEncodingStrategy = .iso8601
         let jsonData = try jsonEncoder.encode(message)
         keychainSwift.set(jsonData, forKey: keyName)
+        
+        sleep(2)
         
         let location2 = Location(latitude: 1.1, longitude: 1.1, time: Date())
         let message2 = LocationMessage(
             id: 1, sender: try ProtocolAddress(name: "testSender2", deviceId: 1),
             location: location2
         )
-        let keyName2 = "-msg-\(message2.sender.combinedValue)"
+        let keyName2 = "-msg-rcv-\(message2.sender.combinedValue)"
         let jsonData2 = try jsonEncoder.encode(message2)
         keychainSwift.set(jsonData2, forKey: keyName2)
         
         let summary = try messagingStore.getMessageSummary()
         
         XCTAssertEqual(summary.count, 2)
-        XCTAssertEqual(summary[1].time, message.location!.time)
-        XCTAssertGreaterThan(summary[0].time, summary[1].time)
+        XCTAssertEqual(Int(summary[1].time.timeIntervalSince1970), Int(message.location!.time.timeIntervalSince1970))
+        XCTAssertGreaterThan(summary[0].time.timeIntervalSince1970, summary[1].time.timeIntervalSince1970)
         
     }
     
@@ -154,11 +161,12 @@ class MessagingStoreTests: XCTestCase {
         let messagingStore = MessagingStore(localAddress: address)
         
         let recipient = try ProtocolAddress(name: "testRecipient", deviceId: 1)
-        let liveMessage = LiveMessage(recipient: recipient, expiry: 1)
+        let liveMessage = LiveMessage(recipient: recipient, expiry: Date())
         try messagingStore.storeLiveMessage(liveMessage)
         
         let arrayData = keychainSwift.getData("-msg-liveMessageRecipients")
         let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
         let decodedArray = try decoder.decode([LiveMessage].self, from: arrayData!)
         
         XCTAssertEqual(decodedArray.count, 1)
@@ -169,11 +177,12 @@ class MessagingStoreTests: XCTestCase {
         let messagingStore = MessagingStore(localAddress: address)
         
         let recipient1 = try ProtocolAddress(name: "testRecipient1", deviceId: 1)
-        let liveMessage1 = LiveMessage(recipient: recipient1, expiry: 1)
+        let liveMessage1 = LiveMessage(recipient: recipient1, expiry: Date())
         let recipient2 = try ProtocolAddress(name: "testRecipient2", deviceId: 1)
-        let liveMessage2 = LiveMessage(recipient: recipient2, expiry: 1)
+        let liveMessage2 = LiveMessage(recipient: recipient2, expiry: Date())
         let array = [liveMessage1, liveMessage2]
         let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
         let encodedArrayData = try encoder.encode(array)
         keychainSwift.set(encodedArrayData, forKey: "-msg-liveMessageRecipients")
         
@@ -187,11 +196,12 @@ class MessagingStoreTests: XCTestCase {
         let messagingStore = MessagingStore(localAddress: address)
         
         let recipient1 = try ProtocolAddress(name: "testRecipient1", deviceId: 1)
-        let liveMessage1 = LiveMessage(recipient: recipient1, expiry: 1)
+        let liveMessage1 = LiveMessage(recipient: recipient1, expiry: Date())
         let recipient2 = try ProtocolAddress(name: "testRecipient2", deviceId: 1)
-        let liveMessage2 = LiveMessage(recipient: recipient2, expiry: 1)
+        let liveMessage2 = LiveMessage(recipient: recipient2, expiry: Date())
         let array = [liveMessage1, liveMessage2]
         let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
         let encodedArrayData = try encoder.encode(array)
         keychainSwift.set(encodedArrayData, forKey: "-msg-liveMessageRecipients")
         
@@ -199,6 +209,7 @@ class MessagingStoreTests: XCTestCase {
         
         let arrayData = keychainSwift.getData("-msg-liveMessageRecipients")
         let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
         let decodedArray = try decoder.decode([LiveMessage].self, from: arrayData!)
         
         XCTAssertEqual(decodedArray.count, 1)
