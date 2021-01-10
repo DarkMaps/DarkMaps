@@ -14,6 +14,13 @@ struct ListController: View {
     @State var receivingMessageArray: [ShortLocationMessage] = []
     @State var sendingMessageArray: [LiveMessage] = []
     @State var getMessagesInProgress: Bool = false
+    @State var directionLabels = ["Receiving (0)", "Sending (0)"]
+    
+    func updateLabels() {
+        print("updateLabels")
+        directionLabels[0] = "Receiving (\(self.receivingMessageArray.count))"
+        directionLabels[1] = "Sending (\(self.sendingMessageArray.count))"
+    }
     
     func getStoredMessages() {
         
@@ -32,13 +39,14 @@ struct ListController: View {
         
         do {
             self.sendingMessageArray = try messagingController.getLiveMessages()
+            print("Got sending messages")
         } catch {
             print("Error getting sent messages")
             print(error)
             appState.displayedError = IdentifiableError(ListViewErrors.unableToRetrieveMessages)
         }
         
-        
+        self.updateLabels()
     }
     
     func performSync() {
@@ -86,6 +94,7 @@ struct ListController: View {
                     )
                     let messages = try messageStore.getMessageSummary()
                     self.receivingMessageArray = messages
+                    updateLabels()
                 } catch {
                     DispatchQueue.main.async {
                         print(error)
@@ -111,6 +120,7 @@ struct ListController: View {
                 try messagingController.handleDeleteMessageLocally(sender: message.sender)
                 receivingMessageArray.remove(atOffsets: offsets)
             }
+            updateLabels()
         } catch {
             appState.displayedError = IdentifiableError(error as! LocalizedError)
         }
@@ -129,6 +139,7 @@ struct ListController: View {
                 try messagingController.removeLiveMessageRecipient(recipientAddress: message.recipient)
                 sendingMessageArray.remove(atOffsets: offsets)
             }
+            updateLabels()
         } catch {
             appState.displayedError = IdentifiableError(error as! LocalizedError)
         }
@@ -140,6 +151,7 @@ struct ListController: View {
             sendingMessageArray: $sendingMessageArray,
             getMessagesInProgress: $getMessagesInProgress,
             loggedInUser: $appState.loggedInUser,
+            directionLabels: $directionLabels,
             performSync: performSync,
             deleteLiveMessage: deleteLiveMessage,
             deleteMessage: deleteMessage

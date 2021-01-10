@@ -13,9 +13,9 @@ struct ListView: View {
     @Binding var sendingMessageArray: [LiveMessage]
     @Binding var getMessagesInProgress: Bool
     @Binding var loggedInUser: LoggedInUser?
-    @State private var selectedDirection = 0
+    @Binding var directionLabels: [String]
     
-    var directions = ["Receiving", "Sending"]
+    @State private var selectedDirection = 0
                
     var performSync: () -> Void
     var deleteLiveMessage: (IndexSet) -> Void
@@ -26,8 +26,8 @@ struct ListView: View {
             VStack {
                 if (loggedInUser?.subscriptionExpiryDate != nil) {
                     Picker(selection: $selectedDirection, label: Text("Please choose a direction")) {
-                        ForEach(0 ..< directions.count) {
-                            Text(self.directions[$0])
+                        ForEach(0 ..< directionLabels.count) {
+                            Text(self.directionLabels[$0])
                         }
                     }.pickerStyle(SegmentedPickerStyle())
                 }
@@ -100,6 +100,7 @@ struct ListView_Previews: PreviewProvider {
         @State var sendingMessageArray: [LiveMessage] = []
         @State var getMessagesInProgress: Bool = false
         @State var loggedInUser: LoggedInUser?
+        @State var directionLabels = ["Receiving", "Sending"]
                    
         func performSync() {}
         func deleteLiveMessage(_: IndexSet) {}
@@ -121,6 +122,7 @@ struct ListView_Previews: PreviewProvider {
                 sendingMessageArray: $sendingMessageArray,
                 getMessagesInProgress: $getMessagesInProgress,
                 loggedInUser: $loggedInUser,
+                directionLabels: $directionLabels,
                 performSync: performSync,
                 deleteLiveMessage: deleteLiveMessage,
                 deleteMessage: deleteMessage
