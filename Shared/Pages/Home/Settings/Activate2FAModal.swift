@@ -15,12 +15,13 @@ struct Activate2FAModal: View {
     @Binding var actionInProgress: ActionInProgress?
     
     @State private var invalidCode: Bool = false
+    @State private var copiedToClipboard: Bool = false
     
     @Environment(\.presentationMode) var presentation
     
     let obtain2FAQRCode: () -> Void
     let confirm2FA: () -> Void
-    let copyCodeToClipboard: () -> Void
+    let copyCodeToClipboard: () -> Bool
     
     let context = CIContext()
     let filter = CIFilter.qrCodeGenerator()
@@ -57,8 +58,22 @@ struct Activate2FAModal: View {
                 }
                 Spacer()
             }
-            Button(action: self.copyCodeToClipboard) {
+            Button(action: {
+                self.copiedToClipboard = false
+                let success = self.copyCodeToClipboard()
+                if success {
+                    withAnimation {
+                        self.copiedToClipboard = true
+                    }
+                }
+            }) {
+                HStack {
                     Text("Copy to clipboard")
+                    if copiedToClipboard {
+                        Image(systemName: "arrow.up.doc.on.clipboard")
+                            .transition(.move(edge: .trailing))
+                    }
+                }
             }
             .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
             .disabled(QRCodeFor2FA == nil)
@@ -78,7 +93,7 @@ struct Activate2FAModal: View {
                     Text("Activate")
                 }
             }
-            .disabled(invalidCode)
+            .disabled(invalidCode || confirm2FACode.count == 0)
             .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
         }
         .padding()
@@ -108,7 +123,7 @@ struct Activate2FAModal_Previews: PreviewProvider {
         func confirm2FA() {
             return
         }
-        func copyCodeToClipboard() {}
+        func copyCodeToClipboard() -> Bool {return true}
         
         init(QRCode: String? = nil) {
             self._QRCodeFor2FA = State(initialValue: QRCode)

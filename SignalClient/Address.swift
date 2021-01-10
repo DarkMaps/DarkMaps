@@ -8,9 +8,12 @@ import SignalFfi
 public class ProtocolAddress: ClonableHandleOwner {
     public init(name: String, deviceId: UInt32) throws {
         var handle: OpaquePointer?
-        try checkError(signal_address_new(&handle,
-                                          name,
-                                          deviceId))
+        do {
+            try checkError(signal_address_new(&handle, name, deviceId))
+        } catch {
+            throw SSAPIProtocolAddressError.failedIntialisation
+        }
+        
         super.init(owned: handle!)
     }
 

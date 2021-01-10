@@ -52,6 +52,7 @@ struct SignalMapsApp: App {
         }
     }
     
+    // Required by storekit
     func handleCompleteTransactions() {
         let subscriptionController = SubscriptionController()
         subscriptionController.handleCompleteTransactions() { completeTransactionsOutcome in

@@ -8,7 +8,20 @@
 import Foundation
 
 public enum SSAPIProtocolAddressError: LocalizedError {
-    case incorrectNumberOfComponents, deviceIdIsNotInt
+    case incorrectNumberOfComponents, deviceIdIsNotInt, failedIntialisation
+}
+
+extension SSAPIProtocolAddressError {
+    public var errorDescription: String? {
+        switch self {
+        case .incorrectNumberOfComponents:
+            return NSLocalizedString("The wrong number of components were provided in the constructor", comment: "")
+        case .deviceIdIsNotInt:
+            return NSLocalizedString("The device ID provided was not in Int form", comment: "")
+        case .failedIntialisation:
+            return NSLocalizedString("Unable to intialise device address", comment: "")
+        }
+    }
 }
 
 public enum SSAPIEncryptionError: String, LocalizedError, Codable {

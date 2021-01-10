@@ -151,9 +151,25 @@ struct SettingsController: View {
         }
     }
     
-    func copyCodeToClipboard() {
-        UIPasteboard.general.setValue(QRCodeFor2FA ?? "No code available",
-                                      forPasteboardType: kUTTypePlainText as String)
+    func copyCodeToClipboard() -> Bool {
+        // We get a otpauth:// string from the server contaiing additional information
+        // We need to parse the secret using Regex
+        let QRCode = QRCodeFor2FA ?? ""
+        print(QRCode)
+        
+        if let range = QRCode.range(of: #"(?<=secret=).*(?=&)"#, options: .regularExpression) {
+            let secret = QRCode[range]
+            print(secret)
+            UIPasteboard.general.setValue(secret, forPasteboardType: kUTTypePlainText as String)
+            return true
+        } else {
+            self.activate2FAModalIsShowing = false
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                // Have to sleep as cannot prevent error alert over sheet
+                appState.displayedError = IdentifiableError(SSAPIAuthActivate2FAError.unableToParseSecret)
+            }
+            return false
+        }
     }
     
     var body: some View {

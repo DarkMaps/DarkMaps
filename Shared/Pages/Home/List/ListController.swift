@@ -89,7 +89,8 @@ struct ListController: View {
                 } catch {
                     DispatchQueue.main.async {
                         print(error)
-                        appState.displayedError = IdentifiableError(error)
+                        
+                        appState.displayedError = IdentifiableError(error as! LocalizedError)
                     }
                 }
                 
@@ -111,7 +112,7 @@ struct ListController: View {
                 receivingMessageArray.remove(atOffsets: offsets)
             }
         } catch {
-            appState.displayedError = IdentifiableError(error)
+            appState.displayedError = IdentifiableError(error as! LocalizedError)
         }
     }
     
@@ -129,7 +130,7 @@ struct ListController: View {
                 sendingMessageArray.remove(atOffsets: offsets)
             }
         } catch {
-            appState.displayedError = IdentifiableError(error)
+            appState.displayedError = IdentifiableError(error as! LocalizedError)
         }
     }
     

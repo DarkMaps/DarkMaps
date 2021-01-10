@@ -114,7 +114,7 @@ extension SSAPIAuthSubmit2FAError {
 
 
 public enum SSAPIAuthActivate2FAError: LocalizedError {
-    case twoFactorAlreadyExists, invalidUrl, badFormat, badResponseFromServer, serverError, possibleIncorrectMFAMethodName, requestThrottled, timeout
+    case twoFactorAlreadyExists, invalidUrl, badFormat, badResponseFromServer, serverError, possibleIncorrectMFAMethodName, requestThrottled, timeout, unableToParseSecret
 }
 
 extension SSAPIAuthActivate2FAError {
@@ -136,6 +136,8 @@ extension SSAPIAuthActivate2FAError {
             return NSLocalizedString("This type of two factor authentication does not exist on the server", comment: "")
         case .timeout:
             return NSLocalizedString("The request timed out. Please try again.", comment: "")
+        case .unableToParseSecret:
+            return NSLocalizedString("The code was received in an unrecognised format", comment: "")
         }
     }
 }

@@ -12,7 +12,7 @@ public enum ListViewErrors: LocalizedError {
 }
 
 extension ListViewErrors {
-    var localisedDescription: String? {
+    public var errorDescription: String? {
         switch self {
         case .noUserLoggedIn:
             return NSLocalizedString("There is no user logged in.", comment: "")

@@ -179,6 +179,7 @@
 		ECDE0E5C2572B615009D3561 /* KeychainSignalProtocolStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFFD64D2572A9C900458BC8 /* KeychainSignalProtocolStore.swift */; };
 		ECDE0E5D2572B615009D3561 /* KeychainSwiftDistrib.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFFD64E2572A9C900458BC8 /* KeychainSwiftDistrib.swift */; };
 		ECDE0E602572B674009D3561 /* libsignal_ffi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ECFFD6442572A82500458BC8 /* libsignal_ffi.a */; };
+		ECE467C525AB552B00939E4F /* SubscriptionErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECE467C425AB552B00939E4F /* SubscriptionErrors.swift */; };
 		ECEFB8A825AB1FE400E815D2 /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECEFB8A725AB1FE400E815D2 /* URLSession.swift */; };
 		ECEFB8A925AB1FE400E815D2 /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECEFB8A725AB1FE400E815D2 /* URLSession.swift */; };
 		ECF3E232259BDC22002E4291 /* NotificationCentreExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF3E231259BDC22002E4291 /* NotificationCentreExtensions.swift */; };
@@ -313,6 +314,7 @@
 		ECDE0E392572B5EC009D3561 /* DarkMapsiOSFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DarkMapsiOSFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECDE0E3B2572B5EC009D3561 /* SignalMapsiOSFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SignalMapsiOSFramework.h; sourceTree = "<group>"; };
 		ECDE0E3C2572B5EC009D3561 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		ECE467C425AB552B00939E4F /* SubscriptionErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionErrors.swift; sourceTree = "<group>"; };
 		ECEFB8A725AB1FE400E815D2 /* URLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSession.swift; sourceTree = "<group>"; };
 		ECF3E231259BDC22002E4291 /* NotificationCentreExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCentreExtensions.swift; sourceTree = "<group>"; };
 		ECF4CB0D25A782F50069993C /* SubscriptionActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionActionSheet.swift; sourceTree = "<group>"; };
@@ -444,6 +446,7 @@
 			isa = PBXGroup;
 			children = (
 				EC247FE3259CA2EE00EEBAA1 /* SubscriptionController.swift */,
+				ECE467C425AB552B00939E4F /* SubscriptionErrors.swift */,
 				EC7226F1259F39F8009F6104 /* configuration.storekit */,
 				EC7226F5259F3A53009F6104 /* StoreKitTestCertificate.cer */,
 				ECF4CB0D25A782F50069993C /* SubscriptionActionSheet.swift */,
@@ -1126,6 +1129,7 @@
 				EC91299A257CC13900E12BF6 /* AuthorisationController.swift in Sources */,
 				EC12FBBD2572ADC700F7230F /* CiphertextMessage.swift in Sources */,
 				EC0BB6B325975B4E00A2F3CB /* MessagingStructs.swift in Sources */,
+				ECE467C525AB552B00939E4F /* SubscriptionErrors.swift in Sources */,
 				EC12FBCB2572ADC700F7230F /* SignedPreKeyRecord.swift in Sources */,
 				EC912986257BB67500E12BF6 /* AppState.swift in Sources */,
 				ECFC5940258DF804005CCDA2 /* TextFieldAlert.swift in Sources */,

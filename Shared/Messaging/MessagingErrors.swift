@@ -12,7 +12,7 @@ enum MessageStoreError: LocalizedError {
 }
 
 extension MessageStoreError {
-    var localisedDescription: String? {
+    public var errorDescription: String? {
         switch self {
         case .noMessageFromThisSender:
             return NSLocalizedString("There is no message stored from this sender.", comment: "")
@@ -33,7 +33,7 @@ enum MessagingControllerError: String, LocalizedError, Codable {
 }
 
 extension MessagingControllerError {
-    var localisedDescription: String? {
+    public var errorDescription: String? {
         switch self {
         case .noDeviceOnServer:
             return NSLocalizedString("There is no device stored on the server, logging out.", comment: "")

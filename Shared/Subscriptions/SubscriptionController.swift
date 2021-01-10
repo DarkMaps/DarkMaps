@@ -10,10 +10,6 @@ import SwiftyStoreKit
 import StoreKit
 import TPInAppReceipt
 
-public enum SubscriptionError: LocalizedError {
-    case invalidIdentifier, unableToRetrieveProductInfo, errorPerformingPurchase, errorVerifyingReceipt, expiredPurchase, neverPurchased, restoreFailed, nothingToRestore, errorRetreivingReceipts, errorCompletingPurchase
-}
-
 public class SubscriptionController {
     
     private let productArray = Set(["mtr.DarkMaps.Subscription.Monthly"])

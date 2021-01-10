@@ -59,7 +59,7 @@ struct NewChatController: View {
                 sendLocationInProgress = false
                 liveMessageSendSuccessAlertShowing = true
             } catch {
-                appState.displayedError = IdentifiableError(error)
+                appState.displayedError = IdentifiableError(error as! LocalizedError)
                 sendLocationInProgress = false
             }
             

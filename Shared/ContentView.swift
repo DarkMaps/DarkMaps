@@ -31,7 +31,9 @@ struct ContentView: View {
                         Text("Settings")
                         Image(systemName: "gear")
                     }.tag(3)
-                }
+                }.onAppear(perform: {
+                    self.homeTabSelection = 1
+                })
             } else {
                 TabView(selection: $authTabSelection) {
                     LoginController(customAuthServer: $customAuthServer).tabItem {
@@ -42,7 +44,9 @@ struct ContentView: View {
                         Text("Register")
                         Image(systemName: "person.fill.badge.plus")
                     }.tag(2)
-                }
+                }.onAppear(perform: {
+                    self.authTabSelection = 1
+                })
             }
             Text("").hidden().alert(item: $appState.displayedError) { viewError -> Alert in
                 ErrorAlert(viewError: viewError)
