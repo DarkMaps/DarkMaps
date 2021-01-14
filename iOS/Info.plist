@@ -56,5 +56,9 @@
 	<string>$(STOREKIT_SECRET)</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>We need to access your location in order to encrypt it and send it on to your chosen recipients.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>We need to access your bluetooth in order to help determine your location.</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>We need to access your bluetooth in order to help determine your location.</string>
 </dict>
 </plist>
