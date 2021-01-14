@@ -25,7 +25,7 @@ extension SSAPIProtocolAddressError {
 }
 
 public enum SSAPIEncryptionError: String, LocalizedError, Codable {
-    case invalidUrl, badFormat, badResponseFromServer, serverError, requestThrottled, deviceExists, recipientUserDoesNotExist, recipientUserHasNoRegisteredDevice, recipientsDeviceChanged, sendersDeviceChanged, senderHasNoRegisteredDevice, unableToDecrypt, invalidSenderAddress, noStore, userHasNoRegisteredDevice, userDeviceChanged, unableToCreateKeys, reachedMaxPreKeys, prekeyIdExists, deviceChanged, userHasNoDevice, unableToGetPreKeyStatus, timeout
+    case invalidUrl, badFormat, badResponseFromServer, serverError, requestThrottled, deviceExists, recipientUserDoesNotExist, recipientUserHasNoRegisteredDevice, recipientsDeviceChanged, sendersDeviceChanged, senderHasNoRegisteredDevice, unableToDecrypt, invalidSenderAddress, noStore, userHasNoRegisteredDevice, userDeviceChanged, unableToCreateKeys, reachedMaxPreKeys, prekeyIdExists, deviceChanged, userHasNoDevice, unableToGetPreKeyStatus, timeout, alteredIdentity
 }
 extension SSAPIEncryptionError {
     public var errorDescription: String? {
@@ -76,6 +76,8 @@ extension SSAPIEncryptionError {
             return NSLocalizedString("Unable to count the number of prekeys in the store", comment: "")
         case .timeout:
             return NSLocalizedString("The request timed out. Please try again.", comment: "")
+        case .alteredIdentity:
+            return NSLocalizedString("The sender's identity has changed.", comment: "")
         }
     }
 }

@@ -361,6 +361,169 @@ class SimpleSignalSwiftEncryptionAPITests: XCTestCase {
         
     }
     
+    func testAlteredIdentity() throws {
+        
+        let expectation = XCTestExpectation(description: "Successfully alerts user to altered identity")
+        
+        //Set up users
+        let sender = "testSender"
+        let senderRegistrationId = 1234
+        let senderDeviceId = 1
+        let senderAddress = try ProtocolAddress(name: sender, deviceId: UInt32(senderDeviceId))
+        var senderIdentity = try IdentityKeyPair.generate()
+        let senderPreKey = try PreKeyRecord.init(id: UInt32(1), privateKey: try PrivateKey.generate())
+        let senderSignedPrekeyId = 1
+        let senderSignedPrekey = try PrivateKey.generate()
+        let senderSignedPrekeySignature = try senderIdentity.privateKey.generateSignature(
+            message: senderSignedPrekey.publicKey().serialize()
+        )
+        let senderSignedPreKeyRecord = try SignedPreKeyRecord.init(
+            id: UInt32(senderSignedPrekeyId),
+            timestamp: Date().ticks,
+            privateKey: senderSignedPrekey,
+            signature: senderSignedPrekeySignature)
+        var senderStore = InMemorySignalProtocolStore.init(
+            identity: senderIdentity,
+            deviceId: UInt32(senderDeviceId))
+        try senderStore.storePreKey(
+            senderPreKey,
+            id: 1,
+            context: nil)
+        try senderStore.storeSignedPreKey(
+            senderSignedPreKeyRecord,
+            id: 1,
+            context: nil)
+        
+        let uriValue = "https://api.dark-maps.com/v1/devices/"
+        let data: NSDictionary = [
+            "code": "device_created",
+            "message": "Device successfully created"
+        ]
+        self.stub(uri(uriValue), json(data, status: 201))
+        
+        let recipient = "testRecipient"
+        let recipientDeviceId = UInt32(1)
+        let recipientAddress = try ProtocolAddress(name: recipient, deviceId: UInt32(recipientDeviceId))
+        let encryptionAPI = try SimpleSignalSwiftEncryptionAPI(address: recipientAddress)
+        let _ = encryptionAPI.createDevice(authToken: "testAuthToken", serverAddress: "https://api.dark-maps.com")
+        
+        let recipientRegistrationId = UInt32(KeychainSwift().get("\(recipientAddress.combinedValue)-enc-registrationId")!)!
+        let recipientIdentity = try IdentityKeyPair(bytes: KeychainSwift().getData("\(recipientAddress.combinedValue)-enc-privateKey")!)
+        let recipientPrekey = try PreKeyRecord(bytes: (KeychainSwift().getData("\(recipientAddress.combinedValue)-enc-preKey:1"))!)
+        let recipientSignedPreKeyRecord = try SignedPreKeyRecord(bytes: KeychainSwift().getData("\(recipientAddress.combinedValue)-enc-signedPreKey:1")!)
+        
+        let recipientPreKeyBundle = try PreKeyBundle.init(
+            registrationId: recipientRegistrationId,
+            deviceId: recipientDeviceId,
+            prekeyId: try recipientPrekey.id(),
+            prekey: try recipientPrekey.publicKey(),
+            signedPrekeyId: try recipientSignedPreKeyRecord.id(),
+            signedPrekey: try recipientSignedPreKeyRecord.publicKey(),
+            signedPrekeySignature: try recipientSignedPreKeyRecord.signature(),
+            identity: recipientIdentity.identityKey)
+        
+        try processPreKeyBundle(
+            recipientPreKeyBundle,
+            for: recipientAddress,
+            sessionStore: senderStore,
+            identityStore: senderStore,
+            context: nil)
+        
+        let messageText = "A test message"
+        let cipherText = try signalEncrypt(
+            message: messageText.data(using: .utf8)!,
+            for: recipientAddress,
+            sessionStore: senderStore,
+            identityStore: senderStore,
+            context: nil)
+        
+        let message = try! PreKeySignalMessage(bytes: try! cipherText.serialize())
+        
+        let uriValue2 = "https://api.dark-maps.com/v1/\(recipientRegistrationId)/messages/"
+        let contentObject = [
+            "registration_id": senderRegistrationId,
+            "content": try message.serialize().toBase64String()
+        ] as [String : Any]
+        let contentJsonData = try! JSONSerialization.data(withJSONObject: contentObject, options: [])
+        let contentText = String(data: contentJsonData, encoding: .utf8)!
+        let messageInArray: NSDictionary = [
+            "id": 1,
+            "content": contentText,
+            "recipient_address": recipientAddress.combinedValue,
+            "sender_registration_id": senderRegistrationId,
+            "sender_address": senderAddress.combinedValue
+        ]
+        let data2: NSArray = [messageInArray]
+        
+        self.stub(uri(uriValue2), json(data2, status: 200))
+        
+        let _ = encryptionAPI.getMessages(authToken: "testAuthToken", serverAddress: "https://api.dark-maps.com")
+        
+        // Alter identity
+        senderIdentity = try IdentityKeyPair.generate()
+        senderStore = InMemorySignalProtocolStore.init(
+            identity: senderIdentity,
+            deviceId: UInt32(senderDeviceId))
+        try senderStore.storePreKey(
+            senderPreKey,
+            id: 1,
+            context: nil)
+        try senderStore.storeSignedPreKey(
+            senderSignedPreKeyRecord,
+            id: 1,
+            context: nil)
+        try processPreKeyBundle(
+            recipientPreKeyBundle,
+            for: recipientAddress,
+            sessionStore: senderStore,
+            identityStore: senderStore,
+            context: nil)
+        
+        // Create new message
+        let alteredIdentityMessageText = "A test message with altered identity"
+        let alteredIdentityCipherText = try signalEncrypt(
+            message: alteredIdentityMessageText.data(using: .utf8)!,
+            for: recipientAddress,
+            sessionStore: senderStore,
+            identityStore: senderStore,
+            context: nil)
+        
+        // Get new message
+        let alteredIdentityMessage = try! PreKeySignalMessage(bytes: try! alteredIdentityCipherText.serialize())
+        
+        let alteredIdentityContentObject = [
+            "registration_id": senderRegistrationId,
+            "content": try alteredIdentityMessage.serialize().toBase64String()
+        ] as [String : Any]
+        let alteredIdentityContentJsonData = try! JSONSerialization.data(withJSONObject: alteredIdentityContentObject, options: [])
+        let alteredIdentityContentText = String(data: alteredIdentityContentJsonData, encoding: .utf8)!
+        let alteredIdentityMessageInArray: NSDictionary = [
+            "id": 1,
+            "content": alteredIdentityContentText,
+            "recipient_address": recipientAddress.combinedValue,
+            "sender_registration_id": senderRegistrationId,
+            "sender_address": senderAddress.combinedValue
+        ]
+        let data3: NSArray = [alteredIdentityMessageInArray]
+        
+        self.stub(uri(uriValue2), json(data3, status: 200))
+        
+        let alteredIdentityResult = encryptionAPI.getMessages(authToken: "testAuthToken", serverAddress: "https://api.dark-maps.com")
+        
+        switch alteredIdentityResult {
+        case .success(let decryptedMessages):
+            XCTAssertEqual(decryptedMessages.count, 1)
+            XCTAssertEqual(decryptedMessages[0].error, .alteredIdentity)
+            XCTAssertEqual(decryptedMessages[0].senderAddress.combinedValue, senderAddress.combinedValue)
+            expectation.fulfill()
+
+        case .failure(let error):
+            print(error)
+        }
+        wait(for: [expectation], timeout: 2.0)
+        
+    }
+    
     func testDeleteDevice() throws {
         let expectation = XCTestExpectation(description: "Successfully delete a device")
         

@@ -504,6 +504,8 @@ public class SimpleSignalSwiftEncryptionAPI {
                 context: nil)
 
             decryptedMessageString = String(decoding: decryptedMessageData, as: UTF8.self)
+        } catch SignalError.untrustedIdentity {
+            return(SSAPIGetMessagesOutput(id: input.id, error: .alteredIdentity, senderAddress: address))
         } catch {
             do {
                 let decryptedMessageData = try signalDecryptPreKey(
@@ -515,8 +517,9 @@ public class SimpleSignalSwiftEncryptionAPI {
                     signedPreKeyStore: store,
                     context: nil)
                 decryptedMessageString = String(decoding: decryptedMessageData, as: UTF8.self)
+            } catch SignalError.untrustedIdentity {
+                return(SSAPIGetMessagesOutput(id: input.id, error: .alteredIdentity, senderAddress: address))
             } catch {
-                // TODO: Need to catch untrusted identity here
                 return(SSAPIGetMessagesOutput(id: input.id, error: .unableToDecrypt, senderAddress: address))
             }
         }
