@@ -14,9 +14,10 @@ public class LiveMessage: Codable, Identifiable {
     var expiry: Date
     var error: MessagingControllerError?
     
-    init(recipient: ProtocolAddress, expiry: Date, error: Error? = nil) {
+    init(recipient: ProtocolAddress, expiry: Date, error: MessagingControllerError? = nil) {
         self.recipient = recipient
         self.expiry = expiry
+        self.error = error
     }
     
     required public init(from decoder: Decoder) throws {
@@ -132,13 +133,15 @@ public class ShortLocationMessage: Identifiable {
     var sender: ProtocolAddress
     var time: Date
     var isError: Bool
+    var isAlteredIdentity: Bool
     var isLive: Bool
     
     init(_ locationMessage: LocationMessage) {
         self.id = locationMessage.id
         self.sender = locationMessage.sender
         self.time = locationMessage.location?.time ?? Date()
-        self.isError = locationMessage.error != nil
+        self.isError = (locationMessage.error != nil && locationMessage.error != .alteredIdentity)
+        self.isAlteredIdentity = locationMessage.error == .alteredIdentity
         self.isLive = locationMessage.location?.liveExpiryDate != nil
     }
     

@@ -10,8 +10,12 @@ import SwiftUI
 struct SendingList: View {
     
     @Binding var sendingMessageArray: [LiveMessage]
+    @Binding var updateIdentityInProgress: ProtocolAddress?
+    
+    @State var acceptAlteredIdentityAlertRelatesTo: ProtocolAddress? = nil
     
     var deleteLiveMessage: (IndexSet) -> Void
+    var handleConsentToNewIdentity: (ProtocolAddress) -> Void
     
     var body: some View {
         VStack {
@@ -20,7 +24,20 @@ struct SendingList: View {
                     HStack {
                         VStack(alignment: .leading) {
                             Text(message.recipient.name)
-                            if message.error != nil {
+                            if updateIdentityInProgress == message.recipient {
+                                HStack {
+                                    ActivityIndicator(isAnimating: true)
+                                    Text("Updating Identity.")
+                                        .italic()
+                                        .foregroundColor(.accentColor)
+                                        .font(.footnote)
+                                }
+                            } else if message.error == .alteredIdentity {
+                                Text("Altered Identity. Click to accept.")
+                                    .italic()
+                                    .foregroundColor(.accentColor)
+                                    .font(.footnote)
+                            } else if message.error != nil {
                                 Text("Error")
                                     .italic()
                                     .foregroundColor(.red)
@@ -34,6 +51,13 @@ struct SendingList: View {
                         Spacer()
                         Image(systemName: "bolt").foregroundColor(.yellow)
                     }.padding()
+                    .onTapGesture {
+                        if updateIdentityInProgress == nil {
+                            if message.error == .alteredIdentity {
+                                acceptAlteredIdentityAlertRelatesTo = message.recipient
+                            }
+                        }
+                    }
                 }
                 .onDelete(perform: deleteLiveMessage)
                 if sendingMessageArray.count == 0 {
@@ -44,6 +68,17 @@ struct SendingList: View {
                     }
                 }
             }
+            Text("").hidden().alert(item: $acceptAlteredIdentityAlertRelatesTo, content: {chosenSender in
+                Alert(title:
+                        Text("Altered Identity"),
+                      message: Text("\(chosenSender.name)'s identity has changed, do you wish to use their new identity?"),
+                      primaryButton: Alert.Button.destructive(
+                        Text("OK"),
+                        action: {
+                            handleConsentToNewIdentity(chosenSender)
+                        }),
+                      secondaryButton: Alert.Button.cancel())
+            })
         }
     }
 }

@@ -166,7 +166,11 @@ public class MessagingController {
                     case let .failure(error):
                         print("Message send unsuccessful")
                         print(error)
-                        completionHandler(.failure(.unableToSendMessage))
+                        if error == .alteredIdentity {
+                            completionHandler(.failure(.alteredIdentity))
+                        } else {
+                            completionHandler(.failure(.unableToSendMessage))
+                        }
                     }
             }
         }
@@ -193,11 +197,16 @@ public class MessagingController {
                         do {
                             if let error = output.error {
                                 print("Found error in message output")
+                                
+                                if error == .alteredIdentity {
+                                    //Don't delete this message
+                                    messageIdsToDelete.removeLast()
+                                    try self.handleAlteredIdentity(address: output.senderAddress)
+                                }
                                 let newMessage = LocationMessage(
                                     id: output.id,
                                     sender: output.senderAddress,
                                     error: error)
-                                print(newMessage)
                                 try messagingStore.storeMessage(newMessage)
                                 continue
                             } else {
@@ -278,6 +287,23 @@ public class MessagingController {
                 }
             }
         }
+    }
+    
+    
+    
+    // If we recognise an altered identity in a received message we need to update any live messages as well
+    private func handleAlteredIdentity(address: ProtocolAddress) throws {
+        
+        guard let messagingStore = self.messagingStore else {
+            throw MessagingControllerError.noDeviceCreated
+        }
+        guard let oldMessage = try? messagingStore.getLiveMessage(address: address) else {
+            return
+        }
+        oldMessage.error = MessagingControllerError.alteredIdentity
+        try messagingStore.updateLiveMessage(newMessage: oldMessage)
+        return
+        
     }
     
     private func handleDeleteMessages(messageIds: [Int], serverAddress: String, authToken: String, completionHandler: @escaping (_: Result<Void, MessagingControllerError>) -> ()) {
@@ -372,6 +398,27 @@ public class MessagingController {
                     print("Error deleting device")
                     print(error)
                     completionHandler(.failure(.unableToDeleteDevice))
+                }
+            }
+        }
+    }
+    
+    func updateIdentity(address: ProtocolAddress, serverAddress: String, authToken: String, completionHandler: @escaping (_: Result<Void, MessagingControllerError>) -> ()) {
+        print("Attempting to update identity")
+        guard let simpleSignalSwiftEncryptionAPI = self.simpleSignalSwiftEncryptionAPI else {
+            completionHandler(.failure(.noDeviceCreated))
+            return
+        }
+        DispatchQueue.global(qos: .utility).async {
+            let response = simpleSignalSwiftEncryptionAPI.updateIdentity(address: address, serverAddress: serverAddress, authToken: authToken)
+            DispatchQueue.main.async {
+                switch response {
+                case .success():
+                    completionHandler(.success(()))
+                case .failure(let error):
+                    print("Error updating identity")
+                    print(error)
+                    completionHandler(.failure(.unableToUpdateIdentity))
                 }
             }
         }

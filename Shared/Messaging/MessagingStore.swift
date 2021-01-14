@@ -122,6 +122,24 @@ public class MessagingStore {
         return decodedResponse
     }
     
+    public func getLiveMessage(address: ProtocolAddress) throws -> LiveMessage? {
+        let keyName = "-msg-liveMessageRecipients"
+        guard let arrayData = keychainSwift.getData(keyName) else {
+            return nil
+        }
+        guard let decodedResponse = try? decoder.decode([LiveMessage].self, from: arrayData) else {
+            print("Decoding live messages failed - deleting..")
+            keychainSwift.delete(keyName)
+            throw MessageStoreError.poorlyFormattedLiveMessageArrayData
+        }
+        for liveMessage in decodedResponse {
+            if liveMessage.recipient == address {
+                return liveMessage
+            }
+        }
+        return nil
+    }
+    
     public func updateLiveMessage(newMessage: LiveMessage) throws {
         let keyName = "-msg-liveMessageRecipients"
         guard let arrayData = keychainSwift.getData(keyName) else {

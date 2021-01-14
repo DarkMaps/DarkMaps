@@ -24,12 +24,12 @@ struct RegisterController: View {
     
     private func handleCreateDevice(newUser: LoggedInUser) -> Void {
         
-        registerInProgress = true
-        
         guard let messagingController = try? MessagingController(userName: newUser.userName, serverAddress: newUser.serverAddress, authToken: newUser.authCode) else {
             appState.displayedError = IdentifiableError(MessagingControllerError.unableToCreateAddress)
             return
         }
+        
+        registerInProgress = true
             
         messagingController.createDevice(
             userName: newUser.userName,

@@ -12,6 +12,7 @@ struct ListView: View {
     @Binding var receivingMessageArray: [ShortLocationMessage]
     @Binding var sendingMessageArray: [LiveMessage]
     @Binding var getMessagesInProgress: Bool
+    @Binding var updateIdentityInProgress: ProtocolAddress?
     @Binding var loggedInUser: LoggedInUser?
     @Binding var directionLabels: [String]
     
@@ -20,6 +21,7 @@ struct ListView: View {
     var performSync: () -> Void
     var deleteLiveMessage: (IndexSet) -> Void
     var deleteMessage: (IndexSet) -> Void
+    var handleConsentToNewIdentity: (ProtocolAddress) -> Void
     
     var body: some View {
         NavigationView {
@@ -35,12 +37,16 @@ struct ListView: View {
                     ReceivingList(
                         receivingMessageArray: $receivingMessageArray,
                         getMessagesInProgress: $getMessagesInProgress,
+                        updateIdentityInProgress: $updateIdentityInProgress,
                         deleteMessage: deleteMessage,
-                        performSync: performSync)
+                        performSync: performSync,
+                        handleConsentToNewIdentity: handleConsentToNewIdentity)
                 } else {
                     SendingList(
                         sendingMessageArray: $sendingMessageArray,
-                        deleteLiveMessage: deleteLiveMessage)
+                        updateIdentityInProgress: $updateIdentityInProgress,
+                        deleteLiveMessage: deleteLiveMessage,
+                        handleConsentToNewIdentity: handleConsentToNewIdentity)
                 }
             }.navigationTitle("Received")
         }
@@ -95,16 +101,45 @@ struct ListView_Previews: PreviewProvider {
                             deviceId: UInt32(1)),
                         error: .badResponseFromServer
                     )
+                ),
+                ShortLocationMessage(
+                    LocationMessage(
+                        id: 4,
+                        sender: try! ProtocolAddress(
+                            name: "test4@test.com",
+                            deviceId: UInt32(1)),
+                        error: .alteredIdentity
+                    )
                 )
             ]
-        @State var sendingMessageArray: [LiveMessage] = []
+        @State var sendingMessageArray: [LiveMessage] = [
+            LiveMessage(
+                recipient: try! ProtocolAddress(
+                    name: "test1@test.com",
+                    deviceId: UInt32(1)),
+                expiry: Date().addingTimeInterval(3000)),
+            LiveMessage(
+                recipient: try! ProtocolAddress(
+                    name: "test2@test.com",
+                    deviceId: UInt32(1)),
+                expiry: Date().addingTimeInterval(2000),
+                error: MessagingControllerError.unableToSendMessage),
+            LiveMessage(
+                recipient: try! ProtocolAddress(
+                    name: "test3@test.com",
+                    deviceId: UInt32(1)),
+                expiry: Date().addingTimeInterval(1000),
+                error: MessagingControllerError.alteredIdentity)
+        ]
         @State var getMessagesInProgress: Bool = false
+        @State var updateIdentityInProgress: ProtocolAddress? = nil
         @State var loggedInUser: LoggedInUser?
         @State var directionLabels = ["Receiving", "Sending"]
                    
         func performSync() {}
         func deleteLiveMessage(_: IndexSet) {}
         func deleteMessage(_: IndexSet) {}
+        func handleConsentToNewIdentity(_: ProtocolAddress) {}
         
         init(isSubscriber: Bool = false) {
             let loggedInUser = LoggedInUser(
@@ -112,7 +147,8 @@ struct ListView_Previews: PreviewProvider {
                 deviceId: 1,
                 serverAddress: "test.com",
                 authCode: "testAuthCode",
-                is2FAUser: isSubscriber)
+                is2FAUser: false,
+                subscriptionExpiryDate: isSubscriber ? Date() : nil)
             _loggedInUser = State(initialValue: loggedInUser)
         }
 
@@ -121,11 +157,13 @@ struct ListView_Previews: PreviewProvider {
                 receivingMessageArray: $receivingMessageArray,
                 sendingMessageArray: $sendingMessageArray,
                 getMessagesInProgress: $getMessagesInProgress,
+                updateIdentityInProgress: $updateIdentityInProgress,
                 loggedInUser: $loggedInUser,
                 directionLabels: $directionLabels,
                 performSync: performSync,
                 deleteLiveMessage: deleteLiveMessage,
-                deleteMessage: deleteMessage
+                deleteMessage: deleteMessage,
+                handleConsentToNewIdentity: handleConsentToNewIdentity
             )
         }
     }

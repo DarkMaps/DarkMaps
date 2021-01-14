@@ -31,12 +31,12 @@ struct LoginController: View {
     
     private func handleCreateDevice(newUser: LoggedInUser) -> Void {
         
-        loginInProgress = true
-        
         guard let messagingController = try? MessagingController(userName: newUser.userName, serverAddress: newUser.serverAddress, authToken: newUser.authCode) else {
             appState.displayedError = IdentifiableError(MessagingControllerError.unableToCreateAddress)
             return
         }
+        
+        loginInProgress = true
             
         messagingController.createDevice(
             userName: newUser.userName,
@@ -108,8 +108,6 @@ struct LoginController: View {
     
     func handleDeleteDeviceThenLogin() -> Void {
         
-        loginInProgress = true
-        
         guard let storedNewUser = self.storedNewUser else {
             appState.displayedError = IdentifiableError(MessagingControllerError.unableToDeleteDevice)
             return
@@ -119,6 +117,8 @@ struct LoginController: View {
             appState.displayedError = IdentifiableError(MessagingControllerError.unableToCreateAddress)
             return
         }
+        
+        loginInProgress = true
         
         messagingController.deleteDevice(
             userName: storedNewUser.userName,

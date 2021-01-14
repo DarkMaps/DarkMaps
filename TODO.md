@@ -12,6 +12,7 @@
 10) Handle live message sending errors (x)
 11) Fix remote device exists error (x)
 12) Allow copy QR code to clipboard (x)
+13) Fix [weak self]
 
 
 

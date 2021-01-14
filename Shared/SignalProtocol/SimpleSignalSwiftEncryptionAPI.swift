@@ -505,6 +505,7 @@ public class SimpleSignalSwiftEncryptionAPI {
 
             decryptedMessageString = String(decoding: decryptedMessageData, as: UTF8.self)
         } catch SignalError.untrustedIdentity {
+            
             return(SSAPIGetMessagesOutput(id: input.id, error: .alteredIdentity, senderAddress: address))
         } catch {
             do {
@@ -882,6 +883,44 @@ public class SimpleSignalSwiftEncryptionAPI {
         
     }
     
+    public func updateIdentity(address: ProtocolAddress, serverAddress: String, authToken: String) -> Result<Void, SSAPIEncryptionError> {
+        
+        guard let store = self.store else {
+            return(.failure(.noStore))
+        }
+        
+        guard let userRegistrationId = try? store.localRegistrationId(context: nil) else {
+            return(.failure(.userHasNoRegisteredDevice))
+        }
+        
+        let outcome = obtainPreKeyBundle(
+            recipient: address,
+            sendersRegistrationId: Int(userRegistrationId),
+            authToken: authToken,
+            serverAddress: serverAddress)
+        
+        switch outcome {
+        case .success(let preKeyBundle):
+            do {
+                // Store new identity before processing bundle
+                let _ = try store.saveIdentity(try preKeyBundle.identityKey(), for: address, context: nil)
+                try processPreKeyBundle(
+                    preKeyBundle,
+                    for: address,
+                    sessionStore: store,
+                    identityStore: store,
+                    context: nil)
+                return(.success(()))
+            } catch {
+                print(error)
+                return(.failure(.badFormat))
+            }
+        case .failure(let error):
+            print("Error returned from obtainPreKeyBundle")
+            return(.failure(error))
+        }
+    }
+    
     private func handleURLErrors(successCode: Int, data: Data?, response: URLResponse?, error: Error?) -> Result<Void, SSAPIEncryptionError> {
         if error != nil || data == nil {
             return(.failure(.badResponseFromServer))
@@ -967,58 +1006,6 @@ public class SimpleSignalSwiftEncryptionAPI {
         }
         
         return(.success(()))
-    }
-}
-
-extension Collection {
-    subscript (safe index: Index) -> Element? {
-        return indices.contains(index) ? self[index] : nil
-    }
-}
-
-extension ProtocolAddress {
-    
-    convenience init(_ combinedValue: String) throws {
-        let splitValues = combinedValue.split(separator: ".")
-        guard let deviceIdString = splitValues.last else {
-            throw SSAPIProtocolAddressError.incorrectNumberOfComponents
-        }
-        guard let deviceId = UInt32(deviceIdString) else {
-            throw SSAPIProtocolAddressError.deviceIdIsNotInt
-        }
-        let name = combinedValue.replacingOccurrences(of: ".\(deviceIdString)", with: "")
-        try self.init(name: name, deviceId: deviceId)
-    }
-    
-    var combinedValue: String {
-        return "\(self.name).\(self.deviceId)"
-    }
-}
-
-extension Date {
-    init(ticks: UInt64) {
-        let intervalSince1970 = Double((ticks / 10_000_000) - 62_135_596_800)
-        self.init(timeIntervalSince1970: intervalSince1970)
-    }
-    var ticks: UInt64 {
-        return UInt64((self.timeIntervalSince1970 + 62_135_596_800) * 10_000_000)
-    }
-}
-
-extension Array where Element == UInt8 {
-    func toBase64String() -> String {
-        let data = NSData(bytes: self, length: self.count)
-        let base64String = data.base64EncodedString(options: NSData.Base64EncodingOptions.endLineWithLineFeed)
-        return base64String
-    }
-}
-
-extension String {
-    func toUint8Array() -> [UInt8]? {
-        guard let data = Data.init(base64Encoded: self, options: []) else {
-            return nil
-        }
-        return [UInt8](data)
     }
 }
 

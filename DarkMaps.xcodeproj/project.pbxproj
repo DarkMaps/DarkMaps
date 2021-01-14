@@ -70,6 +70,8 @@
 		EC23C0F5258BEE4600ABDE84 /* SimpleSignalSwiftAuthAPIStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC23C0F4258BEE4600ABDE84 /* SimpleSignalSwiftAuthAPIStructs.swift */; };
 		EC247FE4259CA2EE00EEBAA1 /* SubscriptionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC247FE3259CA2EE00EEBAA1 /* SubscriptionController.swift */; };
 		EC265A7A259C8D2900D5B7CD /* MessagingStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC265A79259C8D2900D5B7CD /* MessagingStoreTests.swift */; };
+		EC2D8C6925B07FD300B3755D /* SimpleSignalSwiftExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC2D8C6825B07FD300B3755D /* SimpleSignalSwiftExtensions.swift */; };
+		EC2D8C6A25B07FD300B3755D /* SimpleSignalSwiftExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC2D8C6825B07FD300B3755D /* SimpleSignalSwiftExtensions.swift */; };
 		EC4520D525896275002768C8 /* Activate2FAModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4520D425896275002768C8 /* Activate2FAModal.swift */; };
 		EC4520D925896287002768C8 /* Deactivate2FAModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4520D825896287002768C8 /* Deactivate2FAModal.swift */; };
 		EC4520DD258B66F8002768C8 /* SimpleSignalSwiftAuthAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4520DC258B66F8002768C8 /* SimpleSignalSwiftAuthAPI.swift */; };
@@ -270,6 +272,7 @@
 		EC23C0F4258BEE4600ABDE84 /* SimpleSignalSwiftAuthAPIStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleSignalSwiftAuthAPIStructs.swift; sourceTree = "<group>"; };
 		EC247FE3259CA2EE00EEBAA1 /* SubscriptionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionController.swift; sourceTree = "<group>"; };
 		EC265A79259C8D2900D5B7CD /* MessagingStoreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagingStoreTests.swift; sourceTree = "<group>"; };
+		EC2D8C6825B07FD300B3755D /* SimpleSignalSwiftExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleSignalSwiftExtensions.swift; sourceTree = "<group>"; };
 		EC3712DE259DD825001E5422 /* secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = secrets.xcconfig; sourceTree = "<group>"; };
 		EC4520D425896275002768C8 /* Activate2FAModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activate2FAModal.swift; sourceTree = "<group>"; };
 		EC4520D825896287002768C8 /* Deactivate2FAModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deactivate2FAModal.swift; sourceTree = "<group>"; };
@@ -496,6 +499,7 @@
 				EC1EDB19258EB1A000B8F4D4 /* SimpleSignalSwiftEncryptionAPI.swift */,
 				EC1EDB1E258EB1C000B8F4D4 /* SimpleSignalSwiftEncryptionAPIErrors.swift */,
 				EC1EDB23258EB1ED00B8F4D4 /* SimpleSignalSwiftEncryptionApiStructs.swift */,
+				EC2D8C6825B07FD300B3755D /* SimpleSignalSwiftExtensions.swift */,
 				ECEFB8A725AB1FE400E815D2 /* URLSession.swift */,
 			);
 			path = SignalProtocol;
@@ -1071,6 +1075,7 @@
 				ECAEF15125A1218700525760 /* LoginView.swift in Sources */,
 				ECAEF13D25A1217900525760 /* SettingsView.swift in Sources */,
 				ECAEF0C525A1211200525760 /* SubscriptionController.swift in Sources */,
+				EC2D8C6A25B07FD300B3755D /* SimpleSignalSwiftExtensions.swift in Sources */,
 				ECDE0E4B2572B615009D3561 /* Address.swift in Sources */,
 				ECAEF13125A1216F00525760 /* NewChatView.swift in Sources */,
 				ECAEF0F525A1213D00525760 /* ErrorAlert.swift in Sources */,
@@ -1191,6 +1196,7 @@
 				EC23C0EC258BEE2D00ABDE84 /* SimpleSignalSwiftAuthAPIErrors.swift in Sources */,
 				EC12FBB52572ADC700F7230F /* Protocol.swift in Sources */,
 				EC9129B3257CC60A00E12BF6 /* TextFieldWithTitleAndValidation.swift in Sources */,
+				EC2D8C6925B07FD300B3755D /* SimpleSignalSwiftExtensions.swift in Sources */,
 				ECF4CB0E25A782F50069993C /* SubscriptionActionSheet.swift in Sources */,
 				EC12FBD32572ADC700F7230F /* PrivateKey.swift in Sources */,
 				ECAC079D25A4EACD00FCCD7C /* ReceivingList.swift in Sources */,

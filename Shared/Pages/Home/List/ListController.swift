@@ -14,6 +14,7 @@ struct ListController: View {
     @State var receivingMessageArray: [ShortLocationMessage] = []
     @State var sendingMessageArray: [LiveMessage] = []
     @State var getMessagesInProgress: Bool = false
+    @State var updateIdentityInProgress: ProtocolAddress? = nil
     @State var directionLabels = ["Receiving (0)", "Sending (0)"]
     
     func updateLabels() {
@@ -50,7 +51,6 @@ struct ListController: View {
     }
     
     func performSync() {
-        getMessagesInProgress = true
         
         guard let loggedInUser = appState.loggedInUser else {
             appState.displayedError = IdentifiableError(ListViewErrors.noUserLoggedIn)
@@ -61,6 +61,8 @@ struct ListController: View {
             appState.displayedError = IdentifiableError(ListViewErrors.noUserLoggedIn)
             return
         }
+        
+        getMessagesInProgress = true
         
         messagingController.getMessages(serverAddress: loggedInUser.serverAddress, authToken: loggedInUser.authCode) { getMessagesOutcome in
             
@@ -145,16 +147,43 @@ struct ListController: View {
         }
     }
     
+    func handleConsentToNewIdentity(address: ProtocolAddress) {
+        
+        guard let loggedInUser = appState.loggedInUser else {
+            appState.displayedError = IdentifiableError(ListViewErrors.noUserLoggedIn)
+            return
+        }
+        
+        guard let messagingController = appState.messagingController else {
+            appState.displayedError = IdentifiableError(ListViewErrors.noUserLoggedIn)
+            return
+        }
+            
+        updateIdentityInProgress = address
+        
+        messagingController.updateIdentity(address: address, serverAddress: loggedInUser.serverAddress, authToken: loggedInUser.authCode) { updateIdentityOutcome in
+            updateIdentityInProgress = nil
+            switch updateIdentityOutcome {
+            case .success:
+                performSync()
+            case .failure(let error):
+                appState.displayedError = IdentifiableError(error)
+            }
+        }
+    }
+    
     var body: some View {
         ListView(
             receivingMessageArray: $receivingMessageArray,
             sendingMessageArray: $sendingMessageArray,
             getMessagesInProgress: $getMessagesInProgress,
+            updateIdentityInProgress: $updateIdentityInProgress,
             loggedInUser: $appState.loggedInUser,
             directionLabels: $directionLabels,
             performSync: performSync,
             deleteLiveMessage: deleteLiveMessage,
-            deleteMessage: deleteMessage
+            deleteMessage: deleteMessage,
+            handleConsentToNewIdentity: handleConsentToNewIdentity
         ).onAppear() {
             getStoredMessages()
             performSync()
