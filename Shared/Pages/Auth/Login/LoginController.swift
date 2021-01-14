@@ -21,6 +21,7 @@ struct LoginController: View {
     @State private var twoFactorCode = ""
     @State private var twoFactorModalVisible = false
     @State private var showingDeleteDeviceSheet = false
+    @State private var showingResetDeviceSheet = false
     @State private var storedNewUser: LoggedInUser? = nil
     @State private var resetPasswordAlertShowing = false
     @State private var resetPasswordRequestedEmail = ""
@@ -56,6 +57,33 @@ struct LoginController: View {
             case .success(let registrationId):
                 print("Registration Id: \(registrationId)")
                 appState.messagingController = messagingController
+                handleSync(newUser: newUser)
+            }
+        }
+    }
+    
+    private func handleSync(newUser: LoggedInUser) -> Void {
+        // We need to sync to ensure that the local and remote devices match
+        // If there is an existing local device and the user creates a new remote device
+        // with another physical device they could become out of sync
+        
+        guard let messagingController = try? MessagingController(userName: newUser.userName, serverAddress: newUser.serverAddress, authToken: newUser.authCode) else {
+            appState.displayedError = IdentifiableError(MessagingControllerError.unableToCreateAddress)
+            return
+        }
+        
+        loginInProgress = true
+        
+        messagingController.getMessages(serverAddress: newUser.serverAddress, authToken: newUser.authCode) { getMessagesOutcome in
+            loginInProgress = false
+            switch getMessagesOutcome {
+            case .failure(let error):
+                if error == .remoteDeviceChanged {
+                    showingResetDeviceSheet = true
+                } else {
+                    appState.displayedError = IdentifiableError(error)
+                }
+            case .success:
                 handleCheckSubscriptionStatus(newUser: newUser)
             }
         }
@@ -196,7 +224,17 @@ struct LoginController: View {
             Text("").hidden().actionSheet(isPresented: $showingDeleteDeviceSheet) {
                 ActionSheet(
                     title: Text("Device already exists"),
-                    message: Text("This account already has a registered device. Do you wish to delete it? This is irreversible."),
+                    message: Text("This account already has a registered device on the server. If you delete it you will no longer be able to log in from devices you have previously used. Do you still wish to delete the device on the server? This is irreversible."),
+                    buttons: [
+                        .cancel(),
+                        .destructive(Text("Delete device from server"), action: handleDeleteDeviceThenLogin)
+                    ]
+                )
+            }
+            Text("").hidden().actionSheet(isPresented: $showingResetDeviceSheet) {
+                ActionSheet(
+                    title: Text("Server does not match"),
+                    message: Text("The device registered on the server does not match the details stored on this device. This happens when you have logged on from another device. Do you wish to delete the details on the sever and this device? This is irreversible, but necessary to continue."),
                     buttons: [
                         .cancel(),
                         .destructive(Text("Delete device from server"), action: handleDeleteDeviceThenLogin)
@@ -214,7 +252,7 @@ struct LoginController: View {
             Text("").hidden().alert(isPresented: $resetPasswordSuccessAlertShowing) {
                 Alert(
                     title: Text("Success"),
-                    message: Text("If \(resetPasswordRequestedEmail) is registered on our server then a reset password email will have been sent to them."),
+                    message: Text("If \(resetPasswordRequestedEmail) is registered as a user on the server then a reset password email will have been sent to them."),
                     dismissButton: .default(Text("OK"))
                 )
             }

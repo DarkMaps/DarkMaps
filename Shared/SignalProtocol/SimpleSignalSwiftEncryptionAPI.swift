@@ -969,7 +969,7 @@ public class SimpleSignalSwiftEncryptionAPI {
                         } else if code == "device_exists" {
                             return(.failure(.deviceExists))
                         } else if code == "device_changed" {
-                            return(.failure(.sendersDeviceChanged))
+                            return(.failure(.remoteDeviceChanged))
                         } else {
                             return(.failure(.serverError))
                         }

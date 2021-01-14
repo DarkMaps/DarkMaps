@@ -19,11 +19,19 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>We need to access your bluetooth in order to help determine your location.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>We need to access your bluetooth in order to help determine your location.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>We need to access your location in order to encrypt it and send it on to your chosen recipients.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We need to access your location in order to encrypt it and send it on to your chosen recipients.</string>
+	<key>STOREKIT_SECRET</key>
+	<string>$(STOREKIT_SECRET)</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -52,13 +60,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>STOREKIT_SECRET</key>
-	<string>$(STOREKIT_SECRET)</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>We need to access your location in order to encrypt it and send it on to your chosen recipients.</string>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>We need to access your bluetooth in order to help determine your location.</string>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>We need to access your bluetooth in order to help determine your location.</string>
 </dict>
 </plist>

@@ -25,7 +25,7 @@ extension SSAPIProtocolAddressError {
 }
 
 public enum SSAPIEncryptionError: String, LocalizedError, Codable {
-    case invalidUrl, badFormat, badResponseFromServer, serverError, requestThrottled, deviceExists, recipientUserDoesNotExist, recipientUserHasNoRegisteredDevice, recipientsDeviceChanged, sendersDeviceChanged, senderHasNoRegisteredDevice, unableToDecrypt, invalidSenderAddress, noStore, userHasNoRegisteredDevice, userDeviceChanged, unableToCreateKeys, reachedMaxPreKeys, prekeyIdExists, deviceChanged, userHasNoDevice, unableToGetPreKeyStatus, timeout, alteredIdentity
+    case invalidUrl, badFormat, badResponseFromServer, serverError, requestThrottled, deviceExists, recipientUserDoesNotExist, recipientUserHasNoRegisteredDevice, recipientsDeviceChanged, senderHasNoRegisteredDevice, unableToDecrypt, invalidSenderAddress, noStore, userHasNoRegisteredDevice, remoteDeviceChanged, unableToCreateKeys, reachedMaxPreKeys, prekeyIdExists, userHasNoDevice, unableToGetPreKeyStatus, timeout, alteredIdentity
 }
 extension SSAPIEncryptionError {
     public var errorDescription: String? {
@@ -48,8 +48,6 @@ extension SSAPIEncryptionError {
             return NSLocalizedString("The recipient user does not have a registered device", comment: "")
         case .recipientsDeviceChanged:
             return NSLocalizedString("The recipients device has changed", comment: "")
-        case .sendersDeviceChanged:
-            return NSLocalizedString("The sending user's device has changed", comment: "")
         case .senderHasNoRegisteredDevice:
             return NSLocalizedString("The sending user has no registered device", comment: "")
         case .unableToDecrypt:
@@ -60,7 +58,7 @@ extension SSAPIEncryptionError {
             return NSLocalizedString("There was an error loading your encryption data", comment: "")
         case .userHasNoRegisteredDevice:
             return NSLocalizedString("You have not registered a device", comment: "")
-        case .userDeviceChanged:
+        case .remoteDeviceChanged:
             return NSLocalizedString("Your device has changed", comment: "")
         case .unableToCreateKeys:
             return NSLocalizedString("Unable to create new pre keys", comment: "")
@@ -68,8 +66,6 @@ extension SSAPIEncryptionError {
             return NSLocalizedString("Tried to create too many prekeys", comment: "")
         case .prekeyIdExists:
             return NSLocalizedString("Tried to create an existing prekey", comment: "")
-        case .deviceChanged:
-            return NSLocalizedString("Your device has changed", comment: "")
         case .userHasNoDevice:
             return NSLocalizedString("You have not registered a device", comment: "")
         case .unableToGetPreKeyStatus:

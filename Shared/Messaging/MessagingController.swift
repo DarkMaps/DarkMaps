@@ -281,6 +281,8 @@ public class MessagingController {
                     print("Message retrieval unsuccessful")
                     if error == .senderHasNoRegisteredDevice {
                         completionHandler(.failure(.noDeviceOnServer))
+                    } else if error == .remoteDeviceChanged {
+                        completionHandler(.failure(.remoteDeviceChanged))
                     } else {
                         completionHandler(.failure(.unableToRetrieveMessages))
                     }
