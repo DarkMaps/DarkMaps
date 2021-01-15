@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class MessagingStore {
+public struct MessagingStore {
     
     private let keychainSwift: KeychainSwift
     private let notificationCentre = NotificationCenter.default

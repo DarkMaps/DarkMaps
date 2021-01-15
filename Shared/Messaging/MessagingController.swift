@@ -57,11 +57,12 @@ public class MessagingController {
             time: Date()
             )
         for recipient in allRecipients {
+            var newRecipient = recipient
             var personalLocationToSend = locationToSend
-            personalLocationToSend.liveExpiryDate = recipient.expiry
+            personalLocationToSend.liveExpiryDate = newRecipient.expiry
             self.sendMessage(
-                recipientName: recipient.recipient.name,
-                recipientDeviceId: Int(recipient.recipient.deviceId),
+                recipientName: newRecipient.recipient.name,
+                recipientDeviceId: Int(newRecipient.recipient.deviceId),
                 message: personalLocationToSend,
                 serverAddress: serverAddress,
                 authToken: authToken) {
@@ -70,16 +71,16 @@ public class MessagingController {
                 case .failure(let error):
                     print("Error sending message")
                     print(error)
-                    recipient.error = error
+                    newRecipient.error = error
                     do {
-                        try messageStore.updateLiveMessage(newMessage: recipient)
+                        try messageStore.updateLiveMessage(newMessage: newRecipient)
                     } catch {
                         print("Error storing live message with error")
                         print(error)
                         // Do nothing if we can't store the error -
                     }
                 case .success():
-                    print("Message successfully sent to \(recipient.recipient.combinedValue)")
+                    print("Message successfully sent to \(newRecipient.recipient.combinedValue)")
                 }
             }
         }
@@ -252,7 +253,12 @@ public class MessagingController {
                     
                     if messageIdsToDelete.count > 0 {
                      
-                        self.handleDeleteMessages(messageIds: messageIdsToDelete, serverAddress: serverAddress, authToken: authToken) { deleteMessageOutcome in
+                        self.handleDeleteMessages(messageIds: messageIdsToDelete, serverAddress: serverAddress, authToken: authToken) { [weak self] deleteMessageOutcome in
+                            
+                            guard let self = self else {
+                                return
+                            }
+                            
                             switch deleteMessageOutcome {
                             case .failure(let error):
                                 print(error)
@@ -299,7 +305,7 @@ public class MessagingController {
         guard let messagingStore = self.messagingStore else {
             throw MessagingControllerError.noDeviceCreated
         }
-        guard let oldMessage = try? messagingStore.getLiveMessage(address: address) else {
+        guard var oldMessage = try? messagingStore.getLiveMessage(address: address) else {
             return
         }
         oldMessage.error = MessagingControllerError.alteredIdentity

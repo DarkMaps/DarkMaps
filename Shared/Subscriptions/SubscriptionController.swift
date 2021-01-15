@@ -10,7 +10,7 @@ import SwiftyStoreKit
 import StoreKit
 import TPInAppReceipt
 
-public class SubscriptionController {
+public struct SubscriptionController {
     
     private let productArray = Set(["mtr.DarkMaps.Subscription.Monthly"])
     private let notificationCentre = NotificationCenter.default

@@ -160,11 +160,11 @@ public class SimpleSignalSwiftEncryptionAPI {
         
         let semaphore = DispatchSemaphore(value: 0)
         
-        URLSession.shared.uploadTask(with: request, from: jsonData) { (data, response, error) in
+        URLSession.shared.uploadTask(with: request, from: jsonData) { [weak self] (data, response, error) in
+            
+            guard let self = self else { return }
             
             let processedResponse = self.handleURLErrors(successCode: 201, data: data, response: response, error: error)
-            
-            print(processedResponse)
             
             switch processedResponse {
             case .success:
@@ -288,7 +288,9 @@ public class SimpleSignalSwiftEncryptionAPI {
             
             let semaphore = DispatchSemaphore(value: 0)
             
-            URLSession.shared.uploadTask(with: request, from: bodyJsonData) { (data, response, error) in
+            URLSession.shared.uploadTask(with: request, from: bodyJsonData) { [weak self] (data, response, error) in
+                
+                guard let self = self else { return }
                 
                 let processedResponse = self.handleURLErrors(successCode: 201, data: data, response: response, error: error)
                 
@@ -330,7 +332,9 @@ public class SimpleSignalSwiftEncryptionAPI {
         
         let semaphore = DispatchSemaphore(value: 0)
         
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
+        URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
+            
+            guard let self = self else {return}
             
             let processedResponse = self.handleURLErrors(successCode: 200, data: data, response: response, error: error)
             
@@ -427,7 +431,9 @@ public class SimpleSignalSwiftEncryptionAPI {
         
         let semaphore = DispatchSemaphore(value: 0)
         
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
+        URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
+            
+            guard let self = self else {return}
             
             let processedResponse = self.handleURLErrors(successCode: 200, data: data, response: response, error: error)
             
@@ -544,7 +550,9 @@ public class SimpleSignalSwiftEncryptionAPI {
         
         let semaphore = DispatchSemaphore(value: 0)
         
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
+        URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
+            
+            guard let self = self else {return}
             
             let processedResponse = self.handleURLErrors(successCode: 200, data: data, response: response, error: error)
             
@@ -590,7 +598,9 @@ public class SimpleSignalSwiftEncryptionAPI {
         
         let semaphore = DispatchSemaphore(value: 0)
         
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
+        URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
+            
+            guard let self = self else {return}
             
             let processedResponse = self.handleURLErrors(successCode: 204, data: data, response: response, error: error)
             
@@ -651,7 +661,9 @@ public class SimpleSignalSwiftEncryptionAPI {
         
         let semaphore = DispatchSemaphore(value: 0)
         
-        URLSession.shared.uploadTask(with: request, from: jsonData) { (data, response, error) in
+        URLSession.shared.uploadTask(with: request, from: jsonData) { [weak self] (data, response, error) in
+            
+            guard let self = self else {return}
             
             let processedResponse = self.handleURLErrors(successCode: 200, data: data, response: response, error: error)
             
@@ -766,7 +778,9 @@ public class SimpleSignalSwiftEncryptionAPI {
         
         let semaphore = DispatchSemaphore(value: 0)
         
-        URLSession.shared.uploadTask(with: request, from: jsonData) { (data, response, error) in
+        URLSession.shared.uploadTask(with: request, from: jsonData) { [weak self] (data, response, error) in
+            
+            guard let self = self else {return}
             
             let processedResponse = self.handleURLErrors(successCode: 200, data: data, response: response, error: error)
             
@@ -860,7 +874,9 @@ public class SimpleSignalSwiftEncryptionAPI {
         
         let semaphore = DispatchSemaphore(value: 0)
         
-        URLSession.shared.uploadTask(with: request, from: jsonData) { (data, response, error) in
+        URLSession.shared.uploadTask(with: request, from: jsonData) { [weak self] (data, response, error) in
+            
+            guard let self = self else {return}
             
             let processedResponse = self.handleURLErrors(successCode: 200, data: data, response: response, error: error)
             

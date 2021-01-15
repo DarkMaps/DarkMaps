@@ -9,7 +9,7 @@ import Foundation
 
 //https://michaellong.medium.com/how-to-chain-api-calls-using-swift-5s-new-result-type-and-gcd-56025b51033c
 
-public class SimpleSignalSwiftAuthAPI{
+public struct SimpleSignalSwiftAuthAPI{
     
     var timeoutDuration: DispatchTime {
         return .now() + 5

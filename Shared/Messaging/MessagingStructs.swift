@@ -8,7 +8,7 @@
 import Foundation
 import MapKit
 
-public class LiveMessage: Codable, Identifiable {
+public struct LiveMessage: Codable, Identifiable {
     public var id = UUID()
     var recipient: ProtocolAddress
     var expiry: Date
@@ -20,7 +20,7 @@ public class LiveMessage: Codable, Identifiable {
         self.error = error
     }
     
-    required public init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try values.decode(UUID.self, forKey: .id)
         let recipientString = try values.decode(String.self, forKey: .recipientCombinedValue)
@@ -78,7 +78,7 @@ public struct Location: Codable {
 
 }
 
-public class LocationMessage: Codable {
+public struct LocationMessage: Codable {
     var id: Int
     var sender: ProtocolAddress
     var location: Location?
@@ -91,7 +91,7 @@ public class LocationMessage: Codable {
         self.error = error
     }
     
-    required public init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try values.decode(Int.self, forKey: .id)
         let senderString = try values.decode(String.self, forKey: .senderCombinedValue)
@@ -127,7 +127,7 @@ public class LocationMessage: Codable {
     
 }
 
-public class ShortLocationMessage: Identifiable {
+public struct ShortLocationMessage: Identifiable {
     
     public var id: Int
     var sender: ProtocolAddress

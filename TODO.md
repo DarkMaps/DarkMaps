@@ -13,6 +13,7 @@
 11) Fix remote device exists error (x)
 12) Allow copy QR code to clipboard (x)
 13) Fix [weak self]
+14) Handle changed remote device from list page syn
 
 
 

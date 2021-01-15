@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class AuthorisationController {
+public struct AuthorisationController {
     
     var simpleSignalSwiftAuthAPI = SimpleSignalSwiftAuthAPI()
     

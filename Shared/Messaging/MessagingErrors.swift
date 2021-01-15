@@ -76,7 +76,7 @@ extension MessagingControllerError {
         case .unableToUpdateIdentity:
             return NSLocalizedString("An error occured whilst updating this user's identity", comment: "")
         case .remoteDeviceChanged:
-            return NSLocalizedString("The device on the server has change", comment: "")
+            return NSLocalizedString("The device on the server has changed", comment: "")
         }
     }
 }
