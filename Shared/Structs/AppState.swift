@@ -14,6 +14,7 @@ class AppState: ObservableObject {
         }
     }
     var messagingController: MessagingController? = nil
+    @Published var subscriptionSheetIsShowing = false
     @Published var displayedError: IdentifiableError? = nil
     
     var locationController = LocationController()

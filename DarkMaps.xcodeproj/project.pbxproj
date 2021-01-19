@@ -11,6 +11,8 @@
 		81C9AD4D119B3F99274439DA /* Pods_DarkMapsTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C97D44905D60718C06A69458 /* Pods_DarkMapsTests.framework */; };
 		85BFF31E390FAB7CA422A809 /* Pods_DarkMapsiOSFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68313EBE24A19395663AECD6 /* Pods_DarkMapsiOSFramework.framework */; };
 		E7A56596E88DEED57998FCCC /* Pods_DarkMaps__macOS_.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90E2E064B752B078921CCA6A /* Pods_DarkMaps__macOS_.framework */; };
+		EC08F51A25B4B10B009ABD75 /* SubscriptionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC08F51925B4B10B009ABD75 /* SubscriptionSheet.swift */; };
+		EC08F51B25B4B10B009ABD75 /* SubscriptionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC08F51925B4B10B009ABD75 /* SubscriptionSheet.swift */; };
 		EC0BB6AE25975B4100A2F3CB /* MessagingErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC0BB6AD25975B4100A2F3CB /* MessagingErrors.swift */; };
 		EC0BB6B325975B4E00A2F3CB /* MessagingStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC0BB6B225975B4E00A2F3CB /* MessagingStructs.swift */; };
 		EC0BB6B825975B7E00A2F3CB /* MessagingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC0BB6B725975B7E00A2F3CB /* MessagingController.swift */; };
@@ -185,7 +187,6 @@
 		ECEFB8A825AB1FE400E815D2 /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECEFB8A725AB1FE400E815D2 /* URLSession.swift */; };
 		ECEFB8A925AB1FE400E815D2 /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECEFB8A725AB1FE400E815D2 /* URLSession.swift */; };
 		ECF3E232259BDC22002E4291 /* NotificationCentreExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF3E231259BDC22002E4291 /* NotificationCentreExtensions.swift */; };
-		ECF4CB0E25A782F50069993C /* SubscriptionActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF4CB0D25A782F50069993C /* SubscriptionActionSheet.swift */; };
 		ECFC5940258DF804005CCDA2 /* TextFieldAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFC593F258DF803005CCDA2 /* TextFieldAlert.swift */; };
 		ECFC5945258E0AAC005CCDA2 /* SettingsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFC5944258E0AAB005CCDA2 /* SettingsRow.swift */; };
 		ECFFD5222572620300458BC8 /* SignalMapsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFFD50F257261FB00458BC8 /* SignalMapsApp.swift */; };
@@ -237,6 +238,7 @@
 		C8E83A68DC210954355FBF34 /* Pods-DarkMaps (iOS).release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DarkMaps (iOS).release.xcconfig"; path = "Target Support Files/Pods-DarkMaps (iOS)/Pods-DarkMaps (iOS).release.xcconfig"; sourceTree = "<group>"; };
 		C97D44905D60718C06A69458 /* Pods_DarkMapsTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DarkMapsTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE8D0B2F177837F76B1419BE /* Pods_DarkMaps__iOS_.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DarkMaps__iOS_.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EC08F51925B4B10B009ABD75 /* SubscriptionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionSheet.swift; sourceTree = "<group>"; };
 		EC0BB6AD25975B4100A2F3CB /* MessagingErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagingErrors.swift; sourceTree = "<group>"; };
 		EC0BB6B225975B4E00A2F3CB /* MessagingStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagingStructs.swift; sourceTree = "<group>"; };
 		EC0BB6B725975B7E00A2F3CB /* MessagingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagingController.swift; sourceTree = "<group>"; };
@@ -322,7 +324,6 @@
 		ECE467C425AB552B00939E4F /* SubscriptionErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionErrors.swift; sourceTree = "<group>"; };
 		ECEFB8A725AB1FE400E815D2 /* URLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSession.swift; sourceTree = "<group>"; };
 		ECF3E231259BDC22002E4291 /* NotificationCentreExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCentreExtensions.swift; sourceTree = "<group>"; };
-		ECF4CB0D25A782F50069993C /* SubscriptionActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionActionSheet.swift; sourceTree = "<group>"; };
 		ECFC593F258DF803005CCDA2 /* TextFieldAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldAlert.swift; sourceTree = "<group>"; };
 		ECFC5944258E0AAB005CCDA2 /* SettingsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRow.swift; sourceTree = "<group>"; };
 		ECFFD50F257261FB00458BC8 /* SignalMapsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalMapsApp.swift; sourceTree = "<group>"; };
@@ -452,7 +453,7 @@
 				ECE467C425AB552B00939E4F /* SubscriptionErrors.swift */,
 				EC7226F1259F39F8009F6104 /* configuration.storekit */,
 				EC7226F5259F3A53009F6104 /* StoreKitTestCertificate.cer */,
-				ECF4CB0D25A782F50069993C /* SubscriptionActionSheet.swift */,
+				EC08F51925B4B10B009ABD75 /* SubscriptionSheet.swift */,
 			);
 			path = Subscriptions;
 			sourceTree = "<group>";
@@ -1071,6 +1072,7 @@
 				ECDE0E4A2572B615009D3561 /* PublicKey.swift in Sources */,
 				ECEFB8A925AB1FE400E815D2 /* URLSession.swift in Sources */,
 				ECAEF0D525A1212400525760 /* LocationController.swift in Sources */,
+				EC08F51B25B4B10B009ABD75 /* SubscriptionSheet.swift in Sources */,
 				ECAEF14525A1217E00525760 /* Deactivate2FAModal.swift in Sources */,
 				ECAEF15125A1218700525760 /* LoginView.swift in Sources */,
 				ECAEF13D25A1217900525760 /* SettingsView.swift in Sources */,
@@ -1159,6 +1161,7 @@
 				EC9129E1257D82D000E12BF6 /* IdentifiableError.swift in Sources */,
 				EC12FBCF2572ADC700F7230F /* PreKeyRecord.swift in Sources */,
 				ECAC078C25A4D67600FCCD7C /* RegisterView.swift in Sources */,
+				EC08F51A25B4B10B009ABD75 /* SubscriptionSheet.swift in Sources */,
 				EC12FBDB2572ADC700F7230F /* SenderKeyName.swift in Sources */,
 				EC12FBDD2572ADC700F7230F /* ClonableHandleOwner.swift in Sources */,
 				EC12FBD92572ADC700F7230F /* Fingerprint.swift in Sources */,
@@ -1197,7 +1200,6 @@
 				EC12FBB52572ADC700F7230F /* Protocol.swift in Sources */,
 				EC9129B3257CC60A00E12BF6 /* TextFieldWithTitleAndValidation.swift in Sources */,
 				EC2D8C6925B07FD300B3755D /* SimpleSignalSwiftExtensions.swift in Sources */,
-				ECF4CB0E25A782F50069993C /* SubscriptionActionSheet.swift in Sources */,
 				EC12FBD32572ADC700F7230F /* PrivateKey.swift in Sources */,
 				ECAC079D25A4EACD00FCCD7C /* ReceivingList.swift in Sources */,
 				EC1EDB1F258EB1C000B8F4D4 /* SimpleSignalSwiftEncryptionAPIErrors.swift in Sources */,
@@ -1491,7 +1493,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = A4G3Y5XC83;
 				ENABLE_BITCODE = NO;
 				ENABLE_PREVIEWS = YES;
@@ -1509,7 +1511,7 @@
 				PRODUCT_NAME = DarkMaps;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -1521,7 +1523,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = A4G3Y5XC83;
 				ENABLE_BITCODE = NO;
 				ENABLE_PREVIEWS = YES;
@@ -1539,7 +1541,7 @@
 				PRODUCT_NAME = DarkMaps;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

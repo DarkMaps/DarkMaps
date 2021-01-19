@@ -18,9 +18,6 @@ struct NewChatController: View {
     @State var selectedLiveLength = 0
     @State var messageSendSuccessAlertShowing = false
     @State var liveMessageSendSuccessAlertShowing = false
-    @State var subscribeInProgress = false
-    @State var subscriptionOptions: [SKProduct] = []
-    @State var subscriptionOptionsSheetShowing = false
     @State var isSubscribed = false //Necessary for animation
     
     var subscriptionController = SubscriptionController()
@@ -98,33 +95,6 @@ struct NewChatController: View {
         }
     }
     
-    func getSubscriptionOptions() {
-        subscribeInProgress = true
-        subscriptionController.getSubscriptions() { result in
-            subscribeInProgress = false
-            switch result {
-            case .success(let options):
-                self.subscriptionOptions = options
-                self.subscriptionOptionsSheetShowing = true
-            case .failure(let error):
-                appState.displayedError = IdentifiableError(error)
-            }
-        }
-    }
-    
-    func subscribe(product: SKProduct) {
-        subscribeInProgress = true
-        subscriptionController.purchaseSubscription(product: product) { result in
-            subscribeInProgress = false
-            switch result {
-            case .success(let date):
-                print(date)
-            case .failure(let error):
-                appState.displayedError = IdentifiableError(error)
-            }
-        }
-    }
-    
     var body: some View {
         ZStack {
             NewChatView(
@@ -133,10 +103,8 @@ struct NewChatController: View {
                 sendLocationInProgress: $sendLocationInProgress,
                 isLiveLocation: $isLiveLocation,
                 selectedLiveLength: $selectedLiveLength,
-                subscribeInProgress: $subscribeInProgress,
                 isSubscribed: $isSubscribed,
-                performMessageSend: performMessageSend,
-                getSubscriptionOptions: getSubscriptionOptions
+                performMessageSend: performMessageSend
             )
             .onReceive(NotificationCenter.default.publisher(for: .subscriptionController_SubscriptionVerified), perform: {_ in
                 withAnimation {
@@ -165,11 +133,6 @@ struct NewChatController: View {
                     dismissButton: .default(Text("OK"), action: {recipientEmail = ""})
                 )
             }
-            SubscriptionActionSheet(
-                isShowing: $subscriptionOptionsSheetShowing,
-                subscriptionOptions: $subscriptionOptions,
-                subscribe: subscribe
-            )
         }
     }
 }

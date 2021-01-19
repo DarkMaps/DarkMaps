@@ -11,14 +11,21 @@ import SwiftUI
 struct RoundedButtonStyle: ButtonStyle {
     
     var backgroundColor: Color
+    var padded: Bool
+    
+    init(backgroundColor: Color, padded: Bool = true) {
+        self.backgroundColor = backgroundColor
+        self.padded = padded
+    }
     
     func makeBody(configuration: ButtonStyle.Configuration) -> some View {
-        RoundedButton(configuration: configuration, backgroundColor: backgroundColor)
+        RoundedButton(configuration: configuration, backgroundColor: backgroundColor, padded: padded)
     }
 
     struct RoundedButton: View {
         let configuration: ButtonStyle.Configuration
         let backgroundColor: Color
+        let padded: Bool
         @Environment(\.isEnabled) private var isEnabled: Bool
         var body: some View {
             configuration.label
@@ -28,7 +35,7 @@ struct RoundedButtonStyle: ButtonStyle {
                 .background(backgroundColor)
                 .cornerRadius(25)
                 .opacity(isEnabled ? 1 : 0.5)
-                .padding()
+                .padding(.vertical, padded ? 3 : 0)
         }
     }
 }

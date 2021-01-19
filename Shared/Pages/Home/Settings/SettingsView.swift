@@ -9,6 +9,8 @@ import SwiftUI
 
 struct SettingsView: View {
     
+    @EnvironmentObject var appState: AppState
+    
     @Binding var activate2FAModalIsShowing: Bool
     @Binding var deactivate2FAModalIsShowing: Bool
     @Binding var passwordAlertShowing: Bool
@@ -16,7 +18,6 @@ struct SettingsView: View {
     @Binding var actionInProgress: ActionInProgress?
     
     var logUserOut: () -> Void
-    var getSubscriptionOptions: () -> Void
     var restoreSubscription: () -> Void
     var dateFormatter = DateFormatter()
     
@@ -36,7 +37,9 @@ struct SettingsView: View {
                             title: "Subscribe",
                             iconName: "creditcard.fill",
                             actionDefiningActivityMarker: .subscribe,
-                            onTap: getSubscriptionOptions
+                            onTap: {
+                                appState.subscriptionSheetIsShowing = true
+                            }
                         )
                         SettingsRow(
                             actionInProgress: $actionInProgress,
@@ -47,6 +50,13 @@ struct SettingsView: View {
                         )
                     } else {
                         Text("You are subscribed until: \(formatDate(loggedInUser!.subscriptionExpiryDate!))")
+                        SettingsRow(
+                            actionInProgress: $actionInProgress,
+                            title: "Manage Subscription - TODO",
+                            iconName: "minus.diamond.fill",
+                            actionDefiningActivityMarker: .deactivate2FA,
+                            onTap: {deactivate2FAModalIsShowing = true}
+                        )
                     }
 
                 }
@@ -152,7 +162,6 @@ struct SettingsView_Previews: PreviewProvider {
     struct PreviewWrapper: View {
         
         func logUserOut() {}
-        func getSubscriptionOptions() {}
         func restoreSubscription() {}
         
         @State var loggedInUser: LoggedInUser?
@@ -174,7 +183,6 @@ struct SettingsView_Previews: PreviewProvider {
                 loggedInUser: $loggedInUser,
                 actionInProgress: $actionInProgress,
                 logUserOut: logUserOut,
-                getSubscriptionOptions: getSubscriptionOptions,
                 restoreSubscription: restoreSubscription
             )
         }

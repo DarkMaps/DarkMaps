@@ -24,8 +24,6 @@ struct SettingsController: View {
     @State var backupCodesAlertShowing = false
     @State var backupCodes: IdentifiableBackupCodes?
     @State var actionInProgress: ActionInProgress? = nil
-    @State var subscriptionOptionsSheetShowing = false
-    @State var subscriptionOptions: [SKProduct] = []
      
     var authorisationController = AuthorisationController()
     var subscriptionController = SubscriptionController()
@@ -110,33 +108,6 @@ struct SettingsController: View {
         }
     }
     
-    func getSubscriptionOptions() {
-        actionInProgress = .subscribe
-        subscriptionController.getSubscriptions() { result in
-            actionInProgress = nil
-            switch result {
-            case .success(let options):
-                self.subscriptionOptions = options
-                self.subscriptionOptionsSheetShowing = true
-            case .failure(let error):
-                appState.displayedError = IdentifiableError(error)
-            }
-        }
-    }
-    
-    func subscribe(product: SKProduct) {
-        actionInProgress = .subscribe
-        subscriptionController.purchaseSubscription(product: product) { result in
-            actionInProgress = nil
-            switch result {
-            case .success(let date):
-                print(date)
-            case .failure(let error):
-                appState.displayedError = IdentifiableError(error)
-            }
-        }
-    }
-    
     func restoreSubscription() {
         actionInProgress = .restoreSubscription
         subscriptionController.verifyIsStillSubscriber() { result in
@@ -181,7 +152,6 @@ struct SettingsController: View {
                 loggedInUser: $appState.loggedInUser,
                 actionInProgress: $actionInProgress,
                 logUserOut: logUserOut,
-                getSubscriptionOptions: getSubscriptionOptions,
                 restoreSubscription: restoreSubscription
             )
             Text("").hidden().sheet(isPresented: $activate2FAModalIsShowing, onDismiss: {
@@ -218,10 +188,6 @@ struct SettingsController: View {
                     dismissButton: .cancel()
                 )
             }
-            SubscriptionActionSheet(
-                isShowing: $subscriptionOptionsSheetShowing,
-                subscriptionOptions: $subscriptionOptions,
-                subscribe: subscribe)
             
         }
         

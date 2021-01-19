@@ -9,6 +9,7 @@ import SwiftUI
 
 struct NewChatView: View {
     
+    @EnvironmentObject var appState: AppState
     @Environment(\.colorScheme) var colorScheme
     
     @Binding var recipientEmail: String
@@ -16,14 +17,12 @@ struct NewChatView: View {
     @Binding var sendLocationInProgress: Bool
     @Binding var isLiveLocation: Bool
     @Binding var selectedLiveLength: Int
-    @Binding var subscribeInProgress: Bool
     // This is unfortunately necessary for animation
     @Binding var isSubscribed: Bool
     
     var liveLengths = ["15 Minutes", "1 Hour", "4 Hours"]
     
     var performMessageSend: () -> Void
-    var getSubscriptionOptions: () -> Void
     
     var body: some View {
         NavigationView {
@@ -67,15 +66,11 @@ struct NewChatView: View {
                     VStack {
                         Text("Subscribe to enable live location sending")
                             .padding(.top)
-                        Button(action: getSubscriptionOptions) {
-                            HStack {
-                                if (self.subscribeInProgress) {
-                                    ActivityIndicator(isAnimating: true)
-                                }
-                                Text("Subscribe")
-                            }
+                        Button(action: {
+                            appState.subscriptionSheetIsShowing = true
+                        }) {
+                            Text("Subscribe")
                         }
-                        .disabled(subscribeInProgress)
                         .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
                     }
                     .transition(.move(edge: .bottom))
@@ -108,7 +103,6 @@ struct NewChatView_Previews: PreviewProvider {
         @State var sendLocationInProgress: Bool = false
         @State var isLiveLocation: Bool = false
         @State var selectedLiveLength = 0
-        @State var subscribeInProgress: Bool = false
         @State var isSubscribed: Bool = false
         
         init(isSubscriber: Bool = false) {
@@ -116,15 +110,6 @@ struct NewChatView_Previews: PreviewProvider {
         }
         
         func performMessageSend() {}
-        func getSubscriptionOptions() {
-            if self.isSubscribed == true {
-                self.isSubscribed = false
-            } else {
-                withAnimation {
-                    self.isSubscribed = true
-                }
-            }
-        }
 
         var body: some View {
             
@@ -134,10 +119,8 @@ struct NewChatView_Previews: PreviewProvider {
                 sendLocationInProgress: $sendLocationInProgress,
                 isLiveLocation: $isLiveLocation,
                 selectedLiveLength: $selectedLiveLength,
-                subscribeInProgress: $subscribeInProgress,
                 isSubscribed: $isSubscribed,
-                performMessageSend: performMessageSend,
-                getSubscriptionOptions: getSubscriptionOptions
+                performMessageSend: performMessageSend
             )
         }
     }

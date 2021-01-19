@@ -51,6 +51,9 @@ struct ContentView: View {
             Text("").hidden().alert(item: $appState.displayedError) { viewError -> Alert in
                 ErrorAlert(viewError: viewError)
             }
+            Text("").hidden().sheet(isPresented: $appState.subscriptionSheetIsShowing) {
+                SubscriptionSheet()
+            }
         }
     }
 }
