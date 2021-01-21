@@ -16,6 +16,10 @@
 		EC0BB6AE25975B4100A2F3CB /* MessagingErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC0BB6AD25975B4100A2F3CB /* MessagingErrors.swift */; };
 		EC0BB6B325975B4E00A2F3CB /* MessagingStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC0BB6B225975B4E00A2F3CB /* MessagingStructs.swift */; };
 		EC0BB6B825975B7E00A2F3CB /* MessagingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC0BB6B725975B7E00A2F3CB /* MessagingController.swift */; };
+		EC117DD325B9CE9C000878C6 /* ServerDeviceChangedSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC117DD225B9CE9C000878C6 /* ServerDeviceChangedSheet.swift */; };
+		EC117DD425B9CE9C000878C6 /* ServerDeviceChangedSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC117DD225B9CE9C000878C6 /* ServerDeviceChangedSheet.swift */; };
+		EC117DD925B9D2ED000878C6 /* SheetExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC117DD825B9D2ED000878C6 /* SheetExtensions.swift */; };
+		EC117DDA25B9D2ED000878C6 /* SheetExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC117DD825B9D2ED000878C6 /* SheetExtensions.swift */; };
 		EC12FBB32572ADC700F7230F /* DataStoreInMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9A2572ADC700F7230F /* DataStoreInMemory.swift */; };
 		EC12FBB42572ADC700F7230F /* DataStoreInMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9A2572ADC700F7230F /* DataStoreInMemory.swift */; };
 		EC12FBB52572ADC700F7230F /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9B2572ADC700F7230F /* Protocol.swift */; };
@@ -242,6 +246,8 @@
 		EC0BB6AD25975B4100A2F3CB /* MessagingErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagingErrors.swift; sourceTree = "<group>"; };
 		EC0BB6B225975B4E00A2F3CB /* MessagingStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagingStructs.swift; sourceTree = "<group>"; };
 		EC0BB6B725975B7E00A2F3CB /* MessagingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagingController.swift; sourceTree = "<group>"; };
+		EC117DD225B9CE9C000878C6 /* ServerDeviceChangedSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerDeviceChangedSheet.swift; sourceTree = "<group>"; };
+		EC117DD825B9D2ED000878C6 /* SheetExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetExtensions.swift; sourceTree = "<group>"; };
 		EC12FB8F2572AB9B00F7230F /* SignalClient Build Details.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "SignalClient Build Details.md"; sourceTree = "<group>"; };
 		EC12FB9A2572ADC700F7230F /* DataStoreInMemory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStoreInMemory.swift; sourceTree = "<group>"; };
 		EC12FB9B2572ADC700F7230F /* Protocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocol.swift; sourceTree = "<group>"; };
@@ -571,6 +577,8 @@
 				EC9129BC257CC72500E12BF6 /* ActivityIndicator.swift */,
 				EC9129DC257D828200E12BF6 /* ErrorAlert.swift */,
 				ECFC593F258DF803005CCDA2 /* TextFieldAlert.swift */,
+				EC117DD225B9CE9C000878C6 /* ServerDeviceChangedSheet.swift */,
+				EC117DD825B9D2ED000878C6 /* SheetExtensions.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1052,8 +1060,10 @@
 				ECAEF16525A1219A00525760 /* SimpleSignalSwiftAuthAPIStructs.swift in Sources */,
 				ECAEF10925A1214F00525760 /* LoggedInUser.swift in Sources */,
 				ECDE0E432572B615009D3561 /* DataStoreInMemory.swift in Sources */,
+				EC117DD425B9CE9C000878C6 /* ServerDeviceChangedSheet.swift in Sources */,
 				ECAEF0E925A1213600525760 /* TextFieldWithTitleAndValidation.swift in Sources */,
 				ECAEF0F125A1213B00525760 /* ActivityIndicator.swift in Sources */,
+				EC117DDA25B9D2ED000878C6 /* SheetExtensions.swift in Sources */,
 				ECDE0E442572B615009D3561 /* Protocol.swift in Sources */,
 				ECAEF0DD25A1212B00525760 /* MessagingErrors.swift in Sources */,
 				ECDE0E452572B615009D3561 /* PreKeySignalMessage.swift in Sources */,
@@ -1160,6 +1170,7 @@
 				EC12FBBB2572ADC700F7230F /* SenderKeyDistributionMessage.swift in Sources */,
 				EC9129E1257D82D000E12BF6 /* IdentifiableError.swift in Sources */,
 				EC12FBCF2572ADC700F7230F /* PreKeyRecord.swift in Sources */,
+				EC117DD925B9D2ED000878C6 /* SheetExtensions.swift in Sources */,
 				ECAC078C25A4D67600FCCD7C /* RegisterView.swift in Sources */,
 				EC08F51A25B4B10B009ABD75 /* SubscriptionSheet.swift in Sources */,
 				EC12FBDB2572ADC700F7230F /* SenderKeyName.swift in Sources */,
@@ -1192,6 +1203,7 @@
 				ECC0A5BF257FE8A6001D5E60 /* ListController.swift in Sources */,
 				EC9129B9257CC61B00E12BF6 /* RoundedButton.swift in Sources */,
 				EC0BB6B825975B7E00A2F3CB /* MessagingController.swift in Sources */,
+				EC117DD325B9CE9C000878C6 /* ServerDeviceChangedSheet.swift in Sources */,
 				ECC0A5DD257FE8FF001D5E60 /* SettingsView.swift in Sources */,
 				EC9129AA257CC34900E12BF6 /* LoginView.swift in Sources */,
 				EC1EDB1A258EB1A000B8F4D4 /* SimpleSignalSwiftEncryptionAPI.swift in Sources */,

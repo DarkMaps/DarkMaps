@@ -169,6 +169,9 @@ public class MessagingController {
                         print(error)
                         if error == .alteredIdentity {
                             completionHandler(.failure(.alteredIdentity))
+                        } else if error == .remoteDeviceChanged {
+                            self.notificationCentre.post(name: .encryptionController_ServerOutOfSync, object: nil)
+                            completionHandler(.failure(.remoteDeviceChanged))
                         } else {
                             completionHandler(.failure(.unableToSendMessage))
                         }
@@ -262,7 +265,12 @@ public class MessagingController {
                             switch deleteMessageOutcome {
                             case .failure(let error):
                                 print(error)
-                                completionHandler(.failure(.unableToDeleteMessage))
+                                if error == .remoteDeviceChanged {
+                                    self.notificationCentre.post(name: .encryptionController_ServerOutOfSync, object: nil)
+                                    completionHandler(.failure(.remoteDeviceChanged))
+                                } else {
+                                    completionHandler(.failure(.unableToDeleteMessage))
+                                }
                             case .success():
                                 
                                 self.handleUpdateDevice(serverAddress: serverAddress, authToken: authToken) { updateDeviceOutcome in
@@ -288,6 +296,7 @@ public class MessagingController {
                     if error == .senderHasNoRegisteredDevice {
                         completionHandler(.failure(.noDeviceOnServer))
                     } else if error == .remoteDeviceChanged {
+                        self.notificationCentre.post(name: .encryptionController_ServerOutOfSync, object: nil)
                         completionHandler(.failure(.remoteDeviceChanged))
                     } else {
                         completionHandler(.failure(.unableToRetrieveMessages))
@@ -331,7 +340,12 @@ public class MessagingController {
             case .failure(let error):
                 print("Error deleting messages")
                 print(error)
-                completionHandler(.failure(.unableToDeleteMessage))
+                if error == .remoteDeviceChanged {
+                    self.notificationCentre.post(name: .encryptionController_ServerOutOfSync, object: nil)
+                    completionHandler(.failure(.remoteDeviceChanged))
+                } else {
+                    completionHandler(.failure(.unableToDeleteMessage))
+                }
             }
         }
     }
@@ -367,7 +381,12 @@ public class MessagingController {
             case .failure(let error):
                 print("Failed to update prekeys")
                 print(error)
-                completionHandler(.failure(.unableToUpdateDeviceKeys))
+                if error == .remoteDeviceChanged {
+                    self.notificationCentre.post(name: .encryptionController_ServerOutOfSync, object: nil)
+                    completionHandler(.failure(.remoteDeviceChanged))
+                } else {
+                    completionHandler(.failure(.unableToUpdateDeviceKeys))
+                }
             }
         }
     }
@@ -405,7 +424,12 @@ public class MessagingController {
                 case .failure(let error):
                     print("Error deleting device")
                     print(error)
-                    completionHandler(.failure(.unableToDeleteDevice))
+                    if error == .remoteDeviceChanged {
+                        self.notificationCentre.post(name: .encryptionController_ServerOutOfSync, object: nil)
+                        completionHandler(.failure(.remoteDeviceChanged))
+                    } else {
+                        completionHandler(.failure(.unableToDeleteDevice))
+                    }
                 }
             }
         }
@@ -426,7 +450,12 @@ public class MessagingController {
                 case .failure(let error):
                     print("Error updating identity")
                     print(error)
-                    completionHandler(.failure(.unableToUpdateIdentity))
+                    if error == .remoteDeviceChanged {
+                        self.notificationCentre.post(name: .encryptionController_ServerOutOfSync, object: nil)
+                        completionHandler(.failure(.remoteDeviceChanged))
+                    } else {
+                        completionHandler(.failure(.unableToUpdateIdentity))
+                    }
                 }
             }
         }
