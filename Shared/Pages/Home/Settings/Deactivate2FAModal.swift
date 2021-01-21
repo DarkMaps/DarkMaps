@@ -33,7 +33,7 @@ struct Deactivate2FAModal: View {
                     Text("Deactivate")
                 }
             }
-            .disabled(invalidCode)
+            .disabled(invalidCode || deactivate2FACode.isEmpty)
             .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
             Spacer()
         }.padding()

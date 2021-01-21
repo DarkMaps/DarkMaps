@@ -93,7 +93,7 @@ struct Activate2FAModal: View {
                     Text("Activate")
                 }
             }
-            .disabled(invalidCode || confirm2FACode.count == 0)
+            .disabled(invalidCode || confirm2FACode.isEmpty)
             .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
         }
         .padding()

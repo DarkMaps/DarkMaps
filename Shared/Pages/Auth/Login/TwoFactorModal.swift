@@ -40,7 +40,7 @@ struct TwoFactorModal: View {
                     Text("Submit")
                 }
             }
-            .disabled(showInvalidTwoFactorCodeText)
+            .disabled(showInvalidTwoFactorCodeText || twoFactorCode.isEmpty)
             .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
             Spacer()
         }

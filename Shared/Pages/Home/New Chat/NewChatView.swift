@@ -59,7 +59,7 @@ struct NewChatView: View {
                     }
                 }
                 .padding(.top)
-                .disabled(recipientEmailInvalid || sendLocationInProgress)
+                .disabled(recipientEmailInvalid || sendLocationInProgress || recipientEmail.isEmpty)
                 .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
                 Spacer()
                 if (isSubscribed == false) {

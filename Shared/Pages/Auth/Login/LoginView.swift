@@ -59,7 +59,7 @@ struct LoginView: View {
                                 Text("Login")
                             }
                         }
-                        .disabled(invalidUsername || invalidPassword || loginInProgress)
+                        .disabled(invalidUsername || invalidPassword || loginInProgress || username.isEmpty || password.isEmpty)
                         .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
                         Button(action: {self.resetPasswordAlertShowing.toggle()}) { Text("Reset Password")
                         }

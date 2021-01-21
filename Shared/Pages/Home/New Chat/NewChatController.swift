@@ -12,7 +12,7 @@ struct NewChatController: View {
     @EnvironmentObject var appState: AppState
     
     @State var recipientEmail: String = ""
-    @State var recipientEmailInvalid: Bool = false
+    @State var recipientEmailInvalid: Bool = true
     @State var isLiveLocation: Bool = false
     @State var sendLocationInProgress: Bool = false
     @State var selectedLiveLength = 0

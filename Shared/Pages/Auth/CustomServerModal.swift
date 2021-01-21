@@ -23,7 +23,6 @@ struct CustomServerModal: View {
         VStack(alignment: .leading) {
             Text("Use a custom server")
                 .font(.title)
-            Spacer()
             TextFieldWithTitleAndValidation(
                 title: "Server Address",
                 invalidText: "Server address is invalid",
@@ -31,12 +30,13 @@ struct CustomServerModal: View {
                 text: $serverAddress,
                 showInvalidText: $showInvalidServerText,
                 onCommit: dismissModal
-            )
+            ).padding(.top)
+            Spacer()
+            Text("If you have set up your own server you can adjust the address that the app uses here.").padding(.bottom)
             .padding(.bottom)
             Button("Set", action: dismissModal)
-                .disabled(showInvalidServerText)
+                .disabled(showInvalidServerText || serverAddress.isEmpty)
                 .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
-            Spacer()
         }
         .padding()
     }

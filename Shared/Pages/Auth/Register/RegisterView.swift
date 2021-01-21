@@ -59,7 +59,7 @@ struct RegisterView: View {
                                 Text("Register")
                             }
                         }
-                        .disabled(invalidUsername || invalidPassword || registerInProgress)
+                        .disabled(invalidUsername || invalidPassword || registerInProgress || username.isEmpty || password.isEmpty)
                         .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
                         .padding(.bottom)
                     }.transition(.move(edge: .bottom))
