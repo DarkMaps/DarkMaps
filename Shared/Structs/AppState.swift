@@ -20,6 +20,7 @@ class AppState: ObservableObject {
     var locationController = LocationController()
     
     func handleNewUser() {
+        print("Storing new user details")
         if self.loggedInUser == nil {
             KeychainSwift().delete("loggedInUser")
         } else {

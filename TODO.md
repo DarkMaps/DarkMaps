@@ -13,7 +13,7 @@
 11) Fix remote device exists error (x)
 12) Allow copy QR code to clipboard (x)
 13) Fix [weak self] (x)
-14) Handle changed remote device from list page sync (o)
+14) Handle changed remote device from list page sync (x)
 15) Handle sending message to changed device (o)
 16) Provide test account in App Store Connect (o)
 17) Check subscription state stored on change (o)

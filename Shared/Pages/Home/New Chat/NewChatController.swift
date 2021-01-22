@@ -18,6 +18,7 @@ struct NewChatController: View {
     @State var selectedLiveLength = 0
     @State var messageSendSuccessAlertShowing = false
     @State var liveMessageSendSuccessAlertShowing = false
+    @State var recipientIdentityChangedAlertShowing = false
     @State var isSubscribed = false //Necessary for animation
     
     var subscriptionController = SubscriptionController()
@@ -82,8 +83,12 @@ struct NewChatController: View {
                         
                         switch sendMessageOutcome {
                         case .failure(let error):
-                            appState.displayedError = IdentifiableError(error)
                             sendLocationInProgress = false
+                            if error == .alteredIdentity {
+                                recipientIdentityChangedAlertShowing = true
+                            } else {
+                                appState.displayedError = IdentifiableError(error)
+                            }
                         case .success():
                             messageSendSuccessAlertShowing = true
                             sendLocationInProgress = false
@@ -92,6 +97,36 @@ struct NewChatController: View {
                 }
             }
             
+        }
+    }
+    
+    func handleConsentToNewIdentity() {
+        
+        sendLocationInProgress = true
+        
+        guard let loggedInUser = appState.loggedInUser else {
+            appState.displayedError = IdentifiableError(ListViewErrors.noUserLoggedIn)
+            return
+        }
+        
+        guard let messagingController = appState.messagingController else {
+            appState.displayedError = IdentifiableError(ListViewErrors.noUserLoggedIn)
+            return
+        }
+        
+        guard let address = try? ProtocolAddress(name: recipientEmail, deviceId: 1) else {
+            appState.displayedError = IdentifiableError(ListViewErrors.noUserLoggedIn)
+            return
+        }
+        
+        messagingController.updateIdentity(address: address, serverAddress: loggedInUser.serverAddress, authToken: loggedInUser.authCode) { updateIdentityOutcome in
+            sendLocationInProgress = false
+            switch updateIdentityOutcome {
+            case .success:
+                performMessageSend()
+            case .failure(let error):
+                appState.displayedError = IdentifiableError(error)
+            }
         }
     }
     
@@ -119,6 +154,14 @@ struct NewChatController: View {
                     self.isSubscribed = true
                 }
             })
+            Text("").hidden().alert(isPresented: $recipientIdentityChangedAlertShowing) {
+                Alert(
+                    title: Text("Identity Changed"),
+                    message: Text("\(recipientEmail) identity has changed since you last communicated with them. Are you happy to send your location to their new identity?"),
+                    primaryButton: Alert.Button.default(Text("Yes"), action: handleConsentToNewIdentity),
+                    secondaryButton: Alert.Button.cancel()
+                )
+            }
             Text("").hidden().alert(isPresented: $messageSendSuccessAlertShowing) {
                 Alert(
                     title: Text("Success"),

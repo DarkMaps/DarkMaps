@@ -10,24 +10,11 @@
 import SwiftUI
 
 @main
-class SignalMapsApp: App {
+struct SignalMapsApp: App {
     
     @StateObject private var appState = AppState()
     @Environment(\.scenePhase) private var scenePhase
     @State var serverOutOfSyncSheetIsShowing = false
-    
-    private let notificationCentre = NotificationCenter.default
-    
-    required init() {
-        notificationCentre.addObserver(self,
-                                       selector: #selector(self.handleServerOutOfSync(_:)),
-                                       name: .encryptionController_ServerOutOfSync,
-                                       object: nil)
-    }
-    
-    @objc private func handleServerOutOfSync(_ notification: NSNotification) {
-        serverOutOfSyncSheetIsShowing = true
-    }
     
     func handleLoadStoredUser() {
         let decoder = JSONDecoder()
@@ -51,8 +38,7 @@ class SignalMapsApp: App {
             if let subscriptionExpiryDate = loggedInUser.subscriptionExpiryDate {
                 if subscriptionExpiryDate.timeIntervalSince1970 < Date().timeIntervalSince1970 {
                     let subscriptionController = SubscriptionController()
-                    subscriptionController.verifyIsStillSubscriber() { [weak self] verifyResult in
-                        guard let self = self else {return}
+                    subscriptionController.verifyIsStillSubscriber() { verifyResult in
                         switch verifyResult {
                         case .success(let expirationDate):
                             print("User is still subscribed")
@@ -70,10 +56,7 @@ class SignalMapsApp: App {
     // Required by storekit
     func handleCompleteTransactions() {
         let subscriptionController = SubscriptionController()
-        subscriptionController.handleCompleteTransactions() { [weak self] completeTransactionsOutcome in
-            guard let self = self else {
-                return
-            }
+        subscriptionController.handleCompleteTransactions() { completeTransactionsOutcome in
             switch completeTransactionsOutcome {
             case .success(let expiryDate):
                 if let _ = self.appState.loggedInUser {
@@ -96,10 +79,10 @@ class SignalMapsApp: App {
                     ServerDeviceChangedSheet().allowAutoDismiss(false)
                 }
             }
-        }.onChange(of: scenePhase) { [weak self] phase in
-            guard let self = self else {
-                return
-            }
+            .onReceive(NotificationCenter.default.publisher(for: .encryptionController_ServerOutOfSync), perform: { _ in
+                serverOutOfSyncSheetIsShowing = true
+            })
+        }.onChange(of: scenePhase) { phase in
             if phase == .active {
                 self.handleCheckUserIsSubscriber()
             }

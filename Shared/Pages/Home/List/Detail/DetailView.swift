@@ -25,14 +25,34 @@ struct DetailView: View {
             } else if (centerCoordinate == nil) {
                 Text("No location data in message")
             } else {
-                VStack(alignment: .leading) {
-                    Text(messageDetails!.sender.name).padding(.leading).padding(.top)
-                    Text("Last Seen: \(messageDetails!.location!.relativeDate)").padding(.leading)
+                ZStack {
                     MapView(
                         centerCoordinate: Binding($centerCoordinate)!,
                         annotations: annotations
                     )
+                    VStack(alignment: .leading) {
+                        VStack(alignment: .leading) {
+                            Text(messageDetails!.sender.name)
+                                .font(.largeTitle)
+                                .padding(.leading)
+                                .padding(.top)
+                            Text("Last Seen: \(messageDetails!.location!.relativeDate)")
+                                .italic()
+                                .padding(.leading)
+                                .padding(.bottom, 30)
+                        }
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: 200, alignment: .topLeading)
+                        .background(
+                            LinearGradient(
+                                gradient: Gradient(colors: [Color.white, Color.white.opacity(0)]),
+                                startPoint: .top,
+                                endPoint: .bottom))
+                        
+                    }
+                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
+
                 }
+                
                 
             }
         }.navigationBarTitle(Text("Detail"), displayMode: .inline)
