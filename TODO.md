@@ -14,9 +14,10 @@
 12) Allow copy QR code to clipboard (x)
 13) Fix [weak self] (x)
 14) Handle changed remote device from list page sync (x)
-15) Handle sending message to changed device (o)
+15) Handle sending message to changed device (x)
 16) Provide test account in App Store Connect (o)
-17) Check subscription state stored on change (o)
+17) Check subscription state stored on change (x)
+18) Handle log out when server return unauthorised (o)
 
 
 Long Term:

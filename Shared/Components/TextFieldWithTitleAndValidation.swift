@@ -70,7 +70,7 @@ struct TextFieldWithTitleAndValidation: View {
                         .foregroundColor(.white)
                         .padding(.vertical, 3)
                         .frame(maxWidth: .infinity)
-                        .background(Color.accentColor)
+                        .background(Color("AccentColor"))
                         .cornerRadius(3.0)
                         .transition(.move(edge: .leading))
                         .animation(.easeInOut(duration: 0.2))

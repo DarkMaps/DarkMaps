@@ -25,6 +25,11 @@ struct ListController: View {
     
     func getStoredMessages() {
         
+        //Updates occur when we have just logged out, stop this
+        guard let _ = appState.loggedInUser else {
+            return
+        }
+        
         guard let messagingController = appState.messagingController else {
             appState.displayedError = IdentifiableError(ListViewErrors.noUserLoggedIn)
             return

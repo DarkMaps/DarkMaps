@@ -11,6 +11,7 @@ import StoreKit
 struct SubscriptionSheet: View {
     
     @EnvironmentObject var appState: AppState
+    @Environment(\.colorScheme) var colorScheme
     
     @State var subscribeInProgress = false
     @State var subscriptionOptions: [SKProduct] = []
@@ -78,17 +79,17 @@ struct SubscriptionSheet: View {
     var body: some View {
         VStack {
             VStack {
-                Text("Dark Maps Subscription").font(.largeTitle)
-                Text("Subscribe to Dark Maps to access the benefits below. You can cancel any time you wish from within the settings menu.").padding(.horizontal)
+                Text("Subscription").font(.largeTitle).foregroundColor(.accentColor)
+                Text("Subscribe to Dark Maps to access the benefits below. You can cancel any time you wish from within the settings menu.").padding()
             }
             VStack {
                 TabView {
                     ForEach(features.sorted(by: <), id: \.key) { title, description in
                         ZStack {
-                            LinearGradient(gradient: Gradient(colors: [Color("GradientColor"), Color.accentColor]), startPoint: .leading, endPoint: .trailing)
+                            Color("AccentColor")
                             VStack {
                                 Text("\(title)").foregroundColor(.white).font(.title)
-                                Divider().background(Color.white)
+                                Rectangle().fill(Color.white).frame(maxWidth: .infinity, maxHeight: 2)
                                 Spacer()
                                 Text("\(description)").foregroundColor(.white)
                             }.padding().padding(.bottom, 40)
@@ -99,7 +100,7 @@ struct SubscriptionSheet: View {
                 .frame(width: UIScreen.main.bounds.width, height: 200)
                 .tabViewStyle(PageTabViewStyle())
                 Spacer()
-                Divider().background(Color.accentColor)
+                Rectangle().fill(Color("AccentColor")).frame(maxWidth: .infinity, maxHeight: 4)
             }
             if subscriptionOptions.count > 0 {
                 VStack {
@@ -121,6 +122,7 @@ struct SubscriptionSheet: View {
                         }
                         .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor"), padded: false))
                         .padding(.horizontal)
+                        .padding(.top)
                         .disabled(subscribeInProgress)
                     }
                     Button("Restore a subscription") {
@@ -131,13 +133,13 @@ struct SubscriptionSheet: View {
                         Link(
                             "Privacy Policy",
                             destination: URL(string: "https://dark-maps.com/privacy-policy/")!)
-                            .foregroundColor(.black)
+                            .foregroundColor(colorScheme == .dark ? .white : .black)
                         Text("and")
                             .foregroundColor(.gray)
                         Link(
                             "Terms of Service",
                             destination: URL(string: "https://dark-maps.com/terms-of-service/")!)
-                            .foregroundColor(.black)
+                            .foregroundColor(colorScheme == .dark ? .white : .black)
                     }
                 }
             } else {
@@ -172,6 +174,9 @@ struct SubscriptionSheet_Previews: PreviewProvider {
             SubscriptionSheet(subscriptionOptions: [
                 SKProduct(identifier: "Monthly Dark Maps Subscription", price: "0.99", priceLocale: .current, subscriptionPeriod: MockSKProductSubscriptionPeriod(numberOfUnits: 1, unit: .month))
             ])
+            SubscriptionSheet(subscriptionOptions: [
+                SKProduct(identifier: "Monthly Dark Maps Subscription", price: "0.99", priceLocale: .current, subscriptionPeriod: MockSKProductSubscriptionPeriod(numberOfUnits: 1, unit: .month))
+            ]).preferredColorScheme(.dark)
         }
     }
 }

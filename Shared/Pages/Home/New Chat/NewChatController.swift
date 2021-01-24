@@ -19,6 +19,8 @@ struct NewChatController: View {
     @State var messageSendSuccessAlertShowing = false
     @State var liveMessageSendSuccessAlertShowing = false
     @State var recipientIdentityChangedAlertShowing = false
+    @State var invalidEmailAlertShowing = false
+    @State var ownEmailAlertShowing = false
     @State var isSubscribed = false //Necessary for animation
     
     var subscriptionController = SubscriptionController()
@@ -38,8 +40,19 @@ struct NewChatController: View {
     
     func performMessageSend() {
         
+        let predicate = NSPredicate(format:"SELF MATCHES %@", "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}")
+        guard predicate.evaluate(with: recipientEmail) else {
+            self.invalidEmailAlertShowing = true
+            return
+        }
+        
         guard let loggedInUser = appState.loggedInUser else {
             appState.displayedError = IdentifiableError(NewChatErrors.noUserLoggedIn)
+            return
+        }
+        
+        guard recipientEmail != loggedInUser.userName else {
+            self.ownEmailAlertShowing = true
             return
         }
         
@@ -174,6 +187,20 @@ struct NewChatController: View {
                     title: Text("Success"),
                     message: Text("You are now broadcasting your location to \(recipientEmail)."),
                     dismissButton: .default(Text("OK"), action: {recipientEmail = ""})
+                )
+            }
+            Text("").hidden().alert(isPresented: $invalidEmailAlertShowing) {
+                Alert(
+                    title: Text("Error"),
+                    message: Text("Please enter a valid email."),
+                    dismissButton: .cancel()
+                )
+            }
+            Text("").hidden().alert(isPresented: $ownEmailAlertShowing) {
+                Alert(
+                    title: Text("Error"),
+                    message: Text("You cannot send messages to yourself."),
+                    dismissButton: .cancel()
                 )
             }
         }

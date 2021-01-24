@@ -29,7 +29,7 @@ struct TextFieldAlert<Presenting>: View where Presenting: View {
                     Spacer()
                     VStack {
                         VStack {
-                            Text(self.title).padding(.bottom, 5)
+                            Text(self.title).padding(.bottom, 15)
                             if (secureField) {
                                 SecureField(self.title, text: self.$text)
                                     .id(self.isShowing)
@@ -44,6 +44,7 @@ struct TextFieldAlert<Presenting>: View where Presenting: View {
                                             .stroke(Color.gray, lineWidth: 1))
                             }
                             HStack {
+                                Spacer()
                                 Button(action: {
                                     withAnimation {
                                         self.isShowing.toggle()
@@ -51,6 +52,8 @@ struct TextFieldAlert<Presenting>: View where Presenting: View {
                                 }) {
                                     Text("Cancel")
                                 }
+                                .padding()
+                                Spacer()
                                 Button(action: {
                                     withAnimation {
                                         onDismiss()
@@ -59,6 +62,8 @@ struct TextFieldAlert<Presenting>: View where Presenting: View {
                                 }) {
                                     Text("OK")
                                 }
+                                .padding()
+                                Spacer()
                             }
                         }.padding()
                     }
@@ -66,6 +71,10 @@ struct TextFieldAlert<Presenting>: View where Presenting: View {
                         Color.black :
                         Color.white)
                     .cornerRadius(10)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color.gray, lineWidth: 2)
+                    )
                     .shadow(radius: 1)
                     .padding()
                     Spacer()

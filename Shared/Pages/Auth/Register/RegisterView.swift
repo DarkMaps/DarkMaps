@@ -49,7 +49,7 @@ struct RegisterView: View {
                 }.padding()
                 if loginBoxShowing {
                     VStack {
-                        Rectangle().fill(Color.accentColor)
+                        Rectangle().fill(Color("AccentColor"))
                             .frame(maxWidth: .infinity, maxHeight: 4)
                         Button(action: self.performRegister) {
                             HStack {

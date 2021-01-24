@@ -31,7 +31,9 @@ struct ContentView: View {
                         Text("Settings")
                         Image(systemName: "gear")
                     }.tag(3)
-                }.onAppear(perform: {
+                }
+                .accentColor(Color("AccentColor"))
+                .onAppear(perform: {
                     self.homeTabSelection = 1
                 })
             } else {
@@ -44,7 +46,9 @@ struct ContentView: View {
                         Text("Register")
                         Image(systemName: "person.fill.badge.plus")
                     }.tag(2)
-                }.onAppear(perform: {
+                }
+                .accentColor(Color("AccentColor"))
+                .onAppear(perform: {
                     self.authTabSelection = 1
                 })
             }

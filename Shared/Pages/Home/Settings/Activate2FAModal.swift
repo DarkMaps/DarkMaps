@@ -71,12 +71,13 @@ struct Activate2FAModal: View {
                     Text("Copy to clipboard")
                     if copiedToClipboard {
                         Image(systemName: "arrow.up.doc.on.clipboard")
-                            .transition(.move(edge: .trailing))
+                            .transition(AnyTransition.opacity.combined(with: .move(edge: .leading)))
                     }
                 }
             }
             .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
             .disabled(QRCodeFor2FA == nil)
+            .padding(.top)
             Spacer()
             TextFieldWithTitleAndValidation(
                 title: "Enter the code from your programme",

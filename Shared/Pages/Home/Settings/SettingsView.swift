@@ -104,30 +104,35 @@ struct SettingsView: View {
                         actionInProgress: $actionInProgress,
                         title: "Username: \(loggedInUser?.userName ?? "Unknown")",
                         iconName: "person.fill",
-                        actionDefiningActivityMarker: nil)
+                        actionDefiningActivityMarker: nil,
+                        isTappable: false)
                     SettingsRow(
                         actionInProgress: $actionInProgress,
                         title: "Device ID: \(String(loggedInUser?.deviceId ?? -1))",
                         iconName: "number",
-                        actionDefiningActivityMarker: nil)
+                        actionDefiningActivityMarker: nil,
+                        isTappable: false)
                     SettingsRow(
                         actionInProgress: $actionInProgress,
                         title: "Server Address",
                         subtitle: "\(loggedInUser?.serverAddress ?? "Unknown")",
                         iconName: "curlybraces",
-                        actionDefiningActivityMarker: nil)
+                        actionDefiningActivityMarker: nil,
+                        isTappable: false)
                 }
                 Section(header: Text("App")) {
                     SettingsRow(
                         actionInProgress: $actionInProgress,
                         title: "Version: \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown")",
                         iconName: "number",
-                        actionDefiningActivityMarker: nil)
+                        actionDefiningActivityMarker: nil,
+                        isTappable: false)
                     SettingsRow(
                         actionInProgress: $actionInProgress,
                         title: "Build: \(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown")",
                         iconName: "number",
-                        actionDefiningActivityMarker: nil)
+                        actionDefiningActivityMarker: nil,
+                        isTappable: false)
                 }
                 
             }

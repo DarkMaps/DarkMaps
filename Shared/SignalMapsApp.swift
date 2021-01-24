@@ -79,10 +79,12 @@ struct SignalMapsApp: App {
                     ServerDeviceChangedSheet().allowAutoDismiss(false)
                 }
             }
+            .accentColor(.accentColor)
             .onReceive(NotificationCenter.default.publisher(for: .encryptionController_ServerOutOfSync), perform: { _ in
                 serverOutOfSyncSheetIsShowing = true
             })
-        }.onChange(of: scenePhase) { phase in
+        }
+        .onChange(of: scenePhase) { phase in
             if phase == .active {
                 self.handleCheckUserIsSubscriber()
             }

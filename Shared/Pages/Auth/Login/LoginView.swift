@@ -50,7 +50,7 @@ struct LoginView: View {
                 }.padding()
                 if loginBoxShowing {
                     VStack {
-                        Rectangle().fill(Color.accentColor).frame(maxWidth: .infinity, maxHeight: 4)
+                        Rectangle().fill(Color("AccentColor")).frame(maxWidth: .infinity, maxHeight: 4)
                         Button(action: self.performLogin) {
                             HStack {
                                 if (self.loginInProgress) {

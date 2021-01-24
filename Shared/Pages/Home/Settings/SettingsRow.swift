@@ -17,14 +17,16 @@ struct SettingsRow: View {
     var subtitle: String?
     var iconName: String?
     var actionDefiningActivityMarker: ActionInProgress?
+    var isTappable: Bool
     
-    init(actionInProgress: Binding<ActionInProgress?>, title: String, subtitle: String? = nil, iconName: String? = nil, actionDefiningActivityMarker: ActionInProgress?, onTap: @escaping () -> Void = {}) {
+    init(actionInProgress: Binding<ActionInProgress?>, title: String, subtitle: String? = nil, iconName: String? = nil, actionDefiningActivityMarker: ActionInProgress?, onTap: @escaping () -> Void = {}, isTappable: Bool = true) {
         self._actionInProgress = actionInProgress
         self.title = title
         self.subtitle = subtitle
         self.iconName = iconName
         self.actionDefiningActivityMarker = actionDefiningActivityMarker
         self.onTap = onTap
+        self.isTappable = isTappable
     }
     
     var onTap: () -> Void
@@ -36,11 +38,15 @@ struct SettingsRow: View {
                     .fill(Color.black.opacity(0))
                     .frame(width: 25)
                 if (iconName != nil) {
-                    Image(systemName: iconName!)
+                    Image(systemName: iconName!).foregroundColor(isTappable ? Color("AccentColor") : Color.white)
                 }
             }
             VStack(alignment: .leading) {
-                Text(title)
+                if isTappable {
+                    Button(title, action: onTap)
+                } else {
+                    Text(title)
+                }
                 if subtitle != nil {
                     Text(subtitle!)
                 }

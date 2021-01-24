@@ -30,30 +30,28 @@ struct NewChatView: View {
                 TextFieldWithTitleAndValidation(
                     title: "Recipient's Email",
                     invalidText: "Invalid email",
-                    validRegex: "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$",
+                    validRegex: "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}",
                     disableAutocorrection: true,
                     text: $recipientEmail,
                     showInvalidText: $recipientEmailInvalid
                 ).padding(.horizontal).padding(.top)
-                Toggle("Live Location", isOn: $isLiveLocation)
-                    .padding(.horizontal)
+                Toggle("Live Location", isOn: $isLiveLocation.animation())
+                    .toggleStyle(SwitchToggleStyle(tint: Color("AccentColor")))
+                    .padding()
                     .disabled(isSubscribed == false)
-                Picker(
-                    selection: $selectedLiveLength,
-                    label: Text("Broadcast Length")) {
-                    ForEach(0 ..< liveLengths.count) {
-                       Text(self.liveLengths[$0])
-                    }
-                }
-                .pickerStyle(SegmentedPickerStyle())
-                .padding(.horizontal)
-                .disabled((isSubscribed == false) || !isLiveLocation)
+                DarkMapsPicker(
+                    selectedLiveLength: $selectedLiveLength,
+                    liveLengths: liveLengths,
+                    disabled: (isSubscribed == false) || !isLiveLocation)
+                    .padding(.vertical)
                 Button(action: self.performMessageSend) {
                     HStack {
                         if (self.sendLocationInProgress) {
                             ActivityIndicator(isAnimating: true)
                         } else if (self.isLiveLocation) {
-                            Image(systemName: "bolt.fill").foregroundColor(.yellow)
+                            Image(systemName: "bolt.fill")
+                                .foregroundColor(.yellow)
+                                .transition(AnyTransition.opacity.combined(with: .move(edge: .leading)))
                         }
                         Text("Send")
                     }
@@ -64,16 +62,15 @@ struct NewChatView: View {
                 Spacer()
                 if (isSubscribed == false) {
                     VStack {
+                        Rectangle().fill(Color("AccentColor")).frame(maxWidth: .infinity, maxHeight: 4)
                         Text("Subscribe to enable live location sending")
-                            .padding(.top)
+                            .padding(.top, 3)
                         Button(action: {
                             appState.subscriptionSheetIsShowing = true
                         }) {
                             Text("Subscribe")
                         }
-                        .buttonStyle(RoundedButtonStyle(backgroundColor: Color.white.opacity(0)))
-                        .background(LinearGradient(gradient: Gradient(colors: [Color("GradientColor"), Color.accentColor]), startPoint: .leading, endPoint: .trailing))
-                        .cornerRadius(25)
+                        .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
                     }
                     .padding()
                     .transition(.move(edge: .bottom))
@@ -123,6 +120,45 @@ struct NewChatView_Previews: PreviewProvider {
                 performMessageSend: performMessageSend
             )
         }
+    }
+    
+}
+
+struct DarkMapsPicker: View {
+    
+    @Binding var selectedLiveLength: Int
+    
+    var liveLengths: [String]
+    var disabled: Bool
+    
+    init(selectedLiveLength: Binding<Int>, liveLengths: [String], disabled: Bool) {
+        
+        _selectedLiveLength = selectedLiveLength
+        self.liveLengths = liveLengths
+        self.disabled = disabled
+        
+        //this changes the "thumb" that selects between items
+        UISegmentedControl.appearance().selectedSegmentTintColor = UIColor(Color("AccentColor"))
+
+        //these lines change the text color for various states
+        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor : UIColor.white], for: .selected)
+        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor : UIColor.white], for: .normal)
+    }
+    
+    var body: some View {
+        
+        Picker(
+            selection: $selectedLiveLength,
+            label: Text("Broadcast Length")) {
+            ForEach(0 ..< liveLengths.count) {
+               Text(self.liveLengths[$0])
+            }
+        }
+        .accentColor(Color("AccentColor"))
+        .pickerStyle(SegmentedPickerStyle())
+        .padding(.horizontal)
+        .disabled(disabled)
+        
     }
     
 }
