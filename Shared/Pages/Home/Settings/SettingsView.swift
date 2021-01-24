@@ -52,10 +52,16 @@ struct SettingsView: View {
                         Text("You are subscribed until: \(formatDate(loggedInUser!.subscriptionExpiryDate!))")
                         SettingsRow(
                             actionInProgress: $actionInProgress,
-                            title: "Manage Subscription - TODO",
-                            iconName: "minus.diamond.fill",
-                            actionDefiningActivityMarker: .deactivate2FA,
-                            onTap: {deactivate2FAModalIsShowing = true}
+                            title: "Manage Subscriptions",
+                            iconName: "gear",
+                            actionDefiningActivityMarker: .subscriptionSettings,
+                            onTap: {
+                                if let url = URL(string: "itms-apps://apps.apple.com/account/subscriptions") {
+                                    if UIApplication.shared.canOpenURL(url) {
+                                        UIApplication.shared.open(url, options: [:])
+                                    }
+                                }
+                            }
                         )
                     }
 

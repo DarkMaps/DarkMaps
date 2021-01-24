@@ -200,5 +200,5 @@ struct IdentifiableBackupCodes: Identifiable {
 }
 
 enum ActionInProgress {
-    case obtain2FAQRCode, confirm2FA, deactivate2FA, logUserOut, deleteUserAccount, subscribe, restoreSubscription
+    case obtain2FAQRCode, confirm2FA, deactivate2FA, logUserOut, deleteUserAccount, subscribe, restoreSubscription, subscriptionSettings
 }
