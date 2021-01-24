@@ -30,6 +30,11 @@ struct MapView: UIViewRepresentable {
             longitudinalMeters: CLLocationDistance(exactly: 5000)!)
         mapView.setRegion(mapView.regionThatFits(region), animated: false)
         mapView.showsUserLocation = true
+        
+        
+        mapView.showsCompass = false
+        mapView.isRotateEnabled = false
+        
         return mapView
     }
     

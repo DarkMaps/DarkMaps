@@ -20,7 +20,7 @@ struct SubscriptionSheet: View {
     let features: [String: String] = [
         "Live Messages": "Send messages for a specified period of time, even whilst Dark Maps is in the background.",
         "Support development": "Help us to keep the servers running and develop new features",
-        "Support an audit": "Help us to fund an audit of the Dark Maps app and server"
+        "Security audit": "Help us to fund an audit of the Dark Maps app and server"
     ]
     
     func getSubscriptionOptions() {
@@ -29,7 +29,10 @@ struct SubscriptionSheet: View {
             case .success(let options):
                 self.subscriptionOptions = options
             case .failure(let error):
-                appState.displayedError = IdentifiableError(error)
+                appState.subscriptionSheetIsShowing = false
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    appState.displayedError = IdentifiableError(error)
+                }
             }
         }
     }
@@ -42,7 +45,10 @@ struct SubscriptionSheet: View {
             case .success(let date):
                 print(date)
             case .failure(let error):
-                appState.displayedError = IdentifiableError(error)
+                appState.subscriptionSheetIsShowing = false
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    appState.displayedError = IdentifiableError(error)
+                }
             }
         }
     }
@@ -56,7 +62,10 @@ struct SubscriptionSheet: View {
                 print("Expiry date: \(expiryDate.timeIntervalSince1970)")
                 return
             case .failure(let error):
-                appState.displayedError = IdentifiableError(error)
+                appState.subscriptionSheetIsShowing = false
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    appState.displayedError = IdentifiableError(error)
+                }
             }
         }
     }
@@ -70,19 +79,13 @@ struct SubscriptionSheet: View {
         VStack {
             VStack {
                 Text("Dark Maps Subscription").font(.largeTitle)
-                Image("Main Icon")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .cornerRadius(20)
-                    .frame(width: UIScreen.main.bounds.size.width * 0.5)
-                    .padding(.bottom)
                 Text("Subscribe to Dark Maps to access the benefits below. You can cancel any time you wish from within the settings menu.").padding(.horizontal)
             }
             VStack {
                 TabView {
                     ForEach(features.sorted(by: <), id: \.key) { title, description in
                         ZStack {
-                            LinearGradient(gradient: Gradient(colors: [Color.accentColor, Color.accentColor.opacity(0.7)]), startPoint: .leading, endPoint: .trailing)
+                            LinearGradient(gradient: Gradient(colors: [Color("GradientColor"), Color.accentColor]), startPoint: .leading, endPoint: .trailing)
                             VStack {
                                 Text("\(title)").foregroundColor(.white).font(.title)
                                 Divider().background(Color.white)
@@ -156,14 +159,20 @@ struct SubscriptionSheet: View {
 
 struct SubscriptionSheet_Previews: PreviewProvider {
     static var previews: some View {
-        SubscriptionSheet()
-        SubscriptionSheet(subscriptionOptions: [
-            SKProduct(identifier: "Monthly Dark Maps Subscription", price: "0.99", priceLocale: .current, subscriptionPeriod: MockSKProductSubscriptionPeriod(numberOfUnits: 1, unit: .month))
-        ])
-        SubscriptionSheet(subscriptionOptions: [
-            SKProduct(identifier: "Monthly Dark Maps Subscription", price: "0.99", priceLocale: .current, subscriptionPeriod: MockSKProductSubscriptionPeriod(numberOfUnits: 1, unit: .month)),
-            SKProduct(identifier: "Yearly Dark Maps Subscription", price: "10", priceLocale: .current, subscriptionPeriod: MockSKProductSubscriptionPeriod(numberOfUnits: 1, unit: .year))
-        ])
+        Group {
+            SubscriptionSheet()
+                .preferredColorScheme(.dark)
+            SubscriptionSheet(subscriptionOptions: [
+                SKProduct(identifier: "Monthly Dark Maps Subscription", price: "0.99", priceLocale: .current, subscriptionPeriod: MockSKProductSubscriptionPeriod(numberOfUnits: 1, unit: .month))
+            ])
+            SubscriptionSheet(subscriptionOptions: [
+                SKProduct(identifier: "Monthly Dark Maps Subscription", price: "0.99", priceLocale: .current, subscriptionPeriod: MockSKProductSubscriptionPeriod(numberOfUnits: 1, unit: .month)),
+                SKProduct(identifier: "Yearly Dark Maps Subscription", price: "10", priceLocale: .current, subscriptionPeriod: MockSKProductSubscriptionPeriod(numberOfUnits: 1, unit: .year))
+            ])
+            SubscriptionSheet(subscriptionOptions: [
+                SKProduct(identifier: "Monthly Dark Maps Subscription", price: "0.99", priceLocale: .current, subscriptionPeriod: MockSKProductSubscriptionPeriod(numberOfUnits: 1, unit: .month))
+            ])
+        }
     }
 }
 

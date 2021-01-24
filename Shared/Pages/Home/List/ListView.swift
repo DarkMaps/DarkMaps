@@ -59,6 +59,7 @@ struct ListView_Previews: PreviewProvider {
         Group {
             PreviewWrapper(isSubscriber: true).previewDisplayName("Subscriber")
             PreviewWrapper(isSubscriber: false).previewDisplayName("Not Subscriber")
+            PreviewWrapper(isSubscriber: false, isEmpty: true).previewDisplayName("Empty List")
         }
     }
     
@@ -141,7 +142,7 @@ struct ListView_Previews: PreviewProvider {
         func deleteMessage(_: IndexSet) {}
         func handleConsentToNewIdentity(_: ProtocolAddress) {}
         
-        init(isSubscriber: Bool = false) {
+        init(isSubscriber: Bool = false, isEmpty: Bool = false) {
             let loggedInUser = LoggedInUser(
                 userName: "test@test.com",
                 deviceId: 1,
@@ -150,6 +151,9 @@ struct ListView_Previews: PreviewProvider {
                 is2FAUser: false,
                 subscriptionExpiryDate: isSubscriber ? Date() : nil)
             _loggedInUser = State(initialValue: loggedInUser)
+            if (isEmpty) {
+                _receivingMessageArray = State(initialValue: [])
+            }
         }
 
         var body: some View {

@@ -65,7 +65,7 @@ struct SendingList: View {
                         Spacer()
                         Text("Not sending location to anyone").padding()
                         Spacer()
-                    }
+                    }.cornerRadius(10)
                 }
             }
             Text("").hidden().alert(item: $acceptAlteredIdentityAlertRelatesTo, content: {chosenSender in

@@ -84,3 +84,13 @@ public class LocationController: ObservableObject {
 public enum LocationControllerError: LocalizedError {
     case unableToRetrieveLocation
 }
+
+extension LocationControllerError {
+    
+    public var errorDescription: String? {
+        switch self {
+        case .unableToRetrieveLocation:
+            return NSLocalizedString("Unable to access location.", comment: "")
+        }
+    }
+}

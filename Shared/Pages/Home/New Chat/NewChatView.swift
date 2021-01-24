@@ -71,12 +71,12 @@ struct NewChatView: View {
                         }) {
                             Text("Subscribe")
                         }
-                        .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
+                        .buttonStyle(RoundedButtonStyle(backgroundColor: Color.white.opacity(0)))
+                        .background(LinearGradient(gradient: Gradient(colors: [Color("GradientColor"), Color.accentColor]), startPoint: .leading, endPoint: .trailing))
+                        .cornerRadius(25)
                     }
+                    .padding()
                     .transition(.move(edge: .bottom))
-                    .background(colorScheme == .dark ?
-                                    LinearGradient(gradient: Gradient(colors: [Color.black, Color.accentColor.opacity(0.7)]), startPoint: .top, endPoint: .bottom) :
-                                    LinearGradient(gradient: Gradient(colors: [Color.white, Color.accentColor.opacity(0.7)]), startPoint: .top, endPoint: .bottom))
                 }
             }
             .navigationTitle("Send Location")

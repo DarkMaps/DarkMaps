@@ -35,6 +35,7 @@ struct RoundedButtonStyle: ButtonStyle {
                 .background(backgroundColor)
                 .cornerRadius(25)
                 .opacity(isEnabled ? 1 : 0.5)
+                .padding(.horizontal)
                 .padding(.vertical, padded ? 3 : 0)
         }
     }
