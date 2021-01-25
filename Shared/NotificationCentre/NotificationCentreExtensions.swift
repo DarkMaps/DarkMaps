@@ -13,5 +13,6 @@ extension Notification.Name {
     static let subscriptionController_SubscriptionVerified = Notification.Name("SubscriptionController.SubscriptionVerified")
     static let subscriptionController_SubscriptionFailed = Notification.Name("SubscriptionController.SubscriptionFailed")
     static let encryptionController_ServerOutOfSync = Notification.Name("EncryptionController.ServerOutOfSync")
+    static let communicationController_Unauthorised = Notification.Name("CommunicationController.Unauthorised")
 }
 

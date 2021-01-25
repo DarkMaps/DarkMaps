@@ -25,7 +25,7 @@ extension SSAPIProtocolAddressError {
 }
 
 public enum SSAPIEncryptionError: String, LocalizedError, Codable {
-    case invalidUrl, badFormat, badResponseFromServer, serverError, requestThrottled, deviceExists, recipientUserDoesNotExist, recipientUserHasNoRegisteredDevice, recipientsDeviceChanged, senderHasNoRegisteredDevice, unableToDecrypt, invalidSenderAddress, noStore, userHasNoRegisteredDevice, remoteDeviceChanged, unableToCreateKeys, reachedMaxPreKeys, prekeyIdExists, userHasNoDevice, unableToGetPreKeyStatus, timeout, alteredIdentity
+    case invalidUrl, badFormat, badResponseFromServer, serverError, requestThrottled, deviceExists, recipientUserDoesNotExist, recipientUserHasNoRegisteredDevice, recipientsDeviceChanged, senderHasNoRegisteredDevice, unableToDecrypt, invalidSenderAddress, noStore, userHasNoRegisteredDevice, remoteDeviceChanged, unableToCreateKeys, reachedMaxPreKeys, prekeyIdExists, userHasNoDevice, unableToGetPreKeyStatus, timeout, alteredIdentity, unauthorised
 }
 extension SSAPIEncryptionError {
     public var errorDescription: String? {
@@ -74,6 +74,8 @@ extension SSAPIEncryptionError {
             return NSLocalizedString("The request timed out. Please try again.", comment: "")
         case .alteredIdentity:
             return NSLocalizedString("The sender's identity has changed.", comment: "")
+        case .unauthorised:
+            return NSLocalizedString("You have been logged out by the server.", comment: "")
         }
     }
 }

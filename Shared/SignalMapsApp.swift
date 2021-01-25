@@ -15,6 +15,7 @@ struct SignalMapsApp: App {
     @StateObject private var appState = AppState()
     @Environment(\.scenePhase) private var scenePhase
     @State var serverOutOfSyncSheetIsShowing = false
+    @State var unauthorisedSheetIsShowing = false
     
     func handleLoadStoredUser() {
         let decoder = JSONDecoder()
@@ -78,10 +79,16 @@ struct SignalMapsApp: App {
                 Text("").hidden().sheet(isPresented: $serverOutOfSyncSheetIsShowing) {
                     ServerDeviceChangedSheet().allowAutoDismiss(false)
                 }
+                Text("").hidden().sheet(isPresented: $unauthorisedSheetIsShowing) {
+                    UnauthorisedSheet().allowAutoDismiss(false)
+                }
             }
             .accentColor(.accentColor)
             .onReceive(NotificationCenter.default.publisher(for: .encryptionController_ServerOutOfSync), perform: { _ in
                 serverOutOfSyncSheetIsShowing = true
+            })
+            .onReceive(NotificationCenter.default.publisher(for: .communicationController_Unauthorised), perform: { _ in
+                unauthorisedSheetIsShowing = true
             })
         }
         .onChange(of: scenePhase) { phase in

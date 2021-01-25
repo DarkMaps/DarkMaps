@@ -976,6 +976,8 @@ public class SimpleSignalSwiftEncryptionAPI {
                 } catch {
                     return(.failure(.badResponseFromServer))
                 }
+            } else if response.statusCode == 401 {
+                return(.failure(.unauthorised))
             } else if response.statusCode == 403 {
                 do {
                     let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: Any]

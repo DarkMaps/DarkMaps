@@ -29,7 +29,7 @@ extension MessageStoreError {
 }
 
 enum MessagingControllerError: String, LocalizedError, Codable {
-    case unableToStoreMessages, unableToRetrieveMessages, unableToDecryptMessage, poorlyFormattedLocation, unableToDeleteMessage, unableToUpdateDeviceKeys, unableToCreateAddress, unableToCreateEncryptionHandler, unableToCreateMessagingStore, noDeviceCreated, unableToSendMessage, unableToDeleteDevice, unableToCreateDevice, needToProvideUsername, remoteDeviceExists, poorlyFormattedLiveMessageArrayData, liveMessageRecipientAlreadyExists, noDeviceOnServer, alteredIdentity, unableToUpdateIdentity, remoteDeviceChanged
+    case unableToStoreMessages, unableToRetrieveMessages, unableToDecryptMessage, poorlyFormattedLocation, unableToDeleteMessage, unableToUpdateDeviceKeys, unableToCreateAddress, unableToCreateEncryptionHandler, unableToCreateMessagingStore, noDeviceCreated, unableToSendMessage, unableToDeleteDevice, unableToCreateDevice, needToProvideUsername, remoteDeviceExists, poorlyFormattedLiveMessageArrayData, liveMessageRecipientAlreadyExists, noDeviceOnServer, alteredIdentity, unableToUpdateIdentity, remoteDeviceChanged, unauthorised
 }
 
 extension MessagingControllerError {
@@ -77,6 +77,8 @@ extension MessagingControllerError {
             return NSLocalizedString("An error occured whilst updating this user's identity", comment: "")
         case .remoteDeviceChanged:
             return NSLocalizedString("The device on the server has changed", comment: "")
+        case .unauthorised:
+            return NSLocalizedString("You have been logged out by the server.", comment: "")
         }
     }
 }

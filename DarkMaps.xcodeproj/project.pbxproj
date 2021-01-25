@@ -85,6 +85,8 @@
 		EC5FDA5425933A8E006448AB /* SimpleSignalSwiftEncryptionAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC5FDA5325933A8E006448AB /* SimpleSignalSwiftEncryptionAPITests.swift */; };
 		EC67E4C6258BC39100CACBE7 /* SimpleSignalSwiftAuthAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC67E4C5258BC39100CACBE7 /* SimpleSignalSwiftAuthAPITests.swift */; };
 		EC7226F6259F3A53009F6104 /* StoreKitTestCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = EC7226F5259F3A53009F6104 /* StoreKitTestCertificate.cer */; };
+		EC8B950925BDFBAE00F5C212 /* UnauthorisedSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8B950825BDFBAE00F5C212 /* UnauthorisedSheet.swift */; };
+		EC8B950A25BDFBAE00F5C212 /* UnauthorisedSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8B950825BDFBAE00F5C212 /* UnauthorisedSheet.swift */; };
 		EC912986257BB67500E12BF6 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC912985257BB67500E12BF6 /* AppState.swift */; };
 		EC912992257BB85400E12BF6 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC912985257BB67500E12BF6 /* AppState.swift */; };
 		EC91299A257CC13900E12BF6 /* AuthorisationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC912999257CC13800E12BF6 /* AuthorisationController.swift */; };
@@ -295,6 +297,7 @@
 		EC67E4C7258BC39100CACBE7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EC7226F1259F39F8009F6104 /* configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = configuration.storekit; sourceTree = "<group>"; };
 		EC7226F5259F3A53009F6104 /* StoreKitTestCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = StoreKitTestCertificate.cer; sourceTree = "<group>"; };
+		EC8B950825BDFBAE00F5C212 /* UnauthorisedSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnauthorisedSheet.swift; sourceTree = "<group>"; };
 		EC912985257BB67500E12BF6 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		EC912999257CC13800E12BF6 /* AuthorisationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorisationController.swift; sourceTree = "<group>"; };
 		EC9129A5257CC33800E12BF6 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
@@ -579,6 +582,7 @@
 				ECFC593F258DF803005CCDA2 /* TextFieldAlert.swift */,
 				EC117DD225B9CE9C000878C6 /* ServerDeviceChangedSheet.swift */,
 				EC117DD825B9D2ED000878C6 /* SheetExtensions.swift */,
+				EC8B950825BDFBAE00F5C212 /* UnauthorisedSheet.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1116,6 +1120,7 @@
 				ECDE0E572572B615009D3561 /* SenderKeyName.swift in Sources */,
 				ECDE0E582572B615009D3561 /* ClonableHandleOwner.swift in Sources */,
 				ECDE0E592572B615009D3561 /* IdentityKey.swift in Sources */,
+				EC8B950A25BDFBAE00F5C212 /* UnauthorisedSheet.swift in Sources */,
 				ECAEF11D25A1216100525760 /* DetailView.swift in Sources */,
 				ECAEF0D925A1212800525760 /* MessagingStore.swift in Sources */,
 				ECAEF15925A1218E00525760 /* TwoFactorModal.swift in Sources */,
@@ -1205,6 +1210,7 @@
 				EC0BB6B825975B7E00A2F3CB /* MessagingController.swift in Sources */,
 				EC117DD325B9CE9C000878C6 /* ServerDeviceChangedSheet.swift in Sources */,
 				ECC0A5DD257FE8FF001D5E60 /* SettingsView.swift in Sources */,
+				EC8B950925BDFBAE00F5C212 /* UnauthorisedSheet.swift in Sources */,
 				EC9129AA257CC34900E12BF6 /* LoginView.swift in Sources */,
 				EC1EDB1A258EB1A000B8F4D4 /* SimpleSignalSwiftEncryptionAPI.swift in Sources */,
 				EC247FE4259CA2EE00EEBAA1 /* SubscriptionController.swift in Sources */,

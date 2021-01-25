@@ -85,7 +85,7 @@ extension SSAPIAuthResetPasswordError {
 }
 
 public enum SSAPIAuthSubmit2FAError: LocalizedError {
-    case invalidToken, invalidCode, invalidUrl, badFormat, badResponseFromServer, serverError, requestThrottled, timeout
+    case invalidToken, invalidCode, invalidUrl, badFormat, badResponseFromServer, serverError, requestThrottled, timeout, unauthorised
 }
 
 extension SSAPIAuthSubmit2FAError {
@@ -107,6 +107,8 @@ extension SSAPIAuthSubmit2FAError {
             return NSLocalizedString("The request was throttled", comment: "")
         case .timeout:
             return NSLocalizedString("The request timed out. Please try again.", comment: "")
+        case .unauthorised:
+            return NSLocalizedString("You have been logged out by the server.", comment: "")
         }
     }
 }
@@ -114,7 +116,7 @@ extension SSAPIAuthSubmit2FAError {
 
 
 public enum SSAPIAuthActivate2FAError: LocalizedError {
-    case twoFactorAlreadyExists, invalidUrl, badFormat, badResponseFromServer, serverError, possibleIncorrectMFAMethodName, requestThrottled, timeout, unableToParseSecret
+    case twoFactorAlreadyExists, invalidUrl, badFormat, badResponseFromServer, serverError, possibleIncorrectMFAMethodName, requestThrottled, timeout, unableToParseSecret, unauthorised
 }
 
 extension SSAPIAuthActivate2FAError {
@@ -138,12 +140,14 @@ extension SSAPIAuthActivate2FAError {
             return NSLocalizedString("The request timed out. Please try again.", comment: "")
         case .unableToParseSecret:
             return NSLocalizedString("The code was received in an unrecognised format", comment: "")
+        case .unauthorised:
+            return NSLocalizedString("You have been logged out by the server.", comment: "")
         }
     }
 }
 
 public enum SSAPIAuthConfirm2FAError: LocalizedError {
-    case invalidUrl, badFormat, badResponseFromServer, serverError, possibleIncorrectMFAMethodName, requestThrottled, invalidAuthorisation, invalidCode, timeout
+    case invalidUrl, badFormat, badResponseFromServer, serverError, possibleIncorrectMFAMethodName, requestThrottled, invalidCode, timeout, unauthorised
 }
 
 extension SSAPIAuthConfirm2FAError {
@@ -161,19 +165,18 @@ extension SSAPIAuthConfirm2FAError {
             return NSLocalizedString("The request was throttled", comment: "")
         case .possibleIncorrectMFAMethodName:
             return NSLocalizedString("This type of two factor authentication does not exist on the server", comment: "")
-        case .invalidAuthorisation:
-            return NSLocalizedString("The authorisation details provided were incorrect", comment: "")
         case .invalidCode:
             return NSLocalizedString("The 2FA code provided was incorrect", comment: "")
         case .timeout:
             return NSLocalizedString("The request timed out. Please try again.", comment: "")
+        case .unauthorised:
+            return NSLocalizedString("You have been logged out by the server.", comment: "")
         }
-        
     }
 }
 
 public enum SSAPIAuthDeactivate2FAError: LocalizedError {
-    case invalidUrl, badFormat, badResponseFromServer, serverError, possibleIncorrectMFAMethodName, requestThrottled, invalidAuthorisation, invalidCode, timeout
+    case invalidUrl, badFormat, badResponseFromServer, serverError, possibleIncorrectMFAMethodName, requestThrottled, invalidCode, timeout, unauthorised
 }
 
 extension SSAPIAuthDeactivate2FAError {
@@ -191,19 +194,19 @@ extension SSAPIAuthDeactivate2FAError {
             return NSLocalizedString("The request was throttled", comment: "")
         case .possibleIncorrectMFAMethodName:
             return NSLocalizedString("This type of two factor authentication does not exist on the server", comment: "")
-        case .invalidAuthorisation:
-            return NSLocalizedString("The authorisation details provided were incorrect", comment: "")
         case .invalidCode:
             return NSLocalizedString("The 2FA code provided was incorrect", comment: "")
         case .timeout:
             return NSLocalizedString("The request timed out. Please try again.", comment: "")
+        case .unauthorised:
+            return NSLocalizedString("You have been logged out by the server.", comment: "")
         }
         
     }
 }
 
 public enum SSAPIAuthLogOutError: LocalizedError {
-    case invalidUrl, badFormat, badResponseFromServer, serverError, requestThrottled, invalidAuthorisation, timeout
+    case invalidUrl, badFormat, badResponseFromServer, serverError, requestThrottled, timeout, unauthorised
 }
 
 extension SSAPIAuthLogOutError {
@@ -219,17 +222,17 @@ extension SSAPIAuthLogOutError {
             return NSLocalizedString("The server returned an error", comment: "")
         case .requestThrottled:
             return NSLocalizedString("The request was throttled", comment: "")
-        case .invalidAuthorisation:
-            return NSLocalizedString("The authorisation details provided were incorrect", comment: "")
         case .timeout:
             return NSLocalizedString("The request timed out. Please try again.", comment: "")
+        case .unauthorised:
+            return NSLocalizedString("You have been logged out by the server.", comment: "")
         }
         
     }
 }
 
 public enum SSAPIAuthDeleteUserAccountError: LocalizedError {
-    case invalidPassword, invalidUrl, badFormat, badResponseFromServer, serverError, requestThrottled, invalidAuthorisation, timeout
+    case invalidPassword, invalidUrl, badFormat, badResponseFromServer, serverError, requestThrottled, timeout, unauthorised
 }
 
 extension SSAPIAuthDeleteUserAccountError {
@@ -247,10 +250,10 @@ extension SSAPIAuthDeleteUserAccountError {
             return NSLocalizedString("The server returned an error", comment: "")
         case .requestThrottled:
             return NSLocalizedString("The request was throttled", comment: "")
-        case .invalidAuthorisation:
-            return NSLocalizedString("The authorisation details provided were incorrect", comment: "")
         case .timeout:
             return NSLocalizedString("The request timed out. Please try again.", comment: "")
+        case .unauthorised:
+            return NSLocalizedString("You have been logged out by the server.", comment: "")
         }
         
     }

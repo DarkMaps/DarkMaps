@@ -11,6 +11,8 @@ import Foundation
 
 public struct SimpleSignalSwiftAuthAPI{
     
+    private let notificationCentre = NotificationCenter.default
+    
     var timeoutDuration: DispatchTime {
         return .now() + 5
     }
@@ -305,6 +307,9 @@ public struct SimpleSignalSwiftAuthAPI{
                     } catch {
                         result = .failure(.badResponseFromServer)
                     }
+                } else if response.statusCode == 401 {
+                    self.notificationCentre.post(name: .communicationController_Unauthorised, object: nil)
+                    result = .failure(.unauthorised)
                 } else if response.statusCode == 429 {
                     result = .failure(.requestThrottled)
                 } else {
@@ -386,6 +391,9 @@ public struct SimpleSignalSwiftAuthAPI{
                     } catch {
                         result = .failure(.badResponseFromServer)
                     }
+                } else if response.statusCode == 401 {
+                    self.notificationCentre.post(name: .communicationController_Unauthorised, object: nil)
+                    result = .failure(.unauthorised)
                 } else if response.statusCode == 403 {
                     // A 403 response probably means the mfaMethodName was unrecognised
                     result = .failure(.possibleIncorrectMFAMethodName)
@@ -463,7 +471,8 @@ public struct SimpleSignalSwiftAuthAPI{
                 if response.statusCode == 400 {
                     result = .failure(.invalidCode)
                 } else if response.statusCode == 401 {
-                    result = .failure(.invalidAuthorisation)
+                    self.notificationCentre.post(name: .communicationController_Unauthorised, object: nil)
+                    result = .failure(.unauthorised)
                 } else if response.statusCode == 403 {
                     // A 403 response probably means the mfaMethodName was unrecognised
                     result = .failure(.possibleIncorrectMFAMethodName)
@@ -541,7 +550,8 @@ public struct SimpleSignalSwiftAuthAPI{
                 if response.statusCode == 400 {
                     result = .failure(.invalidCode)
                 } else if response.statusCode == 401 {
-                    result = .failure(.invalidAuthorisation)
+                    self.notificationCentre.post(name: .communicationController_Unauthorised, object: nil)
+                    result = .failure(.unauthorised)
                 } else if response.statusCode == 403 {
                     // A 403 response probably means the mfaMethodName was unrecognised
                     result = .failure(.possibleIncorrectMFAMethodName)
@@ -605,7 +615,8 @@ public struct SimpleSignalSwiftAuthAPI{
             
             guard response.statusCode == 204 else {
                 if response.statusCode == 401 {
-                    result = .failure(.invalidAuthorisation)
+                    self.notificationCentre.post(name: .communicationController_Unauthorised, object: nil)
+                    result = .failure(.unauthorised)
                 } else if response.statusCode == 429 {
                     result = .failure(.requestThrottled)
                 } else {
@@ -670,7 +681,8 @@ public struct SimpleSignalSwiftAuthAPI{
                 if response.statusCode == 400 {
                     result = .failure(.invalidPassword)
                 } else if response.statusCode == 401 {
-                    result = .failure(.invalidAuthorisation)
+                    self.notificationCentre.post(name: .communicationController_Unauthorised, object: nil)
+                    result = .failure(.unauthorised)
                 } else if response.statusCode == 429 {
                     result = .failure(.requestThrottled)
                 } else {
