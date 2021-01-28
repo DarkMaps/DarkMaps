@@ -38,8 +38,7 @@ struct SignalMapsApp: App {
         if let loggedInUser = self.appState.loggedInUser {
             if let subscriptionExpiryDate = loggedInUser.subscriptionExpiryDate {
                 if subscriptionExpiryDate.timeIntervalSince1970 < Date().timeIntervalSince1970 {
-                    let subscriptionController = SubscriptionController()
-                    subscriptionController.verifyIsStillSubscriber() { verifyResult in
+                    appState.subscriptionController.verifyReceipt() { verifyResult in
                         switch verifyResult {
                         case .success(let expirationDate):
                             print("User is still subscribed")
@@ -54,28 +53,18 @@ struct SignalMapsApp: App {
         }
     }
     
-    // Required by storekit
-    func handleCompleteTransactions() {
-        let subscriptionController = SubscriptionController()
-        subscriptionController.handleCompleteTransactions() { completeTransactionsOutcome in
-            switch completeTransactionsOutcome {
-            case .success(let expiryDate):
-                if let _ = self.appState.loggedInUser {
-                    self.appState.loggedInUser?.subscriptionExpiryDate = expiryDate
-                }
-            default:
-                return
-            }
-        }
-    }
-    
     var body: some Scene {
         WindowGroup {
             ZStack {
                 ContentView()
                     .environmentObject(appState)
                     .onAppear(perform: handleLoadStoredUser)
-                    .onAppear(perform: handleCompleteTransactions)
+                    .onAppear() {
+                        self.appState.subscriptionController.startObserving()
+                    }
+                    .onDisappear() {
+                        self.appState.subscriptionController.stopObserving()
+                    }
                 Text("").hidden().sheet(isPresented: $serverOutOfSyncSheetIsShowing) {
                     ServerDeviceChangedSheet().allowAutoDismiss(false)
                 }

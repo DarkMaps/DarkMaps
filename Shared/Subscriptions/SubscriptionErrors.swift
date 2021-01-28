@@ -8,7 +8,7 @@
 import Foundation
 
 public enum SubscriptionError: LocalizedError {
-    case invalidIdentifier, unableToRetrieveProductInfo, errorPerformingPurchase, errorVerifyingReceipt, expiredPurchase, neverPurchased, restoreFailed, nothingToRestore, errorRetreivingReceipts, errorCompletingPurchase
+    case invalidIdentifier, unableToRetrieveProductInfo, errorPerformingPurchase, errorVerifyingReceipt, expiredPurchase, neverPurchased, restoreFailed, nothingToRestore, errorRetreivingReceipts, errorCompletingPurchase, noSubscriptionFound
 }
 
 extension SubscriptionError {
@@ -35,6 +35,8 @@ extension SubscriptionError {
             return NSLocalizedString("An error occured whilst retreiving your receipts. \n\nPlease contact us at the email address below if you think you have been charged and are unable to send live messages. \n\nadmin@dark-maps.com", comment: "")
         case .errorCompletingPurchase:
             return NSLocalizedString("An error occured whilst complteting your purchase. \n\nPlease contact us at the email address below if you think you have been charged and are unable to send live messages. \n\nadmin@dark-maps.com", comment: "")
+        case .noSubscriptionFound:
+            return NSLocalizedString("No subscription to Dark Maps was found. \n\nPlease contact us at the email address below if you think you have been charged and are unable to send live messages. \n\nadmin@dark-maps.com", comment: "")
         }
     }
 }

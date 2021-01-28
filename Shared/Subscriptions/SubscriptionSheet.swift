@@ -16,8 +16,6 @@ struct SubscriptionSheet: View {
     @State var subscribeInProgress = false
     @State var subscriptionOptions: [SKProduct] = []
     
-    var subscriptionController = SubscriptionController()
-    
     let features: [String: String] = [
         "Live Messages": "Send messages for a specified period of time, even whilst Dark Maps is in the background.",
         "Support development": "Help us to keep the servers running and develop new features",
@@ -25,7 +23,7 @@ struct SubscriptionSheet: View {
     ]
     
     func getSubscriptionOptions() {
-        subscriptionController.getSubscriptions() { result in
+        appState.subscriptionController.getSubscriptions() { result in
             switch result {
             case .success(let options):
                 self.subscriptionOptions = options
@@ -40,7 +38,7 @@ struct SubscriptionSheet: View {
     
     func subscribe(product: SKProduct) {
         subscribeInProgress = true
-        subscriptionController.purchaseSubscription(product: product) { result in
+        appState.subscriptionController.purchaseSubscription(product: product) { result in
             subscribeInProgress = false
             switch result {
             case .success(let date):
@@ -56,7 +54,7 @@ struct SubscriptionSheet: View {
     
     func restoreSubscription() {
         subscribeInProgress = true
-        subscriptionController.verifyIsStillSubscriber() { result in
+        appState.subscriptionController.verifyReceipt() { result in
             subscribeInProgress = false
             switch result {
             case .success(let expiryDate):
@@ -73,7 +71,8 @@ struct SubscriptionSheet: View {
     
     
     func getSubscriptionText(_ product: SKProduct) -> String {
-        return product.localizedPrice ?? product.price.description
+//        return product.localizedPrice ?? product.price.description
+        return product.price.description
     }
     
     var body: some View {
@@ -115,7 +114,8 @@ struct SubscriptionSheet: View {
                                 }
                                 VStack {
                                     Text("\(product.localizedTitle)")
-                                    Text("\(getSubscriptionText(product)) per \(product.localizedSubscriptionPeriod), recurring")
+                                    Text("TODO: Need to implement subscription period text")
+//                                    Text("\(getSubscriptionText(product)) per \(product.localizedSubscriptionPeriod), recurring")
                                 }
                                 
                             }

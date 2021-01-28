@@ -26,7 +26,6 @@ struct SettingsController: View {
     @State var actionInProgress: ActionInProgress? = nil
      
     var authorisationController = AuthorisationController()
-    var subscriptionController = SubscriptionController()
     
     func logUserOut() {
         actionInProgress = .logUserOut
@@ -110,7 +109,7 @@ struct SettingsController: View {
     
     func restoreSubscription() {
         actionInProgress = .restoreSubscription
-        subscriptionController.verifyIsStillSubscriber() { result in
+        appState.subscriptionController.restorePurchases() { result in
             actionInProgress = nil
             switch result {
             case .success(let expiryDate):

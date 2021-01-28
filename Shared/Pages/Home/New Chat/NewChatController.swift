@@ -23,8 +23,6 @@ struct NewChatController: View {
     @State var ownEmailAlertShowing = false
     @State var isSubscribed = false //Necessary for animation
     
-    var subscriptionController = SubscriptionController()
-    
     func parseLiveExpiry() -> Date {
         let timeToAdd: Int
         if selectedLiveLength == 0 {

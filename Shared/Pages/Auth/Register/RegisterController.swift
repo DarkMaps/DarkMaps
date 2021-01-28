@@ -54,9 +54,9 @@ struct RegisterController: View {
         
         registerInProgress = true
         
-        let subscriptionController = SubscriptionController()
+        let subscriptionController = appState.subscriptionController
         
-        subscriptionController.verifyIsStillSubscriber { verifyResult in
+        subscriptionController.verifyReceipt() { verifyResult in
             
             registerInProgress = false
             

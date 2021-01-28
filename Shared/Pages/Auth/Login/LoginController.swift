@@ -93,16 +93,16 @@ struct LoginController: View {
         
         loginInProgress = true
         
-        let subscriptionController = SubscriptionController()
+        let subscriptionController = appState.subscriptionController
         
-        subscriptionController.verifyIsStillSubscriber { verifyResult in
+        subscriptionController.verifyReceipt() { verifyResult in
             
             loginInProgress = false
             
             switch verifyResult {
             case.failure(let error):
                 print(error)
-                appState.displayedError = IdentifiableError(error)
+                // Don't display error here as user may genuinely not be a subscriber
                 appState.loggedInUser = newUser
             case .success(let expiryDate):
                 print(expiryDate)

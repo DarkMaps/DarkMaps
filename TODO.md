@@ -17,10 +17,12 @@
 15) Handle sending message to changed device (x)
 16) Provide test account in App Store Connect (o)
 17) Check subscription state stored on change (x)
-18) Handle log out when server return unauthorised (o)
+18) Handle log out when server return unauthorised (x)
 
 
 Long Term:
+- Clear up API calls and error handling
+- Add server logs
 - Notifications
 - Emails to users not signed up
 - Auto fill recent users

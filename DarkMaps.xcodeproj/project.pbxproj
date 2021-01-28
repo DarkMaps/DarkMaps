@@ -82,9 +82,12 @@
 		EC4520D925896287002768C8 /* Deactivate2FAModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4520D825896287002768C8 /* Deactivate2FAModal.swift */; };
 		EC4520DD258B66F8002768C8 /* SimpleSignalSwiftAuthAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4520DC258B66F8002768C8 /* SimpleSignalSwiftAuthAPI.swift */; };
 		EC4A05CF2595F99F00DE81A8 /* MessagingStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4A05CE2595F99F00DE81A8 /* MessagingStore.swift */; };
+		EC55E1A925C2B0940028804F /* SubscriptionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC55E1A825C2B0940028804F /* SubscriptionTests.swift */; };
+		EC55E1AD25C2B6670028804F /* StoreKitTestCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = EC7226F5259F3A53009F6104 /* StoreKitTestCertificate.cer */; };
+		EC55E1B125C2B68C0028804F /* configuration.storekit in Resources */ = {isa = PBXBuildFile; fileRef = EC7226F1259F39F8009F6104 /* configuration.storekit */; };
+		EC55E1BA25C2C4D70028804F /* NewSubscriptionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC55E1B525C2BDAF0028804F /* NewSubscriptionController.swift */; };
 		EC5FDA5425933A8E006448AB /* SimpleSignalSwiftEncryptionAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC5FDA5325933A8E006448AB /* SimpleSignalSwiftEncryptionAPITests.swift */; };
 		EC67E4C6258BC39100CACBE7 /* SimpleSignalSwiftAuthAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC67E4C5258BC39100CACBE7 /* SimpleSignalSwiftAuthAPITests.swift */; };
-		EC7226F6259F3A53009F6104 /* StoreKitTestCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = EC7226F5259F3A53009F6104 /* StoreKitTestCertificate.cer */; };
 		EC8B950925BDFBAE00F5C212 /* UnauthorisedSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8B950825BDFBAE00F5C212 /* UnauthorisedSheet.swift */; };
 		EC8B950A25BDFBAE00F5C212 /* UnauthorisedSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8B950825BDFBAE00F5C212 /* UnauthorisedSheet.swift */; };
 		EC912986257BB67500E12BF6 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC912985257BB67500E12BF6 /* AppState.swift */; };
@@ -291,6 +294,8 @@
 		EC4520DC258B66F8002768C8 /* SimpleSignalSwiftAuthAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleSignalSwiftAuthAPI.swift; sourceTree = "<group>"; };
 		EC4A05CE2595F99F00DE81A8 /* MessagingStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagingStore.swift; sourceTree = "<group>"; };
 		EC538C8725A1D50500DA57B6 /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TODO.md; sourceTree = "<group>"; };
+		EC55E1A825C2B0940028804F /* SubscriptionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionTests.swift; sourceTree = "<group>"; };
+		EC55E1B525C2BDAF0028804F /* NewSubscriptionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSubscriptionController.swift; sourceTree = "<group>"; };
 		EC5FDA5325933A8E006448AB /* SimpleSignalSwiftEncryptionAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleSignalSwiftEncryptionAPITests.swift; sourceTree = "<group>"; };
 		EC67E4C3258BC39100CACBE7 /* DarkMapsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DarkMapsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC67E4C5258BC39100CACBE7 /* SimpleSignalSwiftAuthAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleSignalSwiftAuthAPITests.swift; sourceTree = "<group>"; };
@@ -463,6 +468,7 @@
 				EC7226F1259F39F8009F6104 /* configuration.storekit */,
 				EC7226F5259F3A53009F6104 /* StoreKitTestCertificate.cer */,
 				EC08F51925B4B10B009ABD75 /* SubscriptionSheet.swift */,
+				EC55E1B525C2BDAF0028804F /* NewSubscriptionController.swift */,
 			);
 			path = Subscriptions;
 			sourceTree = "<group>";
@@ -487,6 +493,7 @@
 				EC1EDB36258F417C00B8F4D4 /* KeychainSignalProtocolStoreTests.swift */,
 				EC67E4C7258BC39100CACBE7 /* Info.plist */,
 				EC1CC2DA2597D5410047E9AF /* EndToEndTests.swift */,
+				EC55E1A825C2B0940028804F /* SubscriptionTests.swift */,
 			);
 			path = DarkMapsTests;
 			sourceTree = "<group>";
@@ -848,6 +855,7 @@
 				TargetAttributes = {
 					EC67E4C2258BC39100CACBE7 = {
 						CreatedOnToolsVersion = 12.2;
+						LastSwiftMigration = 1240;
 						TestTargetID = ECFFD5152572620300458BC8;
 					};
 					ECDE0E382572B5EC009D3561 = {
@@ -887,6 +895,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EC55E1AD25C2B6670028804F /* StoreKitTestCertificate.cer in Resources */,
+				EC55E1B125C2B68C0028804F /* configuration.storekit in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -904,7 +914,6 @@
 			files = (
 				ECD599DE259A381C003AD3D0 /* Launch Screen.storyboard in Resources */,
 				ECFFD5262572620300458BC8 /* Assets.xcassets in Resources */,
-				EC7226F6259F3A53009F6104 /* StoreKitTestCertificate.cer in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1052,6 +1061,7 @@
 				EC1EDB37258F417D00B8F4D4 /* KeychainSignalProtocolStoreTests.swift in Sources */,
 				EC265A7A259C8D2900D5B7CD /* MessagingStoreTests.swift in Sources */,
 				EC5FDA5425933A8E006448AB /* SimpleSignalSwiftEncryptionAPITests.swift in Sources */,
+				EC55E1A925C2B0940028804F /* SubscriptionTests.swift in Sources */,
 				EC1CC2DB2597D5410047E9AF /* EndToEndTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1171,6 +1181,7 @@
 				EC12FBB72572ADC700F7230F /* PreKeySignalMessage.swift in Sources */,
 				EC9129D9257D6C6400E12BF6 /* AuthorisationEnum.swift in Sources */,
 				ECAC078425A4D65D00FCCD7C /* RegisterController.swift in Sources */,
+				EC55E1BA25C2C4D70028804F /* NewSubscriptionController.swift in Sources */,
 				EC9129A6257CC33800E12BF6 /* LoginController.swift in Sources */,
 				EC12FBBB2572ADC700F7230F /* SenderKeyDistributionMessage.swift in Sources */,
 				EC9129E1257D82D000E12BF6 /* IdentifiableError.swift in Sources */,
@@ -1275,6 +1286,7 @@
 			baseConfigurationReference = 8BA83BA71266E50CD2FD76EE /* Pods-DarkMapsTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A4G3Y5XC83;
 				INFOPLIST_FILE = DarkMapsTests/Info.plist;
@@ -1287,6 +1299,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = mtr.DarkMapsTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DarkMaps.app/DarkMaps";
@@ -1298,6 +1311,7 @@
 			baseConfigurationReference = B4EB1FD8CABC3191A572920D /* Pods-DarkMapsTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A4G3Y5XC83;
 				INFOPLIST_FILE = DarkMapsTests/Info.plist;
