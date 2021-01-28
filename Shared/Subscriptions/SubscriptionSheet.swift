@@ -28,9 +28,11 @@ struct SubscriptionSheet: View {
             case .success(let options):
                 self.subscriptionOptions = options
             case .failure(let error):
-                appState.subscriptionSheetIsShowing = false
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    appState.displayedError = IdentifiableError(error)
+                DispatchQueue.main.async {
+                    appState.subscriptionSheetIsShowing = false
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        appState.displayedError = IdentifiableError(error)
+                    }
                 }
             }
         }
@@ -44,9 +46,11 @@ struct SubscriptionSheet: View {
             case .success(let date):
                 print(date)
             case .failure(let error):
-                appState.subscriptionSheetIsShowing = false
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    appState.displayedError = IdentifiableError(error)
+                DispatchQueue.main.async {
+                    appState.subscriptionSheetIsShowing = false
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        appState.displayedError = IdentifiableError(error)
+                    }
                 }
             }
         }
@@ -61,9 +65,11 @@ struct SubscriptionSheet: View {
                 print("Expiry date: \(expiryDate.timeIntervalSince1970)")
                 return
             case .failure(let error):
-                appState.subscriptionSheetIsShowing = false
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    appState.displayedError = IdentifiableError(error)
+                DispatchQueue.main.async {
+                    appState.subscriptionSheetIsShowing = false
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        appState.displayedError = IdentifiableError(error)
+                    }
                 }
             }
         }
@@ -71,8 +77,7 @@ struct SubscriptionSheet: View {
     
     
     func getSubscriptionText(_ product: SKProduct) -> String {
-//        return product.localizedPrice ?? product.price.description
-        return product.price.description
+        return "\(product.localizedPrice ?? product.price.description)  per \(product.localizedSubscriptionPeriod), recurring"
     }
     
     var body: some View {
@@ -108,15 +113,17 @@ struct SubscriptionSheet: View {
                             print("Subscribe")
                             self.subscribe(product: product)
                         }) {
-                            HStack {
-                                if subscribeInProgress {
-                                    ActivityIndicator(isAnimating: true)
-                                }
-                                VStack {
+                            VStack {
+                                
+                                HStack {
+                                    if subscribeInProgress {
+                                        ActivityIndicator(isAnimating: true)
+                                    }
                                     Text("\(product.localizedTitle)")
-                                    Text("TODO: Need to implement subscription period text")
-//                                    Text("\(getSubscriptionText(product)) per \(product.localizedSubscriptionPeriod), recurring")
+//
                                 }
+                                
+                                Text(getSubscriptionText(product))
                                 
                             }
                         }

@@ -31,7 +31,6 @@ struct ListController: View {
         }
         
         guard let messagingController = appState.messagingController else {
-            appState.displayedError = IdentifiableError(ListViewErrors.noUserLoggedIn)
             return
         }
         
@@ -58,12 +57,10 @@ struct ListController: View {
     func performSync() {
         
         guard let loggedInUser = appState.loggedInUser else {
-            appState.displayedError = IdentifiableError(ListViewErrors.noUserLoggedIn)
             return
         }
         
         guard let messagingController = appState.messagingController else {
-            appState.displayedError = IdentifiableError(ListViewErrors.noUserLoggedIn)
             return
         }
         

@@ -103,10 +103,15 @@ struct LoginController: View {
             case.failure(let error):
                 print(error)
                 // Don't display error here as user may genuinely not be a subscriber
-                appState.loggedInUser = newUser
+                DispatchQueue.main.async {
+                    appState.loggedInUser = newUser
+                }
             case .success(let expiryDate):
-                print(expiryDate)
-                appState.loggedInUser = newUser
+                DispatchQueue.main.async {
+                    print(expiryDate)
+                    newUser.subscriptionExpiryDate = expiryDate
+                    appState.loggedInUser = newUser
+                }
             }
         }
         

@@ -22,7 +22,11 @@ extension SubscriptionError {
         case .errorPerformingPurchase:
             return NSLocalizedString("An error occured during purchase.\n\nPlease contact us at the email address below if you think you have been charged and are unable to send live messages. \n\nadmin@dark-maps.com", comment: "")
         case .errorVerifyingReceipt:
-            return NSLocalizedString("An error occured whilst trying to verify your purchase.\n\nPlease contact us at the email address below if you think you have been charged and are unable to send live messages. \n\nadmin@dark-maps.com", comment: "")
+            #if DEBUG
+                return NSLocalizedString("An error occured whilst trying to verify your purchase.\n\nNB: To test verification you must use the sandbox environment.\n\nPlease contact us at the email address below if you think you have been charged and are unable to send live messages. \n\nadmin@dark-maps.com", comment: "")
+            #else
+                return NSLocalizedString("An error occured whilst trying to verify your purchase.\n\nPlease contact us at the email address below if you think you have been charged and are unable to send live messages. \n\nadmin@dark-maps.com", comment: "")
+            #endif
         case .expiredPurchase:
             return NSLocalizedString("Your subscription has expired.\n\nPlease contact us at the email address below if you think you have been charged and are unable to send live messages. \n\nadmin@dark-maps.com", comment: "")
         case .neverPurchased:

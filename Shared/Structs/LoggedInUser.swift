@@ -45,7 +45,9 @@ public class LoggedInUser: Equatable, Hashable, Codable {
         serverAddress = try container.decode(String.self, forKey: .serverAddress)
         authCode = try container.decode(String.self, forKey: .authCode)
         is2FAUser = try container.decode(Bool.self, forKey: .is2FAUser)
-        subscriptionExpiryDate = try container.decodeIfPresent(Date.self, forKey: .subscriptionExpiryDate)
+        let subscriptionExpiryDateTimeIntervalSince1970 = try container.decodeIfPresent(Double.self, forKey: .subscriptionExpiryDate)
+        subscriptionExpiryDate = subscriptionExpiryDateTimeIntervalSince1970 != nil ?
+            Date(timeIntervalSince1970: subscriptionExpiryDateTimeIntervalSince1970!) : nil
         handleAddObservers()
     }
     
@@ -56,7 +58,7 @@ public class LoggedInUser: Equatable, Hashable, Codable {
         try container.encode(serverAddress, forKey: .serverAddress)
         try container.encode(authCode, forKey: .authCode)
         try container.encode(is2FAUser, forKey: .is2FAUser)
-        try container.encode(subscriptionExpiryDate, forKey: .subscriptionExpiryDate)
+        try container.encode(subscriptionExpiryDate?.timeIntervalSince1970, forKey: .subscriptionExpiryDate)
     }
     
     
@@ -75,6 +77,7 @@ public class LoggedInUser: Equatable, Hashable, Codable {
     }
     
     private func handleStoreObject() {
+        print("Storing LoggedInUser")
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
         guard let data = try? encoder.encode(self) else {
