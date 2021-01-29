@@ -88,6 +88,10 @@
 		EC55E1BA25C2C4D70028804F /* SubscriptionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC55E1B525C2BDAF0028804F /* SubscriptionController.swift */; };
 		EC5FDA5425933A8E006448AB /* SimpleSignalSwiftEncryptionAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC5FDA5325933A8E006448AB /* SimpleSignalSwiftEncryptionAPITests.swift */; };
 		EC67E4C6258BC39100CACBE7 /* SimpleSignalSwiftAuthAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC67E4C5258BC39100CACBE7 /* SimpleSignalSwiftAuthAPITests.swift */; };
+		EC82D4A925C4B5C8001A2E22 /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC82D4A825C4B5C8001A2E22 /* Entry.swift */; };
+		EC82D4AA25C4B5C8001A2E22 /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC82D4A825C4B5C8001A2E22 /* Entry.swift */; };
+		EC82D4B225C4B614001A2E22 /* hero.png in Resources */ = {isa = PBXBuildFile; fileRef = EC82D4B125C4B614001A2E22 /* hero.png */; };
+		EC82D4B325C4B614001A2E22 /* hero.png in Resources */ = {isa = PBXBuildFile; fileRef = EC82D4B125C4B614001A2E22 /* hero.png */; };
 		EC8B950925BDFBAE00F5C212 /* UnauthorisedSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8B950825BDFBAE00F5C212 /* UnauthorisedSheet.swift */; };
 		EC8B950A25BDFBAE00F5C212 /* UnauthorisedSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8B950825BDFBAE00F5C212 /* UnauthorisedSheet.swift */; };
 		EC912986257BB67500E12BF6 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC912985257BB67500E12BF6 /* AppState.swift */; };
@@ -301,6 +305,8 @@
 		EC67E4C7258BC39100CACBE7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EC7226F1259F39F8009F6104 /* configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = configuration.storekit; sourceTree = "<group>"; };
 		EC7226F5259F3A53009F6104 /* StoreKitTestCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = StoreKitTestCertificate.cer; sourceTree = "<group>"; };
+		EC82D4A825C4B5C8001A2E22 /* Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entry.swift; sourceTree = "<group>"; };
+		EC82D4B125C4B614001A2E22 /* hero.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hero.png; sourceTree = "<group>"; };
 		EC8B950825BDFBAE00F5C212 /* UnauthorisedSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnauthorisedSheet.swift; sourceTree = "<group>"; };
 		EC912985257BB67500E12BF6 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		EC912999257CC13800E12BF6 /* AuthorisationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorisationController.swift; sourceTree = "<group>"; };
@@ -524,6 +530,8 @@
 		EC912980257BB5CE00E12BF6 /* Pages */ = {
 			isa = PBXGroup;
 			children = (
+				ECFFD50F257261FB00458BC8 /* SignalMapsApp.swift */,
+				ECFFD510257261FB00458BC8 /* ContentView.swift */,
 				ECAC078125A4D63400FCCD7C /* Auth */,
 				EC912982257BB61700E12BF6 /* Home */,
 			);
@@ -596,6 +604,7 @@
 		ECAC078125A4D63400FCCD7C /* Auth */ = {
 			isa = PBXGroup;
 			children = (
+				EC82D4A825C4B5C8001A2E22 /* Entry.swift */,
 				EC9129AD257CC51E00E12BF6 /* CustomServerModal.swift */,
 				ECAC078225A4D64300FCCD7C /* Register */,
 				EC912981257BB60C00E12BF6 /* Login */,
@@ -704,9 +713,8 @@
 				EC912980257BB5CE00E12BF6 /* Pages */,
 				EC91297F257BB51F00E12BF6 /* SignalProtocol */,
 				EC91297E257BB50C00E12BF6 /* Keychain */,
-				ECFFD50F257261FB00458BC8 /* SignalMapsApp.swift */,
-				ECFFD510257261FB00458BC8 /* ContentView.swift */,
 				ECFFD5112572620300458BC8 /* Assets.xcassets */,
+				EC82D4B125C4B614001A2E22 /* hero.png */,
 				ECD599DD259A381C003AD3D0 /* Launch Screen.storyboard */,
 			);
 			path = Shared;
@@ -904,6 +912,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ECAEF0C925A1211600525760 /* configuration.storekit in Resources */,
+				EC82D4B325C4B614001A2E22 /* hero.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -913,6 +922,7 @@
 			files = (
 				ECD599DE259A381C003AD3D0 /* Launch Screen.storyboard in Resources */,
 				ECFFD5262572620300458BC8 /* Assets.xcassets in Resources */,
+				EC82D4B225C4B614001A2E22 /* hero.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1069,6 +1079,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EC82D4AA25C4B5C8001A2E22 /* Entry.swift in Sources */,
 				ECAEF0F925A1214000525760 /* TextFieldAlert.swift in Sources */,
 				ECAEF16525A1219A00525760 /* SimpleSignalSwiftAuthAPIStructs.swift in Sources */,
 				ECAEF10925A1214F00525760 /* LoggedInUser.swift in Sources */,
@@ -1165,6 +1176,7 @@
 				ECFC5940258DF804005CCDA2 /* TextFieldAlert.swift in Sources */,
 				EC12FBC32572ADC700F7230F /* Address.swift in Sources */,
 				ECD599D42599D590003AD3D0 /* NewChatErrors.swift in Sources */,
+				EC82D4A925C4B5C8001A2E22 /* Entry.swift in Sources */,
 				EC9129D1257D5EC100E12BF6 /* TwoFactorModal.swift in Sources */,
 				ECC0A5C5257FE8B8001D5E60 /* ListView.swift in Sources */,
 				EC4520DD258B66F8002768C8 /* SimpleSignalSwiftAuthAPI.swift in Sources */,

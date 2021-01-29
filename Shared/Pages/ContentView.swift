@@ -11,8 +11,6 @@ import SignalFfi
 struct ContentView: View {
     
     @EnvironmentObject var appState: AppState
-    @State var customAuthServer = "https://api.dark-maps.com"
-    @State var authTabSelection: Int = 1
     @State var homeTabSelection: Int = 1
     
     var body: some View {
@@ -20,7 +18,7 @@ struct ContentView: View {
             if $appState.loggedInUser.wrappedValue != nil {
                 TabView(selection: $homeTabSelection) {
                     ListController().tabItem {
-                        Text("List")
+                        Text("List").font(.largeTitle)
                         Image(systemName: "list.dash")
                     }.tag(1)
                     NewChatController().tabItem {
@@ -34,23 +32,11 @@ struct ContentView: View {
                 }
                 .accentColor(Color("AccentColor"))
                 .onAppear(perform: {
+                    UITabBar.appearance().barTintColor = .blue
                     self.homeTabSelection = 1
                 })
             } else {
-                TabView(selection: $authTabSelection) {
-                    LoginController(customAuthServer: $customAuthServer).tabItem {
-                        Text("Login")
-                        Image(systemName: "key.fill")
-                    }.tag(1)
-                    RegisterController(customAuthServer: $customAuthServer).tabItem {
-                        Text("Register")
-                        Image(systemName: "person.fill.badge.plus")
-                    }.tag(2)
-                }
-                .accentColor(Color("AccentColor"))
-                .onAppear(perform: {
-                    self.authTabSelection = 1
-                })
+                Entry()
             }
             Text("").hidden().alert(item: $appState.displayedError) { viewError -> Alert in
                 ErrorAlert(viewError: viewError)

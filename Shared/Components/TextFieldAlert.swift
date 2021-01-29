@@ -29,28 +29,34 @@ struct TextFieldAlert<Presenting>: View where Presenting: View {
                     Spacer()
                     VStack {
                         VStack {
-                            Text(self.title).padding(.bottom, 15)
-                            if (secureField) {
-                                SecureField(self.title, text: self.$text)
-                                    .id(self.isShowing)
-                                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                            } else {
-                                TextField(self.textBoxPlaceholder ?? self.title, text: self.$text)
-                                    .id(self.isShowing)
-                                    .padding(10)
-                                    .overlay(
-                                        RoundedRectangle(
-                                            cornerRadius: 10)
-                                            .stroke(Color.gray, lineWidth: 1))
-                            }
-                            HStack {
+                            VStack {
+                                Text(self.title).padding(.bottom, 10).font(Font.body.bold())
+                                if (secureField) {
+                                    SecureField(self.title, text: self.$text)
+                                        .id(self.isShowing)
+                                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                                        .background(Color.white)
+                                } else {
+                                    TextField(self.textBoxPlaceholder ?? self.title, text: self.$text)
+                                        .id(self.isShowing)
+                                        .padding(10)
+                                        .background(Color.white)
+                                        .overlay(
+                                            Rectangle()
+                                                .stroke(Color(UIColor.systemGray3), lineWidth: 1))
+                                }
+                            }.padding()
+                            Rectangle()
+                                .foregroundColor(Color(UIColor.systemGray4))
+                                .frame(height:1)
+                            HStack() {
                                 Spacer()
                                 Button(action: {
                                     withAnimation {
                                         self.isShowing.toggle()
                                     }
                                 }) {
-                                    Text("Cancel")
+                                    Text("Cancel").font(Font.body.bold())
                                 }
                                 .padding()
                                 Spacer()
@@ -60,22 +66,17 @@ struct TextFieldAlert<Presenting>: View where Presenting: View {
                                         self.isShowing.toggle()
                                     }
                                 }) {
-                                    Text("OK")
+                                    Text("OK").font(Font.body.bold())
                                 }
                                 .padding()
                                 Spacer()
                             }
-                        }.padding()
+                        }
                     }
                     .background(colorScheme == .dark ?
                         Color.black :
-                        Color.white)
+                                    Color(UIColor.systemGray5))
                     .cornerRadius(10)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.gray, lineWidth: 2)
-                    )
-                    .shadow(radius: 1)
                     .padding()
                     Spacer()
                 }

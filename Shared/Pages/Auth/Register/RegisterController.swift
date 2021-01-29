@@ -18,7 +18,6 @@ struct RegisterController: View {
     @State private var password = ""
     @State private var username = ""
     @State private var storedNewUser: LoggedInUser? = nil
-    @State private var loginBoxShowing: Bool = true
     
     var authorisationController = AuthorisationController()
     
@@ -112,19 +111,8 @@ struct RegisterController: View {
                 password: $password,
                 registerInProgress: $registerInProgress,
                 customServerModalVisible: $customServerModalVisible,
-                loginBoxShowing: $loginBoxShowing,
                 performRegister: handleRegister
             )
-            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification), perform: {_ in
-                withAnimation {
-                    self.loginBoxShowing = false
-                }
-            })
-            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidHideNotification), perform: {_ in
-                withAnimation {
-                    self.loginBoxShowing = true
-                }
-            })
             Text("").hidden().sheet(isPresented: $customServerModalVisible) {
                 CustomServerModal(serverAddress: $customAuthServer)
             }

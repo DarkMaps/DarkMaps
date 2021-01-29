@@ -26,7 +26,6 @@ struct LoginController: View {
     @State private var resetPasswordAlertShowing = false
     @State private var resetPasswordRequestedEmail = ""
     @State private var resetPasswordSuccessAlertShowing = false
-    @State private var loginBoxShowing = true
     
     var authorisationController = AuthorisationController()
     
@@ -213,19 +212,8 @@ struct LoginController: View {
                 customServerModalVisible: $customServerModalVisible,
                 loginInProgress: $loginInProgress,
                 resetPasswordAlertShowing: $resetPasswordAlertShowing,
-                loginBoxShowing: $loginBoxShowing,
                 performLogin: handleLogin
             )
-            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification), perform: {_ in
-                withAnimation {
-                    self.loginBoxShowing = false
-                }
-            })
-            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidHideNotification), perform: {_ in
-                withAnimation {
-                    self.loginBoxShowing = true
-                }
-            })
             Text("").hidden().actionSheet(isPresented: $showingDeleteDeviceSheet) {
                 ActionSheet(
                     title: Text("Device already exists"),

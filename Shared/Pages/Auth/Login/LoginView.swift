@@ -14,7 +14,6 @@ struct LoginView: View {
     @Binding var customServerModalVisible: Bool
     @Binding var loginInProgress: Bool
     @Binding var resetPasswordAlertShowing: Bool
-    @Binding var loginBoxShowing: Bool
     
     @State private var invalidUsername: Bool = false
     @State private var invalidPassword: Bool = false
@@ -22,60 +21,45 @@ struct LoginView: View {
     var performLogin: () -> Void
     
     var body: some View {
-        NavigationView {
-            VStack(alignment: .center) {
-                ScrollView {
-                    Image("Main Icon")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: UIScreen.main.bounds.size.width * 0.4)
-                        .cornerRadius(20)
-                        .padding(.bottom)
-                    TextFieldWithTitleAndValidation(
-                        title: "Username",
-                        invalidText: "Invalid username",
-                        validRegex: "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$",
-                        disableAutocorrection: true,
-                        text: $username,
-                        showInvalidText: $invalidUsername
-                    )
-                    TextFieldWithTitleAndValidation(
-                        title: "Password",
-                        invalidText: "Invalid password",
-                        secureField: true,
-                        text: $password,
-                        showInvalidText: $invalidPassword,
-                        onCommit: self.performLogin
-                    )
-                }.padding()
-                if loginBoxShowing {
-                    VStack {
-                        Rectangle().fill(Color("AccentColor")).frame(maxWidth: .infinity, maxHeight: 4)
-                        Button(action: self.performLogin) {
-                            HStack {
-                                if (self.loginInProgress) {
-                                    ActivityIndicator(isAnimating: true)
-                                }
-                                Text("Login")
-                            }
-                        }
-                        .disabled(invalidUsername || invalidPassword || loginInProgress || username.isEmpty || password.isEmpty)
-                        .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
-                        Button(action: {self.resetPasswordAlertShowing.toggle()}) { Text("Reset Password")
-                        }
-                        .disabled(loginInProgress)
-                        .padding(.bottom)
-                    }.transition(.move(edge: .bottom))
+        VStack(alignment: .center) {
+            TextFieldWithTitleAndValidation(
+                title: "Username",
+                invalidText: "Invalid username",
+                validRegex: "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$",
+                disableAutocorrection: true,
+                text: $username,
+                showInvalidText: $invalidUsername
+            )
+            TextFieldWithTitleAndValidation(
+                title: "Password",
+                invalidText: "Invalid password",
+                secureField: true,
+                text: $password,
+                showInvalidText: $invalidPassword,
+                onCommit: self.performLogin
+            )
+            Button(action: self.performLogin) {
+                HStack {
+                    if (self.loginInProgress) {
+                        ActivityIndicator(isAnimating: true)
+                    }
+                    Text("Login")
                 }
             }
-            .navigationBarTitle("Log In")
-            .navigationBarBackButtonHidden(true)
-            .navigationBarItems(
-                leading: Text(""),
-                trailing: Button(action: {self.customServerModalVisible.toggle()}) {
-                    Image(systemName: "gear").imageScale(.large).foregroundColor(Color("AccentColor"))
-            })
-        }
+            .disabled(invalidUsername || invalidPassword || loginInProgress || username.isEmpty || password.isEmpty)
+            .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
+            Button(action: {self.resetPasswordAlertShowing.toggle()}) { Text("Reset Password")
+            }
+            .disabled(loginInProgress)
+            .padding(.bottom)
+            Spacer()
+        }.padding()
+        .navigationBarTitle("Log In")
+        .navigationBarItems(
+            leading: Text(""),
+            trailing: Button(action: {self.customServerModalVisible.toggle()}) {
+                Image(systemName: "gear").imageScale(.large).foregroundColor(Color("AccentColor"))
+        })
     }
 }
 
@@ -94,7 +78,6 @@ struct LoginView_Previews: PreviewProvider {
         @State(initialValue: false) var customServerModalVisible: Bool
         @State(initialValue: false) var loginInProgress: Bool
         @State(initialValue: false) var resetPasswordAlertShowing: Bool
-        @State(initialValue: false) var loginBoxShowing: Bool
         
         func login () -> Void {
             return
@@ -107,7 +90,6 @@ struct LoginView_Previews: PreviewProvider {
                 customServerModalVisible: $customServerModalVisible,
                 loginInProgress: $loginInProgress,
                 resetPasswordAlertShowing: $resetPasswordAlertShowing,
-                loginBoxShowing: $loginBoxShowing,
                 performLogin: login
             )
           }
