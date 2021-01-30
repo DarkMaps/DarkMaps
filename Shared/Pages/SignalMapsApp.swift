@@ -26,8 +26,6 @@ struct SignalMapsApp: App {
             return
         }
         do {
-            print(storedUserData)
-            print(String(data: storedUserData, encoding: .utf8))
             let _ = try decoder.decode(LoggedInUser.self, from: storedUserData)
         } catch {
             print(error)
@@ -80,10 +78,10 @@ struct SignalMapsApp: App {
                         self.appState.subscriptionController.stopObserving()
                     }
                 Text("").hidden().sheet(isPresented: $serverOutOfSyncSheetIsShowing) {
-                    ServerDeviceChangedSheet().allowAutoDismiss(false)
+                    ServerDeviceChangedSheet().allowAutoDismiss(false).environmentObject(appState)
                 }
                 Text("").hidden().sheet(isPresented: $unauthorisedSheetIsShowing) {
-                    UnauthorisedSheet().allowAutoDismiss(false)
+                    UnauthorisedSheet().allowAutoDismiss(false).environmentObject(appState)
                 }
                 Text("").hidden().alert(isPresented: $subscriptionExpiredAlertShowing) {
                     Alert(

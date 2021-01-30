@@ -49,7 +49,8 @@ struct ListView: View {
                         handleConsentToNewIdentity: handleConsentToNewIdentity)
                 }
             }.navigationTitle("Received")
-        }
+            
+        }.padding(.bottom, 0)
     }
 }
 

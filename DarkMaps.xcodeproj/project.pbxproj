@@ -20,6 +20,8 @@
 		EC117DD425B9CE9C000878C6 /* ServerDeviceChangedSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC117DD225B9CE9C000878C6 /* ServerDeviceChangedSheet.swift */; };
 		EC117DD925B9D2ED000878C6 /* SheetExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC117DD825B9D2ED000878C6 /* SheetExtensions.swift */; };
 		EC117DDA25B9D2ED000878C6 /* SheetExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC117DD825B9D2ED000878C6 /* SheetExtensions.swift */; };
+		EC11E33625C53F4600211136 /* TabHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC11E33525C53F4600211136 /* TabHolder.swift */; };
+		EC11E34625C540E200211136 /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC11E34525C540E200211136 /* TabBar.swift */; };
 		EC12FBB32572ADC700F7230F /* DataStoreInMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9A2572ADC700F7230F /* DataStoreInMemory.swift */; };
 		EC12FBB42572ADC700F7230F /* DataStoreInMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9A2572ADC700F7230F /* DataStoreInMemory.swift */; };
 		EC12FBB52572ADC700F7230F /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC12FB9B2572ADC700F7230F /* Protocol.swift */; };
@@ -256,6 +258,8 @@
 		EC0BB6B725975B7E00A2F3CB /* MessagingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagingController.swift; sourceTree = "<group>"; };
 		EC117DD225B9CE9C000878C6 /* ServerDeviceChangedSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerDeviceChangedSheet.swift; sourceTree = "<group>"; };
 		EC117DD825B9D2ED000878C6 /* SheetExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetExtensions.swift; sourceTree = "<group>"; };
+		EC11E33525C53F4600211136 /* TabHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabHolder.swift; sourceTree = "<group>"; tabWidth = 4; };
+		EC11E34525C540E200211136 /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
 		EC12FB8F2572AB9B00F7230F /* SignalClient Build Details.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "SignalClient Build Details.md"; sourceTree = "<group>"; };
 		EC12FB9A2572ADC700F7230F /* DataStoreInMemory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStoreInMemory.swift; sourceTree = "<group>"; };
 		EC12FB9B2572ADC700F7230F /* Protocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocol.swift; sourceTree = "<group>"; };
@@ -551,6 +555,8 @@
 		EC912982257BB61700E12BF6 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				EC11E33525C53F4600211136 /* TabHolder.swift */,
+				EC11E34525C540E200211136 /* TabBar.swift */,
 				ECC0A5BB257FE84B001D5E60 /* List */,
 				ECC0A5BC257FE86A001D5E60 /* New Chat */,
 				ECC0A5BD257FE87C001D5E60 /* Settings */,
@@ -1210,12 +1216,14 @@
 				ECC0A5D1257FE8DF001D5E60 /* NewChatController.swift in Sources */,
 				EC12FBD72572ADC700F7230F /* Utils.swift in Sources */,
 				EC12FBCD2572ADC700F7230F /* SenderKeyRecord.swift in Sources */,
+				EC11E34625C540E200211136 /* TabBar.swift in Sources */,
 				EC12FBD12572ADC700F7230F /* PreKeyBundle.swift in Sources */,
 				EC9129C1257CF7DB00E12BF6 /* LoggedInUser.swift in Sources */,
 				EC12FBC72572ADC700F7230F /* Kdf.swift in Sources */,
 				EC12FBC12572ADC700F7230F /* PublicKey.swift in Sources */,
 				EC0BB6AE25975B4100A2F3CB /* MessagingErrors.swift in Sources */,
 				EC12FBDF2572ADC700F7230F /* IdentityKey.swift in Sources */,
+				EC11E33625C53F4600211136 /* TabHolder.swift in Sources */,
 				ECAFE37C259A80F5008E9318 /* MapView.swift in Sources */,
 				ECC0A5CD257FE8CE001D5E60 /* DetailView.swift in Sources */,
 				ECC0A5D9257FE8F5001D5E60 /* SettingsController.swift in Sources */,

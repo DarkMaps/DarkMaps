@@ -54,18 +54,20 @@ struct ReceivingList: View {
                 }
             }
             .disabled(getMessagesInProgress)
-            .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
-            Text("").hidden().alert(item: $acceptAlteredIdentityAlertRelatesTo, content: {chosenSender in
-                Alert(title:
-                        Text("Altered Identity"),
-                      message: Text("\(chosenSender.name)'s identity has changed, do you wish to use their new identity?"),
-                      primaryButton: Alert.Button.destructive(
-                        Text("OK"),
-                        action: {
-                            handleConsentToNewIdentity(chosenSender)
-                        }),
-                      secondaryButton: Alert.Button.cancel())
-            })
+            .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor"), padded: true))
+            .background(
+                Text("").hidden().alert(item: $acceptAlteredIdentityAlertRelatesTo, content: {chosenSender in
+                    Alert(title:
+                            Text("Altered Identity"),
+                          message: Text("\(chosenSender.name)'s identity has changed, do you wish to use their new identity?"),
+                          primaryButton: Alert.Button.destructive(
+                            Text("OK"),
+                            action: {
+                                handleConsentToNewIdentity(chosenSender)
+                            }),
+                          secondaryButton: Alert.Button.cancel())
+                })
+            )
         }
     }
 }

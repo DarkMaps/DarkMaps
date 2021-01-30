@@ -11,6 +11,8 @@ struct UnauthorisedSheet: View {
     
     @EnvironmentObject var appState: AppState
     
+    @Environment(\.presentationMode) var presentationMode
+    
     func handleDismissal() {
         print("Dismiss")
         guard let messagingController = appState.messagingController else {
@@ -19,6 +21,7 @@ struct UnauthorisedSheet: View {
         }
         messagingController.deleteAllLocalData()
         appState.loggedInUser = nil
+        self.presentationMode.wrappedValue.dismiss()
     }
     
     var body: some View {

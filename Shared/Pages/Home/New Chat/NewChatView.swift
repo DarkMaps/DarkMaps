@@ -72,7 +72,6 @@ struct NewChatView: View {
                         }
                         .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
                     }
-                    .padding()
                     .transition(.move(edge: .bottom))
                 }
             }
