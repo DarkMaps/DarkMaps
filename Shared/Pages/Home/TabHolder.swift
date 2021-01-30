@@ -9,6 +9,8 @@ import SwiftUI
 
 struct TabHolder: View {
     
+    @Environment(\.colorScheme) var colorScheme
+    
     @State var selectedTab: TabOptions = .list
     
     var calculatedListX: CGFloat {
@@ -44,14 +46,14 @@ struct TabHolder: View {
     }
     
     var calculatedCircleX: CGFloat {
-        let width = UIScreen.main.bounds.size.width / 3
+        let width = (UIScreen.main.bounds.size.width) / 3.35
         switch selectedTab {
         case .list:
-            return -width+12
+            return -width
         case .newChat:
             return 0
         case .settings:
-            return width-12
+            return width
         }
     }
     
@@ -71,7 +73,7 @@ struct TabHolder: View {
             }
             ZStack {
                 Capsule()
-                    .foregroundColor(Color(UIColor.systemGray3))
+                    .foregroundColor(colorScheme == .dark ? Color.black : Color(UIColor.systemGray3))
                     .frame(width: 60, height: 45)
                     .offset(x: calculatedCircleX)
                     .animation(.interpolatingSpring(mass: 0.8, stiffness: 400, damping: 20, initialVelocity: 1))
@@ -92,6 +94,9 @@ enum TabOptions {
 
 struct TabHolder_Previews: PreviewProvider {
     static var previews: some View {
-        TabHolder().environmentObject(AppState())
+        Group {
+            TabHolder().environmentObject(AppState())
+            TabHolder().preferredColorScheme(.dark).environmentObject(AppState())
+        }
     }
 }
