@@ -82,7 +82,8 @@ struct TabHolder: View {
             }
             .background(Color(UIColor.systemGray6))
             .overlay(Rectangle().frame(width: nil, height: 1, alignment: .top).foregroundColor(Color.gray), alignment: .top)
-        }
+            
+        }.ignoresSafeArea(.keyboard)
         
         
     }

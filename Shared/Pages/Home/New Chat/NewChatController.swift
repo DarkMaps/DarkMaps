@@ -21,6 +21,7 @@ struct NewChatController: View {
     @State var recipientIdentityChangedAlertShowing = false
     @State var invalidEmailAlertShowing = false
     @State var ownEmailAlertShowing = false
+    @State var liveLocationOptionsVisible = false
     @State var isSubscribed = false //Necessary for animation
     
     func parseLiveExpiry() -> Date {
@@ -149,6 +150,7 @@ struct NewChatController: View {
                 sendLocationInProgress: $sendLocationInProgress,
                 isLiveLocation: $isLiveLocation,
                 selectedLiveLength: $selectedLiveLength,
+                liveLocationOptionsVisible: $liveLocationOptionsVisible,
                 isSubscribed: $isSubscribed,
                 performMessageSend: performMessageSend
             )

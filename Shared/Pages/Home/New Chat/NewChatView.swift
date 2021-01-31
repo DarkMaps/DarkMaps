@@ -17,6 +17,7 @@ struct NewChatView: View {
     @Binding var sendLocationInProgress: Bool
     @Binding var isLiveLocation: Bool
     @Binding var selectedLiveLength: Int
+    @Binding var liveLocationOptionsVisible: Bool
     // This is unfortunately necessary for animation
     @Binding var isSubscribed: Bool
     
@@ -35,15 +36,43 @@ struct NewChatView: View {
                     text: $recipientEmail,
                     showInvalidText: $recipientEmailInvalid
                 ).padding(.horizontal).padding(.top)
-                Toggle("Live Location", isOn: $isLiveLocation.animation())
-                    .toggleStyle(SwitchToggleStyle(tint: Color("AccentColor")))
+                VStack {
+                    Button(action: {withAnimation{liveLocationOptionsVisible.toggle()}}) {
+                        HStack {
+                            Text("Live Location")
+                            Image(systemName: "bolt.fill").foregroundColor(isSubscribed ? .yellow : Color(UIColor.systemGray3))
+                            Spacer()
+                            if isSubscribed {
+                                Image(systemName: "chevron.right")
+                                    .rotationEffect(.degrees(liveLocationOptionsVisible ? 90 : 0))
+                                    .animation(.easeInOut)
+                            } else {
+                                Image(systemName: "lock.fill")
+                            }
+                            
+                        }
+                    }
                     .padding()
-                    .disabled(isSubscribed == false)
-                DarkMapsPicker(
-                    selectedLiveLength: $selectedLiveLength,
-                    liveLengths: liveLengths,
-                    disabled: (isSubscribed == false) || !isLiveLocation)
-                    .padding(.vertical)
+                    .background(Color(UIColor.systemBackground))
+                    .disabled(!isSubscribed)
+                    .zIndex(1.0)
+                    if liveLocationOptionsVisible {
+                        VStack {
+                            Toggle("Live Location Active", isOn: $isLiveLocation.animation())
+                                .toggleStyle(SwitchToggleStyle(tint: Color("AccentColor")))
+                                .padding()
+                                .disabled(isSubscribed == false)
+                            DarkMapsPicker(
+                                selectedLiveLength: $selectedLiveLength,
+                                liveLengths: liveLengths,
+                                disabled: (isSubscribed == false) || !isLiveLocation)
+                                .padding(.vertical)
+                        }
+                        .zIndex(0)
+                        .transition(.move(edge: .top))
+                        
+                    }
+                }.clipped()
                 Button(action: self.performMessageSend) {
                     HStack {
                         if (self.sendLocationInProgress) {
@@ -99,10 +128,11 @@ struct NewChatView_Previews: PreviewProvider {
         @State var sendLocationInProgress: Bool = false
         @State var isLiveLocation: Bool = false
         @State var selectedLiveLength = 0
-        @State var isSubscribed: Bool = false
+        @State var liveLocationOptionsVisible = false
+        @State var isSubscribed: Bool
         
         init(isSubscriber: Bool = false) {
-            isSubscribed = isSubscriber
+            _isSubscribed = State(initialValue: isSubscriber)
         }
         
         func performMessageSend() {}
@@ -115,6 +145,7 @@ struct NewChatView_Previews: PreviewProvider {
                 sendLocationInProgress: $sendLocationInProgress,
                 isLiveLocation: $isLiveLocation,
                 selectedLiveLength: $selectedLiveLength,
+                liveLocationOptionsVisible: $liveLocationOptionsVisible,
                 isSubscribed: $isSubscribed,
                 performMessageSend: performMessageSend
             )
