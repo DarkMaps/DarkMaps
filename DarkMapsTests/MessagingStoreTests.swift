@@ -215,5 +215,25 @@ class MessagingStoreTests: XCTestCase {
         XCTAssertEqual(decodedArray.count, 1)
         XCTAssertEqual(decodedArray[0].recipient, recipient1)
     }
+    
+    func testStoreFailedDeletemessage() throws {
+        let messagingStore = MessagingStore(localAddress: address)
+        messagingStore.storeFailedMessageDelete(3464)
+        let currentData = keychainSwift.getData("-msg-rcv-failed-delete")!
+        let decoder = JSONDecoder()
+        let arrayOfStoredIds = try! decoder.decode([Int].self, from: currentData)
+        XCTAssert(arrayOfStoredIds.contains(3464))
+    }
+    
+    func testParseFailedDeleteMessage() throws {
+        let messagingStore = MessagingStore(localAddress: address)
+        let arrayOfStoredIds = [23785, 235324, 234234]
+        let encoder = JSONEncoder()
+        let data = try! encoder.encode(arrayOfStoredIds)
+        keychainSwift.set(data, forKey: "-msg-rcv-failed-delete")
+        let idsToParse = [23785, 235324, 1]
+        let parsedIds = messagingStore.removeMessagesPreviouslyFailedDelete(idsToParse)
+        XCTAssertEqual(parsedIds, [1])
+    }
 
 }

@@ -178,4 +178,32 @@ public struct MessagingStore {
         sendNotification(count: arrayToDeleteFrom.count)
     }
     
+    public func storeFailedMessageDelete(_ messageID: Int) {
+        let keyName = "-msg-rcv-failed-delete"
+        var arrayOfStoredIds: [Int] = []
+        if let currentData = keychainSwift.getData(keyName) {
+            arrayOfStoredIds = (try? decoder.decode([Int].self, from: currentData)) ?? []
+        }
+        if !arrayOfStoredIds.contains(messageID) {
+            arrayOfStoredIds.append(messageID)
+        }
+        do {
+            let jsonData = try encoder.encode(arrayOfStoredIds)
+            keychainSwift.set(jsonData, forKey: keyName)
+        } catch {
+            return
+        }
+    }
+
+    public func removeMessagesPreviouslyFailedDelete(_ newMessageIdsToDelete: [Int]) -> [Int] {
+        let keyName = "-msg-rcv-failed-delete"
+        var arrayOfStoredIds: [Int] = []
+        if let currentData = keychainSwift.getData(keyName) {
+            arrayOfStoredIds = (try? decoder.decode([Int].self, from: currentData)) ?? []
+        }
+        let storedIdsSet = Set(arrayOfStoredIds)
+        let newMessageIdsToDeleteSet = Set(newMessageIdsToDelete)
+        return Array(newMessageIdsToDeleteSet.subtracting(storedIdsSet))
+    }
+    
 }

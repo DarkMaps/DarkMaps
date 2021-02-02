@@ -348,10 +348,31 @@ public class MessagingController {
             return
         }
         
+        guard let messagingStore = self.messagingStore else {
+            completionHandler(.failure(.noDeviceCreated))
+            return
+        }
+        
+        // Remove messages which have previously failed
+        let parsedMessageIds = messagingStore.removeMessagesPreviouslyFailedDelete(messageIds)
+        
         DispatchQueue.global(qos: .utility).async {
-            let response = simpleSignalSwiftEncryptionAPI.deleteMessage(authToken: authToken, serverAddress: serverAddress, messageIds: messageIds)
+            let response = simpleSignalSwiftEncryptionAPI.deleteMessage(authToken: authToken, serverAddress: serverAddress, messageIds: parsedMessageIds)
             switch response {
             case .success(let output):
+                // Output will be an array of <Int: SSAPIDeleteMessageOutcome>, some messages may not have deleted successfully
+                // We need to handle these errors
+                for messageId in Array(output.keys) {
+                    if let deletedMessageOutcome = output[messageId] {
+                        switch deletedMessageOutcome {
+                        case .messageDeleted:
+                            continue
+                        default:
+                            // An error must have occured, store the message ID so we dont try to delete this message again
+                            messagingStore.storeFailedMessageDelete(messageId)
+                        }
+                    }
+                }
                 print("Messages deleted")
                 print(output)
                 completionHandler(.success(()))
