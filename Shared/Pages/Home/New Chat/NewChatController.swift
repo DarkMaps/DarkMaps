@@ -62,54 +62,57 @@ struct NewChatController: View {
         
         sendLocationInProgress = true
         
-        if isLiveLocation {
+        // Even if this is a live message send one normal message first to ensure successful
+        appState.locationController.getCurrentLocation() {
+            getLocationOutcome in
             
-            do {
-                try messagingController.addLiveMessage(recipientName: recipientEmail, recipientDeviceId: Int(1), expiry: parseLiveExpiry())
+            switch getLocationOutcome {
+            case .failure(let error):
+                appState.displayedError = IdentifiableError(error)
                 sendLocationInProgress = false
-                liveMessageSendSuccessAlertShowing = true
-            } catch {
-                appState.displayedError = IdentifiableError(error as! LocalizedError)
-                sendLocationInProgress = false
-            }
-            
-            
-        } else {
-            
-            appState.locationController.getCurrentLocation() {
-                getLocationOutcome in
+            case .success(var location):
                 
-                switch getLocationOutcome {
-                case .failure(let error):
-                    appState.displayedError = IdentifiableError(error)
-                    sendLocationInProgress = false
-                case .success(let location):
+                if isLiveLocation {
+                    location.liveExpiryDate = parseLiveExpiry()
+                }
+                
+                messagingController.sendMessage(
+                    recipientName: recipientEmail,
+                    recipientDeviceId: Int(1),
+                    message: location,
+                    serverAddress: loggedInUser.serverAddress,
+                    authToken: loggedInUser.authCode) {
+                    sendMessageOutcome in
                     
-                    messagingController.sendMessage(
-                        recipientName: recipientEmail,
-                        recipientDeviceId: Int(1),
-                        message: location,
-                        serverAddress: loggedInUser.serverAddress,
-                        authToken: loggedInUser.authCode) {
-                        sendMessageOutcome in
+                    switch sendMessageOutcome {
+                    case .failure(let error):
+                        sendLocationInProgress = false
+                        if error == .alteredIdentity {
+                            recipientIdentityChangedAlertShowing = true
+                        } else {
+                            appState.displayedError = IdentifiableError(error)
+                        }
+                    case .success():
                         
-                        switch sendMessageOutcome {
-                        case .failure(let error):
-                            sendLocationInProgress = false
-                            if error == .alteredIdentity {
-                                recipientIdentityChangedAlertShowing = true
-                            } else {
-                                appState.displayedError = IdentifiableError(error)
+                        // If successful and live message add to stored live messages
+                        if isLiveLocation {
+                            do {
+                                try messagingController.addLiveMessage(recipientName: recipientEmail, recipientDeviceId: Int(1), expiry: parseLiveExpiry())
+                                sendLocationInProgress = false
+                                liveMessageSendSuccessAlertShowing = true
+                            } catch {
+                                appState.displayedError = IdentifiableError(error as! LocalizedError)
+                                sendLocationInProgress = false
                             }
-                        case .success():
+                        } else {
                             messageSendSuccessAlertShowing = true
                             sendLocationInProgress = false
                         }
                     }
                 }
             }
-            
         }
+        
     }
     
     func handleConsentToNewIdentity() {
