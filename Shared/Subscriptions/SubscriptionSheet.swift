@@ -46,10 +46,13 @@ struct SubscriptionSheet: View {
             case .success(let date):
                 print(date)
             case .failure(let error):
-                DispatchQueue.main.async {
-                    appState.subscriptionSheetIsShowing = false
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                        appState.displayedError = IdentifiableError(error)
+                //Only display an error if the user cancelled the purchase themselves.
+                if error != .purchaseCancelled {
+                    DispatchQueue.main.async {
+                        appState.subscriptionSheetIsShowing = false
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            appState.displayedError = IdentifiableError(error)
+                        }
                     }
                 }
             }

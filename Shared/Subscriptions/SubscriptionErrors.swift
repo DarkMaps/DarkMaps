@@ -8,13 +8,15 @@
 import Foundation
 
 public enum SubscriptionError: LocalizedError {
-    case invalidIdentifier, unableToRetrieveProductInfo, errorPerformingPurchase, errorVerifyingReceipt, expiredPurchase, neverPurchased, restoreFailed, nothingToRestore, errorRetreivingReceipts, errorCompletingPurchase, noSubscriptionFound
+    case invalidIdentifier, unableToRetrieveProductInfo, errorPerformingPurchase, errorVerifyingReceipt, expiredPurchase, neverPurchased, restoreFailed, nothingToRestore, errorRetreivingReceipts, errorCompletingPurchase, noSubscriptionFound, purchaseCancelled
 }
 
 extension SubscriptionError {
     
     public var errorDescription: String? {
         switch self {
+        case .purchaseCancelled:
+            return NSLocalizedString("You cancelled the purchase", comment: "")
         case .invalidIdentifier:
             return NSLocalizedString("Unable to find the specified subscription. \n\nPlease contact us at the email address below if you think you have been charged and are unable to send live messages. \n\nadmin@dark-maps.com", comment: "")
         case .unableToRetrieveProductInfo:

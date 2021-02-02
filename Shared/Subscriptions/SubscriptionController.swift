@@ -132,7 +132,6 @@ extension SubscriptionController: SKPaymentTransactionObserver {
     public func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         print("Got transactions")
         for transaction in transactions {
-            print(transaction.transactionState)
             switch (transaction.transactionState) {
             case .purchased:
                 complete(transaction: transaction)
@@ -155,7 +154,7 @@ extension SubscriptionController: SKPaymentTransactionObserver {
     
     // Handling failed restore.
     public func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Swift.Error) {
-        fail()
+        fail(error: error)
     }
 
     private func complete(transaction: SKPaymentTransaction) {
@@ -171,16 +170,21 @@ extension SubscriptionController: SKPaymentTransactionObserver {
         SKPaymentQueue.default().finishTransaction(transaction)
     }
 
-    private func fail(transaction: SKPaymentTransaction? = nil) {
+    private func fail(transaction: SKPaymentTransaction? = nil, error: Error? = nil) {
         print("fail...")
         if let transaction = transaction,
-           let transactionError = transaction.error as NSError?,
-           let localizedDescription = transaction.error?.localizedDescription,
-           transactionError.code != SKError.paymentCancelled.rawValue {
-            print("Transaction Error: \(localizedDescription)")
+           let transactionError = transaction.error as NSError? {
+            if let localizedDescription = transaction.error?.localizedDescription,
+               transactionError.code != SKError.paymentCancelled.rawValue {
+                   print("Transaction Error: \(localizedDescription)")
+                   sendFailureNotification()
+                   productPurchaseCompletionHandler?(.failure(.errorCompletingPurchase))
+            } else {
+                //Transaction was cancelled
+                sendFailureNotification()
+                productPurchaseCompletionHandler?(.failure(.purchaseCancelled))
+            }
         }
-        sendFailureNotification()
-        productPurchaseCompletionHandler?(.failure(.errorCompletingPurchase))
         if let transaction = transaction {
             SKPaymentQueue.default().finishTransaction(transaction)
         }
