@@ -50,7 +50,15 @@ struct ListView: View {
                 }
             }.navigationTitle("Received")
             
-        }.padding(.bottom, 0)
+        }
+        .padding(.bottom, 0)
+        .onAppear(perform: {
+            if let loggedInUser = self.loggedInUser {
+                if loggedInUser.subscriptionExpiryDate == nil {
+                    self.selectedDirection = 0
+                }
+            }
+        })
     }
 }
 

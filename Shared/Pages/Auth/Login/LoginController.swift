@@ -103,6 +103,9 @@ struct LoginController: View {
                 print(error)
                 // Don't display error here as user may genuinely not be a subscriber
                 DispatchQueue.main.async {
+                    if error == .expiredPurchase {
+                        appState.displayedError = IdentifiableError(error)
+                    }
                     appState.loggedInUser = newUser
                 }
             case .success(let expiryDate):

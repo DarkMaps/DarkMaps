@@ -166,6 +166,8 @@ struct SubscriptionSheet: View {
     }
 }
 
+#if DEBUG
+
 struct SubscriptionSheet_Previews: PreviewProvider {
     static var previews: some View {
         Group {
@@ -187,9 +189,6 @@ struct SubscriptionSheet_Previews: PreviewProvider {
         }
     }
 }
-
-
-#if DEBUG
 
 public extension SKProduct {
     convenience init(identifier: String, price: String, priceLocale: Locale, subscriptionPeriod: SKProductSubscriptionPeriod) {

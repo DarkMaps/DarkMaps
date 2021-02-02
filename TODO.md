@@ -18,6 +18,7 @@
 16) Provide test account in App Store Connect (o)
 17) Check subscription state stored on change (x)
 18) Handle log out when server return unauthorised (x)
+19) Add time outs to subscription functions (o)
 
 
 Long Term:

@@ -210,7 +210,8 @@ public class MessagingController {
                         do {
                             if let error = output.error {
                                 print("Found error in message output")
-                                
+                                print(error)
+                                print(output)
                                 if error == .alteredIdentity {
                                     //Don't delete this message
                                     messageIdsToDelete.removeLast()
@@ -264,6 +265,8 @@ public class MessagingController {
                     print("Finished processing messages")
                     
                     if messageIdsToDelete.count > 0 {
+                        
+                        print(messageIdsToDelete)
                      
                         self.handleDeleteMessages(messageIds: messageIdsToDelete, serverAddress: serverAddress, authToken: authToken) { [weak self] deleteMessageOutcome in
                             

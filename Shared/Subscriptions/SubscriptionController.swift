@@ -241,7 +241,7 @@ extension SubscriptionController {
                 return
             }
             let receiptData = try Data(contentsOf: appStoreReceiptURL, options: .alwaysMapped)
-            let receiptString = receiptData.base64EncodedString(options: [])
+            let receiptString = receiptData.base64EncodedString(options: [.endLineWithCarriageReturn])
             let dict = ["receipt-data" : receiptString, "password" : sharedSecret] as [String : Any]
             let jsonData = try JSONSerialization.data(withJSONObject: dict, options: .prettyPrinted)
 
@@ -274,13 +274,22 @@ extension SubscriptionController {
                     
                     switch status {
                     case 0:
-                        guard let receipt = jsonResponse["receipt"] as? ReceiptInfo,
-                              let decodedReceipt = ReceiptItem(receiptInfo: receipt),
+                        guard let allReceiptData = jsonResponse["receipt"] as? [String: Any],
+                              let allReceipts = allReceiptData["in_app"] as? [ReceiptInfo],
+                              let latestReceipt = allReceipts.last,
+                              let decodedReceipt = ReceiptItem(receiptInfo: latestReceipt),
                               let subscriptionExpirationDate = decodedReceipt.subscriptionExpirationDate else {
                             completionHandler(.failure(.errorVerifyingReceipt))
                             return
                         }
-                        completionHandler(.success(subscriptionExpirationDate))
+                        if (subscriptionExpirationDate > Date()) {
+                            print("Subscription successfully verified: expires \(String(describing: (latestReceipt as [String: Any])["expires_date"] ?? "Unable to get expiry date"))")
+                            completionHandler(.success(subscriptionExpirationDate))
+                        } else {
+                            print("Subscription expired: \(String(describing: (latestReceipt as [String: Any])["expires_date"] ?? "Unable to get expiry date"))")
+                            completionHandler(.failure(.expiredPurchase))
+                        }
+                        
                     case 21007:
                         // Means we are in sandbox env.
                         self.verifyReceipt(sandbox: true, completionHandler: completionHandler)

@@ -24,8 +24,36 @@ struct DetailView: View {
                 Text("Loading data")
             } else if messageDetails == nil {
                 Text("Error loading data")
+            } else if (messageDetails!.error != nil) {
+                VStack {
+                    Spacer()
+                    Text("Uh Oh!").font(.largeTitle)
+                    Image(systemName: "xmark.octagon.fill")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: UIScreen.main.bounds.size.width * 0.4)
+                        .foregroundColor(.red)
+                        .padding(.bottom)
+                    Spacer()
+                    Text("An Error Occured").font(.title)
+                    Text(messageDetails!.error!.localizedDescription)
+                    Spacer()
+                }
             } else if (centerCoordinate == nil) {
-                Text("No location data in message")
+                VStack {
+                    Spacer()
+                    Text("Uh Oh!").font(.largeTitle)
+                    Image(systemName: "xmark.octagon.fill")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: UIScreen.main.bounds.size.width * 0.4)
+                        .foregroundColor(.red)
+                        .padding(.bottom)
+                    Spacer()
+                    Text("An Error Occured").font(.title)
+                    Text("There is no location stored in this message")
+                    Spacer()
+                }
             } else {
                 ZStack {
                     MapView(
@@ -74,31 +102,30 @@ struct DetailView_Previews: PreviewProvider {
             PreviewWrapper(email: "test@test.com").previewDisplayName("Full Set")
             PreviewWrapper(email: "reallyreallyreallylongtest@test.com").previewDisplayName("Long Email")
             PreviewWrapper(email: "reallyreallyreallylongtest@test.com").preferredColorScheme(.dark).previewDisplayName("Long Email")
+            PreviewWrapper(
+                email:"reallyreallyreallylongtest@test.com",
+                isError: true)
+                .preferredColorScheme(.dark)
+                .previewDisplayName("With Error")
         }
     }
     
     struct PreviewWrapper: View {
         
-        @State var messageDetails: LocationMessage? = LocationMessage(
-            id: 3,
-            sender: try! ProtocolAddress(
-                name: "test@test.com",
-                deviceId: UInt32(324)
-            ),
-            location: Location(latitude: 53.800755, longitude: -1.549077, time: Date())
-        )
+        @State var messageDetails: LocationMessage?
         @State var fetchingMessageDetails = false
         @State var centerCoordinate: CLLocationCoordinate2D? = nil
         @State var annotations: [MKPointAnnotation] = []
         
-        init(email: String) {
+        init(email: String, isError: Bool = false) {
             _messageDetails = State(initialValue: LocationMessage(
                 id: 3,
                 sender: try! ProtocolAddress(
                     name: email,
                     deviceId: UInt32(324)
                 ),
-                location: Location(latitude: 53.800755, longitude: -1.549077, time: Date())
+                location: isError ? nil : Location(latitude: 53.800755, longitude: -1.549077, time: Date()),
+                error: isError ? .serverError : nil
             ))
         }
 
@@ -109,9 +136,11 @@ struct DetailView_Previews: PreviewProvider {
                 centerCoordinate: $centerCoordinate,
                 annotations: $annotations
             ).onAppear() {
-                self.centerCoordinate = self.messageDetails!.location!.toLocationCoordinate
-                let annotation = self.messageDetails!.toAnnotation!
-                annotations.append(annotation)
+                if let location = self.messageDetails!.location {
+                    self.centerCoordinate =  location.toLocationCoordinate
+                    let annotation = self.messageDetails!.toAnnotation!
+                    annotations.append(annotation)
+                }
             }
         }
     }

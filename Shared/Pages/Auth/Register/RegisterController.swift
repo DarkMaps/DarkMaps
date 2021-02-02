@@ -62,11 +62,17 @@ struct RegisterController: View {
             switch verifyResult {
             case.failure(let error):
                 print(error)
-                appState.displayedError = IdentifiableError(error)
-                appState.loggedInUser = newUser
+                DispatchQueue.main.async {
+                    if error == .expiredPurchase {
+                        appState.displayedError = IdentifiableError(error)
+                    }
+                    appState.loggedInUser = newUser
+                }
             case .success(let expiryDate):
                 print(expiryDate)
-                appState.loggedInUser = newUser
+                DispatchQueue.main.async {
+                    appState.loggedInUser = newUser
+                }
             }
         }
         
