@@ -260,7 +260,9 @@ extension SubscriptionController {
             request.httpBody = jsonData
             let session = URLSession(configuration: URLSessionConfiguration.default)
             
-            let task = session.dataTask(with: request) { data, response, error in
+            let semaphore = DispatchSemaphore(value: 0)
+            
+            session.dataTask(with: request) { data, response, error in
                 
                 do {
                     guard let receivedData = data, let httpResponse = response as? HTTPURLResponse, error == nil, httpResponse.statusCode == 200  else {
@@ -307,8 +309,12 @@ extension SubscriptionController {
                     print(error)
                     completionHandler(.failure(.errorVerifyingReceipt))
                 }
+                semaphore.signal()
+            }.resume()
+            
+            if semaphore.wait(timeout: (DispatchTime.now() + 5)) == .timedOut {
+                completionHandler(.failure(.timedOut))
             }
-            task.resume()
             
         } catch {
             completionHandler(.failure(.errorVerifyingReceipt))

@@ -69,6 +69,7 @@ struct ListView_Previews: PreviewProvider {
             PreviewWrapper(isSubscriber: true).previewDisplayName("Subscriber")
             PreviewWrapper(isSubscriber: false).previewDisplayName("Not Subscriber")
             PreviewWrapper(isSubscriber: false, isEmpty: true).previewDisplayName("Empty List")
+            PreviewWrapper(isSubscriber: false, isEmpty: true).previewDevice("iPod touch (7th generation)").previewDisplayName("Empty List")
         }
     }
     

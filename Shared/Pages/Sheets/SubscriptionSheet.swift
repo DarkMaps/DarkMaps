@@ -86,8 +86,8 @@ struct SubscriptionSheet: View {
     var body: some View {
         VStack {
             VStack {
-                Text("Subscription").font(.largeTitle).foregroundColor(.accentColor)
-                Text("Subscribe to Dark Maps to access the benefits below. You can cancel any time you wish from within the settings menu.").padding()
+                Text("Subscribe").font(.largeTitle).foregroundColor(.accentColor)
+                Text("Subscribe to Dark Maps to access the benefits below. Cancel any time you wish from the settings menu.").padding()
             }
             VStack {
                 TabView {
@@ -95,11 +95,10 @@ struct SubscriptionSheet: View {
                         ZStack {
                             Color("AccentColor")
                             VStack {
-                                Text("\(title)").foregroundColor(.white).font(.title)
+                                Text("\(title)").foregroundColor(.white).font(.title2)
                                 Rectangle().fill(Color.white).frame(maxWidth: .infinity, maxHeight: 2)
-                                Spacer()
                                 Text("\(description)").foregroundColor(.white)
-                            }.padding().padding(.bottom, 40)
+                            }.padding(.horizontal).padding(.bottom, 30)
                         }.clipShape(RoundedRectangle(cornerRadius: 10.0, style: .continuous))
                     }
                     .padding(.all, 10)
@@ -131,7 +130,7 @@ struct SubscriptionSheet: View {
                             }
                         }
                         .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor"), padded: false))
-                        .padding(.horizontal)
+                        .padding(.horizontal, UIScreen.main.bounds.width / 40)
                         .padding(.top)
                         .disabled(subscribeInProgress)
                     }
@@ -175,20 +174,32 @@ struct SubscriptionSheet_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             SubscriptionSheet()
+                .environmentObject(AppState())
                 .preferredColorScheme(.dark)
             SubscriptionSheet(subscriptionOptions: [
                 SKProduct(identifier: "Monthly Dark Maps Subscription", price: "0.99", priceLocale: .current, subscriptionPeriod: MockSKProductSubscriptionPeriod(numberOfUnits: 1, unit: .month))
             ])
+            .environmentObject(AppState())
             SubscriptionSheet(subscriptionOptions: [
                 SKProduct(identifier: "Monthly Dark Maps Subscription", price: "0.99", priceLocale: .current, subscriptionPeriod: MockSKProductSubscriptionPeriod(numberOfUnits: 1, unit: .month)),
                 SKProduct(identifier: "Yearly Dark Maps Subscription", price: "10", priceLocale: .current, subscriptionPeriod: MockSKProductSubscriptionPeriod(numberOfUnits: 1, unit: .year))
             ])
+            .environmentObject(AppState())
             SubscriptionSheet(subscriptionOptions: [
                 SKProduct(identifier: "Monthly Dark Maps Subscription", price: "0.99", priceLocale: .current, subscriptionPeriod: MockSKProductSubscriptionPeriod(numberOfUnits: 1, unit: .month))
             ])
+            .environmentObject(AppState())
             SubscriptionSheet(subscriptionOptions: [
                 SKProduct(identifier: "Monthly Dark Maps Subscription", price: "0.99", priceLocale: .current, subscriptionPeriod: MockSKProductSubscriptionPeriod(numberOfUnits: 1, unit: .month))
-            ]).preferredColorScheme(.dark)
+            ])
+            .environmentObject(AppState())
+            .preferredColorScheme(.dark)
+            SubscriptionSheet(subscriptionOptions: [
+                SKProduct(identifier: "Monthly Dark Maps Subscription", price: "0.99", priceLocale: .current, subscriptionPeriod: MockSKProductSubscriptionPeriod(numberOfUnits: 1, unit: .month))
+            ])
+            .previewDevice("iPod touch (7th generation)")
+            .environmentObject(AppState())
+            .preferredColorScheme(.dark)
         }
     }
 }

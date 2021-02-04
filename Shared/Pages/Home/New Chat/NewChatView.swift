@@ -118,6 +118,9 @@ struct NewChatView_Previews: PreviewProvider {
             PreviewWrapper(isSubscriber: false)
             PreviewWrapper(isSubscriber: false)
                 .preferredColorScheme(.dark)
+            PreviewWrapper(isSubscriber: true)
+                .previewDevice("iPod touch (7th generation)")
+                .preferredColorScheme(.dark)
         }
     }
     

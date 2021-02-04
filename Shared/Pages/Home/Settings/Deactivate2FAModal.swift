@@ -45,6 +45,8 @@ struct Deactivate2FAModal_Previews: PreviewProvider {
     static var previews: some View {
         return Group {
             PreviewWrapper()
+            PreviewWrapper()
+                .previewDevice("iPod touch (7th generation)")
         }
     }
     

@@ -110,6 +110,11 @@ struct Activate2FAModal_Previews: PreviewProvider {
         return Group {
             PreviewWrapper()
             PreviewWrapper(QRCode: "testCode")
+            PreviewWrapper(QRCode: "testCode")
+                .preferredColorScheme(.dark)
+            PreviewWrapper(QRCode: "testCode")
+                .previewDevice("iPod touch (7th generation)")
+                .preferredColorScheme(.dark)
         }
     }
     
@@ -124,7 +129,10 @@ struct Activate2FAModal_Previews: PreviewProvider {
         func confirm2FA() {
             return
         }
-        func copyCodeToClipboard() -> Bool {return true}
+        func copyCodeToClipboard() -> Bool {
+            return true
+            
+        }
         
         init(QRCode: String? = nil) {
             self._QRCodeFor2FA = State(initialValue: QRCode)

@@ -94,6 +94,7 @@
 		EC82D4AA25C4B5C8001A2E22 /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC82D4A825C4B5C8001A2E22 /* Entry.swift */; };
 		EC82D4B225C4B614001A2E22 /* hero.png in Resources */ = {isa = PBXBuildFile; fileRef = EC82D4B125C4B614001A2E22 /* hero.png */; };
 		EC82D4B325C4B614001A2E22 /* hero.png in Resources */ = {isa = PBXBuildFile; fileRef = EC82D4B125C4B614001A2E22 /* hero.png */; };
+		EC82FC1325CC16740081B77C /* SubscriptionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC08F51925B4B10B009ABD75 /* SubscriptionSheet.swift */; };
 		EC8B950925BDFBAE00F5C212 /* UnauthorisedSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8B950825BDFBAE00F5C212 /* UnauthorisedSheet.swift */; };
 		EC8B950A25BDFBAE00F5C212 /* UnauthorisedSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8B950825BDFBAE00F5C212 /* UnauthorisedSheet.swift */; };
 		EC912986257BB67500E12BF6 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC912985257BB67500E12BF6 /* AppState.swift */; };
@@ -475,7 +476,6 @@
 				ECE467C425AB552B00939E4F /* SubscriptionErrors.swift */,
 				EC7226F1259F39F8009F6104 /* configuration.storekit */,
 				EC7226F5259F3A53009F6104 /* StoreKitTestCertificate.cer */,
-				EC08F51925B4B10B009ABD75 /* SubscriptionSheet.swift */,
 				EC55E1B525C2BDAF0028804F /* SubscriptionController.swift */,
 				EC3FDD2F25C327280044C312 /* SubscriptionStructs.swift */,
 			);
@@ -505,6 +505,16 @@
 				EC55E1A825C2B0940028804F /* SubscriptionTests.swift */,
 			);
 			path = DarkMapsTests;
+			sourceTree = "<group>";
+		};
+		EC82FC1725CC16830081B77C /* Sheets */ = {
+			isa = PBXGroup;
+			children = (
+				EC117DD225B9CE9C000878C6 /* ServerDeviceChangedSheet.swift */,
+				EC8B950825BDFBAE00F5C212 /* UnauthorisedSheet.swift */,
+				EC08F51925B4B10B009ABD75 /* SubscriptionSheet.swift */,
+			);
+			path = Sheets;
 			sourceTree = "<group>";
 		};
 		EC91297E257BB50C00E12BF6 /* Keychain */ = {
@@ -538,6 +548,7 @@
 				ECFFD510257261FB00458BC8 /* ContentView.swift */,
 				ECAC078125A4D63400FCCD7C /* Auth */,
 				EC912982257BB61700E12BF6 /* Home */,
+				EC82FC1725CC16830081B77C /* Sheets */,
 			);
 			path = Pages;
 			sourceTree = "<group>";
@@ -600,9 +611,7 @@
 				EC9129BC257CC72500E12BF6 /* ActivityIndicator.swift */,
 				EC9129DC257D828200E12BF6 /* ErrorAlert.swift */,
 				ECFC593F258DF803005CCDA2 /* TextFieldAlert.swift */,
-				EC117DD225B9CE9C000878C6 /* ServerDeviceChangedSheet.swift */,
 				EC117DD825B9D2ED000878C6 /* SheetExtensions.swift */,
-				EC8B950825BDFBAE00F5C212 /* UnauthorisedSheet.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1274,6 +1283,7 @@
 				EC12FBDA2572ADC700F7230F /* Fingerprint.swift in Sources */,
 				EC912992257BB85400E12BF6 /* AppState.swift in Sources */,
 				EC12FBC02572ADC700F7230F /* SignalMessage.swift in Sources */,
+				EC82FC1325CC16740081B77C /* SubscriptionSheet.swift in Sources */,
 				EC12FBD62572ADC700F7230F /* DataStoreProtocols.swift in Sources */,
 				ECFFD6522572A9C900458BC8 /* KeychainSwiftDistrib.swift in Sources */,
 				EC12FBD82572ADC700F7230F /* Utils.swift in Sources */,

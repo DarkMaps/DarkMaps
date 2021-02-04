@@ -64,6 +64,8 @@ struct RegisterView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             PreviewWrapper()
+            PreviewWrapper()
+                .previewDevice("iPod touch (7th generation)")
         }
         
     }

@@ -53,6 +53,10 @@ struct UnauthorisedSheet: View {
 
 struct UnauthorisedSheet_Previews: PreviewProvider {
     static var previews: some View {
-        UnauthorisedSheet()
+        Group {
+            UnauthorisedSheet()
+            UnauthorisedSheet()
+                .previewDevice("iPod touch (7th generation)")
+        }
     }
 }

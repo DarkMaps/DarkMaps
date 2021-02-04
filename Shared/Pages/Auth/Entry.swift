@@ -49,7 +49,8 @@ struct Entry_Previews: PreviewProvider {
             Entry()
                 .preferredColorScheme(.dark)
             Entry()
-                .previewDevice("iPhone SE (2nd generation)")
+                .previewLayout(.device)
+                .previewDevice("iPod touch (7th generation)")
         }
     }
 }

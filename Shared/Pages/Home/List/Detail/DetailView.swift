@@ -107,6 +107,10 @@ struct DetailView_Previews: PreviewProvider {
                 isError: true)
                 .preferredColorScheme(.dark)
                 .previewDisplayName("With Error")
+            PreviewWrapper(
+                email:"reallyreallyreallylongtest@test.com")
+                .previewDevice("iPod touch (7th generation)")
+                .previewDisplayName("With Error")
         }
     }
     
