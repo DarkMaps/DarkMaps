@@ -34,4 +34,13 @@ class AppState: ObservableObject {
             KeychainSwift().set(data, forKey: "loggedInUser")
         }
     }
+    
+    public func handleNoLongerSubscribed() throws {
+        loggedInUser?.subscriptionExpiryDate = nil
+        if let liveMessages = try messagingController?.getLiveMessages() {
+            for message in liveMessages {
+                try messagingController?.removeLiveMessageRecipient(recipientAddress: message.recipient)
+            }
+        }
+    }
 }

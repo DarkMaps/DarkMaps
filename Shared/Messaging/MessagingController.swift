@@ -181,6 +181,8 @@ public class MessagingController {
                         } else if error == .remoteDeviceChanged {
                             self.notificationCentre.post(name: .encryptionController_ServerOutOfSync, object: nil)
                             completionHandler(.failure(.remoteDeviceChanged))
+                        } else if error == .recipientUserDoesNotExist {
+                            completionHandler(.failure(.recipientUserDoesNotExist))
                         } else {
                             completionHandler(.failure(.unableToSendMessage))
                         }

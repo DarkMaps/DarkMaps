@@ -11,6 +11,6 @@ public func ErrorAlert(viewError: IdentifiableError) -> Alert {
     return Alert(
         title: Text("Error"),
         message: Text(viewError.error.localizedDescription),
-        dismissButton: .cancel()
+        dismissButton: .default(Text("OK"))
     )
 }

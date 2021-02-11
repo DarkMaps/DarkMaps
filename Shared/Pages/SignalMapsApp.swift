@@ -58,10 +58,12 @@ struct SignalMapsApp: App {
                         case .failure(let error):
                             print("Failed to verify subscription status")
                             if error == .expiredPurchase {
+                                self.subscriptionExpiredAlertShowing = true
+                            } else {
                                 appState.displayedError = IdentifiableError(error)
                             }
-                            self.subscriptionExpiredAlertShowing = true
-                            self.appState.loggedInUser?.subscriptionExpiryDate = nil
+                            try? appState.handleNoLongerSubscribed()
+                            
                         }
                     }
                 }

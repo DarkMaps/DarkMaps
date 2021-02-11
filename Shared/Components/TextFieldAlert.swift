@@ -35,12 +35,13 @@ struct TextFieldAlert<Presenting>: View where Presenting: View {
                                     SecureField(self.title, text: self.$text)
                                         .id(self.isShowing)
                                         .textFieldStyle(RoundedBorderTextFieldStyle())
-                                        .background(Color.white)
+                                        .overlay(
+                                            Rectangle()
+                                                .stroke(Color(UIColor.systemGray3), lineWidth: 1))
                                 } else {
                                     TextField(self.textBoxPlaceholder ?? self.title, text: self.$text)
                                         .id(self.isShowing)
-                                        .padding(10)
-                                        .background(Color.white)
+                                        .textFieldStyle(RoundedBorderTextFieldStyle())
                                         .overlay(
                                             Rectangle()
                                                 .stroke(Color(UIColor.systemGray3), lineWidth: 1))
@@ -122,6 +123,11 @@ struct TextFieldAlert_Previews: PreviewProvider {
             PreviewWrapper()
                 .preferredColorScheme(.dark)
                 .previewLayout(.fixed(width: 350, height: 120))
+            PreviewWrapper(secureField: true)
+                .previewLayout(.fixed(width: 350, height: 120))
+            PreviewWrapper(secureField: true)
+                .preferredColorScheme(.dark)
+                .previewLayout(.fixed(width: 350, height: 120))
         }
     }
     
@@ -129,6 +135,11 @@ struct TextFieldAlert_Previews: PreviewProvider {
         
         @State var isShowing = false
         @State var text = ""
+        @State var secureField: Bool
+        
+        init(secureField: Bool = false) {
+            _secureField = State(initialValue: secureField)
+        }
 
         var body: some View {
             
@@ -137,6 +148,7 @@ struct TextFieldAlert_Previews: PreviewProvider {
                     isShowing: $isShowing,
                     text: $text,
                     title: "A title",
+                    secureField: secureField,
                     onDismiss: {})
         }
     }

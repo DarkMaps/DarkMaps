@@ -527,6 +527,7 @@ public class SimpleSignalSwiftEncryptionAPI {
             } catch SignalError.untrustedIdentity {
                 return(SSAPIGetMessagesOutput(id: input.id, error: .alteredIdentity, senderAddress: address))
             } catch {
+                print(error)
                 return(SSAPIGetMessagesOutput(id: input.id, error: .unableToDecrypt, senderAddress: address))
             }
         }

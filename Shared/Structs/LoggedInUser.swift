@@ -111,6 +111,7 @@ public class LoggedInUser: Equatable, Hashable, Codable {
     @objc private func handleSubscriptionFailed(_ notification: NSNotification) {
         self.subscriptionExpiryDate = nil
     }
+    
 }
 
 

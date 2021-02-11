@@ -132,14 +132,19 @@ public class KeychainSignalProtocolStore: IdentityKeyStore, PreKeyStore, SignedP
     }
 
     public func loadSignedPreKey(id: UInt32, context: UnsafeMutableRawPointer?) throws -> SignedPreKeyRecord {
+        print(keychainSwift.allKeys)
         let keyName = "-enc-signedPreKey:\(id)"
+        print(keyName)
         guard let spkData = keychainSwift.getData(keyName) else {
+            print("Can't find prekey")
             throw SignalError.invalidKeyIdentifier("no signed prekey with this identifier")
         }
+        print(try! SignedPreKeyRecord(bytes: spkData))
         return try SignedPreKeyRecord(bytes: spkData)
     }
 
     public func storeSignedPreKey(_ record: SignedPreKeyRecord, id: UInt32, context: UnsafeMutableRawPointer?) throws {
+        print(id)
         let keyName = "-enc-signedPreKey:\(id)"
         keychainSwift.set(Data(try record.serialize()), forKey: keyName)
     }
