@@ -80,8 +80,7 @@ struct TabHolder: View {
                 TabBar(selectedTab: $selectedTab)
                     .frame(maxWidth: .infinity, maxHeight: UIScreen.main.bounds.size.height * 0.08)
             }
-            .background(Color(UIColor.systemGray6))
-            .overlay(Rectangle().frame(width: nil, height: 1, alignment: .top).foregroundColor(Color.gray), alignment: .top)
+            .background(Color(UIColor.systemBackground))
             
         }.ignoresSafeArea(.keyboard)
         

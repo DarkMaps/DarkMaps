@@ -153,7 +153,7 @@ extension SubscriptionController: SKPaymentTransactionObserver {
             case .purchasing:
                 break
             @unknown default:
-                fatalError()
+                fail()
             }
         }
     }
@@ -233,9 +233,9 @@ extension SubscriptionController {
                 #if targetEnvironment(simulator)
                     //Only run if in DEBUG on simulator and not testing
                     if ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil {
-                        print("********************* DEBUG MODE *********************")
+                        print("********************* DEBUG MODE ********************************")
                         print("********************* SKIPPING VERIFICATION *********************")
-                        print("********************* NOT IN PRODUCTION *********************")
+                        print("********************* NOT IN PRODUCTION *************************")
                         completionHandler(.success(Date().addingTimeInterval(2000)))
                         return
                     }

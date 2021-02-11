@@ -46,7 +46,7 @@ struct SignalMapsApp: App {
         if let loggedInUser = self.appState.loggedInUser {
             print("Logged in")
             if let subscriptionExpiryDate = loggedInUser.subscriptionExpiryDate {
-                print("Is subscribed - expires \(loggedInUser.subscriptionExpiryDate?.debugDescription)")
+                print("Is subscribed - expires \(String(describing: loggedInUser.subscriptionExpiryDate?.debugDescription))")
                 if subscriptionExpiryDate.timeIntervalSince1970 < Date().timeIntervalSince1970 {
                     print("Subscription has expired")
                     appState.subscriptionController.verifyReceipt() { verifyResult in

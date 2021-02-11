@@ -85,7 +85,6 @@
 		EC4520DD258B66F8002768C8 /* SimpleSignalSwiftAuthAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4520DC258B66F8002768C8 /* SimpleSignalSwiftAuthAPI.swift */; };
 		EC4A05CF2595F99F00DE81A8 /* MessagingStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4A05CE2595F99F00DE81A8 /* MessagingStore.swift */; };
 		EC55E1A925C2B0940028804F /* SubscriptionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC55E1A825C2B0940028804F /* SubscriptionTests.swift */; };
-		EC55E1AD25C2B6670028804F /* StoreKitTestCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = EC7226F5259F3A53009F6104 /* StoreKitTestCertificate.cer */; };
 		EC55E1B125C2B68C0028804F /* configuration.storekit in Resources */ = {isa = PBXBuildFile; fileRef = EC7226F1259F39F8009F6104 /* configuration.storekit */; };
 		EC55E1BA25C2C4D70028804F /* SubscriptionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC55E1B525C2BDAF0028804F /* SubscriptionController.swift */; };
 		EC5FDA5425933A8E006448AB /* SimpleSignalSwiftEncryptionAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC5FDA5325933A8E006448AB /* SimpleSignalSwiftEncryptionAPITests.swift */; };
@@ -309,7 +308,6 @@
 		EC67E4C5258BC39100CACBE7 /* SimpleSignalSwiftAuthAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleSignalSwiftAuthAPITests.swift; sourceTree = "<group>"; };
 		EC67E4C7258BC39100CACBE7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EC7226F1259F39F8009F6104 /* configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = configuration.storekit; sourceTree = "<group>"; };
-		EC7226F5259F3A53009F6104 /* StoreKitTestCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = StoreKitTestCertificate.cer; sourceTree = "<group>"; };
 		EC82D4A825C4B5C8001A2E22 /* Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entry.swift; sourceTree = "<group>"; };
 		EC82D4B125C4B614001A2E22 /* hero.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hero.png; sourceTree = "<group>"; };
 		EC8B950825BDFBAE00F5C212 /* UnauthorisedSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnauthorisedSheet.swift; sourceTree = "<group>"; };
@@ -475,7 +473,6 @@
 			children = (
 				ECE467C425AB552B00939E4F /* SubscriptionErrors.swift */,
 				EC7226F1259F39F8009F6104 /* configuration.storekit */,
-				EC7226F5259F3A53009F6104 /* StoreKitTestCertificate.cer */,
 				EC55E1B525C2BDAF0028804F /* SubscriptionController.swift */,
 				EC3FDD2F25C327280044C312 /* SubscriptionStructs.swift */,
 			);
@@ -917,7 +914,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EC55E1AD25C2B6670028804F /* StoreKitTestCertificate.cer in Resources */,
 				EC55E1B125C2B68C0028804F /* configuration.storekit in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

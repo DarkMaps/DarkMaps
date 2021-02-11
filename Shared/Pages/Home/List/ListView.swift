@@ -23,24 +23,54 @@ struct ListView: View {
     var deleteMessage: (IndexSet) -> Void
     var handleConsentToNewIdentity: (ProtocolAddress) -> Void
     
+    var calculatedSendingX: CGFloat {
+        let width = UIScreen.main.bounds.size.width
+        if selectedDirection == 1 {
+            return 0
+        } else {
+            return width
+        }
+    }
+    
+    var calculatedReceivedX: CGFloat {
+        let width = UIScreen.main.bounds.size.width
+        if selectedDirection == 0 {
+            return 0
+        } else {
+            return -width
+        }
+    }
+    
     var body: some View {
+        NavigationView {
             VStack {
                 HStack {
-                    Text("Received")
-                        .font(.largeTitle)
-                        .fontWeight(.semibold)
-                        .padding(.top, 10)
-                        .padding(.leading)
+                    ZStack {
+                        Text("Received")
+                            .font(.largeTitle)
+                            .fontWeight(.semibold)
+                            .padding(.top, 10)
+                            .padding(.leading)
+                            .offset(x: calculatedReceivedX)
+                            .animation(.easeInOut(duration: 0.2))
+                        Text("Sending")
+                            .font(.largeTitle)
+                            .fontWeight(.semibold)
+                            .padding(.top, 10)
+                            .padding(.leading)
+                            .offset(x: calculatedSendingX)
+                            .animation(.easeInOut(duration: 0.2))
+                    }
                     Spacer()
                 }
                 if (isSubscribed) {
-                    Picker(selection: $selectedDirection, label: Text("Please choose a direction")) {
+                    Picker(selection: $selectedDirection.animation(), label: Text("Please choose a direction")) {
                         ForEach(0 ..< directionLabels.count) {
                             Text(self.directionLabels[$0])
                         }
                     }.pickerStyle(SegmentedPickerStyle())
                 }
-                if selectedDirection == 0 {
+                ZStack {
                     ReceivingList(
                         receivingMessageArray: $receivingMessageArray,
                         getMessagesInProgress: $getMessagesInProgress,
@@ -48,15 +78,20 @@ struct ListView: View {
                         deleteMessage: deleteMessage,
                         performSync: performSync,
                         handleConsentToNewIdentity: handleConsentToNewIdentity)
-                } else {
+                        .offset(x: calculatedSendingX)
+                        .animation(.easeInOut(duration: 0.2))
                     SendingList(
                         sendingMessageArray: $sendingMessageArray,
                         updateIdentityInProgress: $updateIdentityInProgress,
                         deleteLiveMessage: deleteLiveMessage,
                         handleConsentToNewIdentity: handleConsentToNewIdentity,
                         displayError: displayError)
+                        .offset(x: calculatedReceivedX)
+                        .animation(.easeInOut(duration: 0.2))
+                    
                 }
-            }
+            }.navigationBarHidden(true)
+        }
     }
 }
 
