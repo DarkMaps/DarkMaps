@@ -26,86 +26,66 @@ struct NewChatView: View {
     var performMessageSend: () -> Void
     
     var body: some View {
-        NavigationView {
-            VStack {
-                TextFieldWithTitleAndValidation(
-                    title: "Recipient's Email",
-                    invalidText: "Invalid email",
-                    validRegex: "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}",
-                    disableAutocorrection: true,
-                    text: $recipientEmail,
-                    showInvalidText: $recipientEmailInvalid
-                ).padding(.horizontal).padding(.top)
-                VStack {
-                    Button(action: {withAnimation{liveLocationOptionsVisible.toggle()}}) {
-                        HStack {
-                            Text("Live Location")
-                            Image(systemName: "bolt.fill").foregroundColor(isSubscribed ? .yellow : Color(UIColor.systemGray3))
-                            Spacer()
-                            if isSubscribed {
-                                Image(systemName: "chevron.right")
-                                    .rotationEffect(.degrees(liveLocationOptionsVisible ? 90 : 0))
-                                    .animation(.easeInOut)
-                            } else {
-                                Image(systemName: "lock.fill")
-                            }
-                            
-                        }
-                    }
-                    .padding()
-                    .background(Color(UIColor.systemBackground))
-                    .disabled(!isSubscribed)
-                    .zIndex(1.0)
-                    if liveLocationOptionsVisible {
-                        VStack {
-                            Toggle("Live Location Active", isOn: $isLiveLocation.animation())
-                                .toggleStyle(SwitchToggleStyle(tint: Color("AccentColor")))
-                                .padding()
-                                .disabled(isSubscribed == false)
-                            DarkMapsPicker(
-                                selectedLiveLength: $selectedLiveLength,
-                                liveLengths: liveLengths,
-                                disabled: (isSubscribed == false) || !isLiveLocation)
-                                .padding(.vertical)
-                        }
-                        .zIndex(0)
-                        .transition(.move(edge: .top))
-                        
-                    }
-                }.clipped()
-                Button(action: self.performMessageSend) {
-                    HStack {
-                        if (self.sendLocationInProgress) {
-                            ActivityIndicator(isAnimating: true)
-                        } else if (self.isLiveLocation) {
-                            Image(systemName: "bolt.fill")
-                                .foregroundColor(.yellow)
-                                .transition(AnyTransition.opacity.combined(with: .move(edge: .leading)))
-                        }
-                        Text("Send")
-                    }
-                }
-                .padding(.top)
-                .disabled(recipientEmailInvalid || sendLocationInProgress || recipientEmail.isEmpty)
-                .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
+        VStack {
+            HStack {
+                Text("Send Location")
+                    .font(.largeTitle)
+                    .fontWeight(.semibold)
+                    .padding(.top, 10)
+                    .padding(.leading)
                 Spacer()
-                if (isSubscribed == false) {
-                    VStack {
-                        Rectangle().fill(Color("AccentColor")).frame(maxWidth: .infinity, maxHeight: 4)
-                        Text("Subscribe to enable live location sending")
-                            .padding(.top, 3)
-                        Button(action: {
-                            appState.subscriptionSheetIsShowing = true
-                        }) {
-                            Text("Subscribe")
-                        }
-                        .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
-                    }
-                    .transition(.move(edge: .bottom))
+            }
+            TextFieldWithTitleAndValidation(
+                title: "Recipient's Email",
+                invalidText: "Invalid email",
+                validRegex: "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}",
+                disableAutocorrection: true,
+                text: $recipientEmail,
+                showInvalidText: $recipientEmailInvalid
+            ).padding(.horizontal).padding(.top)
+            if isSubscribed {
+                VStack {
+                    Toggle("Live Location Active", isOn: $isLiveLocation.animation())
+                        .toggleStyle(SwitchToggleStyle(tint: Color("AccentColor")))
+                        .padding()
+                        .disabled(isSubscribed == false)
+                    DarkMapsPicker(
+                        selectedLiveLength: $selectedLiveLength,
+                        liveLengths: liveLengths,
+                        disabled: (isSubscribed == false) || !isLiveLocation)
+                        .padding(.vertical)
                 }
             }
-            .navigationTitle("Send Location")
-            
+            Button(action: self.performMessageSend) {
+                HStack {
+                    if (self.sendLocationInProgress) {
+                        ActivityIndicator(isAnimating: true)
+                    } else if (self.isLiveLocation) {
+                        Image(systemName: "bolt.fill")
+                            .foregroundColor(.yellow)
+                            .transition(AnyTransition.opacity.combined(with: .move(edge: .leading)))
+                    }
+                    Text("Send")
+                }
+            }
+            .padding(.top)
+            .disabled(recipientEmailInvalid || sendLocationInProgress || recipientEmail.isEmpty)
+            .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
+            Spacer()
+            if (isSubscribed == false) {
+                VStack {
+                    Rectangle().fill(Color("AccentColor")).frame(maxWidth: .infinity, maxHeight: 4)
+                    Text("Subscribe to enable live location sending")
+                        .padding(.top, 3)
+                    Button(action: {
+                        appState.subscriptionSheetIsShowing = true
+                    }) {
+                        Text("Subscribe")
+                    }
+                    .buttonStyle(RoundedButtonStyle(backgroundColor: Color("AccentColor")))
+                }
+                .transition(.move(edge: .bottom))
+            }
         }
     }
 }

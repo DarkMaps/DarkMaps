@@ -162,6 +162,11 @@ struct NewChatController: View {
                     self.isSubscribed = true
                 }
             })
+            .onReceive(NotificationCenter.default.publisher(for: .subscriptionController_SubscriptionFailed), perform: {_ in
+                withAnimation {
+                    self.isSubscribed = false
+                }
+            })
             .onAppear(perform: {
                 guard let loggedInUser = appState.loggedInUser else {
                     return

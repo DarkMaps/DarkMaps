@@ -33,6 +33,7 @@ struct LoginController: View {
         
         guard let messagingController = try? MessagingController(userName: newUser.userName, serverAddress: newUser.serverAddress, authToken: newUser.authCode) else {
             appState.displayedError = IdentifiableError(MessagingControllerError.unableToCreateAddress)
+            loginInProgress = false
             return
         }
         
@@ -44,10 +45,9 @@ struct LoginController: View {
             authToken: newUser.authCode) {
             createDeviceOutcome in
             
-            loginInProgress = false
-            
             switch createDeviceOutcome {
             case .failure(let error):
+                loginInProgress = false
                 if error == .remoteDeviceExists {
                     self.showingDeleteDeviceSheet = true
                 } else {
@@ -68,6 +68,7 @@ struct LoginController: View {
         
         guard let messagingController = try? MessagingController(userName: newUser.userName, serverAddress: newUser.serverAddress, authToken: newUser.authCode) else {
             appState.displayedError = IdentifiableError(MessagingControllerError.unableToCreateAddress)
+            loginInProgress = false
             return
         }
         
@@ -77,6 +78,7 @@ struct LoginController: View {
             loginInProgress = false
             switch getMessagesOutcome {
             case .failure(let error):
+                loginInProgress = false
                 if error == .remoteDeviceChanged {
                     showingResetDeviceSheet = true
                 } else {
@@ -126,13 +128,14 @@ struct LoginController: View {
             password: password,
             serverAddress: customAuthServer
         ) { loginOutcome in
-            loginInProgress = false
             
             switch loginOutcome {
             case .twoFactorRequired(let ephemeralCodeReceived):
+                loginInProgress = false
                 ephemeralCode = ephemeralCodeReceived
                 twoFactorModalVisible = true
             case .failure(let error):
+                loginInProgress = false
                 appState.displayedError = IdentifiableError(error)
             case .success(let newUser):
                 storedNewUser = newUser

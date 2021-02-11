@@ -43,11 +43,17 @@ public class SubscriptionController: NSObject  {
     private let notificationCentre = NotificationCenter.default
     
     private func sendFailureNotification() {
-        notificationCentre.post(name: .subscriptionController_SubscriptionFailed, object: nil)
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else {return}
+            self.notificationCentre.post(name: .subscriptionController_SubscriptionFailed, object: nil)
+        }
     }
 
     private func sendSuccessNotification(expiry: Date) {
-        notificationCentre.post(name: .subscriptionController_SubscriptionVerified, object: nil, userInfo: ["expiry": expiry])
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else {return}
+            self.notificationCentre.post(name: .subscriptionController_SubscriptionVerified, object: nil, userInfo: ["expiry": expiry])
+        }
     }
     
     func startObserving() {
@@ -223,7 +229,6 @@ extension SubscriptionController {
         do {
             
             #if DEBUG
-            
                 //Verification impossible on simulator
                 #if targetEnvironment(simulator)
                     //Only run if in DEBUG on simulator and not testing

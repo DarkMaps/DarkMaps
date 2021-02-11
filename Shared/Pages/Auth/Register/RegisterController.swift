@@ -25,6 +25,7 @@ struct RegisterController: View {
         
         guard let messagingController = try? MessagingController(userName: newUser.userName, serverAddress: newUser.serverAddress, authToken: newUser.authCode) else {
             appState.displayedError = IdentifiableError(MessagingControllerError.unableToCreateAddress)
+            registerInProgress = false
             return
         }
         
@@ -36,10 +37,9 @@ struct RegisterController: View {
             authToken: newUser.authCode) {
             createDeviceOutcome in
             
-            registerInProgress = false
-            
             switch createDeviceOutcome {
             case .failure(let error):
+                registerInProgress = false
                 appState.displayedError = IdentifiableError(error)
             case .success(let registrationId):
                 print("Registration Id: \(registrationId)")
@@ -85,7 +85,6 @@ struct RegisterController: View {
             password: password,
             serverAddress: customAuthServer
         ) { registerOutcome in
-            registerInProgress = false
             
             switch registerOutcome {
             case .failure(let error):
@@ -103,6 +102,7 @@ struct RegisterController: View {
                         storedNewUser = newUser
                         handleCreateDevice(newUser: newUser)
                     default:
+                        registerInProgress = false
                         appState.displayedError = IdentifiableError(SSAPIAuthRegisterError.loginError)
                     }
                 }

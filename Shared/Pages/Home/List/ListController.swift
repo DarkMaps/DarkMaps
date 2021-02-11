@@ -16,6 +16,8 @@ struct ListController: View {
     @State var getMessagesInProgress: Bool = false
     @State var updateIdentityInProgress: ProtocolAddress? = nil
     @State var directionLabels = ["Receiving (0)", "Sending (0)"]
+    @State var selectedDirection: Int = 0
+    @State var isSubscribed = false //Necessary for updates
     
     func updateLabels() {
         print("updateLabels")
@@ -174,21 +176,44 @@ struct ListController: View {
         }
     }
     
+    func displayError(error: LocalizedError) {
+        appState.displayedError = IdentifiableError(error)
+    }
+    
     var body: some View {
         ListView(
             receivingMessageArray: $receivingMessageArray,
             sendingMessageArray: $sendingMessageArray,
             getMessagesInProgress: $getMessagesInProgress,
             updateIdentityInProgress: $updateIdentityInProgress,
-            loggedInUser: $appState.loggedInUser,
             directionLabels: $directionLabels,
+            isSubscribed: $isSubscribed,
+            selectedDirection: $selectedDirection,
             performSync: performSync,
+            displayError: displayError,
             deleteLiveMessage: deleteLiveMessage,
             deleteMessage: deleteMessage,
             handleConsentToNewIdentity: handleConsentToNewIdentity
         ).onAppear() {
+            if let loggedInUser = appState.loggedInUser {
+                if loggedInUser.subscriptionExpiryDate == nil {
+                    self.selectedDirection = 0
+                } else {
+                    self.isSubscribed = true
+                }
+            }
             getStoredMessages()
             performSync()
         }
+        .onReceive(NotificationCenter.default.publisher(for: .subscriptionController_SubscriptionVerified), perform: {_ in
+            withAnimation {
+                self.isSubscribed = true
+            }
+        })
+        .onReceive(NotificationCenter.default.publisher(for: .subscriptionController_SubscriptionFailed), perform: {_ in
+            withAnimation {
+                self.isSubscribed = false
+            }
+        })
     }
 }

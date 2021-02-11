@@ -39,7 +39,6 @@ struct SignalMapsApp: App {
         }
         self.appState.loggedInUser = storedUser
         self.appState.messagingController = messagingController
-        handleCheckUserIsSubscriber()
     }
     
     func handleCheckUserIsSubscriber() {
@@ -105,7 +104,10 @@ struct SignalMapsApp: App {
         }
         .onChange(of: scenePhase) { phase in
             if phase == .active {
-                self.handleLoadStoredUser()
+                if appState.loggedInUser == nil {
+                    self.handleLoadStoredUser()
+                }
+                self.handleCheckUserIsSubscriber()
             }
         }
     }

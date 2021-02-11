@@ -1004,7 +1004,7 @@ public class SimpleSignalSwiftEncryptionAPI {
                     if let code = (json?["code"] as? String) {
                         if code == "no_device" {
                             return(.failure(.senderHasNoRegisteredDevice))
-                        } else if code == "no_recipient" {
+                        } else if code == "no_recipient_user" {
                             return(.failure(.recipientUserDoesNotExist))
                         } else if code == "no_recipient_device" {
                             return(.failure(.recipientUserHasNoRegisteredDevice))

@@ -16,6 +16,7 @@ struct SendingList: View {
     
     var deleteLiveMessage: (IndexSet) -> Void
     var handleConsentToNewIdentity: (ProtocolAddress) -> Void
+    var displayError: (LocalizedError) -> Void
     
     var body: some View {
         VStack {
@@ -55,6 +56,8 @@ struct SendingList: View {
                         if updateIdentityInProgress == nil {
                             if message.error == .alteredIdentity {
                                 acceptAlteredIdentityAlertRelatesTo = message.recipient
+                            } else if message.error != nil {
+                                displayError(message.error!)
                             }
                         }
                     }
@@ -67,18 +70,32 @@ struct SendingList: View {
                         Spacer()
                     }.cornerRadius(10)
                 }
-            }.background(
-                Text("").hidden().alert(item: $acceptAlteredIdentityAlertRelatesTo, content: {chosenSender in
-                    Alert(title:
-                            Text("Altered Identity"),
-                          message: Text("\(chosenSender.name)'s identity has changed, do you wish to use their new identity?"),
-                          primaryButton: Alert.Button.destructive(
-                            Text("OK"),
-                            action: {
-                                handleConsentToNewIdentity(chosenSender)
-                            }),
-                          secondaryButton: Alert.Button.cancel())
-                })
+            }
+            .background(
+                VStack {
+                    Text("").hidden().alert(item: $acceptAlteredIdentityAlertRelatesTo, content: {chosenSender in
+                        Alert(title:
+                                Text("Altered Identity"),
+                              message: Text("\(chosenSender.name)'s identity has changed, do you wish to use their new identity?"),
+                              primaryButton: Alert.Button.destructive(
+                                Text("OK"),
+                                action: {
+                                    handleConsentToNewIdentity(chosenSender)
+                                }),
+                              secondaryButton: Alert.Button.cancel())
+                    })
+                    Text("").hidden().alert(item: $acceptAlteredIdentityAlertRelatesTo, content: {chosenSender in
+                        Alert(title:
+                                Text("Altered Identity"),
+                              message: Text("\(chosenSender.name)'s identity has changed, do you wish to use their new identity?"),
+                              primaryButton: Alert.Button.destructive(
+                                Text("OK"),
+                                action: {
+                                    handleConsentToNewIdentity(chosenSender)
+                                }),
+                              secondaryButton: Alert.Button.cancel())
+                    })
+                }
             )
             
         }

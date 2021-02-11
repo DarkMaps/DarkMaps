@@ -13,20 +13,27 @@ struct ListView: View {
     @Binding var sendingMessageArray: [LiveMessage]
     @Binding var getMessagesInProgress: Bool
     @Binding var updateIdentityInProgress: ProtocolAddress?
-    @Binding var loggedInUser: LoggedInUser?
     @Binding var directionLabels: [String]
-    
-    @State private var selectedDirection = 0
+    @Binding var isSubscribed: Bool
+    @Binding var selectedDirection: Int
                
     var performSync: () -> Void
+    var displayError: (LocalizedError) -> Void
     var deleteLiveMessage: (IndexSet) -> Void
     var deleteMessage: (IndexSet) -> Void
     var handleConsentToNewIdentity: (ProtocolAddress) -> Void
     
     var body: some View {
-        NavigationView {
             VStack {
-                if (loggedInUser?.subscriptionExpiryDate != nil) {
+                HStack {
+                    Text("Received")
+                        .font(.largeTitle)
+                        .fontWeight(.semibold)
+                        .padding(.top, 10)
+                        .padding(.leading)
+                    Spacer()
+                }
+                if (isSubscribed) {
                     Picker(selection: $selectedDirection, label: Text("Please choose a direction")) {
                         ForEach(0 ..< directionLabels.count) {
                             Text(self.directionLabels[$0])
@@ -46,19 +53,10 @@ struct ListView: View {
                         sendingMessageArray: $sendingMessageArray,
                         updateIdentityInProgress: $updateIdentityInProgress,
                         deleteLiveMessage: deleteLiveMessage,
-                        handleConsentToNewIdentity: handleConsentToNewIdentity)
-                }
-            }.navigationTitle("Received")
-            
-        }
-        .padding(.bottom, 0)
-        .onAppear(perform: {
-            if let loggedInUser = self.loggedInUser {
-                if loggedInUser.subscriptionExpiryDate == nil {
-                    self.selectedDirection = 0
+                        handleConsentToNewIdentity: handleConsentToNewIdentity,
+                        displayError: displayError)
                 }
             }
-        })
     }
 }
 
@@ -144,23 +142,18 @@ struct ListView_Previews: PreviewProvider {
         ]
         @State var getMessagesInProgress: Bool = false
         @State var updateIdentityInProgress: ProtocolAddress? = nil
-        @State var loggedInUser: LoggedInUser?
         @State var directionLabels = ["Receiving", "Sending"]
+        @State var selectedDirection: Int = 0
+        @State var isSubscribed: Bool
                    
         func performSync() {}
         func deleteLiveMessage(_: IndexSet) {}
         func deleteMessage(_: IndexSet) {}
         func handleConsentToNewIdentity(_: ProtocolAddress) {}
+        func displayError(_: LocalizedError) {}
         
         init(isSubscriber: Bool = false, isEmpty: Bool = false) {
-            let loggedInUser = LoggedInUser(
-                userName: "test@test.com",
-                deviceId: 1,
-                serverAddress: "test.com",
-                authCode: "testAuthCode",
-                is2FAUser: false,
-                subscriptionExpiryDate: isSubscriber ? Date() : nil)
-            _loggedInUser = State(initialValue: loggedInUser)
+            _isSubscribed = State(initialValue: isSubscriber)
             if (isEmpty) {
                 _receivingMessageArray = State(initialValue: [])
             }
@@ -172,9 +165,11 @@ struct ListView_Previews: PreviewProvider {
                 sendingMessageArray: $sendingMessageArray,
                 getMessagesInProgress: $getMessagesInProgress,
                 updateIdentityInProgress: $updateIdentityInProgress,
-                loggedInUser: $loggedInUser,
                 directionLabels: $directionLabels,
+                isSubscribed: $isSubscribed,
+                selectedDirection: $selectedDirection,
                 performSync: performSync,
+                displayError: displayError,
                 deleteLiveMessage: deleteLiveMessage,
                 deleteMessage: deleteMessage,
                 handleConsentToNewIdentity: handleConsentToNewIdentity
