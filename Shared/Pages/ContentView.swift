@@ -17,8 +17,10 @@ struct ContentView: View {
         ZStack {
             if $appState.loggedInUser.wrappedValue != nil {
                 TabHolder()
+                    .transition(.opacity)
             } else {
                 Entry()
+                    .transition(.opacity)
             }
             Text("").hidden().alert(item: $appState.displayedError) { viewError -> Alert in
                 ErrorAlert(viewError: viewError)

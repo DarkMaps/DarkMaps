@@ -21,6 +21,38 @@ struct RegisterController: View {
     
     var authorisationController = AuthorisationController()
     
+    func handleRegister() -> Void {
+        registerInProgress = true
+        authorisationController.register(
+            username: username,
+            password: password,
+            serverAddress: customAuthServer
+        ) { registerOutcome in
+            
+            switch registerOutcome {
+            case .failure(let error):
+                appState.displayedError = IdentifiableError(error)
+            case .success:
+                
+                authorisationController.login(
+                    username: username,
+                    password: password,
+                    serverAddress: customAuthServer
+                ) { loginOutcome in
+                    
+                    switch loginOutcome {
+                    case .success(let newUser):
+                        storedNewUser = newUser
+                        handleCreateDevice(newUser: newUser)
+                    default:
+                        registerInProgress = false
+                        appState.displayedError = IdentifiableError(SSAPIAuthRegisterError.loginError)
+                    }
+                }
+            }
+        }
+    }
+    
     private func handleCreateDevice(newUser: LoggedInUser) -> Void {
         
         guard let messagingController = try? MessagingController(userName: newUser.userName, serverAddress: newUser.serverAddress, authToken: newUser.authCode) else {
@@ -66,48 +98,20 @@ struct RegisterController: View {
                     if error == .expiredPurchase {
                         appState.displayedError = IdentifiableError(error)
                     }
-                    appState.loggedInUser = newUser
+                    withAnimation {
+                        appState.loggedInUser = newUser
+                    }
                 }
             case .success(let expiryDate):
                 print(expiryDate)
                 DispatchQueue.main.async {
-                    appState.loggedInUser = newUser
-                }
-            }
-        }
-        
-    }
-    
-    func handleRegister() -> Void {
-        registerInProgress = true
-        authorisationController.register(
-            username: username,
-            password: password,
-            serverAddress: customAuthServer
-        ) { registerOutcome in
-            
-            switch registerOutcome {
-            case .failure(let error):
-                appState.displayedError = IdentifiableError(error)
-            case .success:
-                
-                authorisationController.login(
-                    username: username,
-                    password: password,
-                    serverAddress: customAuthServer
-                ) { loginOutcome in
-                    
-                    switch loginOutcome {
-                    case .success(let newUser):
-                        storedNewUser = newUser
-                        handleCreateDevice(newUser: newUser)
-                    default:
-                        registerInProgress = false
-                        appState.displayedError = IdentifiableError(SSAPIAuthRegisterError.loginError)
+                    withAnimation {
+                        appState.loggedInUser = newUser
                     }
                 }
             }
         }
+        
     }
     
     var body: some View {

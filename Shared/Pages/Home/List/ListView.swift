@@ -78,7 +78,7 @@ struct ListView: View {
                         deleteMessage: deleteMessage,
                         performSync: performSync,
                         handleConsentToNewIdentity: handleConsentToNewIdentity)
-                        .offset(x: calculatedSendingX)
+                        .offset(x: calculatedReceivedX)
                         .animation(.easeInOut(duration: 0.2))
                     SendingList(
                         sendingMessageArray: $sendingMessageArray,
@@ -86,7 +86,7 @@ struct ListView: View {
                         deleteLiveMessage: deleteLiveMessage,
                         handleConsentToNewIdentity: handleConsentToNewIdentity,
                         displayError: displayError)
-                        .offset(x: calculatedReceivedX)
+                        .offset(x: calculatedSendingX)
                         .animation(.easeInOut(duration: 0.2))
                     
                 }

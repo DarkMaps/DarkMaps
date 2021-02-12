@@ -29,6 +29,29 @@ struct LoginController: View {
     
     var authorisationController = AuthorisationController()
     
+    func handleLogin() -> Void {
+        loginInProgress = true
+        authorisationController.login(
+            username: username,
+            password: password,
+            serverAddress: customAuthServer
+        ) { loginOutcome in
+            
+            switch loginOutcome {
+            case .twoFactorRequired(let ephemeralCodeReceived):
+                loginInProgress = false
+                ephemeralCode = ephemeralCodeReceived
+                twoFactorModalVisible = true
+            case .failure(let error):
+                loginInProgress = false
+                appState.displayedError = IdentifiableError(error)
+            case .success(let newUser):
+                storedNewUser = newUser
+                handleCreateDevice(newUser: newUser)
+            }
+        }
+    }
+    
     private func handleCreateDevice(newUser: LoggedInUser) -> Void {
         
         guard let messagingController = try? MessagingController(userName: newUser.userName, serverAddress: newUser.serverAddress, authToken: newUser.authCode) else {
@@ -108,40 +131,20 @@ struct LoginController: View {
                     if error == .expiredPurchase {
                         appState.displayedError = IdentifiableError(error)
                     }
-                    appState.loggedInUser = newUser
+                    withAnimation {
+                        appState.loggedInUser = newUser
+                    }
                 }
             case .success(let expiryDate):
                 DispatchQueue.main.async {
-                    print(expiryDate)
                     newUser.subscriptionExpiryDate = expiryDate
-                    appState.loggedInUser = newUser
+                    withAnimation {
+                        appState.loggedInUser = newUser
+                    }
                 }
             }
         }
         
-    }
-    
-    func handleLogin() -> Void {
-        loginInProgress = true
-        authorisationController.login(
-            username: username,
-            password: password,
-            serverAddress: customAuthServer
-        ) { loginOutcome in
-            
-            switch loginOutcome {
-            case .twoFactorRequired(let ephemeralCodeReceived):
-                loginInProgress = false
-                ephemeralCode = ephemeralCodeReceived
-                twoFactorModalVisible = true
-            case .failure(let error):
-                loginInProgress = false
-                appState.displayedError = IdentifiableError(error)
-            case .success(let newUser):
-                storedNewUser = newUser
-                handleCreateDevice(newUser: newUser)
-            }
-        }
     }
     
     func handleDeleteDeviceThenLogin() -> Void {
@@ -165,9 +168,9 @@ struct LoginController: View {
             deleteDeviceOutcome in
             switch deleteDeviceOutcome {
             case .failure(let error):
+                loginInProgress = false
                 appState.displayedError = IdentifiableError(error)
             case .success():
-                
                 handleCreateDevice(newUser: storedNewUser)
             }
         }
@@ -181,13 +184,13 @@ struct LoginController: View {
             ephemeralToken: ephemeralCode ?? "unknown",
             serverAddress: customAuthServer) { outcome in
             DispatchQueue.main.async {
-                loginInProgress = false
                 twoFactorModalVisible = false
                 switch outcome {
                 case .success(let newUser):
                     storedNewUser = newUser
                     handleCreateDevice(newUser: newUser)
                 case .failure(let error):
+                    loginInProgress = false
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
                         appState.displayedError = IdentifiableError(error)
                     })

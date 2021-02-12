@@ -16,11 +16,15 @@ struct ServerDeviceChangedSheet: View {
     func handleDismissal() {
         print("Dismiss")
         guard let messagingController = appState.messagingController else {
-            appState.loggedInUser = nil
+            withAnimation {
+                appState.loggedInUser = nil
+            }
             return
         }
         messagingController.deleteAllLocalData()
-        appState.loggedInUser = nil
+        withAnimation {
+            appState.loggedInUser = nil
+        }
         self.presentationMode.wrappedValue.dismiss()
     }
     

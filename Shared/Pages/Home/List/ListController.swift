@@ -74,22 +74,8 @@ struct ListController: View {
             
             switch getMessagesOutcome {
             case .failure(let error):
-                if error == .noDeviceOnServer {
-                    messagingController.deleteAllLocalData()
-                    let authorisationController = AuthorisationController()
-                    authorisationController.logUserOut(authToken: loggedInUser.authCode, serverAddress: loggedInUser.serverAddress) { logOutOutcome in
-                        switch logOutOutcome {
-                        case .success():
-                            appState.loggedInUser = nil
-                        case .failure(let error):
-                            appState.displayedError = IdentifiableError(error)
-                            appState.loggedInUser = nil
-                        }
-                    }
-                } else {
-                    DispatchQueue.main.async {
-                        appState.displayedError = IdentifiableError(error)
-                    }
+                DispatchQueue.main.async {
+                    appState.displayedError = IdentifiableError(error)
                 }
             case .success():
                 do {
@@ -195,9 +181,13 @@ struct ListController: View {
             deleteMessage: deleteMessage,
             handleConsentToNewIdentity: handleConsentToNewIdentity
         ).onAppear() {
+            print("On Appear")
             if let loggedInUser = appState.loggedInUser {
+                print("Logged in")
                 if loggedInUser.subscriptionExpiryDate == nil {
+                    print("Not subscribed")
                     self.selectedDirection = 0
+                    print("Subscribed")
                 } else {
                     self.isSubscribed = true
                 }

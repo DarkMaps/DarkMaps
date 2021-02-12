@@ -33,10 +33,14 @@ struct SettingsController: View {
             actionInProgress = nil
             switch result {
             case .success():
-                appState.loggedInUser = nil
+                withAnimation {
+                    appState.loggedInUser = nil
+                }
             case .failure(let error):
                 appState.displayedError = IdentifiableError(error)
-                appState.loggedInUser = nil
+                withAnimation {
+                    appState.loggedInUser = nil
+                }
             }
         }
     }
@@ -102,7 +106,9 @@ struct SettingsController: View {
                 if let messagingController = self.appState.messagingController {
                     messagingController.deleteAllLocalData()
                 }
-                appState.loggedInUser = nil
+                withAnimation {
+                    appState.loggedInUser = nil
+                }
             case .failure(let error):
                 appState.displayedError = IdentifiableError(error)
             }
