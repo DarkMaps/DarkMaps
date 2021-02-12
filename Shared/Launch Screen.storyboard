@@ -23,7 +23,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="214" verticalHuggingPriority="251" image="Main Icon" translatesAutoresizingMaskIntoConstraints="NO" id="oh9-qm-aS6">
-                                <rect key="frame" x="46" y="287" width="322" height="322"/>
+                                <rect key="frame" x="75" y="316" width="264" height="264"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="oh9-qm-aS6" secondAttribute="height" id="QXA-il-TSx"/>
                                 </constraints>
@@ -33,7 +33,7 @@
                         <color key="backgroundColor" red="0.97614827189412146" green="0.39215686274509803" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="tintColor" red="0.92549019607843142" green="0.45098039215686275" blue="0.18431372549019609" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="oh9-qm-aS6" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" constant="46" id="PZp-dZ-Gr4"/>
+                            <constraint firstItem="oh9-qm-aS6" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" constant="75" id="PZp-dZ-Gr4"/>
                             <constraint firstItem="oh9-qm-aS6" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="T6C-Ew-IeY"/>
                             <constraint firstItem="oh9-qm-aS6" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="nh3-wd-Mr1"/>
                         </constraints>

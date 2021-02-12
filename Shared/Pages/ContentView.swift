@@ -18,6 +18,7 @@ struct ContentView: View {
         ZStack {
             if loadComplete == false {
                 Splash()
+                    .transition(.opacity)
             } else if $appState.loggedInUser.wrappedValue != nil {
                 TabHolder()
                     .transition(.opacity)

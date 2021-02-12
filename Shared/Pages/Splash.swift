@@ -17,7 +17,7 @@ struct Splash: View {
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .ignoresSafeArea()
-                        .frame(width: UIScreen.main.bounds.size.width - 102)
+                        .frame(width: UIScreen.main.bounds.size.width - 150)
                 }
             }
         }.ignoresSafeArea()

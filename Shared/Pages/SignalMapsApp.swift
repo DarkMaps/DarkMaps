@@ -110,7 +110,9 @@ struct SignalMapsApp: App {
                 }
                 sleep(2)
                 DispatchQueue.main.async {
-                    loadComplete = true
+                    withAnimation {
+                        loadComplete = true
+                    }
                 }
                 // Don't wait for handleCheckUserIsSubscriber as this may involve an API call
                 self.handleCheckUserIsSubscriber()
