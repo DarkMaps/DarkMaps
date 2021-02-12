@@ -33,17 +33,17 @@ struct TextFieldAlert<Presenting>: View where Presenting: View {
                                 Text(self.title).padding(.bottom, 10).font(Font.body.bold())
                                 if (secureField) {
                                     SecureField(self.title, text: self.$text)
-                                        .id(self.isShowing)
                                         .textFieldStyle(RoundedBorderTextFieldStyle())
                                         .overlay(
-                                            Rectangle()
+                                            RoundedRectangle(cornerRadius: 5)
                                                 .stroke(Color(UIColor.systemGray3), lineWidth: 1))
+                                        .id(self.isShowing)
                                 } else {
                                     TextField(self.textBoxPlaceholder ?? self.title, text: self.$text)
                                         .id(self.isShowing)
                                         .textFieldStyle(RoundedBorderTextFieldStyle())
                                         .overlay(
-                                            Rectangle()
+                                            RoundedRectangle(cornerRadius: 5)
                                                 .stroke(Color(UIColor.systemGray3), lineWidth: 1))
                                 }
                             }.padding()
@@ -82,6 +82,10 @@ struct TextFieldAlert<Presenting>: View where Presenting: View {
                         Color.black :
                                     Color(UIColor.systemGray5))
                     .cornerRadius(10)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color(UIColor.systemGray3), lineWidth: 1)
+                    )
                     .padding()
                     Spacer()
                 }
