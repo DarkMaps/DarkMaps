@@ -41,6 +41,7 @@ struct RegisterView: View {
                 HStack {
                     if (self.registerInProgress) {
                         ActivityIndicator(isAnimating: true)
+                            .transition(AnyTransition.opacity.combined(with: .move(edge: .leading)))
                     }
                     Text("Register")
                 }

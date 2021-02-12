@@ -30,75 +30,6 @@ struct SettingsView: View {
     var body: some View {
         NavigationView {
             List {
-                Section(header: Text("Subscription")) {
-                    if loggedInUser?.subscriptionExpiryDate == nil {
-                        SettingsRow(
-                            actionInProgress: $actionInProgress,
-                            title: "Subscribe",
-                            iconName: "creditcard.fill",
-                            actionDefiningActivityMarker: .subscribe,
-                            onTap: {
-                                appState.subscriptionSheetIsShowing = true
-                            }
-                        )
-                        SettingsRow(
-                            actionInProgress: $actionInProgress,
-                            title: "Restore Subscription",
-                            iconName: "arrow.clockwise",
-                            actionDefiningActivityMarker: .restoreSubscription,
-                            onTap: restoreSubscription
-                        )
-                    } else {
-                        Text("You are subscribed until: \(formatDate(loggedInUser!.subscriptionExpiryDate!))")
-                        SettingsRow(
-                            actionInProgress: $actionInProgress,
-                            title: "Manage Subscriptions",
-                            iconName: "gear",
-                            actionDefiningActivityMarker: .subscriptionSettings,
-                            onTap: {
-                                if let url = URL(string: "itms-apps://apps.apple.com/account/subscriptions") {
-                                    if UIApplication.shared.canOpenURL(url) {
-                                        UIApplication.shared.open(url, options: [:])
-                                    }
-                                }
-                            }
-                        )
-                    }
-
-                }
-                Section(header: Text("Account")) {
-                    if (loggedInUser?.is2FAUser ?? false) {
-                        SettingsRow(
-                            actionInProgress: $actionInProgress,
-                            title: "Deactivate 2FA",
-                            iconName: "minus.diamond.fill",
-                            actionDefiningActivityMarker: .deactivate2FA,
-                            onTap: {deactivate2FAModalIsShowing = true}
-                        )
-                    } else {
-                        SettingsRow(
-                            actionInProgress: $actionInProgress,
-                            title: "Activate 2FA",
-                            iconName: "plus.diamond.fill",
-                            actionDefiningActivityMarker: .confirm2FA,
-                            onTap: {activate2FAModalIsShowing = true}
-                        )
-                    }
-                    SettingsRow(
-                        actionInProgress: $actionInProgress,
-                        title: "Log Out",
-                        iconName: "person.fill.badge.minus",
-                        actionDefiningActivityMarker: .logUserOut,
-                        onTap: logUserOut
-                    )
-                    SettingsRow(
-                        actionInProgress: $actionInProgress,
-                        title: "Delete Account",
-                        iconName: "figure.wave",
-                        actionDefiningActivityMarker: .deleteUserAccount,
-                        onTap: {passwordAlertShowing = true}
-                    )
-                }
                 Section(header: Text("User")) {
                     SettingsRow(
                         actionInProgress: $actionInProgress,
@@ -134,7 +65,74 @@ struct SettingsView: View {
                         actionDefiningActivityMarker: nil,
                         isTappable: false)
                 }
-                
+                Section(header: Text("Account")) {
+                    if (loggedInUser?.is2FAUser ?? false) {
+                        SettingsRow(
+                            actionInProgress: $actionInProgress,
+                            title: "Deactivate 2FA",
+                            iconName: "minus.diamond.fill",
+                            actionDefiningActivityMarker: .deactivate2FA,
+                            onTap: {deactivate2FAModalIsShowing = true}
+                        )
+                    } else {
+                        SettingsRow(
+                            actionInProgress: $actionInProgress,
+                            title: "Activate 2FA",
+                            iconName: "plus.diamond.fill",
+                            actionDefiningActivityMarker: .confirm2FA,
+                            onTap: {activate2FAModalIsShowing = true}
+                        )
+                    }
+                    SettingsRow(
+                        actionInProgress: $actionInProgress,
+                        title: "Log Out",
+                        iconName: "person.fill.badge.minus",
+                        actionDefiningActivityMarker: .logUserOut,
+                        onTap: logUserOut
+                    )
+                    SettingsRow(
+                        actionInProgress: $actionInProgress,
+                        title: "Delete Account",
+                        iconName: "figure.wave",
+                        actionDefiningActivityMarker: .deleteUserAccount,
+                        onTap: {passwordAlertShowing = true}
+                    )
+                }
+                Section(header: Text("Subscription")) {
+                    if loggedInUser?.subscriptionExpiryDate == nil {
+                        SettingsRow(
+                            actionInProgress: $actionInProgress,
+                            title: "Subscribe",
+                            iconName: "creditcard.fill",
+                            actionDefiningActivityMarker: .subscribe,
+                            onTap: {
+                                appState.subscriptionSheetIsShowing = true
+                            }
+                        )
+                        SettingsRow(
+                            actionInProgress: $actionInProgress,
+                            title: "Restore Subscription",
+                            iconName: "arrow.clockwise",
+                            actionDefiningActivityMarker: .restoreSubscription,
+                            onTap: restoreSubscription
+                        )
+                    } else {
+                        Text("You are subscribed until: \(formatDate(loggedInUser!.subscriptionExpiryDate!))")
+                        SettingsRow(
+                            actionInProgress: $actionInProgress,
+                            title: "Manage Subscriptions",
+                            iconName: "gear",
+                            actionDefiningActivityMarker: .subscriptionSettings,
+                            onTap: {
+                                if let url = URL(string: "itms-apps://apps.apple.com/account/subscriptions") {
+                                    if UIApplication.shared.canOpenURL(url) {
+                                        UIApplication.shared.open(url, options: [:])
+                                    }
+                                }
+                            }
+                        )
+                    }
+                }
             }
             .listStyle(GroupedListStyle())
             .navigationTitle("Settings")

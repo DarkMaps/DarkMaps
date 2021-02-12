@@ -89,6 +89,7 @@ struct TextFieldAlert<Presenting>: View where Presenting: View {
                     .padding()
                     Spacer()
                 }
+                .edgesIgnoringSafeArea(.all)
                 .background(
                     Color(UIColor.black.withAlphaComponent(0.7))
                 )

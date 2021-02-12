@@ -60,6 +60,7 @@ struct NewChatView: View {
                 HStack {
                     if (self.sendLocationInProgress) {
                         ActivityIndicator(isAnimating: true)
+                            .transition(AnyTransition.opacity.combined(with: .move(edge: .leading)))
                     } else if (self.isLiveLocation) {
                         Image(systemName: "bolt.fill")
                             .foregroundColor(.yellow)

@@ -22,7 +22,9 @@ struct RegisterController: View {
     var authorisationController = AuthorisationController()
     
     func handleRegister() -> Void {
-        registerInProgress = true
+        withAnimation {
+            registerInProgress = true
+        }
         authorisationController.register(
             username: username,
             password: password,
@@ -31,7 +33,9 @@ struct RegisterController: View {
             
             switch registerOutcome {
             case .failure(let error):
-                registerInProgress = false
+                withAnimation {
+                    registerInProgress = false
+                }
                 appState.displayedError = IdentifiableError(error)
             case .success:
                 
@@ -46,7 +50,9 @@ struct RegisterController: View {
                         storedNewUser = newUser
                         handleCreateDevice(newUser: newUser)
                     default:
-                        registerInProgress = false
+                        withAnimation {
+                            registerInProgress = false
+                        }
                         appState.displayedError = IdentifiableError(SSAPIAuthRegisterError.loginError)
                     }
                 }
@@ -62,7 +68,9 @@ struct RegisterController: View {
             return
         }
         
-        registerInProgress = true
+        withAnimation {
+            registerInProgress = true
+        }
             
         messagingController.createDevice(
             userName: newUser.userName,
@@ -72,10 +80,11 @@ struct RegisterController: View {
             
             switch createDeviceOutcome {
             case .failure(let error):
-                registerInProgress = false
+                withAnimation {
+                    registerInProgress = false
+                }
                 appState.displayedError = IdentifiableError(error)
             case .success(let registrationId):
-                print("Registration Id: \(registrationId)")
                 appState.messagingController = messagingController
                 handleCheckSubscriptionStatus(newUser: newUser)
             }
@@ -84,13 +93,17 @@ struct RegisterController: View {
     
     func handleCheckSubscriptionStatus(newUser: LoggedInUser) -> Void {
         
-        registerInProgress = true
+        withAnimation {
+            registerInProgress = true
+        }
         
         let subscriptionController = appState.subscriptionController
         
         subscriptionController.verifyReceipt() { verifyResult in
             
-            registerInProgress = false
+            withAnimation {
+                registerInProgress = false
+            }
             
             switch verifyResult {
             case.failure(let error):

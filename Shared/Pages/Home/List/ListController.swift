@@ -66,11 +66,15 @@ struct ListController: View {
             return
         }
         
-        getMessagesInProgress = true
+        withAnimation {
+            getMessagesInProgress = true
+        }
         
         messagingController.getMessages(serverAddress: loggedInUser.serverAddress, authToken: loggedInUser.authCode) { getMessagesOutcome in
             
-            getMessagesInProgress = false
+            withAnimation {
+                getMessagesInProgress = false
+            }
             
             switch getMessagesOutcome {
             case .failure(let error):
@@ -90,7 +94,6 @@ struct ListController: View {
                 } catch {
                     DispatchQueue.main.async {
                         print(error)
-                        
                         appState.displayedError = IdentifiableError(error as! LocalizedError)
                     }
                 }

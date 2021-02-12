@@ -30,7 +30,9 @@ struct LoginController: View {
     var authorisationController = AuthorisationController()
     
     func handleLogin() -> Void {
-        loginInProgress = true
+        withAnimation {
+            loginInProgress = true
+        }
         authorisationController.login(
             username: username,
             password: password,
@@ -39,11 +41,15 @@ struct LoginController: View {
             
             switch loginOutcome {
             case .twoFactorRequired(let ephemeralCodeReceived):
-                loginInProgress = false
+                withAnimation {
+                    loginInProgress = false
+                }
                 ephemeralCode = ephemeralCodeReceived
                 twoFactorModalVisible = true
             case .failure(let error):
-                loginInProgress = false
+                withAnimation {
+                    loginInProgress = false
+                }
                 appState.displayedError = IdentifiableError(error)
             case .success(let newUser):
                 storedNewUser = newUser
@@ -56,11 +62,15 @@ struct LoginController: View {
         
         guard let messagingController = try? MessagingController(userName: newUser.userName, serverAddress: newUser.serverAddress, authToken: newUser.authCode) else {
             appState.displayedError = IdentifiableError(MessagingControllerError.unableToCreateAddress)
-            loginInProgress = false
+            withAnimation {
+                loginInProgress = false
+            }
             return
         }
         
-        loginInProgress = true
+        withAnimation {
+            loginInProgress = true
+        }
             
         messagingController.createDevice(
             userName: newUser.userName,
@@ -70,14 +80,15 @@ struct LoginController: View {
             
             switch createDeviceOutcome {
             case .failure(let error):
-                loginInProgress = false
+                withAnimation {
+                    loginInProgress = false
+                }
                 if error == .remoteDeviceExists {
                     self.showingDeleteDeviceSheet = true
                 } else {
                     appState.displayedError = IdentifiableError(error)
                 }
             case .success(let registrationId):
-                print("Registration Id: \(registrationId)")
                 appState.messagingController = messagingController
                 handleSync(newUser: newUser)
             }
@@ -95,13 +106,16 @@ struct LoginController: View {
             return
         }
         
-        loginInProgress = true
+        withAnimation {
+            loginInProgress = true
+        }
         
         messagingController.getMessages(serverAddress: newUser.serverAddress, authToken: newUser.authCode) { getMessagesOutcome in
-            loginInProgress = false
             switch getMessagesOutcome {
             case .failure(let error):
-                loginInProgress = false
+                withAnimation {
+                    loginInProgress = false
+                }
                 if error == .remoteDeviceChanged {
                     showingResetDeviceSheet = true
                 } else {
@@ -115,13 +129,17 @@ struct LoginController: View {
     
     func handleCheckSubscriptionStatus(newUser: LoggedInUser) -> Void {
         
-        loginInProgress = true
+        withAnimation {
+            loginInProgress = true
+        }
         
         let subscriptionController = appState.subscriptionController
         
         subscriptionController.verifyReceipt() { verifyResult in
             
-            loginInProgress = false
+            withAnimation {
+                loginInProgress = false
+            }
             
             switch verifyResult {
             case.failure(let error):
@@ -159,7 +177,9 @@ struct LoginController: View {
             return
         }
         
-        loginInProgress = true
+        withAnimation {
+            loginInProgress = true
+        }
         
         messagingController.deleteDevice(
             userName: storedNewUser.userName,
@@ -168,7 +188,9 @@ struct LoginController: View {
             deleteDeviceOutcome in
             switch deleteDeviceOutcome {
             case .failure(let error):
-                loginInProgress = false
+                withAnimation {
+                    loginInProgress = false
+                }
                 appState.displayedError = IdentifiableError(error)
             case .success():
                 handleCreateDevice(newUser: storedNewUser)
@@ -177,7 +199,9 @@ struct LoginController: View {
     }
     
     func submitTwoFactor(_ twoFactorCode: String) {
-        loginInProgress = true
+        withAnimation {
+            loginInProgress = true
+        }
         authorisationController.submitTwoFactor(
             username: username,
             code: twoFactorCode,
@@ -190,7 +214,9 @@ struct LoginController: View {
                     storedNewUser = newUser
                     handleCreateDevice(newUser: newUser)
                 case .failure(let error):
-                    loginInProgress = false
+                    withAnimation {
+                        loginInProgress = false
+                    }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
                         appState.displayedError = IdentifiableError(error)
                     })

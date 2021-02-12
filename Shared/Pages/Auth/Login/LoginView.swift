@@ -42,6 +42,7 @@ struct LoginView: View {
                 HStack {
                     if (self.loginInProgress) {
                         ActivityIndicator(isAnimating: true)
+                            .transition(AnyTransition.opacity.combined(with: .move(edge: .leading)))
                     }
                     Text("Login")
                 }

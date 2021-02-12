@@ -86,28 +86,35 @@ struct SubscriptionSheet: View {
     var body: some View {
         VStack {
             VStack {
-                Text("Subscribe").font(.largeTitle).foregroundColor(.accentColor)
-                Text("Subscribe to Dark Maps to access the benefits below. Cancel any time you wish from the settings menu.").padding()
+                Text("Subscribe")
+                    .font(.system(size: 30))
+                    .foregroundColor(.accentColor)
+                    .padding(.bottom, 2)
+                Text("Subscribe to Dark Maps to access the benefits below. Cancel any time you wish from the settings menu.").padding(.horizontal)
             }
-            VStack {
-                TabView {
-                    ForEach(features.sorted(by: <), id: \.key) { title, description in
-                        ZStack {
-                            Color("AccentColor")
-                            VStack {
-                                Text("\(title)").foregroundColor(.white).font(.title2)
-                                Rectangle().fill(Color.white).frame(maxWidth: .infinity, maxHeight: 2)
-                                Text("\(description)").foregroundColor(.white)
-                            }.padding(.horizontal).padding(.bottom, 30)
-                        }.clipShape(RoundedRectangle(cornerRadius: 10.0, style: .continuous))
+            Spacer()
+            TabView {
+                ForEach(features.sorted(by: <), id: \.key) { title, description in
+                    ZStack {
+                        Color("AccentColor")
+                        VStack {
+                            Text("\(title)")
+                                .foregroundColor(.white)
+                                .font(.system(size: 20))
+                            Rectangle()
+                                .fill(Color.white)
+                                .frame(maxWidth: .infinity, maxHeight: 2)
+                            Text("\(description)").foregroundColor(.white)
+                        }.padding(.horizontal)
+                        .padding(.bottom, 25)
                     }
-                    .padding(.all, 10)
+                    .clipShape(RoundedRectangle(cornerRadius: 10.0, style: .continuous))
                 }
-                .frame(width: UIScreen.main.bounds.width, height: 200)
-                .tabViewStyle(PageTabViewStyle())
-                Spacer()
-                Rectangle().fill(Color("AccentColor")).frame(maxWidth: .infinity, maxHeight: 4)
+                .padding(.horizontal, 10)
             }
+            .frame(width: UIScreen.main.bounds.width, height: 160)
+            .tabViewStyle(PageTabViewStyle())
+            Spacer()
             if subscriptionOptions.count > 0 {
                 VStack {
                     ForEach(subscriptionOptions, id: \.self) { product in
@@ -137,7 +144,7 @@ struct SubscriptionSheet: View {
                     Button("Restore a subscription") {
                         print("Restore")
                         self.restoreSubscription()
-                    }.padding(.vertical)
+                    }.padding(.bottom, 1)
                     HStack {
                         Link(
                             "Privacy Policy",
@@ -149,7 +156,7 @@ struct SubscriptionSheet: View {
                             "Terms of Service",
                             destination: URL(string: "https://dark-maps.com/terms-of-service/")!)
                             .foregroundColor(colorScheme == .dark ? .white : .black)
-                    }
+                    }.padding(.bottom, 2)
                 }
             } else {
                 Text("Loading subscriptions...").font(.title2).padding(.top)

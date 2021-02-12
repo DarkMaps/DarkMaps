@@ -49,6 +49,7 @@ struct ReceivingList: View {
                 HStack {
                     if (self.getMessagesInProgress) {
                         ActivityIndicator(isAnimating: true)
+                            .transition(AnyTransition.opacity.combined(with: .move(edge: .leading)))
                     }
                     Text("Sync")
                 }

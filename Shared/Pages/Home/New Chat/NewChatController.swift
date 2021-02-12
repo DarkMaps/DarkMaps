@@ -60,7 +60,9 @@ struct NewChatController: View {
             return
         }
         
-        sendLocationInProgress = true
+        withAnimation {
+            sendLocationInProgress = true
+        }
         
         // Even if this is a live message send one normal message first to ensure successful
         appState.locationController.getCurrentLocation() {
@@ -69,7 +71,9 @@ struct NewChatController: View {
             switch getLocationOutcome {
             case .failure(let error):
                 appState.displayedError = IdentifiableError(error)
-                sendLocationInProgress = false
+                withAnimation {
+                    sendLocationInProgress = false
+                }
             case .success(var location):
                 
                 if isLiveLocation {
@@ -86,7 +90,9 @@ struct NewChatController: View {
                     
                     switch sendMessageOutcome {
                     case .failure(let error):
-                        sendLocationInProgress = false
+                        withAnimation {
+                            sendLocationInProgress = false
+                        }
                         if error == .alteredIdentity {
                             recipientIdentityChangedAlertShowing = true
                         } else {
@@ -98,15 +104,21 @@ struct NewChatController: View {
                         if isLiveLocation {
                             do {
                                 try messagingController.addLiveMessage(recipientName: recipientEmail, recipientDeviceId: Int(1), expiry: parseLiveExpiry())
-                                sendLocationInProgress = false
+                                withAnimation {
+                                    sendLocationInProgress = false
+                                }
                                 liveMessageSendSuccessAlertShowing = true
                             } catch {
                                 appState.displayedError = IdentifiableError(error as! LocalizedError)
-                                sendLocationInProgress = false
+                                withAnimation {
+                                    sendLocationInProgress = false
+                                }
                             }
                         } else {
                             messageSendSuccessAlertShowing = true
-                            sendLocationInProgress = false
+                            withAnimation {
+                                sendLocationInProgress = false
+                            }
                         }
                     }
                 }
