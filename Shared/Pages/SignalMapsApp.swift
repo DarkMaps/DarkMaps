@@ -108,7 +108,6 @@ struct SignalMapsApp: App {
                 if appState.loggedInUser == nil {
                     self.handleLoadStoredUser()
                 }
-                sleep(2)
                 DispatchQueue.main.async {
                     withAnimation {
                         loadComplete = true
