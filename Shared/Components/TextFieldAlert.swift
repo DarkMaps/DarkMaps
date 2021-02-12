@@ -57,7 +57,9 @@ struct TextFieldAlert<Presenting>: View where Presenting: View {
                                         self.isShowing.toggle()
                                     }
                                 }) {
-                                    Text("Cancel").font(Font.body.bold())
+                                    Text("Cancel")
+                                        .foregroundColor(Color("AccentColor"))
+                                        .font(Font.body.bold())
                                 }
                                 .padding()
                                 Spacer()
@@ -67,7 +69,9 @@ struct TextFieldAlert<Presenting>: View where Presenting: View {
                                         self.isShowing.toggle()
                                     }
                                 }) {
-                                    Text("OK").font(Font.body.bold())
+                                    Text("OK")
+                                        .foregroundColor(Color("AccentColor"))
+                                        .font(Font.body.bold())
                                 }
                                 .padding()
                                 Spacer()

@@ -73,7 +73,7 @@ struct TabHolder: View {
             }
             ZStack {
                 Capsule()
-                    .foregroundColor(colorScheme == .dark ? Color.black : Color(UIColor.systemGray3))
+                    .foregroundColor(Color("AccentColor"))
                     .frame(width: 60, height: 45)
                     .offset(x: calculatedCircleX)
                     .animation(.interpolatingSpring(mass: 0.8, stiffness: 400, damping: 20, initialVelocity: 1))

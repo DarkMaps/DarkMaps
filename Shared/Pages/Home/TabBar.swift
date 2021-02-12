@@ -41,7 +41,7 @@ struct TabBarItem: View {
             VStack {
                 Image(systemName: icon)
                     .font(.system(size: 30, weight: .semibold))
-                    .foregroundColor(selectedTab == selection ? Color("AccentColor") : Color.gray)
+                    .foregroundColor(selectedTab == selection ? Color.white : Color.gray)
                     .frame(width: 30, height: 30)
             }
             .frame(maxWidth: UIScreen.main.bounds.size.width * 0.2, maxHeight: .infinity)
