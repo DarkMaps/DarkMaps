@@ -64,6 +64,8 @@ struct SettingsController: View {
             activate2FAModalIsShowing = false
             switch result {
             case .success(let backupCodes):
+                let backupCodesString = backupCodes.joined(separator: ",")
+                UIPasteboard.general.setValue(backupCodesString, forPasteboardType: kUTTypePlainText as String)
                 self.backupCodes = IdentifiableBackupCodes(codes: backupCodes)
                 appState.loggedInUser?.is2FAUser = true
             case .failure(let error):
@@ -129,7 +131,6 @@ struct SettingsController: View {
         
         if let range = QRCode.range(of: #"(?<=secret=).*(?=&)"#, options: .regularExpression) {
             let secret = QRCode[range]
-            print(secret)
             UIPasteboard.general.setValue(secret, forPasteboardType: kUTTypePlainText as String)
             return true
         } else {
@@ -183,7 +184,7 @@ struct SettingsController: View {
             Text("").hidden().alert(isPresented: $backupCodesAlertShowing) { () -> Alert in
                 Alert(
                     title: Text("Backup Codes"),
-                    message: Text("Store these backup codes in a safe place:\n\n\((backupCodes?.codes ?? []).joined(separator: "\n"))"),
+                    message: Text("If you lose your 2FA codes these backup codes can be used to regain access to the app. They have been copied to your clipboard. Store these backup codes in a safe place:\n\n\((backupCodes?.codes ?? []).joined(separator: "\n"))"),
                     dismissButton: .cancel()
                 )
             }
