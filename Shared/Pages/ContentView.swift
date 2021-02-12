@@ -11,11 +11,14 @@ import SignalFfi
 struct ContentView: View {
     
     @EnvironmentObject var appState: AppState
+    @Binding var loadComplete: Bool
     @State var homeTabSelection: Int = 1
     
     var body: some View {
         ZStack {
-            if $appState.loggedInUser.wrappedValue != nil {
+            if loadComplete == false {
+                Splash()
+            } else if $appState.loggedInUser.wrappedValue != nil {
                 TabHolder()
                     .transition(.opacity)
             } else {

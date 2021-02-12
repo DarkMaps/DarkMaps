@@ -31,6 +31,7 @@ struct RegisterController: View {
             
             switch registerOutcome {
             case .failure(let error):
+                registerInProgress = false
                 appState.displayedError = IdentifiableError(error)
             case .success:
                 

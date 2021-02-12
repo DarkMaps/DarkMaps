@@ -80,6 +80,9 @@
 		EC2D8C6925B07FD300B3755D /* SimpleSignalSwiftExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC2D8C6825B07FD300B3755D /* SimpleSignalSwiftExtensions.swift */; };
 		EC2D8C6A25B07FD300B3755D /* SimpleSignalSwiftExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC2D8C6825B07FD300B3755D /* SimpleSignalSwiftExtensions.swift */; };
 		EC3FDD3025C327280044C312 /* SubscriptionStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC3FDD2F25C327280044C312 /* SubscriptionStructs.swift */; };
+		EC40361825D6915D00048DF6 /* Splash.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC40361725D6915D00048DF6 /* Splash.swift */; };
+		EC40361925D6915D00048DF6 /* Splash.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC40361725D6915D00048DF6 /* Splash.swift */; };
+		EC40361A25D6915D00048DF6 /* Splash.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC40361725D6915D00048DF6 /* Splash.swift */; };
 		EC4520D525896275002768C8 /* Activate2FAModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4520D425896275002768C8 /* Activate2FAModal.swift */; };
 		EC4520D925896287002768C8 /* Deactivate2FAModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4520D825896287002768C8 /* Deactivate2FAModal.swift */; };
 		EC4520DD258B66F8002768C8 /* SimpleSignalSwiftAuthAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4520DC258B66F8002768C8 /* SimpleSignalSwiftAuthAPI.swift */; };
@@ -296,6 +299,7 @@
 		EC2D8C6825B07FD300B3755D /* SimpleSignalSwiftExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleSignalSwiftExtensions.swift; sourceTree = "<group>"; };
 		EC3712DE259DD825001E5422 /* secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = secrets.xcconfig; sourceTree = "<group>"; };
 		EC3FDD2F25C327280044C312 /* SubscriptionStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionStructs.swift; sourceTree = "<group>"; };
+		EC40361725D6915D00048DF6 /* Splash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Splash.swift; sourceTree = "<group>"; };
 		EC4520D425896275002768C8 /* Activate2FAModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activate2FAModal.swift; sourceTree = "<group>"; };
 		EC4520D825896287002768C8 /* Deactivate2FAModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deactivate2FAModal.swift; sourceTree = "<group>"; };
 		EC4520DC258B66F8002768C8 /* SimpleSignalSwiftAuthAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleSignalSwiftAuthAPI.swift; sourceTree = "<group>"; };
@@ -543,6 +547,7 @@
 			children = (
 				ECFFD50F257261FB00458BC8 /* SignalMapsApp.swift */,
 				ECFFD510257261FB00458BC8 /* ContentView.swift */,
+				EC40361725D6915D00048DF6 /* Splash.swift */,
 				ECAC078125A4D63400FCCD7C /* Auth */,
 				EC912982257BB61700E12BF6 /* Home */,
 				EC82FC1725CC16830081B77C /* Sheets */,
@@ -1096,6 +1101,7 @@
 				ECAEF10925A1214F00525760 /* LoggedInUser.swift in Sources */,
 				ECDE0E432572B615009D3561 /* DataStoreInMemory.swift in Sources */,
 				EC117DD425B9CE9C000878C6 /* ServerDeviceChangedSheet.swift in Sources */,
+				EC40361A25D6915D00048DF6 /* Splash.swift in Sources */,
 				ECAEF0E925A1213600525760 /* TextFieldWithTitleAndValidation.swift in Sources */,
 				ECAEF0F125A1213B00525760 /* ActivityIndicator.swift in Sources */,
 				EC117DDA25B9D2ED000878C6 /* SheetExtensions.swift in Sources */,
@@ -1242,6 +1248,7 @@
 				EC12FBC52572ADC700F7230F /* Error.swift in Sources */,
 				ECC0A5BF257FE8A6001D5E60 /* ListController.swift in Sources */,
 				EC9129B9257CC61B00E12BF6 /* RoundedButton.swift in Sources */,
+				EC40361825D6915D00048DF6 /* Splash.swift in Sources */,
 				EC0BB6B825975B7E00A2F3CB /* MessagingController.swift in Sources */,
 				EC117DD325B9CE9C000878C6 /* ServerDeviceChangedSheet.swift in Sources */,
 				ECC0A5DD257FE8FF001D5E60 /* SettingsView.swift in Sources */,
@@ -1266,6 +1273,7 @@
 				EC12FBCA2572ADC700F7230F /* SessionRecord.swift in Sources */,
 				EC12FBBE2572ADC700F7230F /* CiphertextMessage.swift in Sources */,
 				EC12FBCC2572ADC700F7230F /* SignedPreKeyRecord.swift in Sources */,
+				EC40361925D6915D00048DF6 /* Splash.swift in Sources */,
 				EC12FBC42572ADC700F7230F /* Address.swift in Sources */,
 				EC12FBB42572ADC700F7230F /* DataStoreInMemory.swift in Sources */,
 				ECFFD5252572620300458BC8 /* ContentView.swift in Sources */,

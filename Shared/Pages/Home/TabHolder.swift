@@ -63,13 +63,10 @@ struct TabHolder: View {
             ZStack {
                 ListController()
                     .offset(x: calculatedListX)
-                    .animation(.easeInOut(duration: 0.2))
                 NewChatController()
                     .offset(x: calculatedNewMessageX)
-                    .animation(.easeInOut(duration: 0.2))
                 SettingsController()
                     .offset(x: calculatedSettingsX)
-                    .animation(.easeInOut(duration: 0.2))
             }
             ZStack {
                 Capsule()

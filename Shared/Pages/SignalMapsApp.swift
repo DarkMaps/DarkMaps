@@ -14,6 +14,7 @@ struct SignalMapsApp: App {
     
     @StateObject private var appState = AppState()
     @Environment(\.scenePhase) private var scenePhase
+    @State var loadComplete = false
     @State var serverOutOfSyncSheetIsShowing = false
     @State var unauthorisedSheetIsShowing = false
     @State var subscriptionExpiredAlertShowing = false
@@ -73,7 +74,7 @@ struct SignalMapsApp: App {
     var body: some Scene {
         WindowGroup {
             ZStack {
-                ContentView()
+                ContentView(loadComplete: $loadComplete)
                     .environmentObject(appState)
                     .onAppear() {
                         self.appState.subscriptionController.startObserving()
@@ -107,6 +108,11 @@ struct SignalMapsApp: App {
                 if appState.loggedInUser == nil {
                     self.handleLoadStoredUser()
                 }
+                sleep(2)
+                DispatchQueue.main.async {
+                    loadComplete = true
+                }
+                // Don't wait for handleCheckUserIsSubscriber as this may involve an API call
                 self.handleCheckUserIsSubscriber()
             }
         }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -22,10 +22,10 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Main Icon" translatesAutoresizingMaskIntoConstraints="NO" id="oh9-qm-aS6">
-                                <rect key="frame" x="46" y="328" width="323" height="240"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="214" verticalHuggingPriority="251" image="Main Icon" translatesAutoresizingMaskIntoConstraints="NO" id="oh9-qm-aS6">
+                                <rect key="frame" x="46" y="287" width="322" height="322"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="oh9-qm-aS6" secondAttribute="height" multiplier="323:240" id="QXA-il-TSx"/>
+                                    <constraint firstAttribute="width" secondItem="oh9-qm-aS6" secondAttribute="height" id="QXA-il-TSx"/>
                                 </constraints>
                             </imageView>
                         </subviews>
@@ -33,8 +33,7 @@
                         <color key="backgroundColor" red="0.97614827189412146" green="0.39215686274509803" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="tintColor" red="0.92549019607843142" green="0.45098039215686275" blue="0.18431372549019609" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="trailing" secondItem="oh9-qm-aS6" secondAttribute="trailing" constant="45" id="Ay6-zM-l2h"/>
-                            <constraint firstItem="oh9-qm-aS6" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" constant="46" id="STG-Eo-zfd"/>
+                            <constraint firstItem="oh9-qm-aS6" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" constant="46" id="PZp-dZ-Gr4"/>
                             <constraint firstItem="oh9-qm-aS6" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="T6C-Ew-IeY"/>
                             <constraint firstItem="oh9-qm-aS6" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="nh3-wd-Mr1"/>
                         </constraints>

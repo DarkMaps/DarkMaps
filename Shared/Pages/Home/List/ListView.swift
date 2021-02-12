@@ -52,14 +52,12 @@ struct ListView: View {
                             .padding(.top, 10)
                             .padding(.leading)
                             .offset(x: calculatedReceivedX)
-                            .animation(.easeInOut(duration: 0.2))
                         Text("Sending")
                             .font(.largeTitle)
                             .fontWeight(.semibold)
                             .padding(.top, 10)
                             .padding(.leading)
                             .offset(x: calculatedSendingX)
-                            .animation(.easeInOut(duration: 0.2))
                     }
                     Spacer()
                 }
@@ -69,6 +67,7 @@ struct ListView: View {
                             Text(self.directionLabels[$0])
                         }
                     }.pickerStyle(SegmentedPickerStyle())
+                    .padding(.horizontal)
                 }
                 ZStack {
                     ReceivingList(
@@ -79,7 +78,6 @@ struct ListView: View {
                         performSync: performSync,
                         handleConsentToNewIdentity: handleConsentToNewIdentity)
                         .offset(x: calculatedReceivedX)
-                        .animation(.easeInOut(duration: 0.2))
                     SendingList(
                         sendingMessageArray: $sendingMessageArray,
                         updateIdentityInProgress: $updateIdentityInProgress,
@@ -87,7 +85,6 @@ struct ListView: View {
                         handleConsentToNewIdentity: handleConsentToNewIdentity,
                         displayError: displayError)
                         .offset(x: calculatedSendingX)
-                        .animation(.easeInOut(duration: 0.2))
                     
                 }
             }.navigationBarHidden(true)

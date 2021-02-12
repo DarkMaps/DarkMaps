@@ -181,13 +181,9 @@ struct ListController: View {
             deleteMessage: deleteMessage,
             handleConsentToNewIdentity: handleConsentToNewIdentity
         ).onAppear() {
-            print("On Appear")
             if let loggedInUser = appState.loggedInUser {
-                print("Logged in")
                 if loggedInUser.subscriptionExpiryDate == nil {
-                    print("Not subscribed")
                     self.selectedDirection = 0
-                    print("Subscribed")
                 } else {
                     self.isSubscribed = true
                 }
