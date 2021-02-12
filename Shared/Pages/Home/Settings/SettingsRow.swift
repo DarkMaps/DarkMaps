@@ -38,7 +38,11 @@ struct SettingsRow: View {
                     .fill(Color.black.opacity(0))
                     .frame(width: 25)
                 if (iconName != nil) {
-                    Image(systemName: iconName!).foregroundColor(isTappable ? Color("AccentColor") : Color.white)
+                    Image(systemName: iconName!)
+                        .foregroundColor(
+                            isTappable ? Color("AccentColor") :
+                                (colorScheme == .dark ?
+                                    Color.white : Color.black))
                 }
             }
             VStack(alignment: .leading) {
