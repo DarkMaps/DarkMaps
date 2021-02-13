@@ -29,12 +29,14 @@ extension MessageStoreError {
 }
 
 enum MessagingControllerError: String, LocalizedError, Codable {
-    case unableToStoreMessages, unableToRetrieveMessages, unableToDecryptMessage, poorlyFormattedLocation, unableToDeleteMessage, unableToUpdateDeviceKeys, unableToCreateAddress, unableToCreateEncryptionHandler, unableToCreateMessagingStore, noDeviceCreated, unableToSendMessage, unableToDeleteDevice, unableToCreateDevice, needToProvideUsername, remoteDeviceExists, poorlyFormattedLiveMessageArrayData, liveMessageRecipientAlreadyExists, noDeviceOnServer, alteredIdentity, unableToUpdateIdentity, remoteDeviceChanged, unauthorised, recipientUserDoesNotExist
+    case unableToStoreMessages, unableToRetrieveMessages, unableToDecryptMessage, poorlyFormattedLocation, unableToDeleteMessage, unableToUpdateDeviceKeys, unableToCreateAddress, unableToCreateEncryptionHandler, unableToCreateMessagingStore, noDeviceCreated, unableToSendMessage, unableToDeleteDevice, unableToCreateDevice, needToProvideUsername, remoteDeviceExists, poorlyFormattedLiveMessageArrayData, liveMessageRecipientAlreadyExists, noDeviceOnServer, alteredIdentity, unableToUpdateIdentity, remoteDeviceChanged, unauthorised, recipientUserDoesNotExist, recipientUserHasNoRegisteredDevice
 }
 
 extension MessagingControllerError {
     public var errorDescription: String? {
         switch self {
+        case .recipientUserHasNoRegisteredDevice:
+            return NSLocalizedString("This user does not have a device registered on our servers.", comment: "")
         case .recipientUserDoesNotExist:
             return NSLocalizedString("This user does not exist.", comment: "")
         case .noDeviceOnServer:

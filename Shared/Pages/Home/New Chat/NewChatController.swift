@@ -93,6 +93,7 @@ struct NewChatController: View {
                         withAnimation {
                             sendLocationInProgress = false
                         }
+                        print(error)
                         if error == .alteredIdentity {
                             recipientIdentityChangedAlertShowing = true
                         } else {

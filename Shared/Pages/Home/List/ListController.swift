@@ -202,7 +202,11 @@ struct ListController: View {
         .onReceive(NotificationCenter.default.publisher(for: .subscriptionController_SubscriptionFailed), perform: {_ in
             withAnimation {
                 self.isSubscribed = false
+                self.selectedDirection = 0
             }
+        })
+        .onReceive(NotificationCenter.default.publisher(for: .messagingStore_LiveMessagesUpdates), perform: { _ in
+            getStoredMessages()
         })
     }
 }

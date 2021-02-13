@@ -183,6 +183,8 @@ public class MessagingController {
                             completionHandler(.failure(.remoteDeviceChanged))
                         } else if error == .recipientUserDoesNotExist {
                             completionHandler(.failure(.recipientUserDoesNotExist))
+                        } else if error == .recipientUserHasNoRegisteredDevice {
+                            completionHandler(.failure(.recipientUserHasNoRegisteredDevice))
                         } else {
                             completionHandler(.failure(.unableToSendMessage))
                         }

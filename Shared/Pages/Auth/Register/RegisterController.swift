@@ -84,7 +84,7 @@ struct RegisterController: View {
                     registerInProgress = false
                 }
                 appState.displayedError = IdentifiableError(error)
-            case .success(let registrationId):
+            case .success(let _):
                 appState.messagingController = messagingController
                 handleCheckSubscriptionStatus(newUser: newUser)
             }

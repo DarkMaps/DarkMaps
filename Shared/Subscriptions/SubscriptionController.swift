@@ -95,10 +95,28 @@ extension SubscriptionController {
         SKPaymentQueue.default().restoreCompletedTransactions()
     }
     
-    private func refreshReceipt() {
+    public func refreshReceipt(_ completionHandler: @escaping ProductPurchaseCompletionHandler) {
+        print("Refreshing")
+        productPurchaseCompletionHandler = completionHandler
         let request = SKReceiptRefreshRequest()
         request.delegate = self // to be able to receive the results of this request, check the SKRequestDelegate protocol
         request.start()
+    }
+    
+    public func requestDidFinish(_ request: SKRequest) {
+        print("RequestDidFinish")
+      // call refresh subscriptions method again with same blocks
+        if request is SKReceiptRefreshRequest {
+            verifyReceipt() { [weak self] verifyReciptOutcome in
+                guard let self = self else {return}
+                switch verifyReciptOutcome {
+                case .failure(let error):
+                    self.productPurchaseCompletionHandler?(.failure(error))
+                case .success(let expiryDate):
+                    self.productPurchaseCompletionHandler?(.success(expiryDate))
+                }
+            }
+        }
     }
 }
 
@@ -114,7 +132,7 @@ extension SubscriptionController: SKProductsRequestDelegate {
       return
     }
     for p in products {
-      print("Found product: \(p.productIdentifier) \(p.localizedTitle) \(p.price.floatValue)")
+        print("Found product: \(p.productIdentifier) \(p.localizedTitle) \(p.price.floatValue)")
     }
     productsRequestCompletionHandler?(.success(products))
     clearRequestAndHandler()
@@ -136,8 +154,23 @@ extension SubscriptionController: SKProductsRequestDelegate {
 // MARK: - SKPaymentTransactionObserver
 extension SubscriptionController: SKPaymentTransactionObserver {
     public func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
-        print("Got transactions")
-        for transaction in transactions {
+        print("Transactions Received \(transactions.count)")
+        //If restoring we may receive hundreds of transactions
+        //Therefore only process most recent transsaction, but retain those without a date
+        var sortedTransactions = transactions
+        sortedTransactions = sortedTransactions.filter { transaction -> Bool in
+            transaction.transactionDate != nil
+        }
+        sortedTransactions.sort { (one, two) -> Bool in
+            one.transactionDate! < two.transactionDate!
+        }
+        var allTransactionsToProcess = transactions.filter { transaction -> Bool in
+            transaction.transactionDate == nil
+        }
+        if let firstDatedTransaction = sortedTransactions.last {
+            allTransactionsToProcess.append(firstDatedTransaction)
+        }
+        for transaction in allTransactionsToProcess {
             switch (transaction.transactionState) {
             case .purchased:
                 complete(transaction: transaction)
@@ -165,15 +198,15 @@ extension SubscriptionController: SKPaymentTransactionObserver {
 
     private func complete(transaction: SKPaymentTransaction) {
         print("complete...")
-        productPurchaseCompleted(identifier: transaction.payment.productIdentifier)
         SKPaymentQueue.default().finishTransaction(transaction)
+        productPurchaseCompleted(identifier: transaction.payment.productIdentifier)
     }
 
     private func restore(transaction: SKPaymentTransaction) {
         guard let productIdentifier = transaction.original?.payment.productIdentifier else { return }
         print("restore... \(productIdentifier)")
-        productPurchaseCompleted(identifier: productIdentifier)
         SKPaymentQueue.default().finishTransaction(transaction)
+        productPurchaseCompleted(identifier: productIdentifier)
     }
 
     private func fail(transaction: SKPaymentTransaction? = nil, error: Error? = nil) {
@@ -199,17 +232,24 @@ extension SubscriptionController: SKPaymentTransactionObserver {
 
     private func productPurchaseCompleted(identifier: ProductID?) {
         guard let identifier = identifier else { return }
-        print("Purchase of \(identifier) complete")
         self.verifyReceipt { [weak self] verificationResult in
             guard let self = self else {return}
             switch verificationResult {
             case .success(let expiryDate):
+                print("Success verifying")
                 self.sendSuccessNotification(expiry: expiryDate)
                 self.productPurchaseCompletionHandler?(.success(expiryDate))
                 self.clearHandler()
             case .failure(let error):
-                print(error)
-                self.productPurchaseCompletionHandler?(.failure(error))
+                if error == .expiredPurchase {
+                    if let completionHandler = self.productPurchaseCompletionHandler {
+                        self.refreshReceipt(completionHandler)
+                    }
+                } else {
+                    print("Failed verifying")
+                    print(error)
+                    self.productPurchaseCompletionHandler?(.failure(error))
+                }
             }
         }
         
@@ -246,7 +286,7 @@ extension SubscriptionController {
             let sharedSecret = Bundle.main.infoDictionary?["STOREKIT_SECRET"] as? String ?? "no storekit secret available"
             guard let appStoreReceiptURL = Bundle.main.appStoreReceiptURL, FileManager.default.fileExists(atPath: appStoreReceiptURL.path) else {
                 print("Unable to get app store receipt")
-                self.refreshReceipt()
+                completionHandler(.failure(.errorVerifyingReceipt))
                 return
             }
             let receiptData = try Data(contentsOf: appStoreReceiptURL, options: .alwaysMapped)

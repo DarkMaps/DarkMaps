@@ -61,18 +61,18 @@ struct SubscriptionSheet: View {
     
     func restoreSubscription() {
         subscribeInProgress = true
-        appState.subscriptionController.verifyReceipt() { result in
-            subscribeInProgress = false
+        appState.subscriptionController.restorePurchases() { result in
+            DispatchQueue.main.async {
+                subscribeInProgress = false
+            }
             switch result {
             case .success(let expiryDate):
                 print("Expiry date: \(expiryDate.timeIntervalSince1970)")
                 return
             case .failure(let error):
-                DispatchQueue.main.async {
-                    appState.subscriptionSheetIsShowing = false
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                        appState.displayedError = IdentifiableError(error)
-                    }
+                appState.subscriptionSheetIsShowing = false
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    appState.displayedError = IdentifiableError(error)
                 }
             }
         }
@@ -128,7 +128,7 @@ struct SubscriptionSheet: View {
                                     if subscribeInProgress {
                                         ActivityIndicator(isAnimating: true)
                                     }
-                                    Text("\(product.localizedTitle)")
+                                    Text("\(product.localizedTitle.count == 0 ? "Subscribe" : product.localizedTitle )")
 //
                                 }
                                 

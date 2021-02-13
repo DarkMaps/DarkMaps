@@ -50,20 +50,21 @@ struct SignalMapsApp: App {
                 print("Is subscribed - expires \(String(describing: loggedInUser.subscriptionExpiryDate?.debugDescription))")
                 if subscriptionExpiryDate.timeIntervalSince1970 < Date().timeIntervalSince1970 {
                     print("Subscription has expired")
-                    appState.subscriptionController.verifyReceipt() { verifyResult in
-                        switch verifyResult {
-                        case .success(let expirationDate):
-                            print("User is still subscribed")
-                            self.appState.loggedInUser?.subscriptionExpiryDate = expirationDate
-                        case .failure(let error):
-                            print("Failed to verify subscription status")
-                            if error == .expiredPurchase {
-                                self.subscriptionExpiredAlertShowing = true
-                            } else {
-                                appState.displayedError = IdentifiableError(error)
-                            }
-                            try? appState.handleNoLongerSubscribed()
-                            
+                    
+                    appState.subscriptionController.refreshReceipt { refreshResult in
+                        switch refreshResult {
+                            case .success(let expirationDate):
+                                print("User is still subscribed")
+                                self.appState.loggedInUser?.subscriptionExpiryDate = expirationDate
+                            case .failure(let error):
+                                print("Failed to verify subscription status")
+                                if error == .expiredPurchase {
+                                    self.subscriptionExpiredAlertShowing = true
+                                } else {
+                                    appState.displayedError = IdentifiableError(error)
+                                }
+                                try? appState.handleNoLongerSubscribed()
+
                         }
                     }
                 }

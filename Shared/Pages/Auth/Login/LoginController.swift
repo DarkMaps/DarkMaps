@@ -102,7 +102,9 @@ struct LoginController: View {
         
         guard let messagingController = try? MessagingController(userName: newUser.userName, serverAddress: newUser.serverAddress, authToken: newUser.authCode) else {
             appState.displayedError = IdentifiableError(MessagingControllerError.unableToCreateAddress)
-            loginInProgress = false
+            withAnimation {
+                loginInProgress = false
+            }
             return
         }
         
@@ -169,11 +171,17 @@ struct LoginController: View {
         
         guard let storedNewUser = self.storedNewUser else {
             appState.displayedError = IdentifiableError(MessagingControllerError.unableToDeleteDevice)
+            withAnimation {
+                loginInProgress = false
+            }
             return
         }
         
         guard let messagingController = try? MessagingController(userName: storedNewUser.userName) else {
             appState.displayedError = IdentifiableError(MessagingControllerError.unableToCreateAddress)
+            withAnimation {
+                loginInProgress = false
+            }
             return
         }
         

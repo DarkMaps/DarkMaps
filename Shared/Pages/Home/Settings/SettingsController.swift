@@ -116,15 +116,20 @@ struct SettingsController: View {
     }
     
     func restoreSubscription() {
+        print("Click")
         actionInProgress = .restoreSubscription
         appState.subscriptionController.restorePurchases() { result in
-            actionInProgress = nil
+            DispatchQueue.main.async {
+                actionInProgress = nil
+            }
             switch result {
             case .success(let expiryDate):
                 print("Expiry date: \(expiryDate.timeIntervalSince1970)")
                 return
             case .failure(let error):
-                appState.displayedError = IdentifiableError(error)
+                DispatchQueue.main.async {
+                    appState.displayedError = IdentifiableError(error)
+                }
             }
         }
     }
