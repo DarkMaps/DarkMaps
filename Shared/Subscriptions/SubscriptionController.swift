@@ -107,6 +107,7 @@ extension SubscriptionController {
         print("RequestDidFinish")
       // call refresh subscriptions method again with same blocks
         if request is SKReceiptRefreshRequest {
+            request.cancel()
             verifyReceipt() { [weak self] verifyReciptOutcome in
                 guard let self = self else {return}
                 switch verifyReciptOutcome {
@@ -326,19 +327,31 @@ extension SubscriptionController {
                     switch status {
                     case 0:
                         guard let allReceiptData = jsonResponse["receipt"] as? [String: Any],
-                              let allReceipts = allReceiptData["in_app"] as? [ReceiptInfo],
-                              let latestReceipt = allReceipts.last,
-                              let decodedReceipt = ReceiptItem(receiptInfo: latestReceipt),
-                              let subscriptionExpirationDate = decodedReceipt.subscriptionExpirationDate else {
+                              let allReceipts = allReceiptData["in_app"] as? [ReceiptInfo] else {
                             completionHandler(.failure(.errorVerifyingReceipt))
                             return
                         }
-                        if (subscriptionExpirationDate > Date()) {
-                            print("Subscription successfully verified: expires \(String(describing: (latestReceipt as [String: Any])["expires_date"] ?? "Unable to get expiry date"))")
-                            completionHandler(.success(subscriptionExpirationDate))
-                        } else {
-                            print("Subscription expired: \(String(describing: (latestReceipt as [String: Any])["expires_date"] ?? "Unable to get expiry date"))")
-                            completionHandler(.failure(.expiredPurchase))
+                        var allReceiptItems = allReceipts.map { receipt in
+                            return ReceiptItem(receiptInfo: receipt)
+                        }
+                        allReceiptItems = allReceiptItems.filter({ receiptItem -> Bool in
+                            receiptItem != nil
+                        })
+                        allReceiptItems = allReceiptItems.filter({ receiptItem -> Bool in
+                            receiptItem!.subscriptionExpirationDate != nil
+                        })
+                        allReceiptItems.sort(by: { one, two in
+                            return one!.subscriptionExpirationDate! < two!.subscriptionExpirationDate!
+                        })
+                        if let latestReceipt = allReceiptItems.last {
+                            let subscriptionExpirationDate = latestReceipt!.subscriptionExpirationDate!
+                            if (subscriptionExpirationDate > Date()) {
+                                print("Subscription successfully verified: expires \(String(describing: latestReceipt!.subscriptionExpirationDate))")
+                                completionHandler(.success(subscriptionExpirationDate))
+                            } else {
+                                print("Subscription expired: \(String(describing: latestReceipt!.subscriptionExpirationDate))")
+                                completionHandler(.failure(.expiredPurchase))
+                            }
                         }
                         
                     case 21007:

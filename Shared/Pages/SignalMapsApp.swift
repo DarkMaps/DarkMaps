@@ -92,7 +92,7 @@ struct SignalMapsApp: App {
                 Text("").hidden().alert(isPresented: $subscriptionExpiredAlertShowing) {
                     Alert(
                         title: Text("Subscription Expired"),
-                        message: Text("Your subscription has expired and you have now lost the ability to send live messages.\n\nPlease contact us at\n\nadmin@dark-maps.com\n\nif you believe you have been incorrectly charged."),
+                        message: Text("Your subscription has expired and you have now lost the ability to send live messages.\n\nPlease contact us at\n\nadmin@dark-maps.net\n\nif you believe you have been incorrectly charged."),
                         dismissButton: Alert.Button.default(Text("OK")))
                 }
             }

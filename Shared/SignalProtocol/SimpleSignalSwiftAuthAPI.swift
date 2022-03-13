@@ -189,7 +189,7 @@ public struct SimpleSignalSwiftAuthAPI{
     
     public func resetPassword(username: String, serverAddress: String) -> Result<Void, SSAPIAuthResetPasswordError> {
         
-        let path = "\(serverAddress)/v1/auth/password/reset"
+        let path = "\(serverAddress)/v1/auth/users/reset_password/"
         guard let url = URL(string: path) else {
             return .failure(.invalidUrl)
         }
@@ -223,6 +223,8 @@ public struct SimpleSignalSwiftAuthAPI{
             }
             
             guard response.statusCode == 204 else {
+                print(response.statusCode)
+                print(response)
                 if response.statusCode == 400 {
                     result = .failure(.badResponseFromServer)
                 } else if response.statusCode == 429 {

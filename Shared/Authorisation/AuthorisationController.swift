@@ -67,6 +67,7 @@ public struct AuthorisationController {
                         print("Reset Password Successful")
                         completionHandler(.success(()))
                     case let .failure(error):
+                    print(error)
                         print("Reset Password Unsuccessful")
                         completionHandler(.failure(error))
                     }

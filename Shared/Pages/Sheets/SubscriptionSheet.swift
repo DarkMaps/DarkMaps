@@ -148,13 +148,13 @@ struct SubscriptionSheet: View {
                     HStack {
                         Link(
                             "Privacy Policy",
-                            destination: URL(string: "https://dark-maps.com/privacy-policy/")!)
+                            destination: URL(string: "https://dark-maps.net/privacy-policy/")!)
                             .foregroundColor(colorScheme == .dark ? .white : .black)
                         Text("and")
                             .foregroundColor(.gray)
                         Link(
                             "Terms of Service",
-                            destination: URL(string: "https://dark-maps.com/terms-of-service/")!)
+                            destination: URL(string: "https://dark-maps.net/terms-of-service/")!)
                             .foregroundColor(colorScheme == .dark ? .white : .black)
                     }.padding(.bottom, 2)
                 }

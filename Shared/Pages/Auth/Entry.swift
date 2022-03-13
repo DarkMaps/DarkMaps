@@ -11,7 +11,7 @@ struct Entry: View {
     
     @State var isLoginLinkActive = false
     @State var isRegisterLinkActive = false
-    @State var customAuthServer = "https://api.dark-maps.com"
+    @State var customAuthServer = "https://api.dark-maps.net"
     
     var body: some View {
         NavigationView {

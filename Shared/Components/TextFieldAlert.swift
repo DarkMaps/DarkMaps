@@ -41,6 +41,10 @@ struct TextFieldAlert<Presenting>: View where Presenting: View {
                                 } else {
                                     TextField(self.textBoxPlaceholder ?? self.title, text: self.$text)
                                         .id(self.isShowing)
+                                        .textInputAutocapitalization(.never)
+                                        .keyboardType(.emailAddress)
+                                        .autocapitalization(.none)
+                                        .disableAutocorrection(true)
                                         .textFieldStyle(RoundedBorderTextFieldStyle())
                                         .overlay(
                                             RoundedRectangle(cornerRadius: 5)
