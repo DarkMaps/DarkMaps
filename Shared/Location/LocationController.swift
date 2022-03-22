@@ -44,8 +44,10 @@ public class LocationController: ObservableObject {
         print("Starting GPS Subscription")
         subscription = SwiftLocation.gpsLocationWith {
             $0.subscription = .continous // continous updated until you stop it
-            $0.accuracy = .house
+            $0.accuracy = .room
             $0.minTimeInterval = 30
+            $0.activityType = .fitness
+            $0.precise = .fullAccuracy
         }.then { result in // you can attach one or more subscriptions via `then`.
             switch result {
             case .success(let newData):
@@ -66,7 +68,7 @@ public class LocationController: ObservableObject {
     }
 
     public func getCurrentLocation(completionHandler: @escaping (_: Result<Location, LocationControllerError>) -> ()) {
-        SwiftLocation.gpsLocation().then {
+        SwiftLocation.gpsLocation(accuracy: .room, timeout: .delayed(30)).then {
             guard let extractedLocation = $0.location else {
                 completionHandler(.failure(.unableToRetrieveLocation))
                 return
