@@ -22,8 +22,8 @@ struct RegisterView: View {
     var body: some View {
         VStack(alignment: .center) {
             TextFieldWithTitleAndValidation(
-                title: "Username",
-                invalidText: "Invalid username",
+                title: "Email",
+                invalidText: "Invalid email",
                 validRegex: "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$",
                 disableAutocorrection: true,
                 text: $username,
